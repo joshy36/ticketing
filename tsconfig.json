@@ -48,7 +48,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "tailwind.config.ts", "postcss.config.ts"  ],
+, "tailwind.config.js", "postcss.config.js", "next.config.js"  ],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

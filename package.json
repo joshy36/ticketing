@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
     "@prisma/client": "^5.0.0",
     "@vercel/analytics": "^1.0.1",
     "eslint": "8.45.0",
