@@ -13,6 +13,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true, // true required for zod
+    "noImplicitAny": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -47,7 +48,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "tailwind.config.ts", "postcss.config.ts"  ],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

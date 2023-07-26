@@ -5,7 +5,7 @@ import Events from './components/Events';
 export default function Home() {
   return (
     <main className={styles.main}>
-      <Events/>
+      <Events />
     </main>
-  )
+  );
 }

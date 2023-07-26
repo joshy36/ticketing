@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../lib/prisma'
+import prisma from '../../lib/prisma';
 
 export default async function getData(
-  req: NextApiRequest, 
+  req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { method } = req;
@@ -16,10 +16,10 @@ export default async function getData(
         console.error('Request error', e);
         res.status(500).json({ error: 'Error fetching posts' });
       }
-      break
+      break;
     default:
       res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${method} Not Allowed`);
-      break
+      break;
   }
 }
