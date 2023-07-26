@@ -1,4 +1,4 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import styles from './page.module.css';
 import Events from './components/Events';
 import './globals.css';
