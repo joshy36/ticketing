@@ -3,7 +3,7 @@ import useSWR from 'swr'
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
   
-export default function Test() {
+export default function Events() {
     const { data, error } = useSWR('/api/data', fetcher);
 
     if (error) return <div>Failed to load</div>
