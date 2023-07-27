@@ -1,14 +1,10 @@
-// import Image from 'next/image';
-import styles from '../../app/page.module.css';
-import Events from '../../app/components/Events';
-import EventsBetter from '../../app/components/EventsBetter';
-import Header from '../../app/components/Header';
-
-import '../../app/globals.css';
+import Events from '../../components/Events';
+import EventsBetter from '../../components/EventsBetter';
+import Header from '../../components/Header';
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main>
       <Header />
       <Events />
       <EventsBetter />
