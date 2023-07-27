@@ -3,18 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "prisma generate && next dev",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.15",
+    "@headlessui/react": "^1.7.16",
     "@heroicons/react": "^2.0.18",
     "@prisma/client": "^5.0.0",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@vercel/analytics": "^1.0.1",
+    "aws-sdk": "^2.1424.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
+    "fs": "^0.0.1-security",
     "next": "13.4.10",
     "react": "18.2.0",
     "react-dom": "18.2.0",

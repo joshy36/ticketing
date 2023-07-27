@@ -5,7 +5,7 @@ export default async function addEvent(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { name, description, date, location } = req.body;
+  const { name, description, date, location, image } = req.body;
 
   switch (req.method) {
     case 'POST':
@@ -16,6 +16,7 @@ export default async function addEvent(
             description: description,
             date: date,
             location: location,
+            image: image,
           },
         });
         res.status(201).json(result);
