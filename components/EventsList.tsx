@@ -48,7 +48,7 @@ const products = [
   // More products...
 ];
 
-export default function Example() {
+export default function EventsList() {
   const { data, error } = useSWR('/api/data', fetcher);
 
   if (error) return <div>Failed to load</div>;

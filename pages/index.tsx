@@ -1,13 +1,11 @@
-import Events from '../components/Events';
-import EventsBetter from '../components/EventsBetter';
+import EventsList from '../components/EventsList';
 import Header from '../components/Header';
 
 export default function Home() {
   return (
     <main>
       <Header />
-      <EventsBetter />
-      <Events />
+      <EventsList />
     </main>
   );
 }
