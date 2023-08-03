@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../lib/prisma';
+import prisma from '../../../lib/prisma';
+import { Event } from '@prisma/client';
 
-export default async function addEvent(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -10,7 +11,7 @@ export default async function addEvent(
   switch (req.method) {
     case 'POST':
       try {
-        const result = await prisma.event.create({
+        const result: Event = await prisma.event.create({
           data: {
             name: name,
             description: description,
