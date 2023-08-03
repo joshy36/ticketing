@@ -23,6 +23,7 @@
 import useSWR from 'swr';
 import Image from 'next/image';
 import { Event } from '@prisma/client';
+import { useRouter } from 'next/router';
 
 const fetcher = (arg, ...args) => fetch(arg, ...args).then((res) => res.json());
 
@@ -92,7 +93,10 @@ export default function Example() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
 
-  const { data, error } = useSWR('/api/event/1', fetcher);
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data, error } = useSWR(`/api/event/${id}`, fetcher);
 
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
@@ -143,6 +147,12 @@ export default function Example() {
 
               <div className="space-y-6">
                 <p className="text-base text-gray-900">{event.description}</p>
+              </div>
+              <div className="space-y-6">
+                <p className="text-base text-gray-900">{`Location: ${event.location}`}</p>
+              </div>
+              <div className="space-y-6">
+                <p className="text-base text-gray-900">{`Date: ${event.date}`}</p>
               </div>
             </div>
           </div>
