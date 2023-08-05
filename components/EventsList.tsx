@@ -1,9 +1,4 @@
-'use client';
-import useSWR from 'swr';
 import Image from 'next/image';
-import { Event } from '@prisma/client';
-
-const fetcher = (arg, ...args) => fetch(arg, ...args).then((res) => res.json());
 
 const products = [
   {
@@ -49,11 +44,17 @@ const products = [
   // More products...
 ];
 
-export default function EventsList() {
-  const { data, error } = useSWR('/api/event', fetcher);
+async function getEvents() {
+  const res = await fetch(`http://localhost:3000/api/event`, {
+    cache: 'no-store',
+  });
+  const events = await res.json();
 
-  if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  return events.events;
+}
+
+export default async function EventsList() {
+  const data = await getEvents();
 
   return (
     <div className="bg-white">

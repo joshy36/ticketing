@@ -20,16 +20,8 @@
   ```
 */
 'use client';
-import useSWR from 'swr';
-import Image from 'next/image';
 import { Event } from '@prisma/client';
-import { useRouter } from 'next/router';
-
-const fetcher = (arg, ...args) => fetch(arg, ...args).then((res) => res.json());
-
-import { useState } from 'react';
-import { StarIcon } from '@heroicons/react/20/solid';
-import { RadioGroup } from '@headlessui/react';
+import { usePathname } from 'next/navigation';
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -85,23 +77,20 @@ const product = {
 };
 const reviews = { href: '#', average: 4, totalCount: 117 };
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+async function getEvent(id: string): Promise<Event> {
+  const res = await fetch(`http://localhost:3000/api/event/${id}`, {
+    cache: 'no-store',
+  });
+  const event = await res.json();
+
+  return event.event;
 }
 
-export default function Example() {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+export default async function EventView() {
+  const url = usePathname();
+  const id = url.substring(url.lastIndexOf('/') + 1);
 
-  const router = useRouter();
-  const { id } = router.query;
-
-  const { data, error } = useSWR(`/api/event/${id}`, fetcher);
-
-  if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
-
-  const event: Event = data;
+  const event = await getEvent(id);
 
   return (
     <div className="bg-white">

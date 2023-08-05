@@ -1,5 +1,5 @@
-import EventView from '../../components/EventView';
-import Header from '../../components/Header';
+import EventView from '../../../components/EventView';
+import Header from '../../../components/Header';
 
 export default function Home() {
   return (

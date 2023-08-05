@@ -1,10 +1,10 @@
 import EventsList from '../components/EventsList';
-import Header from '../components/Header';
+import NavBar from '../components/NavBar';
 
 export default function Home() {
   return (
     <main>
-      <Header />
+      <NavBar />
       <EventsList />
     </main>
   );
