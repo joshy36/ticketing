@@ -45,7 +45,8 @@ const products = [
 ];
 
 async function getEvents() {
-  const res = await fetch(`http://localhost:3000/api/event`, {
+  const baseUrl = process.env.BASE_URL;
+  const res = await fetch(baseUrl + `/api/event`, {
     cache: 'no-store',
   });
   const events = await res.json();

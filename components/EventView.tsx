@@ -77,7 +77,8 @@ const product = {
 const reviews = { href: '#', average: 4, totalCount: 117 };
 
 async function getEvent(id: string): Promise<Event> {
-  const res = await fetch(`http://localhost:3000/api/event/${id}`, {
+  const baseUrl = process.env.BASE_URL;
+  const res = await fetch(baseUrl + `/api/event/${id}`, {
     cache: 'no-store',
   });
   const event = await res.json();
