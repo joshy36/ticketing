@@ -59,7 +59,7 @@ async function getEvents() {
     return events.events;
   } catch (error) {
     console.error('Error fetching events:', error);
-    return []; // Return an empty array in case of an error
+    return [];
   }
 }
 
@@ -67,7 +67,7 @@ export default async function EventsList() {
   const data = await getEvents();
 
   if (!data || data.length === 0) {
-    return <div>Error: Failed to fetch events</div>; // Display an error message if data is not available
+    return <div>Error: Failed to fetch events</div>;
   }
 
   return (

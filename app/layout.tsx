@@ -1,6 +1,7 @@
-import '../styles/globals.css';
+import './globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
-import NavBar from 'components/NavBar';
+import { ClerkProvider } from '@clerk/nextjs';
+import { dark } from '@clerk/themes';
 
 export default function RootLayout({
   // Layouts must accept a children prop.
@@ -10,13 +11,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <NavBar />
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
+      <html lang="en">
+        <body>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

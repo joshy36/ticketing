@@ -1,14 +1,11 @@
-'use client';
-import { useParams } from 'next/navigation';
 import EventView from '../../../components/EventView';
+import NavBar from 'components/NavBar';
 
-export default function Home() {
-  const params = useParams();
-  const id = params.id[0];
-
+export default function Home({ params }: { params: { id: string } }) {
   return (
     <main>
-      <EventView params={{ id: id }} />
+      <NavBar />
+      <EventView params={{ id: params.id }} />
     </main>
   );
 }
