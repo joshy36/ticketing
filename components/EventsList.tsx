@@ -45,17 +45,30 @@ const products = [
 ];
 
 async function getEvents() {
-  const baseUrl = process.env.BASE_URL;
-  const res = await fetch(baseUrl + `/api/event`, {
-    cache: 'no-store',
-  });
-  const events = await res.json();
+  try {
+    const baseUrl = process.env.BASE_URL;
+    const res = await fetch(baseUrl + `/api/event`, {
+      cache: 'no-store',
+    });
 
-  return events.events;
+    if (!res.ok) {
+      throw new Error('Failed to fetch events');
+    }
+
+    const events = await res.json();
+    return events.events;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return []; // Return an empty array in case of an error
+  }
 }
 
 export default async function EventsList() {
   const data = await getEvents();
+
+  if (!data || data.length === 0) {
+    return <div>Error: Failed to fetch events</div>; // Display an error message if data is not available
+  }
 
   return (
     <div className="bg-background">
