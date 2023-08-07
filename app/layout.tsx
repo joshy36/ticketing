@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
+import NavBar from 'components/NavBar';
 
 export default function RootLayout({
   // Layouts must accept a children prop.
@@ -12,6 +13,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <NavBar />
           {children}
         </ThemeProvider>
       </body>

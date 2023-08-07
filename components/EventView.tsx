@@ -19,9 +19,8 @@
   }
   ```
 */
-'use client';
 import { Event } from '@prisma/client';
-import { usePathname } from 'next/navigation';
+import { Button } from '../components/ui/button';
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -86,14 +85,15 @@ async function getEvent(id: string): Promise<Event> {
   return event.event;
 }
 
-export default async function EventView() {
-  const url = usePathname();
-  const id = url.substring(url.lastIndexOf('/') + 1);
-
-  const event = await getEvent(id);
+export default async function EventView({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const event = await getEvent(params.id);
 
   return (
-    <div className="bg-white">
+    <div className="bg-background">
       <div className="pt-6">
         {/* Image gallery */}
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
@@ -109,7 +109,7 @@ export default async function EventView() {
         {/* Product info */}
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-accent-foreground sm:text-3xl">
               {event.name}
             </h1>
           </div>
@@ -117,15 +117,12 @@ export default async function EventView() {
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">{`$99999`}</p>
+            <p className="text-3xl tracking-tight text-accent-foreground">{`$99999`}</p>
 
             <form className="mt-10">
-              <button
-                type="submit"
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
+              <Button variant="default" className="flex w-full">
                 Log in to Purchase
-              </button>
+              </Button>
             </form>
           </div>
 
@@ -135,13 +132,15 @@ export default async function EventView() {
               <h3 className="sr-only">Description</h3>
 
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{event.description}</p>
+                <p className="text-base text-accent-foreground">
+                  {event.description}
+                </p>
               </div>
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{`Location: ${event.location}`}</p>
+                <p className="text-base text-accent-foreground">{`Location: ${event.location}`}</p>
               </div>
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{`Date: ${event.date}`}</p>
+                <p className="text-base text-accent-foreground">{`Date: ${event.date}`}</p>
               </div>
             </div>
           </div>
