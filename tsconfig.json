@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "baseUrl": ".", // this handles the root
-    // "paths": {
-    //   "@lib-server/*": ["lib-server/*"] // just placeholder for now
-    // },
+    "paths": {
+      "@/*": ["./*"]
+    },
     "target": "es5",
     "lib": [
       "dom",

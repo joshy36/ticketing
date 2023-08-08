@@ -20,7 +20,7 @@
   ```
 */
 import { Event } from '@prisma/client';
-import { Button } from '../components/ui/button';
+import { Button } from '@/components/ui/button';
 
 const product = {
   name: 'Basic Tee 6-Pack',
