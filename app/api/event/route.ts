@@ -4,7 +4,10 @@ import prisma from '@/lib/prisma';
 
 export async function GET(req: NextRequest) {
   try {
+    console.log('test');
     const events: Event[] = await prisma.event.findMany();
+    console.log('test2');
+    console.log(events);
     return NextResponse.json({ events });
   } catch (e) {
     console.error('Request error', e);
