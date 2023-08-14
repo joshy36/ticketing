@@ -23,8 +23,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Framework - [Nextjs](https://nextjs.org/)
 
-Database  - [Planetscale](https://planetscale.com/)
+Database/Auth/File Hosting - [Supabase](https://supabase.com/)
 
-Auth      - [Clerk](https://clerk.com/)
-
-Styling   - [Tailwind](https://tailwindui.com/)
+UI - [Shadcn](https://ui.shadcn.com/) and [Tailwind](https://tailwindui.com/)

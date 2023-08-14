@@ -1,7 +1,5 @@
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { ClerkProvider } from '@clerk/nextjs';
-import { dark } from '@clerk/themes';
 
 export default function RootLayout({
   // Layouts must accept a children prop.
@@ -11,18 +9,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-      }}
-    >
-      <html lang="en">
-        <body>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
