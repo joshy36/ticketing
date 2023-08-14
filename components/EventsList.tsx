@@ -80,8 +80,10 @@ export default async function EventsList() {
             <a key={product.id} href={`/event/${product.id}`} className="group">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
                 <Image
-                  src={product.imageSrc}
-                  alt={product.imageAlt}
+                  src="https://gclzfhnchcgtgcmzpvna.supabase.co/storage/v1/object/public/images/drake.webp?t=2023-08-14T19%3A56%3A19.016Z"
+                  alt={product.description}
+                  width={500}
+                  height={500}
                   className="h-full w-full object-cover object-center group-hover:opacity-75"
                 />
               </div>
