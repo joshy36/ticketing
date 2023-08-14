@@ -13,7 +13,6 @@ import {
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import * as React from 'react';
-import { UserButton } from '@clerk/nextjs';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -119,9 +118,6 @@ export default function NavBar() {
                 ))}
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <UserButton afterSignOutUrl="/" />
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
