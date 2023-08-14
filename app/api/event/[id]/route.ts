@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     const id = url.substring(url.lastIndexOf('/') + 1);
     const event: Event = await prisma.event.findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
     });
     return NextResponse.json({ event });

@@ -14,7 +14,7 @@ npm run dev
 In a new terminal connect to the db:
 
 ```bash
-pscale connect tickets develop --port 3309
+npx supabase start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
