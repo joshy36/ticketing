@@ -21,6 +21,7 @@
 */
 import { Event } from '@prisma/client';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -97,7 +98,7 @@ export default async function EventView({
         {/* Image gallery */}
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-            <img
+            <Image
               src={event.image}
               alt={product.images[0].alt}
               className="h-full w-full object-cover object-center"
