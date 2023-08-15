@@ -1,156 +1,243 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+'use client';
+
 import Link from 'next/link';
-import { PhotoIcon } from '@heroicons/react/24/solid';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-export default function Example() {
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+
+import { Calendar } from './ui/calendar';
+
+import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from './ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
+
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: 'Event name must be at least 2 characters.',
+  }),
+  description: z.string().min(20, {
+    message: 'Description must be at least 20 characters.',
+  }),
+  date: z.date({
+    required_error: 'A date is required.',
+  }),
+  time: z.string().regex(/^(0?[1-9]|1[0-2]):[0-5][0-9]$/, {
+    message: 'Must input a valid time.',
+  }),
+  ampm: z.enum(['pm', 'am'], {
+    required_error: 'You need to select PM or AM.',
+  }),
+  location: z.string().min(2, {
+    message: 'Location must be at least 2 characters.',
+  }),
+});
+
+export default function EventCreate() {
+  const { toast } = useToast();
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+    },
+  });
+
+  // 2. Define a submit handler.
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const time = values.time.split(':');
+    values.date.setHours(Number(time[0]));
+    values.date.setMinutes(Number(time[1]));
+    console.log(values.date);
+    const event = JSON.stringify({
+      name: values.name,
+      description: values.description,
+      date: values.date,
+      location: values.location,
+      image:
+        'https://gclzfhnchcgtgcmzpvna.supabase.co/storage/v1/object/public/images/tswift.jpeg',
+    });
+    console.log(values);
+    console.log(event);
+    try {
+      toast({
+        description: 'Creating event...',
+      });
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      console.log(baseUrl);
+      const res = await fetch(baseUrl + `/api/event/create`, {
+        method: 'POST',
+        body: event,
+        cache: 'no-store',
+      });
+
+      if (!res.ok) {
+        toast({
+          description: 'Error creating event',
+        });
+        throw new Error('Failed to create event');
+      } else {
+        toast({
+          description: 'Event created successfully!',
+        });
+      }
+    } catch (error) {
+      toast({
+        description: 'Error creating event',
+      });
+      console.error('Error creating event:', error);
+    }
+  }
+
   return (
-    <form className="max-w-md mx-auto">
-      <div className="space-y-12">
-        <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Event
-          </h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">
-            Fill in the details to create an event.
-          </p>
-
-          <div className="col-span-full">
-            <label className="block text-sm font-medium leading-6 text-gray-900">
-              Date
-            </label>
-            <div className="mt-2">
-              <input
-                type="date"
-                id="date"
-                name="date"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="col-span-full">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Name
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Event Name</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Come join us for an unforgettable night!!"
+                  className="resize-none"
+                  {...field}
                 />
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="location"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Location
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="location"
-                  id="location"
-                  autoComplete="location"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="about"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Description
-              </label>
-              <div className="mt-2">
-                <textarea
-                  id="about"
-                  name="about"
-                  rows={3}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  defaultValue={''}
-                />
-              </div>
-              <p className="mt-3 text-sm leading-6 text-gray-600">
-                Write a description for the event.
-              </p>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="cover-photo"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Cover photo
-              </label>
-              <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                <div className="text-center">
-                  <PhotoIcon
-                    className="mx-auto h-12 w-12 text-gray-300"
-                    aria-hidden="true"
-                  />
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Event date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
                     >
-                      <span>Upload a file</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        className="sr-only"
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs leading-5 text-gray-600">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-6 flex items-center justify-end gap-x-6">
-        <Link
-          href="/"
-          className="text-sm font-semibold leading-6 text-gray-900"
-        >
-          Cancel
-        </Link>
-        <button
-          type="submit"
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Save
-        </button>
-      </div>
-    </form>
+                      {field.value ? (
+                        format(field.value, 'PPP')
+                      ) : (
+                        <span>Select a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) => date < new Date()}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="time"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Event Time</FormLabel>
+              <FormControl>
+                <Input placeholder="8:30" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="ampm"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="pm" />
+                    </FormControl>
+                    <FormLabel className="font-normal">PM</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="am" />
+                    </FormControl>
+                    <FormLabel className="font-normal">AM</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Location</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
   );
 }
