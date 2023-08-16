@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -68,7 +67,7 @@ export default function EventCreate() {
     const time = values.time.split(':');
     values.date.setHours(Number(time[0]));
     values.date.setMinutes(Number(time[1]));
-    console.log(values.date);
+
     const event = JSON.stringify({
       name: values.name,
       description: values.description,
@@ -77,14 +76,12 @@ export default function EventCreate() {
       image:
         'https://gclzfhnchcgtgcmzpvna.supabase.co/storage/v1/object/public/images/tswift.jpeg',
     });
-    console.log(values);
-    console.log(event);
+
     try {
       toast({
         description: 'Creating event...',
       });
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      console.log(baseUrl);
       const res = await fetch(baseUrl + `/api/event/create`, {
         method: 'POST',
         body: event,
