@@ -5,6 +5,14 @@ import prisma from '@/lib/prisma';
 export async function POST(req: NextRequest) {
   try {
     const { name, description, date, location, image } = await req.json();
+
+    if (!name || !description || !date || !location || !image) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
     const result: Event = await prisma.event.create({
       data: {
         name: name,

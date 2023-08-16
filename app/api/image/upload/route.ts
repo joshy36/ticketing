@@ -10,11 +10,16 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const file = formData.get('file');
   const fileName = formData.get('fileName');
+  const location = formData.get('location');
+
   const fileType = String(fileName).split('.')[1];
+  const uuid = crypto.randomUUID();
+  const nameWithUuid = fileName + '-' + uuid;
+  const fullRoute = location + nameWithUuid;
 
   const { data, error } = await supabase.storage
     .from('images')
-    .upload('/' + fileName, file!, {
+    .upload(fullRoute, file!, {
       cacheControl: '3600',
       upsert: false,
       contentType: 'image/' + fileType,
@@ -27,6 +32,6 @@ export async function POST(req: NextRequest) {
     );
   } else {
     console.log('Successfully uploaded file:', data);
-    return NextResponse.json({ data });
+    return NextResponse.json({ fullRoute });
   }
 }

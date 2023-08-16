@@ -4,14 +4,24 @@ import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 
+const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
+
 export default function UploadImage({ setImgUrl }) {
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
+    const fileType = data.file[0].name.split('.')[1];
+    if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
+      toast({
+        description: 'Image must be a jpeg, jpg, png, or webp',
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('fileName', data.file[0].name);
+    formData.append('location', '/event/');
 
     try {
       toast({
@@ -28,7 +38,8 @@ export default function UploadImage({ setImgUrl }) {
         toast({
           description: 'Image uploaded successfully!',
         });
-        setImgUrl(data.file[0].name);
+        const fileName = await res.json();
+        setImgUrl(fileName.fullRoute);
       } else {
         toast({
           description: 'Error uploading image!',

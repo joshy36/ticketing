@@ -76,28 +76,28 @@ export default async function EventsList() {
         <h2 className="sr-only">Events</h2>
 
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-          {data.map((product) => (
-            <a key={product.id} href={`/event/${product.id}`} className="group">
+          {data.map((event) => (
+            <a key={event.id} href={`/event/${event.id}`} className="group">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
                 <Image
-                  src={product.image}
-                  alt={product.description}
+                  src={event.image}
+                  alt={event.description}
                   width={500}
                   height={500}
                   className="h-full w-full object-cover object-center group-hover:opacity-75"
                 />
               </div>
               <h3 className="mt-4 text-sm text-accent-foreground">
-                {product.name}
+                {event.name}
               </h3>
               <p className="mt-1 text-sm font-sm text-accent-foreground">
-                {`Location: ${product.location}`}
+                {`Location: ${event.location}`}
               </p>
               <p className="mt-1 text-sm font-sm text-accent-foreground">
-                {`Date: ${product.date.toLocaleString()}`}
+                {`Date: ${event.date.toLocaleString()}`}
               </p>
               <p className="mt-1 text-lg font-medium text-accent-foreground">
-                {product.description}
+                {event.description}
               </p>
             </a>
           ))}
