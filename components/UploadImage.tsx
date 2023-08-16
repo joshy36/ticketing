@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 
-export default function UploadImage() {
+export default function UploadImage({ setImgUrl }) {
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
 
@@ -24,9 +24,18 @@ export default function UploadImage() {
         cache: 'no-store',
       });
 
-      toast({
-        description: 'Image uploaded successfully!',
-      });
+      if (res.ok) {
+        toast({
+          description: 'Image uploaded successfully!',
+        });
+        setImgUrl(data.file[0].name);
+      } else {
+        toast({
+          description: 'Error uploading image!',
+        });
+        console.error('Error uploading image:', res.statusText);
+        setImgUrl('');
+      }
     } catch (error) {
       toast({
         description: 'Error uploading image!',

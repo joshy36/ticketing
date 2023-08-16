@@ -91,7 +91,6 @@ export default async function EventView({
   params: { id: string };
 }) {
   const event = await getEvent(params.id);
-  console.log(event);
 
   return (
     <div className="bg-background">
@@ -100,7 +99,7 @@ export default async function EventView({
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
             <Image
-              src="https://gclzfhnchcgtgcmzpvna.supabase.co/storage/v1/object/public/images/tswift.jpeg?t=2023-08-14T19%3A42%3A52.286Z"
+              src={event.image}
               alt={event.description}
               width={500}
               height={500}
