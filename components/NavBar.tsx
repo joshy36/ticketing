@@ -37,15 +37,6 @@ export default function NavBar({ user }: { user: User | null }) {
 
   const supabase = createClientClient();
 
-  useEffect(() => {
-    const getData = async () => {
-      const { data } = await supabase.from('Event').select();
-      console.log('testingdata: ', data);
-    };
-
-    getData();
-  }, []);
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.refresh();
