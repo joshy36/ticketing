@@ -20,7 +20,7 @@ export default function AuthenticationPage() {
           </div>
           <UserSignInForm />
           <p className="text-sm text-muted-foreground text-center">
-            Don't have an account?{' '}
+            Don`&apos;`t have an account?{' '}
             <Link
               href="/sign-up"
               className="underline underline-offset-4 hover:text-primary"

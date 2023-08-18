@@ -48,6 +48,10 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
         title: 'Password should be at least 6 characters!',
         description: 'Please enter a more secure password.',
       });
+    } else {
+      toast({
+        title: 'Success! Please check your email for further instructions.',
+      });
     }
 
     // router.refresh();
