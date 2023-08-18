@@ -123,7 +123,7 @@ export default async function EventView({
 
             <form className="mt-10">
               <Button variant="default" className="flex w-full">
-                Log in to Purchase
+                Sign in to Purchase
               </Button>
             </form>
           </div>

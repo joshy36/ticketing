@@ -13,11 +13,9 @@ import {
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import * as React from 'react';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import { User } from '@supabase/supabase-js';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import createClientClient from '@/lib/supabaseClient';
+import { UserNav } from './UserNav';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -33,15 +31,6 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export default function NavBar({ user }: { user: User | null }) {
-  const router = useRouter();
-
-  const supabase = createClientClient();
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
-
   return (
     <div className="flex h-16 items-center px-4">
       <NavigationMenu>
@@ -73,17 +62,15 @@ export default function NavBar({ user }: { user: User | null }) {
       </NavigationMenu>
       {user ? (
         <div className="ml-auto flex items-center space-x-4">
-          <Button onClick={handleSignOut}>Sign out</Button>
+          <UserNav />
         </div>
       ) : (
         <div className="ml-auto flex items-center space-x-4">
-          <Link href="/login">
+          <Link href="/sign-in">
             {' '}
-            <Button>Sign Up</Button>
-          </Link>
-          <Link href="/login">
-            {' '}
-            <Button>Log in</Button>
+            <Button className={cn(buttonVariants({ variant: 'default' }))}>
+              Sign In
+            </Button>
           </Link>
         </div>
       )}
