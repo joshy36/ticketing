@@ -7,12 +7,17 @@ import type { NextRequest } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
-  console.log('testing');
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
 
   if (code) {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteHandlerClient(
+      { cookies },
+      {
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+        supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      }
+    );
     await supabase.auth.exchangeCodeForSession(code);
   }
 
