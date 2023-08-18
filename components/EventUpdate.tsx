@@ -31,7 +31,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from './ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import UploadImage from './UploadImage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Event } from '@prisma/client';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -54,18 +55,46 @@ const formSchema = z.object({
   }),
 });
 
-export default function EventCreate() {
+async function getEvent(id: string): Promise<Event> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const res = await fetch(baseUrl + `/api/event/${id}`, {
+    cache: 'no-store',
+  });
+  const event = await res.json();
+
+  return event.event;
+}
+
+type formValues = z.infer<typeof formSchema>;
+
+let defaultValues: Partial<formValues> = {};
+
+export default async function EventUpdate({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { toast } = useToast();
   const [imgUrl, setImgUrl] = useState('');
 
-  console.log('img: ', imgUrl);
+  useEffect(() => {
+    async function initializeEventData() {
+      const event: Event = await getEvent(params.id);
+      console.log(event);
+      defaultValues.name = event.name;
+      defaultValues.description = event.description;
+      defaultValues.date = event.date;
+    }
+
+    initializeEventData();
+  }, [params.id]);
+
+  console.log('DEFAULT', defaultValues);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-    },
+    defaultValues,
   });
 
   // 2. Define a submit handler.

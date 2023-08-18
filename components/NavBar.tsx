@@ -13,6 +13,11 @@ import {
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import * as React from 'react';
+import { Button } from './ui/button';
+import { User } from '@supabase/supabase-js';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import createClientClient from '@/lib/supabaseClient';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -27,15 +32,27 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export default function NavBar() {
+export default function NavBar({ user }: { user: User | null }) {
+  const router = useRouter();
+
+  const supabase = createClientClient();
+
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await supabase.from('Event').select();
+      console.log('testingdata: ', data);
+    };
+
+    getData();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+  };
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: '20px',
-      }}
-    >
+    <div className="flex h-16 items-center px-4">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -63,6 +80,22 @@ export default function NavBar() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+      {user ? (
+        <div className="ml-auto flex items-center space-x-4">
+          <Button onClick={handleSignOut}>Sign out</Button>
+        </div>
+      ) : (
+        <div className="ml-auto flex items-center space-x-4">
+          <Link href="/login">
+            {' '}
+            <Button>Sign Up</Button>
+          </Link>
+          <Link href="/login">
+            {' '}
+            <Button>Log in</Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

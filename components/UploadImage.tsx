@@ -22,12 +22,15 @@ export default function UploadImage({ setImgUrl }) {
     formData.append('file', data.file[0]);
     formData.append('fileName', data.file[0].name);
     formData.append('location', '/event/');
+    console.log(data.file[0]);
+    console.log(data.file[0].name);
 
     try {
       toast({
         description: 'Uploading image...',
       });
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      console.log(baseUrl);
       const res = await fetch(baseUrl + `/api/image/upload`, {
         method: 'POST',
         body: formData,
