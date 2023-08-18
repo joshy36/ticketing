@@ -30,7 +30,7 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
       email,
       password,
       options: {
-        emailRedirectTo: `https://ticketing-lemon.vercel.app/auth/callback`,
+        emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
 
