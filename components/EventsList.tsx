@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 const products = [
@@ -48,6 +49,9 @@ async function getEvents() {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const res = await fetch(baseUrl + `/api/event`, {
+      headers: {
+        cookie: cookies().toString(),
+      },
       cache: 'no-store',
     });
 
@@ -56,7 +60,7 @@ async function getEvents() {
     }
 
     const events = await res.json();
-    return events.events;
+    return events;
   } catch (error) {
     console.error('Error fetching events:', error);
     return [];

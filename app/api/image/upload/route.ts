@@ -1,18 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import createRouteClient from '@/lib/supabaseRoute';
 
 export async function POST(req: NextRequest) {
-  console.log('test');
-  const supabase = createServerActionClient(
-    { cookies },
-    {
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    }
-  );
+  const supabase = createRouteClient();
 
-  console.log('test2');
   const formData = await req.formData();
   const file = formData.get('file');
   const fileName = formData.get('fileName');
@@ -32,12 +23,9 @@ export async function POST(req: NextRequest) {
     });
   if (error) {
     console.log('Error uploading file:', error);
-    return NextResponse.json(
-      { error: 'Error fetching event' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   } else {
-    console.log('Successfully uploaded file:', data);
+    console.log('Successfully uploaded file:', { fullRoute });
     return NextResponse.json({ fullRoute });
   }
 }

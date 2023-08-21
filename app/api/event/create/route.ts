@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Event } from '@prisma/client';
-import prisma from '@/lib/prisma';
+import createRouteClient from '@/lib/supabaseRoute';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,16 +12,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const result: Event = await prisma.event.create({
-      data: {
+    const supabase = createRouteClient();
+
+    const { data } = await supabase
+      .from('events')
+      .insert({
         name: name,
         description: description,
         date: date,
         location: location,
         image: image,
-      },
-    });
-    return NextResponse.json({ result });
+      })
+      .select();
+    console.log(data);
+
+    return NextResponse.json(data);
   } catch (e) {
     console.error('Request error', e);
     return NextResponse.json(

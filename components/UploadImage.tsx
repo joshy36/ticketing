@@ -22,15 +22,12 @@ export default function UploadImage({ setImgUrl }) {
     formData.append('file', data.file[0]);
     formData.append('fileName', data.file[0].name);
     formData.append('location', '/event/');
-    console.log(data.file[0]);
-    console.log(data.file[0].name);
 
     try {
       toast({
         description: 'Uploading image...',
       });
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      console.log(baseUrl);
       const res = await fetch(baseUrl + `/api/image/upload`, {
         method: 'POST',
         body: formData,
@@ -44,14 +41,24 @@ export default function UploadImage({ setImgUrl }) {
         const fileName = await res.json();
         setImgUrl(fileName.fullRoute);
       } else {
-        toast({
-          description: 'Error uploading image!',
-        });
-        console.error('Error uploading image:', res.statusText);
+        const error = await res.json();
+        if (error.error.message == 'invalid signature') {
+          toast({
+            variant: 'destructive',
+            description: 'Must be signed in to upload an image!',
+          });
+        } else {
+          toast({
+            variant: 'destructive',
+            description: 'Error uploading image!',
+          });
+        }
+        console.error('Error uploading image:', error.error);
         setImgUrl('');
       }
     } catch (error) {
       toast({
+        variant: 'destructive',
         description: 'Error uploading image!',
       });
       console.error('Error uploading image:', error);

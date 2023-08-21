@@ -19,8 +19,9 @@
   }
   ```
 */
-import { Event } from '@prisma/client';
+
 import { Button } from '@/components/ui/button';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 const product = {
@@ -77,12 +78,17 @@ const product = {
 };
 const reviews = { href: '#', average: 4, totalCount: 117 };
 
-async function getEvent(id: string): Promise<Event> {
+async function getEvent(id: string) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const res = await fetch(baseUrl + `/api/event/${id}`, { cache: 'no-store' });
+  const res = await fetch(baseUrl + `/api/event/${id}`, {
+    headers: {
+      cookie: cookies().toString(),
+    },
+    cache: 'no-store',
+  });
   const event = await res.json();
 
-  return event.event;
+  return event;
 }
 
 export default async function EventView({

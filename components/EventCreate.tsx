@@ -58,8 +58,6 @@ export default function EventCreate() {
   const { toast } = useToast();
   const [imgUrl, setImgUrl] = useState('');
 
-  console.log('img: ', imgUrl);
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

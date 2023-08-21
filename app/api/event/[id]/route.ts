@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Event } from '@prisma/client';
-import prisma from '@/lib/prisma';
+import createRouteClient from '@/lib/supabaseRoute';
 
 export async function GET(req: NextRequest) {
   try {
     const url = req.url;
     const id = url.substring(url.lastIndexOf('/') + 1);
-    const event: Event = await prisma.event.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    return NextResponse.json({ event });
+    const supabase = createRouteClient();
+    const { data } = await supabase.from('events').select().eq('id', id);
+    return NextResponse.json(data![0]);
   } catch (e) {
     console.error('Request error', e);
     return NextResponse.json(

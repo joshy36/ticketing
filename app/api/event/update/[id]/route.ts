@@ -1,6 +1,5 @@
+import createRouteClient from '@/lib/supabaseRoute';
 import { NextRequest, NextResponse } from 'next/server';
-import { Event } from '@prisma/client';
-import prisma from '@/lib/prisma';
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -12,7 +11,7 @@ export async function PATCH(req: NextRequest) {
     const updateData: {
       name?: string;
       description?: string;
-      date?: Date;
+      date?: string;
       location?: string;
       image?: string;
     } = {};
@@ -31,14 +30,14 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const updateEvent: Event = await prisma.event.update({
-      where: {
-        id: id,
-      },
-      data: updateData,
-    });
+    // need to check this
+    const supabase = createRouteClient();
+    const { data } = await supabase
+      .from('events')
+      .update(updateData)
+      .match({ id: id });
 
-    return NextResponse.json({ updateEvent });
+    return NextResponse.json(data);
   } catch (e) {
     console.error('Request error', e);
     return NextResponse.json(

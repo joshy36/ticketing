@@ -13,5 +13,6 @@ module.exports = {
         pathname: '/storage/v1/object/public/images/**',
       },
     ],
+    domains: ['gclzfhnchcgtgcmzpvna.supabase.co', 'localhost'],
   },
 };

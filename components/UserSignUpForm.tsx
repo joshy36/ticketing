@@ -17,6 +17,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { toast } = useToast();
@@ -49,6 +50,7 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
         description: 'Please enter a more secure password.',
       });
     } else {
+      setIsSuccessful(true);
       toast({
         title: 'Success! Please check your email for further instructions.',
       });
@@ -104,9 +106,16 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            Sign Up with Email
           </Button>
         </div>
+        {isSuccessful ? (
+          <div>
+            <h1>Success! Please check your email for further instructions.</h1>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </form>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
