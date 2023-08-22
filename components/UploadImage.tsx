@@ -6,11 +6,11 @@ import { useToast } from './ui/use-toast';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
 
-export default function UploadImage({ setImgUrl }) {
+export default function UploadImage({ setImgUrl }: any) {
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     const fileType = data.file[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
       toast({

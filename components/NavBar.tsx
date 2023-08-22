@@ -62,7 +62,7 @@ export default function NavBar({ user }: { user: User | null }) {
       </NavigationMenu>
       {user ? (
         <div className="ml-auto flex items-center space-x-4">
-          <UserNav />
+          <UserNav user={user} />
         </div>
       ) : (
         <div className="ml-auto flex items-center space-x-4">

@@ -12,8 +12,10 @@ import {
 } from './ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import createClientClient from '@/lib/supabaseClient';
+import { User } from '@supabase/supabase-js';
+import Link from 'next/link';
 
-export function UserNav() {
+export function UserNav({ user }: { user: User | null }) {
   const router = useRouter();
 
   const supabase = createClientClient();
@@ -21,6 +23,7 @@ export function UserNav() {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.refresh();
+    router.push('/');
   };
 
   return (
@@ -36,15 +39,17 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none">Random Username</p>
             <p className="text-xs leading-none text-muted-foreground">
-              m@example.com
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href={`/profile/edit/${user?.id}`}>Profile</Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>

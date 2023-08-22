@@ -196,7 +196,7 @@ export default function EventCreate() {
             name="time"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Event Time</FormLabel>
+                <FormLabel>Event Time (EST)</FormLabel>
                 <FormControl>
                   <Input placeholder="8:30" {...field} />
                 </FormControl>
