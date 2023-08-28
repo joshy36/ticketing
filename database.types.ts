@@ -36,36 +36,70 @@ export interface Database {
     Tables: {
       events: {
         Row: {
-          created_at: string | null
+          created_at: string
           date: string
           description: string
           id: string
           image: string
           location: string
           name: string
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           date: string
           description: string
           id?: string
           image: string
           location: string
           name: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           date?: string
           description?: string
           id?: string
           image?: string
           location?: string
           name?: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          bio: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          profile_image: string | null
+          username: string | null
+        }
+        Insert: {
+          bio?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          profile_image?: string | null
+          username?: string | null
+        }
+        Update: {
+          bio?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          profile_image?: string | null
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

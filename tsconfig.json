@@ -13,6 +13,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true, // true required for zod
+    "noUncheckedIndexedAccess": true,
     "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,

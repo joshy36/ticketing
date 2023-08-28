@@ -1,9 +1,10 @@
 import NavBar from '@/components/NavBar';
-import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { Analytics } from '@vercel/analytics/react';
 import createServerClient from '@/lib/supabaseServer';
+import getUserProfile from '@/utils/getUserProfile';
+import './globals.css';
 
 export const revalidate = 0;
 
@@ -20,11 +21,13 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  const userProfile = await getUserProfile(user?.id!);
+
   return (
     <html lang="en">
       <body>
-        <NavBar user={user} />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <NavBar user={user} userProfile={userProfile} />
           {children}
           <Toaster />
           <Analytics />

@@ -30,7 +30,13 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export default function NavBar({ user }: { user: User | null }) {
+export default function NavBar({
+  user,
+  userProfile,
+}: {
+  user: User | null;
+  userProfile: UserProfile | null;
+}) {
   return (
     <div className="flex h-16 items-center px-4">
       <NavigationMenu>
@@ -62,7 +68,7 @@ export default function NavBar({ user }: { user: User | null }) {
       </NavigationMenu>
       {user ? (
         <div className="ml-auto flex items-center space-x-4">
-          <UserNav user={user} />
+          <UserNav user={user} userProfile={userProfile} />
         </div>
       ) : (
         <div className="ml-auto flex items-center space-x-4">

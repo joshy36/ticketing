@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import {
   Form,
@@ -17,13 +16,6 @@ import {
   FormMessage,
 } from './ui/form';
 import { Input } from './ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
 import { Textarea } from './ui/textarea';
 import { toast } from './ui/use-toast';
 
@@ -33,48 +25,101 @@ const profileFormSchema = z.object({
     .min(2, {
       message: 'Username must be at least 2 characters.',
     })
+    .regex(/^[a-zA-Z0-9_\-]+$/, {
+      message: 'Your username can contain letters, numbers, _ and -',
+    })
     .max(30, {
       message: 'Username must not be longer than 30 characters.',
     }),
-  email: z
-    .string({
-      required_error: 'Please select an email to display.',
+  firstname: z
+    .string()
+    .max(30, {
+      message: 'First name must not be longer than 30 characters.',
     })
-    .email(),
-  bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: 'Please enter a valid URL.' }),
-      })
-    )
+    .regex(/^[a-zA-Z]+$/, {
+      message: 'Must not contain spaces or special characters',
+    })
     .optional(),
+  lastname: z
+    .string()
+    .max(30, {
+      message: 'Last name must not be longer than 30 characters.',
+    })
+    .regex(/^[a-zA-Z]+$/, {
+      message: 'Must not contain spaces or special characters',
+    })
+    .optional(),
+  bio: z.string().max(160).optional(),
+  // urls: z
+  //   .array(
+  //     z.object({
+  //       value: z.string().url({ message: 'Please enter a valid URL.' }),
+  //     })
+  //   )
+  //   .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: 'I own a computer.',
-  urls: [
-    { value: 'https://shadcn.com' },
-    { value: 'http://twitter.com/shadcn' },
-  ],
+type UserForm = {
+  bio: string | undefined;
+  first_name: string | undefined;
+  id: string;
+  last_name: string | undefined;
+  profile_image: string | undefined;
+  username: string | undefined;
 };
 
-export function ProfileForm() {
+function nullToUndefined(value: string | null): string | undefined {
+  return value ?? undefined;
+}
+
+function undefinedToNull(value: string | undefined): string | null {
+  return value ?? null;
+}
+
+export function ProfileForm({ params }: { params: { user: UserProfile } }) {
+  const user: UserForm = {
+    bio: nullToUndefined(params.user.bio),
+    first_name: nullToUndefined(params.user.first_name),
+    id: params.user.id,
+    last_name: nullToUndefined(params.user.last_name),
+    profile_image: nullToUndefined(params.user.profile_image),
+    username: nullToUndefined(params.user.username),
+  };
+
+  // This can come from your database or API.
+  const defaultValues: Partial<ProfileFormValues> = {
+    username: user.username,
+    firstname: user.first_name,
+    lastname: user.last_name,
+    bio: user.bio,
+    // urls: [
+    //   { value: 'https://shadcn.com' },
+    //   { value: 'http://twitter.com/shadcn' },
+    // ],
+  };
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: 'onChange',
   });
 
-  const { fields, append } = useFieldArray({
-    name: 'urls',
-    control: form.control,
-  });
+  // const { fields, append } = useFieldArray({
+  //   name: 'urls',
+  //   control: form.control,
+  // });
 
-  function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: ProfileFormValues) {
+    const userUpdate = JSON.stringify({
+      username: undefinedToNull(data.username) === '' ? null : data.username,
+      first_name:
+        undefinedToNull(data.firstname) === '' ? null : data.firstname,
+      last_name: undefinedToNull(data.lastname) === '' ? null : data.lastname,
+      bio: undefinedToNull(data.bio) === '' ? null : data.bio,
+    });
+
     toast({
       title: 'You submitted the following values:',
       description: (
@@ -83,6 +128,34 @@ export function ProfileForm() {
         </pre>
       ),
     });
+
+    try {
+      toast({
+        description: 'Updating profile...',
+      });
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      const res = await fetch(baseUrl + `/api/user/edit/${user.id}`, {
+        method: 'PATCH',
+        body: userUpdate,
+        cache: 'no-store',
+      });
+
+      if (!res.ok) {
+        toast({
+          description: 'Error updating profile',
+        });
+        throw new Error('Failed to update profile');
+      } else {
+        toast({
+          description: 'Profile updated successfully!',
+        });
+      }
+    } catch (error) {
+      toast({
+        description: 'Error updating profile',
+      });
+      console.error('Error updating profile:', error);
+    }
   }
 
   return (
@@ -95,11 +168,11 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
+                pseudonym.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -107,26 +180,26 @@ export function ProfileForm() {
         />
         <FormField
           control={form.control}
-          name="email"
+          name="firstname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can manage verified email addresses in your{' '}
-                <Link href="/examples/forms">email settings</Link>.
-              </FormDescription>
+              <FormLabel>First Name</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastname"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -144,16 +217,12 @@ export function ProfileForm() {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <div>
-          {fields.map((field, index) => (
+          {/* {fields.map((field, index) => (
             <FormField
               control={form.control}
               key={field.id}
@@ -182,7 +251,7 @@ export function ProfileForm() {
             onClick={() => append({ value: '' })}
           >
             Add URL
-          </Button>
+          </Button> */}
         </div>
         <Button type="submit">Update profile</Button>
       </form>

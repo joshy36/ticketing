@@ -2,6 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { ProfileForm } from '@/components/ProfileForm';
 import { SidebarNav } from '@/components/SidebarNav';
 import Image from 'next/image';
+import getUserProfile from '@/utils/getUserProfile';
 
 const sidebarNavItems = [
   {
@@ -19,7 +20,13 @@ const sidebarNavItems = [
   },
 ];
 
-export default function ProfilePage({ params }: { params: { id: string } }) {
+export default async function ProfilePage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const user = await getUserProfile(params.id);
+
   return (
     <>
       <div className="md:hidden">
@@ -58,7 +65,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
               </p>
             </div>
             <Separator />
-            <ProfileForm />
+            <ProfileForm params={{ user: user }} />
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import createRouteClient from '@/lib/supabaseRoute';
+import { createClient } from '@supabase/supabase-js';
 
 export async function GET(
   req: NextRequest,
@@ -7,13 +8,15 @@ export async function GET(
 ) {
   try {
     const supabase = createRouteClient();
-    const { data } = await supabase.from('events').select().eq('id', params.id);
+
+    const { data } = await supabase
+      .from('user_profiles')
+      .select()
+      .eq('id', params.id);
+
     return NextResponse.json(data![0]);
   } catch (e) {
     console.error('Request error', e);
-    return NextResponse.json(
-      { error: 'Error fetching event' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error fetching user' }, { status: 500 });
   }
 }

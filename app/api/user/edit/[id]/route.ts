@@ -1,18 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import createRouteClient from '@/lib/supabaseRoute';
 
-export async function GET(
+export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const user = await req.json();
     const supabase = createRouteClient();
-    const { data } = await supabase.from('events').select().eq('id', params.id);
-    return NextResponse.json(data![0]);
+    const { error } = await supabase
+      .from('user_profiles')
+      .update(user)
+      .eq('id', params.id);
+    return NextResponse.json('Successfully updated profile!');
   } catch (e) {
     console.error('Request error', e);
     return NextResponse.json(
-      { error: 'Error fetching event' },
+      { error: 'Error updating user profile' },
       { status: 500 }
     );
   }
