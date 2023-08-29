@@ -8,10 +8,14 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import createClientClient from '@/lib/supabaseClient';
-import { AuthResponse } from '@supabase/supabase-js';
 import { useToast } from './ui/use-toast';
+import {
+  uniqueNamesGenerator,
+  adjectives,
+  colors,
+  animals,
+} from 'unique-names-generator';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -27,13 +31,20 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const res: AuthResponse = await supabase.auth.signUp({
+    const randomName = uniqueNamesGenerator({
+      dictionaries: [adjectives, colors, animals],
+    });
+    const res = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
+        data: {
+          username: randomName,
+        },
       },
     });
+    const id = res.data.user?.id;
 
     if (res.error?.message == 'User already registered') {
       toast({
