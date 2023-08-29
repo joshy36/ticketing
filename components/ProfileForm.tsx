@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -18,6 +19,8 @@ import {
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { toast } from './ui/use-toast';
+import { useRouter } from 'next/navigation';
+import { Icons } from './ui/icons';
 
 const profileFormSchema = z.object({
   username: z
@@ -79,6 +82,8 @@ function undefinedToNull(value: string | undefined): string | null {
 }
 
 export function ProfileForm({ params }: { params: { user: UserProfile } }) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const user: UserForm = {
     bio: nullToUndefined(params.user.bio),
     first_name: nullToUndefined(params.user.first_name),
@@ -112,21 +117,13 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
   // });
 
   async function onSubmit(data: ProfileFormValues) {
+    setIsLoading(true);
     const userUpdate = JSON.stringify({
       username: undefinedToNull(data.username) === '' ? null : data.username,
       first_name:
         undefinedToNull(data.firstname) === '' ? null : data.firstname,
       last_name: undefinedToNull(data.lastname) === '' ? null : data.lastname,
       bio: undefinedToNull(data.bio) === '' ? null : data.bio,
-    });
-
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
     });
 
     try {
@@ -146,15 +143,18 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
         });
         throw new Error('Failed to update profile');
       } else {
+        router.refresh();
         toast({
           description: 'Profile updated successfully!',
         });
       }
+      setIsLoading(false);
     } catch (error) {
       toast({
         description: 'Error updating profile',
       });
       console.error('Error updating profile:', error);
+      setIsLoading(false);
     }
   }
 
@@ -168,7 +168,7 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder="" disabled={isLoading} {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a
@@ -185,7 +185,7 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
             <FormItem>
               <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder="" disabled={isLoading} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -198,7 +198,7 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
             <FormItem>
               <FormLabel>Last Name</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder="" disabled={isLoading} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -214,6 +214,7 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
                 <Textarea
                   placeholder="Tell us a little bit about yourself"
                   className="resize-none"
+                  disabled={isLoading}
                   {...field}
                 />
               </FormControl>
@@ -253,7 +254,10 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
             Add URL
           </Button> */}
         </div>
-        <Button type="submit">Update profile</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+          Update profile
+        </Button>
       </form>
     </Form>
   );
