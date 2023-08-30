@@ -83,13 +83,17 @@ export default async function EventsList() {
           {data.map((event: Events) => (
             <a key={event.id} href={`/event/${event.id}`} className="group">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
-                <Image
-                  src={event.image}
-                  alt={event.description}
-                  width={500}
-                  height={500}
-                  className="h-full w-full object-cover object-center group-hover:opacity-75"
-                />
+                {event.image ? (
+                  <Image
+                    src={event.image}
+                    alt={event.description}
+                    width={500}
+                    height={500}
+                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                  />
+                ) : (
+                  <h3>No image to render</h3>
+                )}
               </div>
               <h3 className="mt-4 text-sm text-accent-foreground">
                 {event.name}
