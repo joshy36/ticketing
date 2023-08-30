@@ -8,16 +8,13 @@ export async function POST(req: NextRequest) {
   const file = formData.get('file');
   const fileName = formData.get('fileName');
   const location = formData.get('location');
+  const bucket = String(formData.get('bucket'));
 
   const fileType = String(fileName).split('.')[1];
-  // const uuid = crypto.randomUUID();
-  // const nameWithUuid = fileName + '-' + uuid;
-  // const fullRoute = location + nameWithUuid;
-  const fullRoute = location + 'event_photo.jpeg';
 
   const { data, error } = await supabase.storage
-    .from('events') // change to events
-    .upload(fullRoute, file!, {
+    .from(bucket)
+    .upload(String(location), file!, {
       cacheControl: '3600',
       upsert: true,
       contentType: 'image/' + fileType,
@@ -29,7 +26,7 @@ export async function POST(req: NextRequest) {
     console.log('Error uploading file:', error);
     return NextResponse.json({ error: error }, { status: 500 });
   } else {
-    console.log('Successfully uploaded file:', { fullRoute });
-    return NextResponse.json({ fullRoute });
+    console.log('Successfully uploaded file:', { location });
+    return NextResponse.json({ location });
   }
 }

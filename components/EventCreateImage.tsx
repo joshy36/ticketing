@@ -3,7 +3,6 @@ import UploadImage from './UploadImage';
 import { Separator } from './ui/separator';
 
 export default function EventCreateImage({ id }: { id: string }) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   return (
     <div className=" space-y-6 p-10 pb-16 sm:block">
       <div className="space-y-0.5">
@@ -20,7 +19,7 @@ export default function EventCreateImage({ id }: { id: string }) {
               <h1 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Upload an Image for the Event
               </h1>
-              <UploadImage id={id} />
+              <UploadImage id={id} buttonText="Create Event" />
             </div>
           </div>
         </div>

@@ -45,7 +45,7 @@ const products = [
   // More products...
 ];
 
-async function getEvents() {
+async function getEvents(): Promise<Events[] | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const res = await fetch(baseUrl + `/api/event`, {
@@ -66,6 +66,27 @@ async function getEvents() {
     return [];
   }
 }
+
+const convertDate = (date: string): string => {
+  const months: Record<string, string> = {
+    '01': 'Jan',
+    '02': 'Feb',
+    '03': 'March',
+    '04': 'April',
+    '05': 'May',
+    '06': 'June',
+    '07': 'July',
+    '08': 'Aug',
+    '09': 'Sept',
+    '10': 'Oct',
+    '11': 'Nov',
+    '12': 'Dec',
+  };
+  const time = date.split('-')[2]?.split('T')[1];
+  const day = date.split('-')[2]?.split('T')[0];
+  const month = months[date.split('-')[1]!];
+  return month + ' ' + day;
+};
 
 export default async function EventsList() {
   const data = await getEvents();
@@ -95,17 +116,14 @@ export default async function EventsList() {
                   <h3>No image to render</h3>
                 )}
               </div>
-              <h3 className="mt-4 text-sm text-accent-foreground">
+              <h1 className="mt-4 text-lg text-accent-foreground">
                 {event.name}
-              </h3>
+              </h1>
               <p className="mt-1 text-sm font-sm text-accent-foreground">
                 {`Location: ${event.location}`}
               </p>
               <p className="mt-1 text-sm font-sm text-accent-foreground">
-                {`Date: ${event.date.toLocaleString()}`}
-              </p>
-              <p className="mt-1 text-lg font-medium text-accent-foreground">
-                {event.description}
+                {`Date: ${convertDate(event.date)}`}
               </p>
             </a>
           ))}

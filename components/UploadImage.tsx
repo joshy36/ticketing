@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
@@ -10,7 +10,13 @@ import { useRouter } from 'next/navigation';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 
-export default function UploadImage({ id }: { id: string }) {
+export default function UploadImage({
+  id,
+  buttonText,
+}: {
+  id: string;
+  buttonText: string;
+}) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState('');
@@ -18,6 +24,8 @@ export default function UploadImage({ id }: { id: string }) {
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
   const router = useRouter();
+
+  console.log('IMG: ', imgUrl);
 
   const createEvent = async () => {
     setIsLoading(true);
@@ -63,10 +71,12 @@ export default function UploadImage({ id }: { id: string }) {
       setIsLoading(false);
       return;
     }
+    const bucket = 'events';
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('fileName', data.file[0].name);
-    formData.append('location', `/${id}/`);
+    formData.append('location', `/${id}/event_photo.jpeg`);
+    formData.append('bucket', bucket);
 
     try {
       toast({
@@ -86,8 +96,9 @@ export default function UploadImage({ id }: { id: string }) {
         const fileName = await res.json();
         setImgUrl(
           process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
-            '/events' +
-            fileName.fullRoute +
+            '/' +
+            bucket +
+            fileName.location +
             '?' +
             imageKey
         );
@@ -153,7 +164,7 @@ export default function UploadImage({ id }: { id: string }) {
       )}
       <Button disabled={isLoading || imgUrl == ''} onClick={createEvent}>
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-        Create Event
+        {buttonText}
       </Button>
     </>
   );

@@ -67,7 +67,7 @@ export default async function ProfilePage({
             </div>
             <Separator />
             <ProfileForm userProfile={userProfile} />
-            <UploadImage id={params.id} />
+            <UploadImage id={params.id} buttonText="Set Image" />
           </div>
         </div>
       </div>
