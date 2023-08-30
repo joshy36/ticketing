@@ -26,7 +26,7 @@ const components: { title: string; href: string; description: string }[] = [
   {
     title: 'Update Event',
     href: '/event/update',
-    description: 'A page to update and event.',
+    description: 'A page to update an event.',
   },
 ];
 

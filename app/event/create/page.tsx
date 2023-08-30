@@ -4,7 +4,7 @@ import EventCreate from '@/components/EventCreate';
 export default function Home() {
   return (
     <main>
-      <div className="container mx-auto px-100">
+      <div className="lg:px-80">
         <EventCreate />
       </div>
     </main>

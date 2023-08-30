@@ -40,7 +40,7 @@ export interface Database {
           date: string
           description: string
           id: string
-          image: string
+          image: string | null
           location: string
           name: string
           updated_at: string
@@ -50,7 +50,7 @@ export interface Database {
           date: string
           description: string
           id?: string
-          image: string
+          image?: string | null
           location: string
           name: string
           updated_at?: string
@@ -60,7 +60,7 @@ export interface Database {
           date?: string
           description?: string
           id?: string
-          image?: string
+          image?: string | null
           location?: string
           name?: string
           updated_at?: string

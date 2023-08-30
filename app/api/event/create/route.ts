@@ -3,9 +3,9 @@ import createRouteClient from '@/lib/supabaseRoute';
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, description, date, location, image } = await req.json();
+    const { name, description, date, location } = await req.json();
 
-    if (!name || !description || !date || !location || !image) {
+    if (!name || !description || !date || !location) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -21,10 +21,9 @@ export async function POST(req: NextRequest) {
         description: description,
         date: date,
         location: location,
-        image: image,
+        image: null,
       })
       .select();
-    console.log(data);
 
     return NextResponse.json(data);
   } catch (e) {

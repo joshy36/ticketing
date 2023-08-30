@@ -12,7 +12,28 @@ module.exports = {
       center: true,
       padding: '20rem',
       screens: {
-        '2xl': '1400px',
+        // prettier-ignore
+        'xs': '200px',
+        // => @media (min-width: 200px) { ... }
+
+        // prettier-ignore
+        'sm': '640px',
+        // => @media (min-width: 640px) { ... }
+
+        // prettier-ignore
+        'md': '768px',
+        // => @media (min-width: 768px) { ... }
+
+        // prettier-ignore
+        'lg': '1024px',
+        // => @media (min-width: 1024px) { ... }
+
+        // prettier-ignore
+        'xl': '1280px',
+        // => @media (min-width: 1280px) { ... }
+
+        '2xl': '1536px',
+        // => @media (min-width: 1536px) { ... }
       },
     },
     extend: {

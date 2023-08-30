@@ -81,16 +81,16 @@ function undefinedToNull(value: string | undefined): string | null {
   return value ?? null;
 }
 
-export function ProfileForm({ params }: { params: { user: UserProfile } }) {
+export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const user: UserForm = {
-    bio: nullToUndefined(params.user.bio),
-    first_name: nullToUndefined(params.user.first_name),
-    id: params.user.id,
-    last_name: nullToUndefined(params.user.last_name),
-    profile_image: nullToUndefined(params.user.profile_image),
-    username: nullToUndefined(params.user.username),
+    bio: nullToUndefined(userProfile.bio),
+    first_name: nullToUndefined(userProfile.first_name),
+    id: userProfile.id,
+    last_name: nullToUndefined(userProfile.last_name),
+    profile_image: nullToUndefined(userProfile.profile_image),
+    username: nullToUndefined(userProfile.username),
   };
 
   // This can come from your database or API.
@@ -159,71 +159,72 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="" disabled={isLoading} {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="firstname"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>First Name</FormLabel>
-              <FormControl>
-                <Input placeholder="" disabled={isLoading} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="lastname"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last Name</FormLabel>
-              <FormControl>
-                <Input placeholder="" disabled={isLoading} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  disabled={isLoading}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div>
-          {/* {fields.map((field, index) => (
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is your public display name. It can be your real name or
+                  a pseudonym.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="firstname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Tell us a little bit about yourself"
+                    className="resize-none"
+                    disabled={isLoading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div>
+            {/* {fields.map((field, index) => (
             <FormField
               control={form.control}
               key={field.id}
@@ -253,12 +254,15 @@ export function ProfileForm({ params }: { params: { user: UserProfile } }) {
           >
             Add URL
           </Button> */}
-        </div>
-        <Button type="submit" disabled={isLoading}>
-          {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Update profile
-        </Button>
-      </form>
-    </Form>
+          </div>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Update profile
+          </Button>
+        </form>
+      </Form>
+    </>
   );
 }
