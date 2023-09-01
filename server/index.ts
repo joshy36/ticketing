@@ -15,7 +15,7 @@ export const appRouter = router({
       const { data } = await supabase
         .from('events')
         .select()
-        .eq('id', opts.input)
+        .eq('id', opts.input.id)
         .limit(1)
         .single();
       return data;
@@ -27,7 +27,7 @@ export const appRouter = router({
       const { data } = await supabase
         .from('user_profiles')
         .select()
-        .eq('id', opts.input)
+        .eq('id', opts.input.id)
         .limit(1)
         .single();
       return data;
