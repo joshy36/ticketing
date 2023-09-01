@@ -1,3 +1,4 @@
+import { serverClient } from '@/app/_trpc/serverClient';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 
@@ -45,28 +46,6 @@ const products = [
   // More products...
 ];
 
-async function getEvents(): Promise<Events[] | null> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const res = await fetch(baseUrl + `/api/event`, {
-      headers: {
-        cookie: cookies().toString(),
-      },
-      cache: 'no-store',
-    });
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch events');
-    }
-
-    const events = await res.json();
-    return events;
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    return [];
-  }
-}
-
 const convertDate = (date: string): string => {
   const months: Record<string, string> = {
     '01': 'Jan',
@@ -89,7 +68,7 @@ const convertDate = (date: string): string => {
 };
 
 export default async function EventsList() {
-  const data = await getEvents();
+  const data = await serverClient.getEvents();
 
   if (!data || data.length === 0) {
     return <div>Error: Failed to fetch events</div>;

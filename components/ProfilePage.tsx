@@ -1,9 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 import { ProfileForm } from '@/components/ProfileForm';
 import { SidebarNav } from '@/components/SidebarNav';
-import Image from 'next/image';
-import getUserProfile from '@/utils/getUserProfile';
-import UploadImage from './UploadImage';
+import { serverClient } from '@/app/_trpc/serverClient';
 
 const sidebarNavItems = [
   {
@@ -26,7 +24,7 @@ export default async function ProfilePage({
 }: {
   params: { id: string };
 }) {
-  const userProfile = await getUserProfile(params.id);
+  const userProfile = await serverClient.getUserProfile(params.id);
 
   return (
     <>
@@ -66,7 +64,7 @@ export default async function ProfilePage({
               </p>
             </div>
             <Separator />
-            <ProfileForm userProfile={userProfile} />
+            <ProfileForm userProfile={userProfile!} />
             {/* <UploadImage id={params.id} buttonText="Set Image" /> */}
           </div>
         </div>

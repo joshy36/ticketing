@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -21,6 +20,7 @@ import { Textarea } from './ui/textarea';
 import { toast } from './ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { Icons } from './ui/icons';
+import { trpc } from '@/app/_trpc/client';
 
 const profileFormSchema = z.object({
   username: z
@@ -39,7 +39,7 @@ const profileFormSchema = z.object({
     .max(30, {
       message: 'First name must not be longer than 30 characters.',
     })
-    .regex(/^[a-zA-Z]+$/, {
+    .regex(/^[a-zA-Z]*$/, {
       message: 'Must not contain spaces or special characters',
     })
     .optional(),
@@ -48,7 +48,7 @@ const profileFormSchema = z.object({
     .max(30, {
       message: 'Last name must not be longer than 30 characters.',
     })
-    .regex(/^[a-zA-Z]+$/, {
+    .regex(/^[a-zA-Z]*$/, {
       message: 'Must not contain spaces or special characters',
     })
     .optional(),
@@ -84,6 +84,25 @@ function undefinedToNull(value: string | undefined): string | null {
 export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const updateUser = trpc.updateUser.useMutation({
+    onSettled(data, error) {
+      if (!data) {
+        toast({
+          variant: 'destructive',
+          description: 'Error updating profile',
+        });
+        console.error('Error updating profile:', error);
+      } else {
+        router.refresh();
+        toast({
+          description: 'Profile updated successfully!',
+        });
+        console.log(data);
+      }
+      setIsLoading(false);
+    },
+  });
+
   const user: UserForm = {
     bio: nullToUndefined(userProfile.bio),
     first_name: nullToUndefined(userProfile.first_name),
@@ -118,44 +137,15 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
 
   async function onSubmit(data: ProfileFormValues) {
     setIsLoading(true);
-    const userUpdate = JSON.stringify({
-      username: undefinedToNull(data.username) === '' ? null : data.username,
+
+    updateUser.mutate({
+      id: user.id,
+      username: data.username === '' ? null : undefinedToNull(data.username),
       first_name:
-        undefinedToNull(data.firstname) === '' ? null : data.firstname,
-      last_name: undefinedToNull(data.lastname) === '' ? null : data.lastname,
-      bio: undefinedToNull(data.bio) === '' ? null : data.bio,
+        data.firstname === '' ? null : undefinedToNull(data.firstname),
+      last_name: data.lastname === '' ? null : undefinedToNull(data.lastname),
+      bio: data.bio === '' ? null : undefinedToNull(data.bio),
     });
-
-    try {
-      toast({
-        description: 'Updating profile...',
-      });
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      const res = await fetch(baseUrl + `/api/user/edit/${user.id}`, {
-        method: 'PATCH',
-        body: userUpdate,
-        cache: 'no-store',
-      });
-
-      if (!res.ok) {
-        toast({
-          description: 'Error updating profile',
-        });
-        throw new Error('Failed to update profile');
-      } else {
-        router.refresh();
-        toast({
-          description: 'Profile updated successfully!',
-        });
-      }
-      setIsLoading(false);
-    } catch (error) {
-      toast({
-        description: 'Error updating profile',
-      });
-      console.error('Error updating profile:', error);
-      setIsLoading(false);
-    }
   }
 
   return (

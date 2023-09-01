@@ -25,8 +25,6 @@ export default function UploadImage({
   const { toast } = useToast();
   const router = useRouter();
 
-  console.log('IMG: ', imgUrl);
-
   const createEvent = async () => {
     setIsLoading(true);
     const eventUpdate = JSON.stringify({

@@ -20,8 +20,8 @@
   ```
 */
 
+import { serverClient } from '@/app/_trpc/serverClient';
 import { Button } from '@/components/ui/button';
-import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 const product = {
@@ -78,25 +78,12 @@ const product = {
 };
 const reviews = { href: '#', average: 4, totalCount: 117 };
 
-async function getEvent(id: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const res = await fetch(baseUrl + `/api/event/${id}`, {
-    headers: {
-      cookie: cookies().toString(),
-    },
-    cache: 'no-store',
-  });
-  const event = await res.json();
-
-  return event;
-}
-
 export default async function EventView({
   params,
 }: {
   params: { id: string };
 }) {
-  const event = await getEvent(params.id);
+  const event = await serverClient.getEventById(params.id);
 
   return (
     <div className="bg-background">
@@ -105,8 +92,8 @@ export default async function EventView({
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
             <Image
-              src={event.image}
-              alt={event.description}
+              src={event?.image!}
+              alt={event?.description!}
               width={500}
               height={500}
               className="h-full w-full object-cover object-center group-hover:opacity-75"
@@ -118,7 +105,7 @@ export default async function EventView({
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
             <h1 className="text-2xl font-bold tracking-tight text-accent-foreground sm:text-3xl">
-              {event.name}
+              {event?.name}
             </h1>
           </div>
 
@@ -141,14 +128,14 @@ export default async function EventView({
 
               <div className="space-y-6">
                 <p className="text-base text-accent-foreground">
-                  {event.description}
+                  {event?.description}
                 </p>
               </div>
               <div className="space-y-6">
-                <p className="text-base text-accent-foreground">{`Location: ${event.location}`}</p>
+                <p className="text-base text-accent-foreground">{`Location: ${event?.location}`}</p>
               </div>
               <div className="space-y-6">
-                <p className="text-base text-accent-foreground">{`Date: ${event.date}`}</p>
+                <p className="text-base text-accent-foreground">{`Date: ${event?.date}`}</p>
               </div>
             </div>
           </div>

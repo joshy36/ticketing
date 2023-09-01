@@ -35,6 +35,7 @@ import { useState } from 'react';
 import { Icons } from './ui/icons';
 import { Separator } from './ui/separator';
 import { useRouter } from 'next/navigation';
+import { trpc } from '@/app/_trpc/client';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -61,6 +62,20 @@ export default function EventCreate() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
+  const createEvent = trpc.createEvent.useMutation({
+    onSettled(data, error) {
+      if (!data) {
+        toast({
+          description: 'Error creating event',
+        });
+        console.error('Error creating event:', error);
+        setIsLoading(false);
+      } else {
+        router.refresh();
+        router.push(`/event/create/image/${data.id}`);
+      }
+    },
+  });
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -78,39 +93,14 @@ export default function EventCreate() {
     values.date.setHours(Number(time[0]));
     values.date.setMinutes(Number(time[1]));
 
-    const event = JSON.stringify({
+    createEvent.mutate({
       name: values.name,
       description: values.description,
+      // @ts-ignore
       date: values.date,
       location: values.location,
       image: null,
     });
-
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      const res = await fetch(baseUrl + `/api/event/create`, {
-        method: 'POST',
-        body: event,
-        cache: 'no-store',
-      });
-
-      if (!res.ok) {
-        toast({
-          description: 'Error creating event',
-        });
-        throw new Error('Failed to create event');
-      }
-      const eventBody = await res.json();
-      const id = eventBody[0].id;
-      router.refresh();
-      router.push(`/event/create/image/${id}`);
-    } catch (error) {
-      toast({
-        description: 'Error creating event',
-      });
-      console.error('Error creating event:', error);
-      setIsLoading(false);
-    }
   }
 
   return (
