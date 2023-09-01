@@ -49,6 +49,13 @@ export default function NavBar({
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
+            <Link href="/event/create" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Create Event
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <NavigationMenuTrigger>Event Managment</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
@@ -63,7 +70,7 @@ export default function NavBar({
                 ))}
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
         </NavigationMenuList>
       </NavigationMenu>
       {user ? (

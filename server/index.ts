@@ -18,16 +18,18 @@ export const appRouter = router({
       .single();
     return data;
   }),
-  getUserProfile: publicProcedure.input(z.string()).query(async (opts) => {
-    const supabase = createRouteClient();
-    const { data } = await supabase
-      .from('user_profiles')
-      .select()
-      .eq('id', opts.input)
-      .limit(1)
-      .single();
-    return data;
-  }),
+  getUserProfile: publicProcedure
+    .input(z.string().optional())
+    .query(async (opts) => {
+      const supabase = createRouteClient();
+      const { data } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('id', opts.input)
+        .limit(1)
+        .single();
+      return data;
+    }),
   createEvent: publicProcedure
     .input(
       z.object({
