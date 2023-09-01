@@ -8,7 +8,7 @@ export default async function ProfileView({
 }: {
   params: { id: string };
 }) {
-  const userProfile = await serverClient.getUserProfile(params.id);
+  const userProfile = await serverClient.getUserProfile({ id: params.id });
 
   const supabase = createServerClient();
 

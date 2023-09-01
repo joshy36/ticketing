@@ -83,7 +83,7 @@ export default async function EventView({
 }: {
   params: { id: string };
 }) {
-  const event = await serverClient.getEventById(params.id);
+  const event = await serverClient.getEventById({ id: params.id });
 
   return (
     <div className="bg-background">

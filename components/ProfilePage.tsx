@@ -24,7 +24,7 @@ export default async function ProfilePage({
 }: {
   params: { id: string };
 }) {
-  const userProfile = await serverClient.getUserProfile(params.id);
+  const userProfile = await serverClient.getUserProfile({ id: params.id });
 
   return (
     <>

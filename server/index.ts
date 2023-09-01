@@ -8,18 +8,20 @@ export const appRouter = router({
     const { data } = await supabase.from('events').select();
     return data;
   }),
-  getEventById: publicProcedure.input(z.string()).query(async (opts) => {
-    const supabase = createRouteClient();
-    const { data } = await supabase
-      .from('events')
-      .select()
-      .eq('id', opts.input)
-      .limit(1)
-      .single();
-    return data;
-  }),
+  getEventById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async (opts) => {
+      const supabase = createRouteClient();
+      const { data } = await supabase
+        .from('events')
+        .select()
+        .eq('id', opts.input)
+        .limit(1)
+        .single();
+      return data;
+    }),
   getUserProfile: publicProcedure
-    .input(z.string().optional())
+    .input(z.object({ id: z.string().optional() }))
     .query(async (opts) => {
       const supabase = createRouteClient();
       const { data } = await supabase
