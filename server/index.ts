@@ -84,6 +84,26 @@ export const appRouter = router({
 
       return data;
     }),
+  updateUserImage: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        profile_image: z.string().nullable(),
+      })
+    )
+    .mutation(async (opts) => {
+      const supabase = createRouteClient();
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({
+          profile_image: opts.input.profile_image,
+        })
+        .eq('id', opts.input.id)
+        .select()
+        .single();
+
+      return data;
+    }),
 });
 
 export type AppRouter = typeof appRouter;

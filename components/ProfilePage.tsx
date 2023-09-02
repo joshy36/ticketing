@@ -2,6 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { ProfileForm } from '@/components/ProfileForm';
 import { SidebarNav } from '@/components/SidebarNav';
 import { serverClient } from '@/app/_trpc/serverClient';
+import UserUploadImage from './UserUploadImage';
 
 const sidebarNavItems = [
   {
@@ -65,7 +66,14 @@ export default async function ProfilePage({
             </div>
             <Separator />
             <ProfileForm userProfile={userProfile!} />
-            {/* <UploadImage id={params.id} buttonText="Set Image" /> */}
+            <Separator />
+            <h3 className="text-lg font-medium">Profile Picture</h3>
+            <Separator />
+            <UserUploadImage
+              id={params.id}
+              userImage={userProfile?.profile_image}
+              buttonText="Update profile picture"
+            />
           </div>
         </div>
       </div>

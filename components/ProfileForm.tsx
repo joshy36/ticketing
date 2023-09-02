@@ -97,7 +97,6 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
         toast({
           description: 'Profile updated successfully!',
         });
-        console.log(data);
       }
       setIsLoading(false);
     },

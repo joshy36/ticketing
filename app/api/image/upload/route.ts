@@ -4,10 +4,14 @@ import createRouteClient from '@/lib/supabaseRoute';
 export async function POST(req: NextRequest) {
   const supabase = createRouteClient();
 
+  const array = new Uint32Array(10);
+  crypto.getRandomValues(array);
+  const randomNumber = array[0];
+
   const formData = await req.formData();
   const file = formData.get('file');
   const fileName = formData.get('fileName');
-  const location = formData.get('location');
+  const location = formData.get('location') + '?v=' + randomNumber;
   const bucket = String(formData.get('bucket'));
 
   const fileType = String(fileName).split('.')[1];
@@ -19,8 +23,6 @@ export async function POST(req: NextRequest) {
       upsert: true,
       contentType: 'image/' + fileType,
     });
-
-  console.log('DATA: ', data);
 
   if (error) {
     console.log('Error uploading file:', error);

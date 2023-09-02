@@ -1,5 +1,5 @@
 import React from 'react';
-import UploadImage from './UploadImage';
+import EventUploadImage from './EventUploadImage';
 import { Separator } from './ui/separator';
 
 export default function EventCreateImage({ id }: { id: string }) {
@@ -19,7 +19,7 @@ export default function EventCreateImage({ id }: { id: string }) {
               <h1 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Upload an Image for the Event
               </h1>
-              <UploadImage id={id} buttonText="Create Event" />
+              <EventUploadImage id={id} buttonText="Create Event" />
             </div>
           </div>
         </div>

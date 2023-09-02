@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
@@ -7,59 +7,74 @@ import { Input } from './ui/input';
 import { Icons } from './ui/icons';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { trpc } from '@/app/_trpc/client';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 
-export default function UploadImage({
+function undefinedToNull(value: string | undefined): string | null {
+  return value ?? null;
+}
+
+export default function EventUploadImage({
   id,
+  userImage,
   buttonText,
 }: {
   id: string;
+  userImage: string | null | undefined;
   buttonText: string;
 }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState('');
-  const [imageKey, setImageKey] = React.useState(0);
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
   const router = useRouter();
-
-  const createEvent = async () => {
-    setIsLoading(true);
-    const eventUpdate = JSON.stringify({
-      image: imgUrl.split('?')[0],
-    });
-
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      const res = await fetch(baseUrl + `/api/event/update/${id}`, {
-        method: 'PATCH',
-        body: eventUpdate,
-        cache: 'no-store',
-      });
-
-      if (!res.ok) {
+  const updateUserImage = trpc.updateUserImage.useMutation({
+    onSettled(data, error) {
+      if (!data) {
         toast({
-          description: 'Error creating event',
+          variant: 'destructive',
+          description: 'Error updating profile',
         });
-        setIsLoading(false);
-        throw new Error('Failed to create event');
+        console.error('Error updating profile:', error);
       } else {
+        setImgUrl(data.profile_image ?? '');
         router.refresh();
-        router.push(`/event/${id}`);
+        toast({
+          description: 'Profile updated successfully!',
+        });
       }
-    } catch (error) {
-      toast({
-        description: 'Error creating event',
-      });
-      console.error('Error creating event:', error);
       setIsLoading(false);
-    }
+    },
+  });
+
+  console.log(imgUrl);
+
+  useEffect(() => {
+    setImgUrl(userImage ?? '');
+  }, []);
+
+  const updateUser = async () => {
+    setIsLoading(true);
+
+    updateUserImage.mutate({
+      id: id,
+      profile_image: imgUrl,
+    });
   };
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
+
+    if (data.file.length == 0) {
+      toast({
+        variant: 'destructive',
+        description: 'Must choose a file to upload!',
+      });
+      setIsLoading(false);
+      return;
+    }
+
     const fileType = data.file[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
       toast({
@@ -69,11 +84,12 @@ export default function UploadImage({
       setIsLoading(false);
       return;
     }
-    const bucket = 'events';
+
+    const bucket = 'users';
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('fileName', data.file[0].name);
-    formData.append('location', `/${id}/event_photo.jpeg`);
+    formData.append('location', `/${id}/profile.jpeg`);
     formData.append('bucket', bucket);
 
     try {
@@ -96,12 +112,8 @@ export default function UploadImage({
           process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
             '/' +
             bucket +
-            fileName.location +
-            '?' +
-            imageKey
+            fileName.location
         );
-        setImageKey((prevKey) => prevKey + 1);
-        setIsSuccessful(true);
       } else {
         const error = await res.json();
         if (error.error.message == 'invalid signature') {
@@ -147,11 +159,11 @@ export default function UploadImage({
         </div>
       </form>
       <br></br>
-      {isSuccessful ? (
+      {imgUrl != '' ? (
         <div>
           <Image
             src={imgUrl}
-            alt="Event Image"
+            alt="Profile Image"
             width={300}
             height={300}
             // className="h-full w-full object-cover object-center group-hover:opacity-75"
@@ -160,7 +172,7 @@ export default function UploadImage({
       ) : (
         <div></div>
       )}
-      <Button disabled={isLoading || imgUrl == ''} onClick={createEvent}>
+      <Button disabled={isLoading || imgUrl == ''} onClick={updateUser}>
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
         {buttonText}
       </Button>
