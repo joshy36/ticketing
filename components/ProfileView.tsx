@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { serverClient } from '@/app/_trpc/serverClient';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export default async function ProfileView({
   params,
@@ -20,22 +21,16 @@ export default async function ProfileView({
   return (
     <div className="bg-background">
       <div className="pt-6">
-        {/* Image gallery */}
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-          <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+        <div className="flex justify-center">
+          <Avatar className="h-40 w-40">
             {userProfile?.profile_image ? (
-              <Image
-                src={userProfile?.profile_image!}
-                alt="Profile Picture"
-                width={500}
-                height={500}
-                className="h-full w-full object-cover object-center group-hover:opacity-75"
-              />
+              <AvatarImage src={userProfile?.profile_image!} alt="pfp" />
             ) : (
-              <div></div>
+              <AvatarFallback></AvatarFallback>
             )}
-          </div>
+          </Avatar>
         </div>
+
         {/* Product info */}
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
