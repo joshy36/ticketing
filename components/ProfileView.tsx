@@ -12,6 +12,10 @@ export default async function ProfileView({
 }) {
   const userProfile = await serverClient.getUserProfile({ id: params.id });
 
+  const userTickets = await serverClient.getTicketsForUser({
+    user_id: userProfile?.id!,
+  });
+
   const supabase = createServerClient();
 
   const {
@@ -85,6 +89,47 @@ export default async function ProfileView({
                 </p>
               </div>
             </div>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-accent-foreground sm:text-3xl">
+            Upcoming Events
+          </h1>
+        </div>
+        <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+          <h2 className="sr-only">Tickets</h2>
+          <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            {userTickets ? (
+              <div>
+                {userTickets.map((ticket) => (
+                  <a
+                    key={ticket.id}
+                    // href={`/event/${ticket.id}`}
+                    className="group"
+                  >
+                    <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
+                      {ticket.event_id ? (
+                        <Image
+                          src={ticket.events?.image!}
+                          alt="Ticket Image"
+                          width={500}
+                          height={500}
+                          className="h-full w-full object-cover object-center group-hover:opacity-75"
+                        />
+                      ) : (
+                        <h3>No image to render</h3>
+                      )}
+                    </div>
+                    <h1 className="mt-4 text-lg text-accent-foreground">
+                      {ticket.events?.name}
+                    </h1>
+                    <p className="mt-1 text-sm font-sm text-accent-foreground">
+                      {`Seat: ${ticket.seat}`}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div>No upcoming events!</div>
+            )}
           </div>
         </div>
       </div>

@@ -44,6 +44,14 @@ const formSchema = z.object({
   description: z.string().min(20, {
     message: 'Description must be at least 20 characters.',
   }),
+  number_of_tickets: z.coerce
+    .number()
+    .min(1, {
+      message: 'Must be at least one ticket',
+    })
+    .max(1000000000, {
+      message: 'Cant be more than 100000000 tickets',
+    }),
   date: z.date({
     required_error: 'A date is required.',
   }),
@@ -96,6 +104,7 @@ export default function EventCreate() {
     createEvent.mutate({
       name: values.name,
       description: values.description,
+      number_of_tickets: values.number_of_tickets,
       // @ts-ignore
       date: values.date,
       location: values.location,
@@ -122,6 +131,19 @@ export default function EventCreate() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Event Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" disabled={isLoading} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="number_of_tickets"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Number of Tickets</FormLabel>
                     <FormControl>
                       <Input placeholder="" disabled={isLoading} {...field} />
                     </FormControl>

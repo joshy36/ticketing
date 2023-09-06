@@ -1,4 +1,3 @@
-'use client';
 import EventCreateImage from '@/components/EventCreateImage';
 
 export default function Home({ params }: { params: { id: string } }) {

@@ -1,5 +1,4 @@
 import { serverClient } from '@/app/_trpc/serverClient';
-import { cookies } from 'next/headers';
 import Image from 'next/image';
 
 const products = [

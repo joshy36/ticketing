@@ -1,4 +1,3 @@
-'use client';
 import EventCreate from '@/components/EventCreate';
 
 export default function Home() {

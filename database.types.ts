@@ -43,6 +43,8 @@ export interface Database {
           image: string | null
           location: string
           name: string
+          number_of_tickets: number
+          tickets_remaining: number
           updated_at: string
         }
         Insert: {
@@ -53,6 +55,8 @@ export interface Database {
           image?: string | null
           location: string
           name: string
+          number_of_tickets: number
+          tickets_remaining: number
           updated_at?: string
         }
         Update: {
@@ -63,9 +67,51 @@ export interface Database {
           image?: string | null
           location?: string
           name?: string
+          number_of_tickets?: number
+          tickets_remaining?: number
           updated_at?: string
         }
         Relationships: []
+      }
+      tickets: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          price: number
+          seat: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          price: number
+          seat?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          price?: number
+          seat?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       user_profiles: {
         Row: {
@@ -112,7 +158,15 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment: {
+        Args: {
+          table_name: string
+          row_id: string
+          x: number
+          field_name: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

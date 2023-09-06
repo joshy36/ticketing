@@ -31,6 +31,7 @@ export default function EventUploadImage({
     });
 
     try {
+      // make this a trpc thing
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       const res = await fetch(baseUrl + `/api/event/update/${id}`, {
         method: 'PATCH',

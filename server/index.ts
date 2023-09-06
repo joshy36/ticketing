@@ -1,5 +1,6 @@
 import createRouteClient from '@/lib/supabaseRoute';
 import { publicProcedure, router } from './trpc';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 export const appRouter = router({
@@ -37,6 +38,7 @@ export const appRouter = router({
       z.object({
         name: z.string(),
         description: z.string(),
+        number_of_tickets: z.number(),
         date: z.string(),
         location: z.string(),
         image: z.string().nullable(),
@@ -44,11 +46,13 @@ export const appRouter = router({
     )
     .mutation(async (opts) => {
       const supabase = createRouteClient();
-      const { data } = await supabase
+      const { data: eventData, error: eventError } = await supabase
         .from('events')
         .insert({
           name: opts.input.name,
           description: opts.input.description,
+          number_of_tickets: opts.input.number_of_tickets,
+          tickets_remaining: opts.input.number_of_tickets,
           date: opts.input.date,
           location: opts.input.location,
           image: opts.input.image ?? null,
@@ -56,7 +60,19 @@ export const appRouter = router({
         .select()
         .limit(1)
         .single();
-      return data;
+      console.log(eventError);
+
+      const tickets = Array(opts.input.number_of_tickets).fill({
+        event_id: eventData?.id,
+        price: 0,
+      });
+      const { data: ticketData, error: ticketError } = await supabase
+        .from('tickets')
+        .insert(tickets);
+      console.log(ticketData);
+      console.log(ticketError);
+
+      return eventData;
     }),
   updateUser: publicProcedure
     .input(
@@ -103,6 +119,58 @@ export const appRouter = router({
         .single();
 
       return data;
+    }),
+  getTicketsForUser: publicProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async (opts) => {
+      const supabase = createRouteClient();
+      const { data } = await supabase
+        .from('tickets')
+        .select(`*, events (image, name)`)
+        .eq('user_id', opts.input.user_id);
+      return data;
+    }),
+  transferTicket: publicProcedure
+    .input(
+      z.object({ seat: z.string(), event_id: z.string(), user_id: z.string() })
+    )
+    .mutation(async (opts) => {
+      const supabase = createRouteClient();
+      const { data: getTicket, error: getTicketError } = await supabase
+        .from('tickets')
+        .select()
+        .eq('seat', opts.input.seat)
+        .eq('event_id', opts.input.event_id)
+        .is('user_id', null)
+        .limit(1)
+        .single();
+
+      console.log(getTicket);
+      console.log(getTicketError);
+      if (getTicketError?.code == 'PGRST116') {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'An unexpected error occurred, please try again later.',
+          // optional: pass the original error to retain stack trace
+          cause: getTicketError,
+        });
+      }
+      const { data: transferTicket, error: transferTicketError } =
+        await supabase
+          .from('tickets')
+          .update({ user_id: opts.input.user_id })
+          .eq('id', getTicket?.id)
+          .select()
+          .single();
+
+      await supabase.rpc('increment', {
+        table_name: 'events',
+        row_id: opts.input.event_id,
+        x: -1,
+        field_name: 'tickets_remaining',
+      });
+
+      return transferTicket;
     }),
 });
 
