@@ -115,7 +115,13 @@ export default async function ProfileView({
                           className="h-full w-full object-cover object-center group-hover:opacity-75"
                         />
                       ) : (
-                        <h3>No image to render</h3>
+                        <Image
+                          src="/fallback.jpeg"
+                          alt="image"
+                          width={500}
+                          height={500}
+                          className="h-full w-full object-cover object-center group-hover:opacity-75"
+                        />
                       )}
                     </div>
                     <h1 className="mt-4 text-lg text-accent-foreground">

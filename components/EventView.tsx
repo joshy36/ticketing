@@ -48,13 +48,23 @@ export default async function EventView({
         {/* Image gallery */}
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-            <Image
-              src={event?.image!}
-              alt={event?.description!}
-              width={500}
-              height={500}
-              className="h-full w-full object-cover object-center group-hover:opacity-75"
-            />
+            {event?.image ? (
+              <Image
+                src={event?.image!}
+                alt={event?.description!}
+                width={500}
+                height={500}
+                className="h-full w-full object-cover object-center group-hover:opacity-75"
+              />
+            ) : (
+              <Image
+                src="/fallback.jpeg"
+                alt="image"
+                width={500}
+                height={500}
+                className="h-full w-full object-cover object-center group-hover:opacity-75"
+              />
+            )}
           </div>
         </div>
 

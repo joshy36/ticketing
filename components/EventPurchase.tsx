@@ -39,20 +39,26 @@ export default function EventPurchase({
   return (
     <div className="py-10">
       {user ? (
-        <Button
-          onClick={async () => {
-            setIsLoading(true);
-            transferTicket.mutate({
-              seat: 'GA',
-              event_id: event?.id!,
-              user_id: userProfile?.id!,
-            });
-          }}
-          disabled={isLoading}
-        >
-          {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Purchase
-        </Button>
+        event?.tickets_remaining === 0 ? (
+          <Button disabled={true}>Sold Out!</Button>
+        ) : (
+          <Button
+            onClick={async () => {
+              setIsLoading(true);
+              transferTicket.mutate({
+                seat: 'GA',
+                event_id: event?.id!,
+                user_id: userProfile?.id!,
+              });
+            }}
+            disabled={isLoading}
+          >
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Purchase
+          </Button>
+        )
       ) : (
         <Link href={`/sign-in`}>
           <Button>Sign in to Purchase</Button>
