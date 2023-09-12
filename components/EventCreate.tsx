@@ -25,17 +25,23 @@ import {
 
 import { Calendar } from './ui/calendar';
 
-import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { CalendarIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from './ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
-import { useState } from 'react';
 import { Icons } from './ui/icons';
 import { Separator } from './ui/separator';
 import { useRouter } from 'next/navigation';
 import { trpc } from '@/app/_trpc/client';
+import { Switch } from './ui/switch';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -44,14 +50,36 @@ const formSchema = z.object({
   description: z.string().min(20, {
     message: 'Description must be at least 20 characters.',
   }),
-  number_of_tickets: z.coerce
+  ga_tickets: z.coerce
     .number()
     .min(1, {
       message: 'Must be at least one ticket',
     })
-    .max(1000000000, {
-      message: 'Cant be more than 100000000 tickets',
+    .max(1000, {
+      message: 'Cant be more than 1000 tickets',
     }),
+  // regex later
+  ga_price: z.coerce
+    .number()
+    .min(0, { message: 'Ticket price can not be negative' }),
+  seats: z.boolean().default(false).optional(),
+  rows: z.coerce
+    .number()
+    .min(0, {
+      message: 'Cant be less than 0 rows.',
+    })
+    .max(100, {
+      message: 'Cant be more than 100 rows.',
+    }),
+  seats_per_row: z.coerce
+    .number()
+    .min(0, {
+      message: 'Cant be less than 0 seats per row.',
+    })
+    .max(20, {
+      message: 'Cant be more than 20 seats per row.',
+    }),
+
   date: z.date({
     required_error: 'A date is required.',
   }),
@@ -70,6 +98,7 @@ export default function EventCreate() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
+
   const createEvent = trpc.createEvent.useMutation({
     onSettled(data, error) {
       if (!data) {
@@ -92,6 +121,7 @@ export default function EventCreate() {
       name: '',
     },
   });
+  const noSeats = !form.watch('seats');
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -104,7 +134,10 @@ export default function EventCreate() {
     createEvent.mutate({
       name: values.name,
       description: values.description,
-      number_of_tickets: values.number_of_tickets,
+      ga_tickets: values.ga_tickets,
+      ga_price: values.ga_price,
+      rows: values.rows,
+      seats_per_row: values.seats_per_row,
       // @ts-ignore
       date: values.date,
       location: values.location,
@@ -122,162 +155,276 @@ export default function EventCreate() {
       </div>
       <Separator className="my-6" />
       <div className="space-y-6">
-        <div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Event Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" disabled={isLoading} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="number_of_tickets"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Number of Tickets</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" disabled={isLoading} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Come join us for an unforgettable night!!"
-                        className="resize-none"
-                        disabled={isLoading}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Event date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={'outline'}
-                            className={cn(
-                              'w-[240px] pl-3 text-left font-normal',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                            disabled={isLoading}
-                          >
-                            {field.value ? (
-                              format(field.value, 'PPP')
-                            ) : (
-                              <span>Select a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>General Information</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Event Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder=""
+                              disabled={isLoading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Come join us for an unforgettable night!!"
+                              className="resize-none"
+                              disabled={isLoading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="date"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>Event date</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={'outline'}
+                                  className={cn(
+                                    'w-[240px] pl-3 text-left font-normal',
+                                    !field.value && 'text-muted-foreground'
+                                  )}
+                                  disabled={isLoading}
+                                >
+                                  {field.value ? (
+                                    format(field.value, 'PPP')
+                                  ) : (
+                                    <span>Select a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="time"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Event Time (EST)</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="8:30"
+                              disabled={isLoading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="ampm"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              disabled={isLoading}
+                              className="flex flex-col space-y-1"
+                            >
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="pm" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  PM
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="am" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  AM
+                                </FormLabel>
+                              </FormItem>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="location"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Location</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder=""
+                              disabled={isLoading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>Ticketing Information</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="ga_tickets"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Number of GA Tickets</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder=""
+                              disabled={isLoading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="ga_price"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>GA Ticket Price</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder=""
+                              disabled={isLoading}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Enter 0 for free tickets.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="seats"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Seating</FormLabel>
+                            <FormDescription>
+                              Are there seats in your venue?
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    {noSeats ? (
+                      <div></div>
+                    ) : (
+                      <div className="space-y-6">
+                        {' '}
+                        <FormField
+                          control={form.control}
+                          name="rows"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Number of Rows</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder=""
+                                  disabled={isLoading || noSeats}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="time"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Event Time (EST)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="8:30"
-                        disabled={isLoading}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="ampm"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        disabled={isLoading}
-                        className="flex flex-col space-y-1"
-                      >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="pm" />
-                          </FormControl>
-                          <FormLabel className="font-normal">PM</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="am" />
-                          </FormControl>
-                          <FormLabel className="font-normal">AM</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Location</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" disabled={isLoading} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isLoading}>
-                {isLoading && (
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Next Page
-              </Button>
-            </form>
-          </Form>
-        </div>
+                        <FormField
+                          control={form.control}
+                          name="seats_per_row"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Number of Seats Per Row</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder=""
+                                  disabled={isLoading || noSeats}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Next Page
+            </Button>
+          </form>
+        </Form>
       </div>
     </div>
   );

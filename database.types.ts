@@ -39,36 +39,45 @@ export interface Database {
           created_at: string
           date: string
           description: string
+          ga_price: number | null
+          ga_tickets: number | null
           id: string
           image: string | null
           location: string
           name: string
-          number_of_tickets: number
-          tickets_remaining: number
+          rows: number | null
+          seats_per_row: number | null
+          tickets_remaining: number | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           date: string
           description: string
+          ga_price?: number | null
+          ga_tickets?: number | null
           id?: string
           image?: string | null
           location: string
           name: string
-          number_of_tickets: number
-          tickets_remaining: number
+          rows?: number | null
+          seats_per_row?: number | null
+          tickets_remaining?: number | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           date?: string
           description?: string
+          ga_price?: number | null
+          ga_tickets?: number | null
           id?: string
           image?: string | null
           location?: string
           name?: string
-          number_of_tickets?: number
-          tickets_remaining?: number
+          rows?: number | null
+          seats_per_row?: number | null
+          tickets_remaining?: number | null
           updated_at?: string
         }
         Relationships: []

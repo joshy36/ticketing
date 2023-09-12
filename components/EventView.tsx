@@ -21,10 +21,8 @@
 */
 
 import { serverClient } from '@/app/_trpc/serverClient';
-import { Button } from '@/components/ui/button';
 import createServerClient from '@/lib/supabaseServer';
 import Image from 'next/image';
-import Link from 'next/link';
 import EventPurchase from './EventPurchase';
 
 export default async function EventView({
@@ -92,14 +90,7 @@ export default async function EventView({
               <div className="space-y-6">
                 <p className="text-base text-accent-foreground">{`Date: ${event?.date}`}</p>
               </div>
-              <div className="space-y-6">
-                <p className="text-base text-accent-foreground">{`Number of tickets remaining: ${event?.tickets_remaining}`}</p>
-              </div>
-              <EventPurchase
-                user={user}
-                userProfile={userProfile}
-                event={event}
-              />
+              <EventPurchase user={user} event={event} />
             </div>
           </div>
         </div>

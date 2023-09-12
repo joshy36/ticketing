@@ -5,36 +5,24 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import { User } from '@supabase/auth-helpers-nextjs';
 import { trpc } from '@/app/_trpc/client';
-import { toast } from './ui/use-toast';
-import { Icons } from './ui/icons';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { DataTable } from './DataTable';
+import { columns } from './Columns';
 
 export default function EventPurchase({
   user,
-  userProfile,
   event,
 }: {
   user: User | null;
-  userProfile: UserProfile | null;
   event: Events | null;
 }) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
-  const transferTicket = trpc.transferTicket.useMutation({
-    onSettled(data, error) {
-      if (!data) {
-        toast({
-          description: 'Error transferring ticket!',
-        });
-        console.error('Error transferring ticket:', error);
-        setIsLoading(false);
-      } else {
-        router.refresh();
-        setIsLoading(false);
-      }
-    },
-  });
+  const { data: eventTickets, isLoading: loading } =
+    trpc.getTicketsForEvent.useQuery({
+      event_id: event?.id!,
+    });
+
+  const notPurchasedEventTickets = eventTickets?.filter(
+    (x) => x.user_id === null
+  );
 
   return (
     <div className="py-10">
@@ -42,22 +30,15 @@ export default function EventPurchase({
         event?.tickets_remaining === 0 ? (
           <Button disabled={true}>Sold Out!</Button>
         ) : (
-          <Button
-            onClick={async () => {
-              setIsLoading(true);
-              transferTicket.mutate({
-                seat: 'GA',
-                event_id: event?.id!,
-                user_id: userProfile?.id!,
-              });
-            }}
-            disabled={isLoading}
-          >
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          <div>
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <div className="py-6">
+                <DataTable columns={columns} data={notPurchasedEventTickets!} />
+              </div>
             )}
-            Purchase
-          </Button>
+          </div>
         )
       ) : (
         <Link href={`/sign-in`}>

@@ -38,7 +38,10 @@ export const appRouter = router({
       z.object({
         name: z.string(),
         description: z.string(),
-        number_of_tickets: z.number(),
+        ga_tickets: z.number(),
+        ga_price: z.number(),
+        rows: z.number().optional(),
+        seats_per_row: z.number().optional(),
         date: z.string(),
         location: z.string(),
         image: z.string().nullable(),
@@ -46,13 +49,27 @@ export const appRouter = router({
     )
     .mutation(async (opts) => {
       const supabase = createRouteClient();
+
+      let ticketsRemaining = opts.input.ga_tickets;
+      if (
+        opts.input.rows &&
+        opts.input.rows > 0 &&
+        opts.input.seats_per_row &&
+        opts.input.seats_per_row > 0
+      ) {
+        ticketsRemaining += opts.input.rows * opts.input.seats_per_row;
+      }
+
       const { data: eventData, error: eventError } = await supabase
         .from('events')
         .insert({
           name: opts.input.name,
           description: opts.input.description,
-          number_of_tickets: opts.input.number_of_tickets,
-          tickets_remaining: opts.input.number_of_tickets,
+          ga_tickets: opts.input.ga_tickets,
+          ga_price: opts.input.ga_price,
+          rows: opts.input.rows,
+          seats_per_row: opts.input.seats_per_row,
+          tickets_remaining: ticketsRemaining,
           date: opts.input.date,
           location: opts.input.location,
           image: opts.input.image ?? null,
@@ -60,17 +77,29 @@ export const appRouter = router({
         .select()
         .limit(1)
         .single();
-      console.log(eventError);
 
-      const tickets = Array(opts.input.number_of_tickets).fill({
+      const tickets = Array(opts.input.ga_tickets).fill({
         event_id: eventData?.id,
-        price: 0,
+        price: opts.input.ga_price,
+        seat: 'GA',
       });
+
+      if (opts.input.rows && opts.input.seats_per_row) {
+        const names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for (let row = 1; row <= opts.input.rows; row++) {
+          for (let seat = 0; seat < opts.input.seats_per_row; seat++) {
+            tickets.push({
+              event_id: eventData?.id,
+              price: opts.input.ga_price,
+              seat: String(row) + names[seat],
+            });
+          }
+        }
+      }
+
       const { data: ticketData, error: ticketError } = await supabase
         .from('tickets')
         .insert(tickets);
-      console.log(ticketData);
-      console.log(ticketError);
 
       return eventData;
     }),
@@ -120,6 +149,26 @@ export const appRouter = router({
 
       return data;
     }),
+  getTicketById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async (opts) => {
+      const supabase = createRouteClient();
+      const { data } = await supabase
+        .from('tickets')
+        .select(`*, events (image, name)`)
+        .eq('id', opts.input.id);
+
+      if (data?.length === 0) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'An unexpected error occurred, please try again later.',
+          // optional: pass the original error to retain stack trace
+          cause: 'No ticket with inputted id',
+        });
+      } else {
+        return data![0];
+      }
+    }),
   getTicketsForUser: publicProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async (opts) => {
@@ -128,6 +177,17 @@ export const appRouter = router({
         .from('tickets')
         .select(`*, events (image, name)`)
         .eq('user_id', opts.input.user_id);
+      return data;
+    }),
+  getTicketsForEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async (opts) => {
+      const supabase = createRouteClient();
+      const { data } = await supabase
+        .from('tickets')
+        .select(`*`)
+        .eq('event_id', opts.input.event_id)
+        .order('price', { ascending: true });
       return data;
     }),
   transferTicket: publicProcedure
@@ -145,8 +205,6 @@ export const appRouter = router({
         .limit(1)
         .single();
 
-      console.log(getTicket);
-      console.log(getTicketError);
       if (getTicketError?.code == 'PGRST116') {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',

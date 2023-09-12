@@ -17,6 +17,7 @@
     "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "noErrorTruncation": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
