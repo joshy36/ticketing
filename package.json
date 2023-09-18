@@ -35,6 +35,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "lucide-react": "^0.263.1",
@@ -50,11 +51,14 @@
     "zod": "^3.22.0"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "@types/node": "^20.4.8",
     "@types/react": "^18.2.15",
     "autoprefixer": "^10.4.14",
     "encoding": "^0.1.13",
     "eslint-config-prettier": "^8.8.0",
+    "hardhat": "^2.17.3",
+    "hardhat-deploy": "^0.11.37",
     "postcss": "^8.4.27",
     "supabase": "^1.88.0",
     "tailwindcss": "^3.3.3",
