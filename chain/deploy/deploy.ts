@@ -13,7 +13,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const unlockTime = currentTimestampInSeconds + 60;
 
   await deploy('Lock', {
-    from: deployer,
+    from: deployer!,
     args: [unlockTime],
     log: true,
     autoMine: true, // speed up deployment on local network (ganache, hardhat), no effect on live networks
