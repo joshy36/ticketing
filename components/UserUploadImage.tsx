@@ -8,6 +8,7 @@ import { Icons } from './ui/icons';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { trpc } from '@/app/_trpc/client';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 
@@ -47,8 +48,6 @@ export default function EventUploadImage({
       setIsLoading(false);
     },
   });
-
-  console.log(imgUrl);
 
   useEffect(() => {
     setImgUrl(userImage ?? '');
@@ -143,36 +142,45 @@ export default function EventUploadImage({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 grid-rows-1 gap-8">
+        <div className="grid grid-cols-2 grid-rows-1">
+          <Button
+            variant="secondary"
+            type="submit"
+            disabled={isLoading}
+            className="w-64"
+          >
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Upload Image
+          </Button>
           <Input
             id="picture"
             type="file"
             disabled={isLoading}
             {...register('file')}
           />
-          <Button type="submit" disabled={isLoading} className="max-w-[40%]">
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Upload Image
-          </Button>
         </div>
       </form>
-      <br></br>
       {imgUrl != '' ? (
         <div>
-          <Image
-            src={imgUrl}
-            alt="Profile Image"
-            width={300}
-            height={300}
-            // className="h-full w-full object-cover object-center group-hover:opacity-75"
-          />
+          <Avatar className="h-40 w-40">
+            {imgUrl ? (
+              <AvatarImage src={imgUrl} alt="pfp" />
+            ) : (
+              <AvatarFallback></AvatarFallback>
+            )}
+          </Avatar>
         </div>
       ) : (
         <div></div>
       )}
-      <Button disabled={isLoading || imgUrl == ''} onClick={updateUser}>
+      <Button
+        className="w-64"
+        variant="secondary"
+        disabled={isLoading || imgUrl == ''}
+        onClick={updateUser}
+      >
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
         {buttonText}
       </Button>

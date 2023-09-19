@@ -148,7 +148,7 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
   }
 
   return (
-    <>
+    <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -244,7 +244,12 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
             Add URL
           </Button> */}
           </div>
-          <Button type="submit" disabled={isLoading}>
+          <Button
+            className="w-64"
+            variant="secondary"
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
@@ -252,6 +257,6 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
           </Button>
         </form>
       </Form>
-    </>
+    </div>
   );
 }
