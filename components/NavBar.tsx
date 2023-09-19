@@ -49,6 +49,13 @@ export default function NavBar({
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
+            <Link href="/event/list" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Upcoming Events
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
             <Link href="/event/create" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Create Event
