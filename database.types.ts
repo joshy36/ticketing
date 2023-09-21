@@ -36,6 +36,7 @@ export interface Database {
     Tables: {
       events: {
         Row: {
+          base_url: string | null
           created_at: string
           date: string
           description: string
@@ -43,6 +44,7 @@ export interface Database {
           ga_tickets: number | null
           id: string
           image: string | null
+          ipfs_image: string | null
           location: string
           name: string
           rows: number | null
@@ -51,6 +53,7 @@ export interface Database {
           updated_at: string
         }
         Insert: {
+          base_url?: string | null
           created_at?: string
           date: string
           description: string
@@ -58,6 +61,7 @@ export interface Database {
           ga_tickets?: number | null
           id?: string
           image?: string | null
+          ipfs_image?: string | null
           location: string
           name: string
           rows?: number | null
@@ -66,6 +70,7 @@ export interface Database {
           updated_at?: string
         }
         Update: {
+          base_url?: string | null
           created_at?: string
           date?: string
           description?: string
@@ -73,6 +78,7 @@ export interface Database {
           ga_tickets?: number | null
           id?: string
           image?: string | null
+          ipfs_image?: string | null
           location?: string
           name?: string
           rows?: number | null

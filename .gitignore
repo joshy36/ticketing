@@ -46,3 +46,5 @@ typechain-types
 cache
 artifacts
 
+# Metadata
+scripts/eventMetadata/
