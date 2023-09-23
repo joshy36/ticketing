@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.2.0",
+    "@openzeppelin/contracts": "^4.9.3",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
@@ -32,6 +33,7 @@
     "@trpc/react-query": "^10.38.1",
     "@trpc/server": "^10.38.1",
     "@vercel/analytics": "^1.0.2",
+    "alchemy-sdk": "^2.10.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",

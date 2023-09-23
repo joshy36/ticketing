@@ -40,6 +40,7 @@ export interface Database {
           created_at: string
           date: string
           description: string
+          etherscan_link: string | null
           ga_price: number | null
           ga_tickets: number | null
           id: string
@@ -57,6 +58,7 @@ export interface Database {
           created_at?: string
           date: string
           description: string
+          etherscan_link?: string | null
           ga_price?: number | null
           ga_tickets?: number | null
           id?: string
@@ -74,6 +76,7 @@ export interface Database {
           created_at?: string
           date?: string
           description?: string
+          etherscan_link?: string | null
           ga_price?: number | null
           ga_tickets?: number | null
           id?: string

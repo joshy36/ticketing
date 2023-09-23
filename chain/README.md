@@ -11,3 +11,13 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
+
+deploy Event contract
+```shell
+npx hardhat --network base-goerli deploy
+```
+
+verify Event contract on etherscan
+```shell
+npx hardhat verify --network base-goerli <address> <name> <symbol> <baseUri>
+```

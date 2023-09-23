@@ -24,27 +24,33 @@ export default function EventPurchase({
     (x) => x.user_id === null
   );
 
-  return (
-    <div className="py-10">
-      {user ? (
-        event?.tickets_remaining === 0 ? (
-          <Button disabled={true}>Sold Out!</Button>
-        ) : (
-          <div>
-            {loading ? (
-              <div>Loading...</div>
-            ) : (
-              <div className="py-6">
-                <DataTable columns={columns} data={notPurchasedEventTickets!} />
-              </div>
-            )}
-          </div>
-        )
-      ) : (
-        <Link href={`/sign-in`}>
+  const renderEventDetails = () => {
+    if (event?.tickets_remaining === 0) {
+      return <h1>Event sold out!</h1>;
+    } else if (!event?.etherscan_link) {
+      // Don't want to render tickets yet
+    } else if (loading) {
+      return <div>Loading...</div>;
+    } else {
+      return (
+        <div className="py-6">
+          <DataTable columns={columns} data={notPurchasedEventTickets!} />
+        </div>
+      );
+    }
+  };
+
+  const renderContent = () => {
+    if (user) {
+      return renderEventDetails();
+    } else {
+      return (
+        <Link href="/sign-in">
           <Button>Sign in to Purchase</Button>
         </Link>
-      )}
-    </div>
-  );
+      );
+    }
+  };
+
+  return <div className="py-10">{renderContent()}</div>;
 }

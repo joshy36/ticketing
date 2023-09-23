@@ -1,29 +1,9 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        gridTemplateRows: {
-          '[auto,auto,1fr]': 'auto auto 1fr',
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-
 import { serverClient } from '@/app/_trpc/serverClient';
 import createServerClient from '@/lib/supabaseServer';
 import Image from 'next/image';
 import EventPurchase from './EventPurchase';
+import { Button } from './ui/button';
+import { ExternalLinkIcon } from '@radix-ui/react-icons';
 
 export default async function EventView({
   params,
@@ -42,17 +22,16 @@ export default async function EventView({
 
   return (
     <div className="bg-background">
-      <div className="pt-6">
-        {/* Image gallery */}
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-          <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+      <div className="pt-6 px-6">
+        <div className="grid grid-cols-2 gap-8">
+          <div className="flex justify-center">
             {event?.image ? (
               <Image
                 src={event?.image!}
                 alt={event?.description!}
                 width={500}
                 height={500}
-                className="h-full w-full object-cover object-center group-hover:opacity-75"
+                className="rounded-lg"
               />
             ) : (
               <Image
@@ -60,37 +39,64 @@ export default async function EventView({
                 alt="image"
                 width={500}
                 height={500}
-                className="h-full w-full object-cover object-center group-hover:opacity-75"
+                className="rounded-lg"
               />
             )}
           </div>
-        </div>
 
-        {/* Product info */}
-        <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
-          <div className="lg:col-span-2 lg:border-rlg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-accent-foreground sm:text-3xl">
-              {event?.name}
-            </h1>
-          </div>
+          <div>
+            <div className="lg:col-span-2 lg:border-rlg:pr-8">
+              <h1 className="text-2xl font-bold tracking-tight text-accent-foreground sm:text-3xl">
+                {event?.name}
+              </h1>
+            </div>
 
-          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-rlg:pb-16 lg:pr-8 lg:pt-6">
-            {/* Description and details */}
-            <div>
-              <h3 className="sr-only">Description</h3>
+            <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-rlg:pb-16 lg:pr-8 lg:pt-6">
+              {/* Description and details */}
+              <div>
+                <h3 className="sr-only">Description</h3>
 
-              <div className="space-y-6">
-                <p className="text-base text-accent-foreground">
-                  {event?.description}
-                </p>
+                <div className="space-y-6">
+                  <p className="text-base text-accent-foreground">
+                    {event?.description}
+                  </p>
+                </div>
+                <div className="space-y-6">
+                  <p className="text-base text-accent-foreground">{`Location: ${event?.location}`}</p>
+                </div>
+                <div className="space-y-6">
+                  <p className="text-base text-accent-foreground">{`Date: ${event?.date}`}</p>
+                </div>
+                {event?.etherscan_link ? (
+                  <a href={`${event.etherscan_link}`} target="_blank">
+                    <Button variant="ghost">
+                      <div className="flex items-center space-x-1.5">
+                        <span className="relative flex h-3 w-3">
+                          {/* Uncomment to animate */}
+                          {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
+                          <div className="relative inline-flex rounded-full h-3 w-3 bg-green-600 "></div>
+                        </span>
+                        <div className="text-muted-foreground">
+                          Contract deployed
+                        </div>
+                        <ExternalLinkIcon className="text-muted-foreground" />
+                      </div>
+                    </Button>
+                  </a>
+                ) : (
+                  <div className="flex items-center space-x-1.5">
+                    <span className="relative flex h-3 w-3">
+                      {/* Uncomment to animate */}
+                      {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
+                      <div className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500 "></div>
+                    </span>
+                    <div className="text-muted-foreground">
+                      Contract pending deployment
+                    </div>
+                  </div>
+                )}
+                <EventPurchase user={user} event={event} />
               </div>
-              <div className="space-y-6">
-                <p className="text-base text-accent-foreground">{`Location: ${event?.location}`}</p>
-              </div>
-              <div className="space-y-6">
-                <p className="text-base text-accent-foreground">{`Date: ${event?.date}`}</p>
-              </div>
-              <EventPurchase user={user} event={event} />
             </div>
           </div>
         </div>
