@@ -141,6 +141,7 @@ export interface Database {
           profile_image: string | null
           updated_at: string | null
           username: string | null
+          wallet_address: string | null
         }
         Insert: {
           bio?: string | null
@@ -151,6 +152,7 @@ export interface Database {
           profile_image?: string | null
           updated_at?: string | null
           username?: string | null
+          wallet_address?: string | null
         }
         Update: {
           bio?: string | null
@@ -161,6 +163,7 @@ export interface Database {
           profile_image?: string | null
           updated_at?: string | null
           username?: string | null
+          wallet_address?: string | null
         }
         Relationships: [
           {

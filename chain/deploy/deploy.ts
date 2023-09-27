@@ -70,7 +70,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   );
 
   for (let i = 0; i < numberOfTickets; i++) {
-    let tx = await eventContract.safeMint(signer.address);
+    // @ts-ignore
+    let tx = await eventContract?.safeMint(signer.address);
     await tx.wait();
     console.log(
       `NFT Minted! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`

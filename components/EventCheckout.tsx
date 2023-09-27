@@ -15,13 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ExternalLinkIcon } from '@radix-ui/react-icons';
 
 export default function EventCheckout({
   ticketId,
-  userId,
+  userProfile,
 }: {
   ticketId: string;
-  userId: string;
+  userProfile: UserProfile;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function EventCheckout({
         console.error('Error transferring ticket:', error);
         setIsLoading(false);
       } else {
-        router.push(`/user/${userId}`);
+        router.push(`/user/${userProfile.id}`);
         setIsLoading(false);
       }
     },
@@ -70,22 +71,39 @@ export default function EventCheckout({
           <Button variant="outline" onClick={() => router.back()}>
             Cancel
           </Button>
-          <Button
-            onClick={async () => {
-              setIsLoading(true);
-              transferTicket.mutate({
-                seat: data?.seat!,
-                event_id: data?.event_id!,
-                user_id: userId,
-              });
-            }}
-            disabled={isLoading}
-          >
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Purchase
-          </Button>
+          {userProfile.wallet_address ? (
+            <Button
+              onClick={async () => {
+                setIsLoading(true);
+                // ?? Transfer nft endpoint
+                transferTicket.mutate({
+                  seat: data?.seat!,
+                  event_id: data?.event_id!,
+                  user_id: userProfile.id,
+                });
+              }}
+              disabled={isLoading}
+            >
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Purchase
+            </Button>
+          ) : (
+            <Button
+              onClick={() => router.push(`/user/edit/${userProfile.id}`)}
+              disabled={isLoading}
+            >
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+
+              <p className="underline">
+                Please Connect Wallet in Profile Section
+              </p>
+              <ExternalLinkIcon />
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </div>

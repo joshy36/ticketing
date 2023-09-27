@@ -64,7 +64,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   some better explanation for users.
                 </p>
                 <Separator />
-                <WalletConnect />
+                <WalletConnect userProfile={userProfile!} />
                 <Separator />
                 <h3 className="text-lg font-medium">Profile Picture</h3>
                 <Separator />

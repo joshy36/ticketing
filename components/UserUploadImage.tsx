@@ -5,16 +5,11 @@ import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 import { Input } from './ui/input';
 import { Icons } from './ui/icons';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { trpc } from '@/app/_trpc/client';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
-
-function undefinedToNull(value: string | undefined): string | null {
-  return value ?? null;
-}
 
 export default function EventUploadImage({
   id,
@@ -26,11 +21,11 @@ export default function EventUploadImage({
   buttonText: string;
 }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [imgUrl, setImgUrl] = React.useState('');
+  const [imgUrl, setImgUrl] = React.useState(userImage);
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
   const router = useRouter();
-  const updateUserImage = trpc.updateUserImage.useMutation({
+  const updateUserImage = trpc.updateUser.useMutation({
     onSettled(data, error) {
       if (!data) {
         toast({
@@ -50,8 +45,8 @@ export default function EventUploadImage({
   });
 
   useEffect(() => {
-    setImgUrl(userImage ?? '');
-  }, []);
+    setImgUrl(imgUrl ?? '');
+  }, [imgUrl]);
 
   const updateUser = async () => {
     setIsLoading(true);

@@ -1,3 +1,4 @@
+import { serverClient } from '@/app/_trpc/serverClient';
 import EventCheckout from '@/components/EventCheckout';
 import createServerClient from '@/lib/supabaseServer';
 import { redirect } from 'next/navigation';
@@ -13,9 +14,13 @@ export default async function Home({ params }: { params: { id: string } }) {
     redirect('/unauthorized');
   }
 
+  const userProfile = await serverClient.getUserProfile({
+    id: session.user.id,
+  });
+
   return (
     <main>
-      <EventCheckout ticketId={params.id} userId={session.user.id} />
+      <EventCheckout ticketId={params.id} userProfile={userProfile!} />
     </main>
   );
 }

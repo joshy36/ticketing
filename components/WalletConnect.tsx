@@ -10,8 +10,12 @@ import {
 import { Button } from './ui/button';
 import Image from 'next/image';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
+import React from 'react';
+import { useSignMessage } from 'wagmi';
+import { recoverMessageAddress } from 'viem';
+import { trpc } from '@/app/_trpc/client';
 
-export function WalletConnect() {
+export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
   const {
     connect,
     connectors,
@@ -24,13 +28,71 @@ export function WalletConnect() {
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
-  console.log(connector);
+  // const [recoveredAddress, setRecoveredAddress] = React.useState<string>('');
+  // const recoveredAddress = React.useRef<string>();
+  const {
+    data: signMessageData,
+    error: signMessageError,
+    isLoading,
+    signMessage,
+    variables,
+  } = useSignMessage();
+
+  const updateWallet = trpc.updateUser.useMutation({
+    onSettled(data, error) {
+      if (!data) {
+        console.error('Error adding wallet:', error);
+      }
+    },
+  });
+
+  React.useEffect(() => {
+    (async () => {
+      if (variables?.message && signMessageData) {
+        const recoveredAddress = await recoverMessageAddress({
+          message: variables?.message,
+          signature: signMessageData,
+        });
+        if (recoveredAddress === address) {
+          updateWallet.mutate({
+            id: userProfile.id,
+            wallet_address: String(recoveredAddress),
+          });
+        } else {
+          console.error('Signature did not recover to correct address');
+        }
+      }
+    })();
+  }, [
+    signMessageData,
+    variables?.message,
+    address,
+    updateWallet,
+    userProfile.id,
+  ]);
 
   return (
     <div>
       {isConnected ? (
         <div className="grid grid-cols-2">
           <div className="justify-self-start">
+            <div className="py-4">
+              {' '}
+              <Button
+                disabled={isLoading}
+                variant="secondary"
+                onClick={() =>
+                  signMessage({
+                    message:
+                      'Please sign this message to confirm this is your wallet',
+                  })
+                }
+              >
+                {isLoading ? 'Check Wallet' : 'Sign Message'}
+              </Button>
+              {signMessageError && <div>{signMessageError.message}</div>}
+            </div>
+
             <Button
               className="w-64"
               variant="secondary"

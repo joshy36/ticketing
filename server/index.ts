@@ -107,42 +107,19 @@ export const appRouter = router({
     .input(
       z.object({
         id: z.string(),
-        username: z.string().nullable(),
-        first_name: z.string().nullable(),
-        last_name: z.string().nullable(),
-        bio: z.string().nullable(),
+        username: z.string().nullable().optional(),
+        first_name: z.string().nullable().optional(),
+        last_name: z.string().nullable().optional(),
+        bio: z.string().nullable().optional(),
+        wallet_address: z.string().nullable().optional(),
+        profile_image: z.string().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
       const supabase = createRouteClient();
       const { data, error } = await supabase
         .from('user_profiles')
-        .update({
-          username: opts.input.username,
-          first_name: opts.input.first_name,
-          last_name: opts.input.last_name,
-          bio: opts.input.bio,
-        })
-        .eq('id', opts.input.id)
-        .select()
-        .single();
-
-      return data;
-    }),
-  updateUserImage: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        profile_image: z.string().nullable(),
-      })
-    )
-    .mutation(async (opts) => {
-      const supabase = createRouteClient();
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .update({
-          profile_image: opts.input.profile_image,
-        })
+        .update(opts.input)
         .eq('id', opts.input.id)
         .select()
         .single();
