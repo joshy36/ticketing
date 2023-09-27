@@ -10,8 +10,7 @@ const API_KEY = process.env.NFT_STORAGE_API_KEY;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// id of event to upload metadata for
-const id = '7ebfb1ea-6da4-445e-81c3-5f05b15c1b7c';
+// prod vs local
 
 async function uploadMetadataImage(id) {
   console.log('Starting image ipfs upload...');
@@ -122,4 +121,9 @@ async function uploadFullMetadata(id) {
   */
 }
 
-uploadFullMetadata(id);
+const args = process.argv.slice(2); // Remove the first two elements
+if (args.length < 1) {
+  console.log('Need event id!');
+} else {
+  uploadFullMetadata(args[0]);
+}

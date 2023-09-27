@@ -98,7 +98,7 @@ export default async function ProfileView({
           <h2 className="sr-only">Tickets</h2>
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             {userTickets ? (
-              <div>
+              <>
                 {userTickets.map((ticket) => (
                   <a
                     key={ticket.id}
@@ -132,7 +132,7 @@ export default async function ProfileView({
                     </p>
                   </a>
                 ))}
-              </div>
+              </>
             ) : (
               <div>No upcoming events!</div>
             )}
