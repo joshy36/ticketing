@@ -26,13 +26,13 @@ export default function EventCheckout({
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const transferTicket = trpc.transferTicket.useMutation({
+  const sellTicket = trpc.sellTicket.useMutation({
     onSettled(data, error) {
       if (!data) {
         toast({
-          description: 'Error transferring ticket!',
+          description: 'Error selling ticket!',
         });
-        console.error('Error transferring ticket:', error);
+        console.error('Error selling ticket:', error);
         setIsLoading(false);
       } else {
         router.push(`/user/${userProfile.id}`);
@@ -43,7 +43,7 @@ export default function EventCheckout({
   const { data, isLoading: loading } = trpc.getTicketById.useQuery({
     id: ticketId,
   });
-  console.log(data);
+
   const formatted = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -62,9 +62,19 @@ export default function EventCheckout({
               Confirm purchase of seat ... for ...
             </p>
           ) : (
-            <p className="mt-1 text-lg font-sm text-accent-foreground text-center">
-              {`Confirm purchase of seat ${data?.seat} for ${formatted}`}
-            </p>
+            <div>
+              <p className="mt-1 text-lg font-sm text-accent-foreground text-center">
+                {`Confirm purchase of seat ${data?.seat} for ${formatted}`}
+              </p>
+              <div>
+                {isLoading && (
+                  <p className="text-muted-foreground">
+                    This may take a few seconds as your ticket is being
+                    transferred and the transaction is confimed on chain
+                  </p>
+                )}
+              </div>
+            </div>
           )}
         </CardContent>
         <CardFooter className="flex justify-between">
@@ -75,9 +85,8 @@ export default function EventCheckout({
             <Button
               onClick={async () => {
                 setIsLoading(true);
-                // ?? Transfer nft endpoint
-                transferTicket.mutate({
-                  seat: data?.seat!,
+                sellTicket.mutate({
+                  ticket_id: ticketId,
                   event_id: data?.event_id!,
                   user_id: userProfile.id,
                 });

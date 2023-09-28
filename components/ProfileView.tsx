@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { serverClient } from '@/app/_trpc/serverClient';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { ExternalLinkIcon } from '@radix-ui/react-icons';
 
 export default async function ProfileView({
   params,
@@ -127,9 +128,19 @@ export default async function ProfileView({
                     <h1 className="mt-4 text-lg text-accent-foreground">
                       {ticket.events?.name}
                     </h1>
-                    <p className="mt-1 text-sm font-sm text-accent-foreground">
+                    <p className="mt-1 text-sm font-sm text-muted-foreground">
                       {`Seat: ${ticket.seat}`}
                     </p>
+                    {/* Need event id */}
+                    {/* <a
+                      href={`https://goerli.basescan.org/token/${ticket.events?.etherscan_link}?a=${ticket.token_id}`}
+                      target="_blank"
+                    >
+                      <p className="text-muted-foreground">
+                        Link
+                        <ExternalLinkIcon className="text-muted-foreground" />
+                      </p>
+                    </a> */}
                   </a>
                 ))}
               </>

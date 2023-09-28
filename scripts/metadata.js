@@ -56,7 +56,7 @@ async function uploadFullMetadata(id) {
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const { data } = await supabase
     .from('tickets')
-    .select('seat')
+    .select()
     .eq('event_id', id)
     .order('seat', { ascending: true });
 
@@ -70,6 +70,16 @@ async function uploadFullMetadata(id) {
   if (!event?.ipfs_image) {
     console.error('Need an image on ipfs!');
     return;
+  }
+
+  console.log(data);
+
+  // Set token ids in database
+  for (let i = 0; i < data.length; i++) {
+    const { error } = await supabase
+      .from('tickets')
+      .update({ token_id: i })
+      .eq('id', data[i].id);
   }
 
   const seats = data.map((x) => x.seat);
@@ -117,7 +127,9 @@ async function uploadFullMetadata(id) {
   /* 
   current flow:
   - create event
-  - locally run node metadata.js to generate metadata and put it on IPFS
+  - locally run node metadata.js to generate metadata and put it on IPF
+    - this script also updates the db with the correct token ids
+  - locally deploy contract
   */
 }
 

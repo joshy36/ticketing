@@ -98,6 +98,7 @@ export interface Database {
           id: string
           price: number
           seat: string
+          token_id: number | null
           user_id: string | null
         }
         Insert: {
@@ -106,6 +107,7 @@ export interface Database {
           id?: string
           price: number
           seat?: string
+          token_id?: number | null
           user_id?: string | null
         }
         Update: {
@@ -114,6 +116,7 @@ export interface Database {
           id?: string
           price?: number
           seat?: string
+          token_id?: number | null
           user_id?: string | null
         }
         Relationships: [
