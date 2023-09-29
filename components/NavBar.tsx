@@ -16,6 +16,7 @@ import * as React from 'react';
 import { Button, buttonVariants } from './ui/button';
 import { User } from '@supabase/supabase-js';
 import { UserNav } from './UserNav';
+import { CommandMenu } from './ui/command-menu';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -38,7 +39,7 @@ export default function NavBar({
   userProfile: UserProfile | null;
 }) {
   return (
-    <div className="flex h-16 items-center px-4">
+    <div className="flex h-16 items-center px-8">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -80,20 +81,25 @@ export default function NavBar({
           </NavigationMenuItem> */}
         </NavigationMenuList>
       </NavigationMenu>
-      {user ? (
-        <div className="ml-auto flex items-center space-x-4">
-          <UserNav user={user} userProfile={userProfile} />
+      <div className="flex flex-1 items-center justify-between space-x-6 md:justify-end">
+        <div className="w-full flex-1 md:w-auto md:flex-none">
+          <CommandMenu />
         </div>
-      ) : (
-        <div className="ml-auto flex items-center space-x-4">
-          <Link href="/sign-in">
-            {' '}
-            <Button className={cn(buttonVariants({ variant: 'default' }))}>
-              Sign In
-            </Button>
-          </Link>
-        </div>
-      )}
+        {user ? (
+          <div className="ml-auto flex items-center space-x-4">
+            <UserNav user={user} userProfile={userProfile} />
+          </div>
+        ) : (
+          <div className="ml-auto flex items-center space-x-4">
+            <Link href="/sign-in">
+              {' '}
+              <Button className={cn(buttonVariants({ variant: 'default' }))}>
+                Sign In
+              </Button>
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
