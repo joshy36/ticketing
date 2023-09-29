@@ -7,8 +7,8 @@ require('dotenv').config();
 
 // Make sure to update based on environment
 const API_KEY = process.env.NFT_STORAGE_API_KEY;
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+let SUPABASE_URL;
+let SUPABASE_ANON_KEY;
 
 // prod vs local
 
@@ -127,7 +127,7 @@ async function uploadFullMetadata(id) {
   /* 
   current flow:
   - create event
-  - locally run node metadata.js to generate metadata and put it on IPF
+  - locally run node metadata.js to generate metadata and put it on IPFS
     - this script also updates the db with the correct token ids
   - locally deploy contract
   */
@@ -136,6 +136,19 @@ async function uploadFullMetadata(id) {
 const args = process.argv.slice(2); // Remove the first two elements
 if (args.length < 1) {
   console.log('Need event id!');
+} else if (args.length < 2) {
+  console.log('Please specify env!');
+  return;
 } else {
+  if (args[1] == 'local') {
+    SUPABASE_URL = process.env.LOCAL_NEXT_PUBLIC_SUPABASE_URL;
+    SUPABASE_ANON_KEY = process.env.LOCAL_NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  } else if (args[1] == 'prod') {
+    SUPABASE_URL = process.env.PROD_NEXT_PUBLIC_SUPABASE_URL;
+    SUPABASE_ANON_KEY = process.env.PROD_NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  } else {
+    console.log('Accepted envs: local or prod');
+    return;
+  }
   uploadFullMetadata(args[0]);
 }

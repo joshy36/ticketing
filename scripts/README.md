@@ -12,5 +12,5 @@ npm i
 ```
 Run the script
 ```bash
-node metadata.js <event-id>
+node metadata.js <event-id> <local or prod>
 ```

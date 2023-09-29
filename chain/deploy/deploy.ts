@@ -4,9 +4,6 @@ import { DeployFunction } from 'hardhat-deploy/types';
 import { createClient } from '@supabase/supabase-js';
 import { ethers } from 'ethers';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const ALCHEMY_API_KEY = process.env.ALCHEMY_DEV_API_KEY!;
 const ALCHEMY_GOERLI_URL = process.env.ALCHEMY_GOERLI_URL!;
 const PRIVATE_KEY = process.env.PRIVATE_KEY!;
 
@@ -17,8 +14,17 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
 
   // id of event to deploy contract for
-  const id = '5c94e68b-28e6-4a49-bd97-786a829d05d6';
-
+  const id = '9525a388-c5b5-4358-b955-0690c4165dba';
+  const env: string = 'prod';
+  let SUPABASE_URL: string;
+  let SUPABASE_ANON_KEY: string;
+  if (env == 'local') {
+    SUPABASE_URL = process.env.LOCAL_NEXT_PUBLIC_SUPABASE_URL!;
+    SUPABASE_ANON_KEY = process.env.LOCAL_NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  } else {
+    SUPABASE_URL = process.env.PROD_NEXT_PUBLIC_SUPABASE_URL!;
+    SUPABASE_ANON_KEY = process.env.PROD_NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  }
   const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const { data } = await supabase
