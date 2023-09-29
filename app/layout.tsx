@@ -7,6 +7,7 @@ import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 
 import './globals.css';
+import Footer from '@/components/Footer';
 
 export const revalidate = 0;
 
@@ -31,9 +32,11 @@ export default async function RootLayout({
         <Provider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <NavBar user={user} userProfile={userProfile} />
-            {children}
+            <div className="min-h-screen"> {children}</div>
+
             <Toaster />
             <Analytics />
+            <Footer />
           </ThemeProvider>
         </Provider>
       </body>
