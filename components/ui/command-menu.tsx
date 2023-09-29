@@ -173,7 +173,7 @@ export function CommandMenu({ ...props }: DialogProps) {
                     value={navItem.name}
                     onSelect={() => {
                       runCommand(() =>
-                        router.push(`event/${navItem.id}` as string)
+                        router.push(`/event/${navItem.id}` as string)
                       );
                     }}
                   >
