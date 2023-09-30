@@ -1,70 +1,6 @@
 import { serverClient } from '@/app/_trpc/serverClient';
+import { dateToString } from '@/utils/helpers';
 import Image from 'next/image';
-
-const products = [
-  {
-    id: 1,
-    name: 'Earthen Bottle',
-    href: '#',
-    price: '$48',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
-    imageAlt:
-      'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
-  },
-  {
-    id: 2,
-    name: 'Nomad Tumbler',
-    href: '#',
-    price: '$35',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
-    imageAlt:
-      'Olive drab green insulated bottle with flared screw lid and flat top.',
-  },
-  {
-    id: 3,
-    name: 'Focus Paper Refill',
-    href: '#',
-    price: '$89',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
-    imageAlt:
-      'Person using a pen to cross a task off a productivity paper card.',
-  },
-  {
-    id: 4,
-    name: 'Machined Mechanical Pencil',
-    href: '#',
-    price: '$35',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-    imageAlt:
-      'Hand holding black machined steel mechanical pencil with brass tip and top.',
-  },
-  // More products...
-];
-
-const convertDate = (date: string): string => {
-  const months: Record<string, string> = {
-    '01': 'Jan',
-    '02': 'Feb',
-    '03': 'March',
-    '04': 'April',
-    '05': 'May',
-    '06': 'June',
-    '07': 'July',
-    '08': 'Aug',
-    '09': 'Sept',
-    '10': 'Oct',
-    '11': 'Nov',
-    '12': 'Dec',
-  };
-  const time = date.split('-')[2]?.split('T')[1];
-  const day = date.split('-')[2]?.split('T')[0];
-  const month = months[date.split('-')[1]!];
-  return month + ' ' + day;
-};
 
 export default async function EventsList() {
   const data = await serverClient.getEvents();
@@ -81,7 +17,7 @@ export default async function EventsList() {
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {data.map((event: Events) => (
             <a key={event.id} href={`/event/${event.id}`} className="group">
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
+              <div className="aspect-square w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
                 {event.image ? (
                   <Image
                     src={event.image}
@@ -103,11 +39,11 @@ export default async function EventsList() {
               <h1 className="mt-4 text-lg text-accent-foreground">
                 {event.name}
               </h1>
-              <p className="mt-1 text-sm font-sm text-accent-foreground">
-                {`Location: ${event.location}`}
+              <p className="mt-1 text-sm font-sm text-muted-foreground">
+                {`${dateToString(event.date)}`}
               </p>
-              <p className="mt-1 text-sm font-sm text-accent-foreground">
-                {`Date: ${convertDate(event.date)}`}
+              <p className="mt-1 text-sm font-sm text-muted-foreground">
+                {`${event.location}`}
               </p>
             </a>
           ))}

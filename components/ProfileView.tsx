@@ -106,7 +106,7 @@ export default async function ProfileView({
                     // href={`/event/${ticket.id}`}
                     className="group"
                   >
-                    <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
+                    <div className="aspect-square w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
                       {ticket.events?.image ? (
                         <Image
                           src={ticket.events?.image}

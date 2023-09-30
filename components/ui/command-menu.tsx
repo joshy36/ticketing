@@ -28,6 +28,7 @@ import { Icons } from './icons';
 import { SearchIcon } from 'lucide-react';
 import { trpc } from '@/app/_trpc/client';
 import Image from 'next/image';
+import { dateToString } from '@/utils/helpers';
 
 export interface NavItem {
   title: string;
@@ -195,7 +196,15 @@ export function CommandMenu({ ...props }: DialogProps) {
                       />
                     )}
                     {/* <FileIcon className="mr-2 h-4 w-4" /> */}
-                    {navItem.name}
+                    <div>
+                      <div className="text-lg">{navItem.name}</div>
+                      <div className="text-muted-foreground">
+                        {dateToString(navItem.date)}
+                      </div>
+                      <div className="text-muted-foreground">
+                        {navItem.location}
+                      </div>
+                    </div>
                   </CommandItem>
                 ))}
             </CommandGroup>

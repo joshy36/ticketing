@@ -4,6 +4,7 @@ import Image from 'next/image';
 import EventPurchase from './EventPurchase';
 import { Button } from './ui/button';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
+import { dateToString } from '@/utils/helpers';
 
 export default async function EventView({
   params,
@@ -62,11 +63,14 @@ export default async function EventView({
                   </p>
                 </div>
                 <div className="space-y-6">
-                  <p className="text-base text-accent-foreground">{`Location: ${event?.location}`}</p>
+                  <p className="text-base text-accent-foreground">
+                    {dateToString(event?.date!)}
+                  </p>
                 </div>
                 <div className="space-y-6">
-                  <p className="text-base text-accent-foreground">{`Date: ${event?.date}`}</p>
+                  <p className="text-base text-accent-foreground">{`${event?.location}`}</p>
                 </div>
+
                 {event?.etherscan_link ? (
                   <a href={`${event.etherscan_link}`} target="_blank">
                     <Button variant="ghost">
