@@ -119,6 +119,8 @@ export default function EventCreate() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      rows: 0,
+      seats_per_row: 0,
     },
   });
   const noSeats = !form.watch('seats');
@@ -128,6 +130,11 @@ export default function EventCreate() {
     setIsLoading(true);
 
     const time = values.time.split(':');
+
+    if (values.ampm == 'pm') {
+      time[0] += 12;
+    }
+
     values.date.setHours(Number(time[0]));
     values.date.setMinutes(Number(time[1]));
 
@@ -376,7 +383,6 @@ export default function EventCreate() {
                       <div></div>
                     ) : (
                       <div className="space-y-6">
-                        {' '}
                         <FormField
                           control={form.control}
                           name="rows"

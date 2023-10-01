@@ -17,8 +17,13 @@ export const dateToString = (date: string): string => {
   const dateObj = new Date(date);
   const dateFormat = dateObj.toLocaleString();
   const timeFormat = dateObj.toLocaleTimeString();
-  const time = timeFormat.split(':')[0] + ':' + timeFormat.split(':')[1];
+  const time =
+    timeFormat.split(':')[0] +
+    ':' +
+    timeFormat.split(':')[1] +
+    ' ' +
+    timeFormat.split(' ')[1];
   const day = dateFormat.split('/')[1]!;
   const month = months[dateFormat.split('/')[0]!];
-  return month + ' ' + day + ', ' + time + ' PM';
+  return month + ' ' + day + ', ' + time;
 };
