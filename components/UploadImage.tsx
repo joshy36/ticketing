@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
@@ -7,16 +8,16 @@ import { Input } from './ui/input';
 import { Icons } from './ui/icons';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { trpc } from '@/app/_trpc/client';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 
-export default function EventUploadImage({
-  id,
-  buttonText,
-}: {
+type Props = {
   id: string;
-  buttonText: string;
-}) {
+  bucket: 'events' | 'artists';
+};
+
+export default function UploadImage({ params }: { params: Props }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState('');
@@ -24,37 +25,46 @@ export default function EventUploadImage({
   const { toast } = useToast();
   const router = useRouter();
 
-  const createEvent = async () => {
-    setIsLoading(true);
-    const eventUpdate = JSON.stringify({
-      image: imgUrl,
-    });
-
-    try {
-      // make this a trpc thing
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      const res = await fetch(baseUrl + `/api/event/update/${id}`, {
-        method: 'PATCH',
-        body: eventUpdate,
-        cache: 'no-store',
-      });
-
-      if (!res.ok) {
+  const updateEvent = trpc.updateEvent.useMutation({
+    onSettled(data, error) {
+      if (!data) {
         toast({
-          description: 'Error creating event',
+          description: 'Error updating event',
         });
+        console.error('Error updating event:', error);
         setIsLoading(false);
-        throw new Error('Failed to create event');
       } else {
-        router.refresh();
-        router.push(`/event/${id}`);
+        router.push(`/event/${params.id}`);
       }
-    } catch (error) {
-      toast({
-        description: 'Error creating event',
+    },
+  });
+
+  const updateArtist = trpc.updateArtist.useMutation({
+    onSettled(data, error) {
+      if (!data) {
+        toast({
+          description: 'Error updating artist',
+        });
+        console.error('Error updating artist:', error);
+        setIsLoading(false);
+      } else {
+        router.push(`/artist/${params.id}`);
+      }
+    },
+  });
+
+  const updateImage = async () => {
+    setIsLoading(true);
+    if (params.bucket === 'events') {
+      updateEvent.mutate({
+        id: params.id,
+        image: imgUrl,
       });
-      console.error('Error creating event:', error);
-      setIsLoading(false);
+    } else if (params.bucket === 'artists') {
+      updateArtist.mutate({
+        id: params.id,
+        image: imgUrl,
+      });
     }
   };
 
@@ -79,11 +89,16 @@ export default function EventUploadImage({
       setIsLoading(false);
       return;
     }
-    const bucket = 'events';
+    const bucket = params.bucket;
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('fileName', data.file[0].name);
-    formData.append('location', `/${id}/event_photo.jpeg`);
+    if (bucket === 'events') {
+      formData.append('location', `/${params.id}/event_photo.jpeg`);
+    } else if (bucket === 'artists') {
+      formData.append('location', `/${params.id}/profile.jpeg`);
+    }
+
     formData.append('bucket', bucket);
 
     try {
@@ -158,7 +173,7 @@ export default function EventUploadImage({
         <div>
           <Image
             src={imgUrl}
-            alt="Event Image"
+            alt="Image"
             width={300}
             height={300}
             // className="h-full w-full object-cover object-center group-hover:opacity-75"
@@ -167,9 +182,9 @@ export default function EventUploadImage({
       ) : (
         <div></div>
       )}
-      <Button disabled={isLoading || imgUrl == ''} onClick={createEvent}>
+      <Button disabled={isLoading || imgUrl == ''} onClick={updateImage}>
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-        {buttonText}
+        {params.bucket === 'events' ? 'Create event' : 'Create Artist'}
       </Button>
     </>
   );

@@ -7,9 +7,9 @@ export default function Home({ params }: { params: { id: string } }) {
       <div className="lg:px-80">
         <div className=" space-y-6 p-10 pb-16 sm:block">
           <div className="space-y-0.5">
-            <h2 className="text-2xl font-bold tracking-tight">Create Event</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Create Artist</h2>
             <p className="text-muted-foreground">
-              Please fill in all the details to create your event!
+              Please fill in all the details to create a profile for an artist!
             </p>
           </div>
           <Separator className="my-6" />
@@ -18,12 +18,12 @@ export default function Home({ params }: { params: { id: string } }) {
               <div>
                 <div className="space-y-2">
                   <h1 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    Upload an Image for the Event
+                    Upload an Image for the Artist Profile
                   </h1>
                   <UploadImage
                     params={{
                       id: params.id,
-                      bucket: 'events',
+                      bucket: 'artists',
                     }}
                   />
                 </div>

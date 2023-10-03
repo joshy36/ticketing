@@ -3,13 +3,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { DialogProps } from '@radix-ui/react-alert-dialog';
-import {
-  CircleIcon,
-  FileIcon,
-  LaptopIcon,
-  MoonIcon,
-  SunIcon,
-} from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 
 // import { docsConfig } from '@/config/docs';
@@ -120,6 +113,10 @@ export function CommandMenu({ ...props }: DialogProps) {
   const { setTheme } = useTheme();
 
   const { data: events, isLoading: loading } = trpc.getEvents.useQuery();
+
+  const { data: artists, isLoading: artistsLoading } =
+    trpc.getArtists.useQuery();
+
   console.log('events!', events);
 
   React.useEffect(() => {
@@ -152,14 +149,14 @@ export function CommandMenu({ ...props }: DialogProps) {
         <span className="hidden lg:inline-flex pr-2">
           <SearchIcon />
         </span>
-        <span className="hidden lg:inline-flex">Search events...</span>
+        <span className="hidden lg:inline-flex">Search events, artists...</span>
         <span className="inline-flex lg:hidden">Search...</span>
         {/* <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
           <span className="text-xs">⌘</span>K
         </kbd> */}
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type here to find an event..." />
+        <CommandInput placeholder="Search events, artists, venues..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           {!events ? (
@@ -204,6 +201,49 @@ export function CommandMenu({ ...props }: DialogProps) {
                       <div className="text-muted-foreground">
                         {navItem.location}
                       </div>
+                    </div>
+                  </CommandItem>
+                ))}
+            </CommandGroup>
+          )}
+
+          <CommandEmpty>No results found.</CommandEmpty>
+          {!artists ? (
+            <CommandEmpty>No results found.</CommandEmpty>
+          ) : (
+            <CommandGroup heading="Artists">
+              {artists
+                // .filter((navitem: any) => !navitem.external)
+                .map((navItem: Artist) => (
+                  <CommandItem
+                    key={navItem.id}
+                    value={navItem.name}
+                    onSelect={() => {
+                      runCommand(() =>
+                        router.push(`/artist/${navItem.id}` as string)
+                      );
+                    }}
+                  >
+                    {navItem.image ? (
+                      <Image
+                        src={navItem.image}
+                        alt={navItem.description}
+                        width={500}
+                        height={500}
+                        className="mr-4 h-12 w-12"
+                      />
+                    ) : (
+                      <Image
+                        src="/fallback.jpeg"
+                        alt="image"
+                        width={500}
+                        height={500}
+                        className="mr-4 h-12 w-12"
+                      />
+                    )}
+                    {/* <FileIcon className="mr-2 h-4 w-4" /> */}
+                    <div>
+                      <div className="text-lg">{navItem.name}</div>
                     </div>
                   </CommandItem>
                 ))}

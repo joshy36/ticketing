@@ -25,9 +25,9 @@ const components: { title: string; href: string; description: string }[] = [
     description: 'A page to create an event.',
   },
   {
-    title: 'Update Event',
-    href: '/event/update',
-    description: 'A page to update an event.',
+    title: 'Create Artist',
+    href: '/artist/create',
+    description: 'A page to create an artist.',
   },
 ];
 
@@ -57,14 +57,7 @@ export default function NavBar({
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/event/create" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Create Event
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          {/* <NavigationMenuItem>
-            <NavigationMenuTrigger>Event Managment</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Admin</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                 {components.map((component) => (
@@ -78,7 +71,7 @@ export default function NavBar({
                 ))}
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem> */}
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
       <div className="flex flex-1 items-center justify-between space-x-6 md:justify-end">
@@ -104,28 +97,28 @@ export default function NavBar({
   );
 }
 
-// const ListItem = React.forwardRef<
-//   React.ElementRef<'a'>,
-//   React.ComponentPropsWithoutRef<'a'>
-// >(({ className, title, children, ...props }, ref) => {
-//   return (
-//     <li>
-//       <NavigationMenuLink asChild>
-//         <a
-//           ref={ref}
-//           className={cn(
-//             'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-//             className
-//           )}
-//           {...props}
-//         >
-//           <div className="text-sm font-medium leading-none">{title}</div>
-//           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-//             {children}
-//           </p>
-//         </a>
-//       </NavigationMenuLink>
-//     </li>
-//   );
-// });
-// ListItem.displayName = 'ListItem';
+const ListItem = React.forwardRef<
+  React.ElementRef<'a'>,
+  React.ComponentPropsWithoutRef<'a'>
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = 'ListItem';
