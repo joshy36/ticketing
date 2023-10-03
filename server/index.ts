@@ -1,13 +1,12 @@
-import createRouteClient from '@/lib/supabaseRoute';
-import { publicProcedure, router } from './trpc';
+import { privateProcedure, publicProcedure, router } from './trpc';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { ethers } from 'ethers';
 import contractAbi from '@/chain/deployments/base-goerli/Event.json';
 
 export const appRouter = router({
-  getEvents: publicProcedure.query(async () => {
-    const supabase = createRouteClient();
+  getEvents: publicProcedure.query(async (opts) => {
+    const supabase = opts.ctx.supabase;
     const { data } = await supabase.from('events').select();
     return data;
   }),
@@ -15,7 +14,7 @@ export const appRouter = router({
   getEventById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
       const { data } = await supabase
         .from('events')
         .select()
@@ -28,7 +27,7 @@ export const appRouter = router({
   getUserProfile: publicProcedure
     .input(z.object({ id: z.string().optional() }))
     .query(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
       const { data } = await supabase
         .from('user_profiles')
         .select()
@@ -53,7 +52,7 @@ export const appRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
 
       let ticketsRemaining = opts.input.ga_tickets;
       if (
@@ -122,7 +121,7 @@ export const appRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
       const { data, error } = await supabase
         .from('user_profiles')
         .update(opts.input)
@@ -136,7 +135,7 @@ export const appRouter = router({
   getTicketById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
       const { data } = await supabase
         .from('tickets')
         .select(`*, events (image, name)`)
@@ -157,7 +156,7 @@ export const appRouter = router({
   getTicketsForUser: publicProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
       const { data } = await supabase
         .from('tickets')
         .select(`*, events (id, image, name, etherscan_link)`)
@@ -168,7 +167,7 @@ export const appRouter = router({
   getTicketsForEvent: publicProcedure
     .input(z.object({ event_id: z.string() }))
     .query(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
       const { data } = await supabase
         .from('tickets')
         .select(`*`)
@@ -186,7 +185,7 @@ export const appRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const supabase = createRouteClient();
+      const supabase = opts.ctx.supabase;
       const { data: eventData } = await supabase
         .from('events')
         .select()
