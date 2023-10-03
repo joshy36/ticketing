@@ -23,7 +23,7 @@ export default async function EventsList() {
                     alt={event.description}
                     width={500}
                     height={500}
-                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                    className="h-full w-full object-cover object-center group-hover:opacity-75 transition duration-300 ease-in-out hover:scale-105"
                   />
                 ) : (
                   <Image
@@ -35,13 +35,13 @@ export default async function EventsList() {
                   />
                 )}
               </div>
-              <h1 className="mt-4 text-lg text-accent-foreground">
+              <h1 className="mt-2 text-xl text-accent-foreground">
                 {event.name}
               </h1>
-              <p className="mt-1 text-sm font-sm text-muted-foreground">
+              <p className="mt-0.5 text-sm font-sm text-muted-foreground">
                 {`${dateToString(event.date)}`}
               </p>
-              <p className="mt-1 text-sm font-sm text-muted-foreground">
+              <p className="mt-0.5 text-sm font-sm text-muted-foreground">
                 {`${event.location}`}
               </p>
             </a>

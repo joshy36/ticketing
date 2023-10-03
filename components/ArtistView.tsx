@@ -1,5 +1,6 @@
 import { serverClient } from '@/app/_trpc/serverClient';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
 export default async function EventView({
   params,
@@ -9,13 +10,7 @@ export default async function EventView({
   const artist = await serverClient.getArtistById({ id: params.id });
 
   if (!artist) {
-    return (
-      <div className="space-y-0.5 text-center mt-24">
-        <h1 className="text-4xl font-bold tracking-tight">
-          Artist does not exist!
-        </h1>
-      </div>
-    );
+    notFound();
   }
 
   return (
@@ -31,9 +26,9 @@ export default async function EventView({
           />
         </div>
         <div>
-          <p className="text-9xl py-4">{artist?.name}</p>
+          <p className="text-8xl py-4">{artist.name}</p>
           <p className="text-2xl py-4">About</p>
-          <p className="text-xl text-muted-foreground">{artist?.description}</p>
+          <p className="text-xl text-muted-foreground">{artist.description}</p>
         </div>
       </div>
     </div>

@@ -73,6 +73,7 @@ export interface Database {
       }
       events: {
         Row: {
+          artist: string
           base_url: string | null
           created_at: string
           date: string
@@ -91,6 +92,7 @@ export interface Database {
           updated_at: string
         }
         Insert: {
+          artist: string
           base_url?: string | null
           created_at?: string
           date: string
@@ -109,6 +111,7 @@ export interface Database {
           updated_at?: string
         }
         Update: {
+          artist?: string
           base_url?: string | null
           created_at?: string
           date?: string
@@ -126,7 +129,14 @@ export interface Database {
           tickets_remaining?: number | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "events_artist_fkey"
+            columns: ["artist"]
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       tickets: {
         Row: {

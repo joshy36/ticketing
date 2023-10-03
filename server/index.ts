@@ -41,6 +41,7 @@ export const appRouter = router({
     .input(
       z.object({
         name: z.string(),
+        artist: z.string(),
         description: z.string(),
         ga_tickets: z.number(),
         ga_price: z.number(),
@@ -68,6 +69,7 @@ export const appRouter = router({
         .from('events')
         .insert({
           name: opts.input.name,
+          artist: opts.input.artist,
           description: opts.input.description,
           ga_tickets: opts.input.ga_tickets,
           ga_price: opts.input.ga_price,

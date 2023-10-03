@@ -31,7 +31,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -43,9 +43,21 @@ import { useRouter } from 'next/navigation';
 import { trpc } from '@/app/_trpc/client';
 import { Switch } from './ui/switch';
 
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from './ui/command';
+import Link from 'next/link';
+
 const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Event name must be at least 2 characters.',
+  }),
+  artist: z.string({
+    required_error: 'Please select a artist.',
   }),
   description: z.string().min(20, {
     message: 'Description must be at least 20 characters.',
@@ -99,6 +111,9 @@ export default function EventCreate() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
+  const { data: artists, isLoading: artistsLoading } =
+    trpc.getArtists.useQuery();
+
   const createEvent = trpc.createEvent.useMutation({
     onSettled(data, error) {
       if (!data) {
@@ -140,6 +155,7 @@ export default function EventCreate() {
 
     createEvent.mutate({
       name: values.name,
+      artist: values.artist,
       description: values.description,
       ga_tickets: values.ga_tickets,
       ga_price: values.ga_price,
@@ -182,6 +198,90 @@ export default function EventCreate() {
                               {...field}
                             />
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="artist"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>Artist</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className={cn(
+                                    'w-[200px] justify-between',
+                                    !field.value && 'text-muted-foreground'
+                                  )}
+                                >
+                                  {artists ? (
+                                    <div>
+                                      {field.value
+                                        ? artists.find(
+                                            (artist) =>
+                                              artist.id === field.value
+                                          )?.name
+                                        : 'Select artist'}
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[200px] p-0">
+                              <Command>
+                                <CommandInput
+                                  placeholder="Search artists..."
+                                  className="h-9"
+                                />
+                                <CommandEmpty>No artists found.</CommandEmpty>
+                                <CommandGroup>
+                                  {artists ? (
+                                    <div>
+                                      {artists.map((artist) => (
+                                        <CommandItem
+                                          value={artist.name}
+                                          key={artist.name}
+                                          onSelect={() => {
+                                            form.setValue('artist', artist.id);
+                                          }}
+                                        >
+                                          {artist.name}
+                                          <CheckIcon
+                                            className={cn(
+                                              'ml-auto h-4 w-4',
+                                              artist.id === field.value
+                                                ? 'opacity-100'
+                                                : 'opacity-0'
+                                            )}
+                                          />
+                                        </CommandItem>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <div>No artists!</div>
+                                  )}
+                                </CommandGroup>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                          <FormDescription>
+                            If you can&apos;t find the artist in this list,
+                            create a profile{' '}
+                            <Link
+                              href="/artist/create"
+                              className="underline underline-offset-4 hover:text-primary"
+                            >
+                              here.
+                            </Link>
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
