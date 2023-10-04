@@ -36,31 +36,31 @@ export interface Database {
     Tables: {
       artists: {
         Row: {
-          created_at: string | null
+          created_at: string
           created_by: string
           description: string
           id: string
           image: string | null
           name: string
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           created_by: string
           description: string
           id?: string
           image?: string | null
           name: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           created_by?: string
           description?: string
           id?: string
           image?: string | null
           name?: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -149,7 +149,7 @@ export interface Database {
       }
       tickets: {
         Row: {
-          created_at: string | null
+          created_at: string
           event_id: string
           id: string
           price: number
@@ -158,7 +158,7 @@ export interface Database {
           user_id: string | null
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           event_id: string
           id?: string
           price: number
@@ -167,7 +167,7 @@ export interface Database {
           user_id?: string | null
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           event_id?: string
           id?: string
           price?: number
