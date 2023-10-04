@@ -19,7 +19,6 @@ type Props = {
 
 export default function UploadImage({ params }: { params: Props }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState('');
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
@@ -53,17 +52,16 @@ export default function UploadImage({ params }: { params: Props }) {
     },
   });
 
-  const updateImage = async () => {
-    setIsLoading(true);
+  const updateImage = async (url: string) => {
     if (params.bucket === 'events') {
       updateEvent.mutate({
         id: params.id,
-        image: imgUrl,
+        image: url,
       });
     } else if (params.bucket === 'artists') {
       updateArtist.mutate({
         id: params.id,
-        image: imgUrl,
+        image: url,
       });
     }
   };
@@ -117,13 +115,12 @@ export default function UploadImage({ params }: { params: Props }) {
           description: 'Image uploaded successfully!',
         });
         const fileName = await res.json();
-        setImgUrl(
+        const url =
           process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
-            '/' +
-            bucket +
-            fileName.location
-        );
-        setIsSuccessful(true);
+          '/' +
+          bucket +
+          fileName.location;
+        await updateImage(url);
       } else {
         const error = await res.json();
         if (error.error.message == 'invalid signature') {
@@ -158,34 +155,36 @@ export default function UploadImage({ params }: { params: Props }) {
             id="picture"
             type="file"
             disabled={isLoading}
-            {...register('file')}
+            {...register('file', {
+              onChange: (e) => {
+                setImgUrl(URL.createObjectURL(e.target.files[0]));
+              },
+            })}
           />
           <Button type="submit" disabled={isLoading} className="max-w-[40%]">
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Upload Image
+            {params.bucket === 'events' ? 'Create event' : 'Create Artist'}
           </Button>
         </div>
       </form>
       <br></br>
-      {isSuccessful ? (
-        <div>
-          <Image
-            src={imgUrl}
-            alt="Image"
-            width={300}
-            height={300}
-            // className="h-full w-full object-cover object-center group-hover:opacity-75"
-          />
-        </div>
-      ) : (
-        <div></div>
-      )}
-      <Button disabled={isLoading || imgUrl == ''} onClick={updateImage}>
-        {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-        {params.bucket === 'events' ? 'Create event' : 'Create Artist'}
-      </Button>
+      <div>
+        {imgUrl === '' ? (
+          <div></div>
+        ) : (
+          <div>
+            <Image
+              src={imgUrl}
+              alt="Image"
+              width={300}
+              height={300}
+              className="rounded-lg"
+            />
+          </div>
+        )}
+      </div>
     </>
   );
 }

@@ -150,7 +150,6 @@ export default function UserUploadImage({
             disabled={isLoading}
             {...register('file', {
               onChange: (e) => {
-                console.log(e.target.files[0]);
                 setImgUrl(URL.createObjectURL(e.target.files[0]));
               },
             })}
