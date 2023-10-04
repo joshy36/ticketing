@@ -76,7 +76,7 @@ export interface Database {
           artist: string
           base_url: string | null
           created_at: string
-          created_by: string | null
+          created_by: string
           date: string
           description: string
           etherscan_link: string | null
@@ -96,7 +96,7 @@ export interface Database {
           artist: string
           base_url?: string | null
           created_at?: string
-          created_by?: string | null
+          created_by: string
           date: string
           description: string
           etherscan_link?: string | null
@@ -116,7 +116,7 @@ export interface Database {
           artist?: string
           base_url?: string | null
           created_at?: string
-          created_by?: string | null
+          created_by?: string
           date?: string
           description?: string
           etherscan_link?: string | null

@@ -1,4 +1,4 @@
-import { router, publicProcedure } from '../trpc';
+import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
 export const eventsRouter = router({
@@ -21,7 +21,7 @@ export const eventsRouter = router({
       return data;
     }),
 
-  createEvent: publicProcedure
+  createEvent: authedProcedure
     .input(
       z.object({
         name: z.string(),
@@ -62,7 +62,7 @@ export const eventsRouter = router({
           tickets_remaining: ticketsRemaining,
           date: opts.input.date,
           location: opts.input.location,
-          created_by: opts.ctx.user?.id,
+          created_by: opts.ctx.user?.id!,
           image: opts.input.image ?? null,
         })
         .select()

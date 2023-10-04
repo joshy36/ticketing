@@ -1,4 +1,4 @@
-import { router, publicProcedure, privateProcedure } from '../trpc';
+import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
 export const artistsRouter = router({
@@ -21,7 +21,7 @@ export const artistsRouter = router({
       return data;
     }),
 
-  createArtist: privateProcedure
+  createArtist: authedProcedure
     .input(z.object({ name: z.string(), description: z.string() }))
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;
@@ -40,7 +40,7 @@ export const artistsRouter = router({
       return data;
     }),
 
-  updateArtist: privateProcedure
+  updateArtist: authedProcedure
     .input(
       z.object({
         id: z.string(),

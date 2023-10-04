@@ -42,4 +42,4 @@ const isAuth = middleware(async (opts) => {
 });
 
 export const publicProcedure = t.procedure.use(noAuth);
-export const privateProcedure = t.procedure.use(isAuth);
+export const authedProcedure = t.procedure.use(isAuth);
