@@ -15,7 +15,7 @@ export default async function EventView({
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-8 pt-16 px-16">
+      <div className="grid grid-cols-1 gap-8 pt-16 px-16 md:grid-cols-2">
         <div className="flex justify-center items-center">
           <Image
             src={artist.image!}
