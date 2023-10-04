@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
@@ -11,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 
-export default function EventUploadImage({
+export default function UserUploadImage({
   id,
   userImage,
   buttonText,
@@ -47,15 +48,6 @@ export default function EventUploadImage({
   useEffect(() => {
     setImgUrl(imgUrl ?? '');
   }, [imgUrl]);
-
-  const updateUser = async () => {
-    setIsLoading(true);
-
-    updateUserImage.mutate({
-      id: id,
-      profile_image: imgUrl,
-    });
-  };
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
@@ -102,12 +94,15 @@ export default function EventUploadImage({
           description: 'Image uploaded successfully!',
         });
         const fileName = await res.json();
-        setImgUrl(
-          process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
+
+        updateUserImage.mutate({
+          id: id,
+          profile_image:
+            process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
             '/' +
             bucket +
-            fileName.location
-        );
+            fileName.location,
+        });
       } else {
         const error = await res.json();
         if (error.error.message == 'invalid signature') {
@@ -147,13 +142,18 @@ export default function EventUploadImage({
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Upload Image
+            {buttonText}
           </Button>
           <Input
             id="picture"
             type="file"
             disabled={isLoading}
-            {...register('file')}
+            {...register('file', {
+              onChange: (e) => {
+                console.log(e.target.files[0]);
+                setImgUrl(URL.createObjectURL(e.target.files[0]));
+              },
+            })}
           />
         </div>
       </form>
@@ -170,15 +170,6 @@ export default function EventUploadImage({
       ) : (
         <div></div>
       )}
-      <Button
-        className="w-64"
-        variant="secondary"
-        disabled={isLoading || imgUrl == ''}
-        onClick={updateUser}
-      >
-        {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-        {buttonText}
-      </Button>
     </>
   );
 }

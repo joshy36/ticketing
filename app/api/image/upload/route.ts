@@ -16,9 +16,14 @@ export async function POST(req: NextRequest) {
 
   const fileType = String(fileName).split('.')[1];
 
+  console.log('file', file);
+  console.log('filename', fileName);
+  console.log('location', location);
+  console.log('filetype', fileType);
+
   const { data, error } = await supabase.storage
     .from(bucket)
-    .upload(String(location), file!, {
+    .upload(location, file!, {
       cacheControl: '3600',
       upsert: true,
       contentType: 'image/' + fileType,
