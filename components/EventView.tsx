@@ -28,7 +28,7 @@ export default async function EventView({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const userProfile = await serverClient.getUserProfile({ id: user?.id });
+  // const userProfile = await serverClient.getUserProfile({ id: user?.id });
 
   return (
     <div className="bg-background">

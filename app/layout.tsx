@@ -24,7 +24,11 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const userProfile = await serverClient.getUserProfile({ id: user?.id });
+  let userProfile = null;
+
+  if (user) {
+    userProfile = await serverClient.getUserProfile({ id: user?.id });
+  }
 
   return (
     <html lang="en">

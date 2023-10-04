@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const usersRouter = router({
   getUserProfile: publicProcedure
-    .input(z.object({ id: z.string().optional() }))
+    .input(z.object({ id: z.string() }))
     .query(async (opts) => {
       const supabase = opts.ctx.supabase;
       const { data } = await supabase

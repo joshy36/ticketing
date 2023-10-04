@@ -126,7 +126,7 @@ export const ticketsRouter = router({
         await supabase
           .from('tickets')
           .update({ user_id: opts.input.user_id })
-          .eq('id', getTicket?.id)
+          .eq('id', getTicket?.id!)
           .select()
           .single();
 
