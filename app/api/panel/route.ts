@@ -1,5 +1,5 @@
 import { renderTrpcPanel } from 'trpc-panel';
-import { appRouter } from '@/server';
+import { appRouter } from '@/server/routers/_app';
 
 const panelHandler = () => {
   return new Response(
