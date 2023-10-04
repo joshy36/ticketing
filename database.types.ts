@@ -76,6 +76,7 @@ export interface Database {
           artist: string
           base_url: string | null
           created_at: string
+          created_by: string | null
           date: string
           description: string
           etherscan_link: string | null
@@ -95,6 +96,7 @@ export interface Database {
           artist: string
           base_url?: string | null
           created_at?: string
+          created_by?: string | null
           date: string
           description: string
           etherscan_link?: string | null
@@ -114,6 +116,7 @@ export interface Database {
           artist?: string
           base_url?: string | null
           created_at?: string
+          created_by?: string | null
           date?: string
           description?: string
           etherscan_link?: string | null
@@ -134,6 +137,12 @@ export interface Database {
             foreignKeyName: "events_artist_fkey"
             columns: ["artist"]
             referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           }
         ]

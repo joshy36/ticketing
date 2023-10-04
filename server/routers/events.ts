@@ -62,6 +62,7 @@ export const eventsRouter = router({
           tickets_remaining: ticketsRemaining,
           date: opts.input.date,
           location: opts.input.location,
+          created_by: opts.ctx.user?.id,
           image: opts.input.image ?? null,
         })
         .select()
