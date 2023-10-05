@@ -123,7 +123,7 @@ export default async function EventView({
                 className="rounded-lg"
               />
               <p className="pl-4 text-muted-foreground">{venue?.name}</p>
-              <Link className="ml-auto" href={`/artist/${venue?.id}`}>
+              <Link className="ml-auto" href={`/venue/${venue?.id}`}>
                 <Button variant="link">View Venue</Button>
               </Link>
             </div>
