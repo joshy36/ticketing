@@ -6,4 +6,5 @@ declare global {
   type UserProfile = DB['public']['Tables']['user_profiles']['Row'];
   type Ticket = DB['public']['Tables']['tickets']['Row'];
   type Artist = DB['public']['Tables']['artists']['Row'];
+  type Venue = DB['public']['Tables']['venues']['Row'];
 }

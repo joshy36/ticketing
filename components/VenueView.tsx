@@ -2,14 +2,14 @@ import { serverClient } from '@/app/_trpc/serverClient';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-export default async function ArtistView({
+export default async function VenueView({
   params,
 }: {
   params: { id: string };
 }) {
-  const artist = await serverClient.getArtistById({ id: params.id });
+  const venue = await serverClient.getVenueById({ id: params.id });
 
-  if (!artist) {
+  if (!venue) {
     notFound();
   }
 
@@ -18,17 +18,17 @@ export default async function ArtistView({
       <div className="grid grid-cols-1 gap-8 pt-16 px-16 md:grid-cols-2">
         <div className="flex justify-center items-center">
           <Image
-            src={artist.image!}
-            alt={artist.description}
+            src={venue.image!}
+            alt={venue.description}
             width={500}
             height={500}
             className="rounded-lg"
           />
         </div>
         <div>
-          <p className="text-8xl py-4">{artist.name}</p>
+          <p className="text-8xl py-4">{venue.name}</p>
           <p className="text-2xl py-4">About</p>
-          <p className="text-xl text-muted-foreground">{artist.description}</p>
+          <p className="text-xl text-muted-foreground">{venue.description}</p>
         </div>
       </div>
     </div>

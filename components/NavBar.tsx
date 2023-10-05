@@ -29,6 +29,11 @@ const components: { title: string; href: string; description: string }[] = [
     href: '/artist/create',
     description: 'A page to create an artist.',
   },
+  {
+    title: 'Create Venue',
+    href: '/venue/create',
+    description: 'A page to create a venue.',
+  },
 ];
 
 export default function NavBar({

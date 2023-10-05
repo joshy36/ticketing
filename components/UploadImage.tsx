@@ -14,7 +14,7 @@ const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 
 type Props = {
   id: string;
-  bucket: 'events' | 'artists';
+  bucket: 'events' | 'artists' | 'venues';
 };
 
 export default function UploadImage({ params }: { params: Props }) {
@@ -52,6 +52,20 @@ export default function UploadImage({ params }: { params: Props }) {
     },
   });
 
+  const updateVenue = trpc.updateVenue.useMutation({
+    onSettled(data, error) {
+      if (!data) {
+        toast({
+          description: 'Error updating venue',
+        });
+        console.error('Error updating venue:', error);
+        setIsLoading(false);
+      } else {
+        router.push(`/venue/${params.id}`);
+      }
+    },
+  });
+
   const updateImage = async (url: string) => {
     if (params.bucket === 'events') {
       updateEvent.mutate({
@@ -60,6 +74,11 @@ export default function UploadImage({ params }: { params: Props }) {
       });
     } else if (params.bucket === 'artists') {
       updateArtist.mutate({
+        id: params.id,
+        image: url,
+      });
+    } else if (params.bucket === 'venues') {
+      updateVenue.mutate({
         id: params.id,
         image: url,
       });
@@ -94,6 +113,8 @@ export default function UploadImage({ params }: { params: Props }) {
     if (bucket === 'events') {
       formData.append('location', `/${params.id}/event_photo.jpeg`);
     } else if (bucket === 'artists') {
+      formData.append('location', `/${params.id}/profile.jpeg`);
+    } else if (bucket === 'venues') {
       formData.append('location', `/${params.id}/profile.jpeg`);
     }
 
@@ -165,7 +186,13 @@ export default function UploadImage({ params }: { params: Props }) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            {params.bucket === 'events' ? 'Create event' : 'Create Artist'}
+            {params.bucket === 'events'
+              ? 'Create Event'
+              : params.bucket === 'artists'
+              ? 'Create Artist'
+              : params.bucket === 'venues'
+              ? 'Create Venue'
+              : ''}
           </Button>
         </div>
       </form>

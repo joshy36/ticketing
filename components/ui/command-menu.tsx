@@ -3,9 +3,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { DialogProps } from '@radix-ui/react-alert-dialog';
-import { useTheme } from 'next-themes';
 
-// import { docsConfig } from '@/config/docs';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
 import {
@@ -45,79 +43,16 @@ interface DocsConfig {
   sidebarNav: SidebarNavItem[];
 }
 
-const docsConfig: DocsConfig = {
-  mainNav: [
-    {
-      title: 'Documentation',
-      href: '/docs',
-    },
-    {
-      title: 'Components',
-      href: '/docs/components/accordion',
-    },
-    {
-      title: 'Themes',
-      href: '/themes',
-    },
-    {
-      title: 'Examples',
-      href: '/examples',
-    },
-    {
-      title: 'Figma',
-      href: '/docs/figma',
-    },
-    {
-      title: 'GitHub',
-      href: 'https://github.com/shadcn/ui',
-      external: true,
-    },
-    {
-      title: 'Twitter',
-      href: 'https://twitter.com/shadcn',
-      external: true,
-    },
-  ],
-  sidebarNav: [
-    {
-      title: 'Getting Started',
-      items: [
-        {
-          title: 'Introduction',
-          href: '/docs',
-          items: [],
-        },
-        {
-          title: 'Installation',
-          href: '/docs/installation',
-          items: [],
-        },
-        {
-          title: 'components.json',
-          href: '/docs/components-json',
-          items: [],
-        },
-        {
-          title: 'Theming',
-          href: '/docs/theming',
-          items: [],
-        },
-      ],
-    },
-  ],
-};
-
 export function CommandMenu({ ...props }: DialogProps) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const { setTheme } = useTheme();
 
-  const { data: events, isLoading: loading } = trpc.getEvents.useQuery();
+  const { data: events, isLoading: eventsLoading } = trpc.getEvents.useQuery();
 
   const { data: artists, isLoading: artistsLoading } =
     trpc.getArtists.useQuery();
 
-  console.log('events!', events);
+  const { data: venues, isLoading: venuesLoading } = trpc.getVenues.useQuery();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -207,7 +142,6 @@ export function CommandMenu({ ...props }: DialogProps) {
             </CommandGroup>
           )}
 
-          <CommandEmpty>No results found.</CommandEmpty>
           {!artists ? (
             <CommandEmpty>No results found.</CommandEmpty>
           ) : (
@@ -221,6 +155,48 @@ export function CommandMenu({ ...props }: DialogProps) {
                     onSelect={() => {
                       runCommand(() =>
                         router.push(`/artist/${navItem.id}` as string)
+                      );
+                    }}
+                  >
+                    {navItem.image ? (
+                      <Image
+                        src={navItem.image}
+                        alt={navItem.description}
+                        width={500}
+                        height={500}
+                        className="mr-4 h-12 w-12"
+                      />
+                    ) : (
+                      <Image
+                        src="/fallback.jpeg"
+                        alt="image"
+                        width={500}
+                        height={500}
+                        className="mr-4 h-12 w-12"
+                      />
+                    )}
+                    {/* <FileIcon className="mr-2 h-4 w-4" /> */}
+                    <div>
+                      <div className="text-lg">{navItem.name}</div>
+                    </div>
+                  </CommandItem>
+                ))}
+            </CommandGroup>
+          )}
+
+          {!venues ? (
+            <CommandEmpty>No results found.</CommandEmpty>
+          ) : (
+            <CommandGroup heading="Venues">
+              {venues
+                // .filter((navitem: any) => !navitem.external)
+                .map((navItem: Venue) => (
+                  <CommandItem
+                    key={navItem.id}
+                    value={navItem.name}
+                    onSelect={() => {
+                      runCommand(() =>
+                        router.push(`/venue/${navItem.id}` as string)
                       );
                     }}
                   >
