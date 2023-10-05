@@ -22,7 +22,7 @@ export default async function EventView({
 
   const artist = await serverClient.getArtistById({ id: event.artist });
 
-  const venue = await serverClient.getVenueById({ id: event.venue! });
+  const venue = await serverClient.getVenueById({ id: event.venue });
 
   const supabase = createServerClient();
 

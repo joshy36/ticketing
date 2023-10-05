@@ -90,7 +90,7 @@ export interface Database {
           seats_per_row: number | null
           tickets_remaining: number | null
           updated_at: string
-          venue: string | null
+          venue: string
         }
         Insert: {
           artist: string
@@ -110,7 +110,7 @@ export interface Database {
           seats_per_row?: number | null
           tickets_remaining?: number | null
           updated_at?: string
-          venue?: string | null
+          venue: string
         }
         Update: {
           artist?: string
@@ -130,7 +130,7 @@ export interface Database {
           seats_per_row?: number | null
           tickets_remaining?: number | null
           updated_at?: string
-          venue?: string | null
+          venue?: string
         }
         Relationships: [
           {
