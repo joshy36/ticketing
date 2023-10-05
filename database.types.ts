@@ -85,12 +85,12 @@ export interface Database {
           id: string
           image: string | null
           ipfs_image: string | null
-          location: string
           name: string
           rows: number | null
           seats_per_row: number | null
           tickets_remaining: number | null
           updated_at: string
+          venue: string | null
         }
         Insert: {
           artist: string
@@ -105,12 +105,12 @@ export interface Database {
           id?: string
           image?: string | null
           ipfs_image?: string | null
-          location: string
           name: string
           rows?: number | null
           seats_per_row?: number | null
           tickets_remaining?: number | null
           updated_at?: string
+          venue?: string | null
         }
         Update: {
           artist?: string
@@ -125,12 +125,12 @@ export interface Database {
           id?: string
           image?: string | null
           ipfs_image?: string | null
-          location?: string
           name?: string
           rows?: number | null
           seats_per_row?: number | null
           tickets_remaining?: number | null
           updated_at?: string
+          venue?: string | null
         }
         Relationships: [
           {
@@ -143,6 +143,12 @@ export interface Database {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_venue_fkey"
+            columns: ["venue"]
+            referencedRelation: "venues"
             referencedColumns: ["id"]
           }
         ]
@@ -261,7 +267,14 @@ export interface Database {
           name?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "venues_created_by_fkey"
+            columns: ["created_by"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

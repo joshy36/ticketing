@@ -4,7 +4,8 @@ import { z } from 'zod';
 export const eventsRouter = router({
   getEvents: publicProcedure.query(async (opts) => {
     const supabase = opts.ctx.supabase;
-    const { data } = await supabase.from('events').select();
+    const { data } = await supabase.from('events').select(`*, venues (name)`);
+
     return data;
   }),
 
@@ -26,13 +27,13 @@ export const eventsRouter = router({
       z.object({
         name: z.string(),
         artist: z.string(),
+        venue: z.string(),
         description: z.string(),
         ga_tickets: z.number(),
         ga_price: z.number(),
         rows: z.number().optional(),
         seats_per_row: z.number().optional(),
         date: z.string(),
-        location: z.string(),
         image: z.string().nullable(),
       })
     )
@@ -54,6 +55,7 @@ export const eventsRouter = router({
         .insert({
           name: opts.input.name,
           artist: opts.input.artist,
+          venue: opts.input.venue,
           description: opts.input.description,
           ga_tickets: opts.input.ga_tickets,
           ga_price: opts.input.ga_price,
@@ -61,7 +63,6 @@ export const eventsRouter = router({
           seats_per_row: opts.input.seats_per_row,
           tickets_remaining: ticketsRemaining,
           date: opts.input.date,
-          location: opts.input.location,
           created_by: opts.ctx.user?.id!,
           image: opts.input.image ?? null,
         })

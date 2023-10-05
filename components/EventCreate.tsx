@@ -57,7 +57,10 @@ const formSchema = z.object({
     message: 'Event name must be at least 2 characters.',
   }),
   artist: z.string({
-    required_error: 'Please select a artist.',
+    required_error: 'Please select an artist.',
+  }),
+  venue: z.string({
+    required_error: 'Please select a venue.',
   }),
   description: z.string().min(20, {
     message: 'Description must be at least 20 characters.',
@@ -101,9 +104,6 @@ const formSchema = z.object({
   ampm: z.enum(['pm', 'am'], {
     required_error: 'You need to select PM or AM.',
   }),
-  location: z.string().min(2, {
-    message: 'Location must be at least 2 characters.',
-  }),
 });
 
 export default function EventCreate() {
@@ -113,6 +113,8 @@ export default function EventCreate() {
 
   const { data: artists, isLoading: artistsLoading } =
     trpc.getArtists.useQuery();
+
+  const { data: venues, isLoading: venuesLoading } = trpc.getVenues.useQuery();
 
   const createEvent = trpc.createEvent.useMutation({
     onSettled(data, error) {
@@ -156,6 +158,7 @@ export default function EventCreate() {
     createEvent.mutate({
       name: values.name,
       artist: values.artist,
+      venue: values.venue,
       description: values.description,
       ga_tickets: values.ga_tickets,
       ga_price: values.ga_price,
@@ -163,7 +166,6 @@ export default function EventCreate() {
       seats_per_row: values.seats_per_row,
       // @ts-ignore
       date: values.date,
-      location: values.location,
       image: null,
     });
   }
@@ -288,6 +290,89 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
+                      name="venue"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>Venue</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className={cn(
+                                    'w-[200px] justify-between',
+                                    !field.value && 'text-muted-foreground'
+                                  )}
+                                >
+                                  {venues ? (
+                                    <div>
+                                      {field.value
+                                        ? venues.find(
+                                            (venue) => venue.id === field.value
+                                          )?.name
+                                        : 'Select venue'}
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[200px] p-0">
+                              <Command>
+                                <CommandInput
+                                  placeholder="Search venues..."
+                                  className="h-9"
+                                />
+                                <CommandEmpty>No venues found.</CommandEmpty>
+                                <CommandGroup>
+                                  {venues ? (
+                                    <div>
+                                      {venues.map((venue) => (
+                                        <CommandItem
+                                          value={venue.name}
+                                          key={venue.name}
+                                          onSelect={() => {
+                                            form.setValue('venue', venue.id);
+                                          }}
+                                        >
+                                          {venue.name}
+                                          <CheckIcon
+                                            className={cn(
+                                              'ml-auto h-4 w-4',
+                                              venue.id === field.value
+                                                ? 'opacity-100'
+                                                : 'opacity-0'
+                                            )}
+                                          />
+                                        </CommandItem>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <div>No venues!</div>
+                                  )}
+                                </CommandGroup>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                          <FormDescription>
+                            If you can&apos;t find the venue in this list,
+                            create a profile{' '}
+                            <Link
+                              href="/venue/create"
+                              className="underline underline-offset-4 hover:text-primary"
+                            >
+                              here.
+                            </Link>
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
                       name="description"
                       render={({ field }) => (
                         <FormItem>
@@ -393,23 +478,6 @@ export default function EventCreate() {
                                 </FormLabel>
                               </FormItem>
                             </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="location"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Location</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder=""
-                              disabled={isLoading}
-                              {...field}
-                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

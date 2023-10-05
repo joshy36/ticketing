@@ -14,7 +14,7 @@ export default async function EventsList() {
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Events</h2>
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-          {data.map((event: Events) => (
+          {data.map((event: any) => (
             <a key={event.id} href={`/event/${event.id}`} className="group">
               <div className="aspect-square w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
                 {event.image ? (
@@ -42,7 +42,7 @@ export default async function EventsList() {
                 {`${dateToString(event.date)}`}
               </p>
               <p className="mt-0.5 text-sm font-sm text-muted-foreground">
-                {`${event.location}`}
+                {`${event.venues.name}`}
               </p>
             </a>
           ))}

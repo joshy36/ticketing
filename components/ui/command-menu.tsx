@@ -100,7 +100,7 @@ export function CommandMenu({ ...props }: DialogProps) {
             <CommandGroup heading="Events">
               {events
                 // .filter((navitem: any) => !navitem.external)
-                .map((navItem: Events) => (
+                .map((navItem: any) => (
                   <CommandItem
                     key={navItem.id}
                     value={navItem.name}
@@ -134,7 +134,7 @@ export function CommandMenu({ ...props }: DialogProps) {
                         {dateToString(navItem.date)}
                       </div>
                       <div className="text-muted-foreground">
-                        {navItem.location}
+                        {navItem.venues.name}
                       </div>
                     </div>
                   </CommandItem>
