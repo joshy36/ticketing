@@ -8,6 +8,7 @@ import { dateToString } from '@/utils/helpers';
 import { Separator } from './ui/separator';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export default async function EventView({
   params,
@@ -34,7 +35,7 @@ export default async function EventView({
 
   return (
     <div className="bg-background">
-      <div className="pt-9 px-16">
+      <div className="pt-9 px-4 md:px-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="flex items-center justify-center aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
             {event.image ? (
@@ -99,13 +100,14 @@ export default async function EventView({
             <div>
               <p className="text-2xl">Artist</p>
               <div className="flex items-center pt-3">
-                <Image
-                  src={artist?.image!}
-                  alt={artist?.description!}
-                  width={60}
-                  height={60}
-                  className="rounded-lg"
-                />
+                <Avatar className="h-14 w-14">
+                  {artist?.image ? (
+                    <AvatarImage src={artist?.image} alt="pfp" />
+                  ) : (
+                    <AvatarFallback></AvatarFallback>
+                  )}
+                </Avatar>
+
                 <p className="pl-4 text-muted-foreground">{artist?.name}</p>
                 <Link className="ml-auto" href={`/artist/${artist?.id}`}>
                   <Button variant="link">View Profile</Button>
@@ -115,14 +117,7 @@ export default async function EventView({
             <Separator className="my-6" />
             <p className="text-2xl">Venue</p>
             <div className="flex items-center pt-3">
-              <Image
-                src={venue?.image!}
-                alt={venue?.description!}
-                width={60}
-                height={60}
-                className="rounded-lg"
-              />
-              <p className="pl-4 text-muted-foreground">{venue?.name}</p>
+              <p className="text-muted-foreground">{venue?.name}</p>
               <Link className="ml-auto" href={`/venue/${venue?.id}`}>
                 <Button variant="link">View Venue</Button>
               </Link>

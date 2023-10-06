@@ -1,7 +1,19 @@
 import UploadImage from '@/components/UploadImage';
 import { Separator } from '@/components/ui/separator';
+import createServerClient from '@/lib/supabaseServer';
+import { redirect } from 'next/navigation';
 
-export default function Home({ params }: { params: { id: string } }) {
+export default async function Home({ params }: { params: { id: string } }) {
+  const supabase = createServerClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.user) {
+    redirect('/unauthorized');
+  }
+
   return (
     <main>
       <div className="lg:px-80">
