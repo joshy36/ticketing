@@ -18,7 +18,25 @@ import { User } from '@supabase/supabase-js';
 import { UserNav } from './UserNav';
 import { CommandMenu } from './ui/command-menu';
 
-const components: { title: string; href: string; description: string }[] = [
+export const mainComponents: {
+  title: string;
+  href: string;
+}[] = [
+  {
+    title: 'Home',
+    href: '/',
+  },
+  {
+    title: 'Upcoming Events',
+    href: '/event/list',
+  },
+];
+
+export const createComponents: {
+  title: string;
+  href: string;
+  description: string;
+}[] = [
   {
     title: 'Create Event',
     href: '/event/create',
@@ -44,29 +62,24 @@ export default function NavBar({
   userProfile: UserProfile | null;
 }) {
   return (
-    <div className="flex h-16 items-center px-8">
+    <div className="hidden md:flex h-16 items-center px-8">
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem>
-            <Link href="/" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Home
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/event/list" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Upcoming Events
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+          {mainComponents.map((component) => (
+            <NavigationMenuItem key={component.title}>
+              <Link href={component.href} legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  {component.title}
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ))}
           {user ? (
             <NavigationMenuItem>
               <NavigationMenuTrigger>Admin</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                  {components.map((component) => (
+                  {createComponents.map((component) => (
                     <ListItem
                       key={component.title}
                       title={component.title}

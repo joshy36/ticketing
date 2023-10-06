@@ -8,6 +8,7 @@ import Provider from './_trpc/Provider';
 
 import './globals.css';
 import Footer from '@/components/Footer';
+import { MobileNav } from '@/components/MobileNav';
 
 export const revalidate = 0;
 
@@ -36,6 +37,7 @@ export default async function RootLayout({
         <Provider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <NavBar user={user} userProfile={userProfile} />
+            <MobileNav user={user} userProfile={userProfile} />
             <div className="min-h-screen"> {children}</div>
 
             <Toaster />
