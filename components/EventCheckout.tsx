@@ -49,26 +49,26 @@ export default function EventCheckout({
     currency: 'USD',
   }).format(Number(data?.price));
   return (
-    <div className="flex items-center justify-center">
+    <div className='flex items-center justify-center'>
       {' '}
-      <Card className="w-[500px]">
+      <Card className='w-[500px]'>
         <CardHeader>
           <CardTitle>Checkout</CardTitle>
           <CardDescription>This will need to be updated</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p className="mt-1 text-lg font-sm text-accent-foreground text-center">
+            <p className='font-sm mt-1 text-center text-lg text-accent-foreground'>
               Confirm purchase of seat ... for ...
             </p>
           ) : (
             <div>
-              <p className="mt-1 text-lg font-sm text-accent-foreground text-center">
+              <p className='font-sm mt-1 text-center text-lg text-accent-foreground'>
                 {`Confirm purchase of seat ${data?.seat} for ${formatted}`}
               </p>
               <div>
                 {isLoading && (
-                  <p className="text-muted-foreground">
+                  <p className='text-muted-foreground'>
                     This may take a few seconds as your ticket is being
                     transferred and the transaction is confimed on chain
                   </p>
@@ -77,8 +77,8 @@ export default function EventCheckout({
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline" onClick={() => router.back()}>
+        <CardFooter className='flex justify-between'>
+          <Button variant='outline' onClick={() => router.back()}>
             Cancel
           </Button>
           {userProfile.wallet_address ? (
@@ -94,7 +94,7 @@ export default function EventCheckout({
               disabled={isLoading}
             >
               {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
               )}
               Purchase
             </Button>
@@ -104,10 +104,10 @@ export default function EventCheckout({
               disabled={isLoading}
             >
               {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
               )}
 
-              <p className="underline">
+              <p className='underline'>
                 Please Connect Wallet in Profile Section
               </p>
               <ExternalLinkIcon />

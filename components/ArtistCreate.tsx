@@ -70,26 +70,26 @@ export default function ArtistCreate() {
   }
 
   return (
-    <div className="space-y-6 p-10 pb-16 sm:block">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Create Artist</h2>
-        <p className="text-muted-foreground">
+    <div className='space-y-6 p-10 pb-16 sm:block'>
+      <div className='space-y-0.5'>
+        <h2 className='text-2xl font-bold tracking-tight'>Create Artist</h2>
+        <p className='text-muted-foreground'>
           Please fill in all the details to create a profile for an artist!
         </p>
       </div>
-      <Separator className="my-6" />
-      <div className="space-y-6">
+      <Separator className='my-6' />
+      <div className='space-y-6'>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+            <div className='space-y-6'>
               <FormField
                 control={form.control}
-                name="name"
+                name='name'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Artist Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="" disabled={isLoading} {...field} />
+                      <Input placeholder='' disabled={isLoading} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -97,14 +97,14 @@ export default function ArtistCreate() {
               />
               <FormField
                 control={form.control}
-                name="description"
+                name='description'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder=""
-                        className="resize-none"
+                        placeholder=''
+                        className='resize-none'
                         disabled={isLoading}
                         {...field}
                       />
@@ -114,9 +114,9 @@ export default function ArtistCreate() {
                 )}
               />
             </div>
-            <Button type="submit" disabled={isLoading}>
+            <Button type='submit' disabled={isLoading}>
               {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
               )}
               Next Page
             </Button>

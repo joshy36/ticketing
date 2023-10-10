@@ -45,7 +45,7 @@ export const artistsRouter = router({
       z.object({
         id: z.string(),
         image: z.string(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;

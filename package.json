@@ -72,6 +72,8 @@
     "hardhat": "^2.17.3",
     "hardhat-deploy": "^0.11.37",
     "postcss": "^8.4.27",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.5",
     "supabase": "^1.88.0",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6"

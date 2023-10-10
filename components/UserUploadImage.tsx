@@ -132,21 +132,21 @@ export default function UserUploadImage({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 grid-rows-1">
+        <div className='grid grid-cols-2 grid-rows-1'>
           <Button
-            variant="secondary"
-            type="submit"
+            variant='secondary'
+            type='submit'
             disabled={isLoading}
-            className="w-64"
+            className='w-64'
           >
             {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
             )}
             {buttonText}
           </Button>
           <Input
-            id="picture"
-            type="file"
+            id='picture'
+            type='file'
             disabled={isLoading}
             {...register('file', {
               onChange: (e) => {
@@ -158,9 +158,9 @@ export default function UserUploadImage({
       </form>
       {imgUrl != '' ? (
         <div>
-          <Avatar className="h-40 w-40">
+          <Avatar className='h-40 w-40'>
             {imgUrl ? (
-              <AvatarImage src={imgUrl} alt="pfp" />
+              <AvatarImage src={imgUrl} alt='pfp' />
             ) : (
               <AvatarFallback></AvatarFallback>
             )}

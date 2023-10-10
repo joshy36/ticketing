@@ -35,7 +35,7 @@ export const eventsRouter = router({
         seats_per_row: z.number().optional(),
         date: z.string(),
         image: z.string().nullable(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;
@@ -101,7 +101,7 @@ export const eventsRouter = router({
       z.object({
         id: z.string(),
         image: z.string(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;

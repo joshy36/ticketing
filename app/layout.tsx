@@ -32,13 +32,13 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en">
+    <html lang='en'>
       <body>
         <Provider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
             <NavBar user={user} userProfile={userProfile} />
             <MobileNav user={user} userProfile={userProfile} />
-            <div className="min-h-screen"> {children}</div>
+            <div className='min-h-screen'> {children}</div>
 
             <Toaster />
             <Analytics />

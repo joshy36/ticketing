@@ -74,13 +74,13 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
   return (
     <div>
       {isConnected ? (
-        <div className="grid grid-cols-2">
-          <div className="justify-self-start">
-            <div className="py-4">
+        <div className='grid grid-cols-2'>
+          <div className='justify-self-start'>
+            <div className='py-4'>
               {' '}
               <Button
                 disabled={isLoading}
-                variant="secondary"
+                variant='secondary'
                 onClick={() =>
                   signMessage({
                     message:
@@ -94,8 +94,8 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
             </div>
 
             <Button
-              className="w-64"
-              variant="secondary"
+              className='w-64'
+              variant='secondary'
               onClick={() => {
                 disconnect();
               }}
@@ -103,42 +103,42 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
               Disconnect
               {connector?.name === 'MetaMask' ? (
                 <Image
-                  src="/metamask.png"
-                  alt="image"
+                  src='/metamask.png'
+                  alt='image'
                   width={500}
                   height={500}
-                  className="h-full w-8 object-cover object-center group-hover:opacity-75 pl-2"
+                  className='h-full w-8 object-cover object-center pl-2 group-hover:opacity-75'
                 />
               ) : (
                 <Image
-                  src="/coinbase.png"
-                  alt="image"
+                  src='/coinbase.png'
+                  alt='image'
                   width={200}
                   height={200}
-                  className="h-full w-8 object-center group-hover:opacity-75 pl-2"
+                  className='h-full w-8 object-center pl-2 group-hover:opacity-75'
                 />
               )}
             </Button>
           </div>
           <div>
-            <h3 className="text-lg font-medium">
+            <h3 className='text-lg font-medium'>
               {ensName
                 ? `${ensName} (${address})`
                 : address?.substring(0, 6) +
                   '...' +
                   address?.substring(address.length - 4)}
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className='text-sm text-muted-foreground'>
               Connected to {chain?.name}
             </p>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4">
+        <div className='grid grid-cols-1 gap-4'>
           {connectors.map((connector) => (
             <Button
-              variant="secondary"
-              className="justify-self-start w-64"
+              variant='secondary'
+              className='w-64 justify-self-start'
               disabled={!connector.ready}
               key={connector.id}
               onClick={() => {
@@ -156,19 +156,19 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
                 ' (connecting)'}
               {connector.name === 'MetaMask' ? (
                 <Image
-                  src="/metamask.png"
-                  alt="image"
+                  src='/metamask.png'
+                  alt='image'
                   width={500}
                   height={500}
-                  className="h-full w-8 object-cover object-center group-hover:opacity-75 pl-2"
+                  className='h-full w-8 object-cover object-center pl-2 group-hover:opacity-75'
                 />
               ) : (
                 <Image
-                  src="/coinbase.png"
-                  alt="image"
+                  src='/coinbase.png'
+                  alt='image'
                   width={200}
                   height={200}
-                  className="h-full w-8 object-center group-hover:opacity-75 pl-2"
+                  className='h-full w-8 object-center pl-2 group-hover:opacity-75'
                 />
               )}
             </Button>

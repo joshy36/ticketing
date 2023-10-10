@@ -55,7 +55,7 @@ export const ticketsRouter = router({
         ticket_id: z.string(),
         event_id: z.string(),
         user_id: z.string(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;
@@ -101,25 +101,25 @@ export const ticketsRouter = router({
       const address = link[link.length - 1]!;
 
       const provider = new ethers.JsonRpcProvider(
-        process.env.ALCHEMY_GOERLI_URL!
+        process.env.ALCHEMY_GOERLI_URL!,
       );
 
       const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
       const eventContract = new ethers.Contract(
         address,
         contractAbi.abi,
-        signer
+        signer,
       );
 
       // @ts-ignore
       let tx = await eventContract.safeTransferFrom(
         signer.address,
         userProfile?.wallet_address,
-        getTicket?.token_id
+        getTicket?.token_id,
       );
       await tx.wait();
       console.log(
-        `Token transferred! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
+        `Token transferred! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`,
       );
 
       const { data: transferTicket, error: transferTicketError } =

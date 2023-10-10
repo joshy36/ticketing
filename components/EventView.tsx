@@ -34,104 +34,104 @@ export default async function EventView({
   // const userProfile = await serverClient.getUserProfile({ id: user?.id });
 
   return (
-    <div className="bg-background">
-      <div className="pt-9 px-4 md:px-16">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <div className="flex items-center justify-center aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-background xl:aspect-h-8 xl:aspect-w-7">
+    <div className='bg-background'>
+      <div className='px-4 pt-9 md:px-16'>
+        <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+          <div className='aspect-h-1 aspect-w-1 xl:aspect-h-8 xl:aspect-w-7 flex w-full items-center justify-center overflow-hidden rounded-lg bg-background'>
             {event.image ? (
               <Image
                 src={event.image!}
                 alt={event.description}
                 width={500}
                 height={500}
-                className="rounded-lg"
+                className='rounded-lg'
               />
             ) : (
               <Image
-                src="/fallback.jpeg"
-                alt="image"
+                src='/fallback.jpeg'
+                alt='image'
                 width={500}
                 height={500}
-                className="rounded-lg"
+                className='rounded-lg'
               />
             )}
           </div>
 
           <div>
-            <div className="lg:col-span-2 lg:border-rlg:pr-8">
-              <h1 className="text-8xl">{event.name}</h1>
+            <div className='lg:border-rlg:pr-8 lg:col-span-2'>
+              <h1 className='text-8xl'>{event.name}</h1>
             </div>
 
             {event.etherscan_link ? (
-              <a href={`${event.etherscan_link}`} target="_blank">
-                <Button variant="link">
-                  <div className="flex items-center space-x-1.5">
-                    <span className="relative flex h-3 w-3">
+              <a href={`${event.etherscan_link}`} target='_blank'>
+                <Button variant='link'>
+                  <div className='flex items-center space-x-1.5'>
+                    <span className='relative flex h-3 w-3'>
                       {/* Uncomment to animate */}
                       {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
-                      <div className="relative inline-flex rounded-full h-3 w-3 bg-green-600 "></div>
+                      <div className='relative inline-flex h-3 w-3 rounded-full bg-green-600 '></div>
                     </span>
-                    <div className="text-muted-foreground">Contract live</div>
-                    <ExternalLinkIcon className="text-muted-foreground" />
+                    <div className='text-muted-foreground'>Contract live</div>
+                    <ExternalLinkIcon className='text-muted-foreground' />
                   </div>
                 </Button>
               </a>
             ) : (
-              <div className="flex items-center space-x-1.5">
-                <span className="relative flex h-3 w-3">
+              <div className='flex items-center space-x-1.5'>
+                <span className='relative flex h-3 w-3'>
                   {/* Uncomment to animate */}
                   {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
-                  <div className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500 "></div>
+                  <div className='relative inline-flex h-3 w-3 rounded-full bg-yellow-500 '></div>
                 </span>
-                <div className="text-muted-foreground">
+                <div className='text-muted-foreground'>
                   Contract pending deployment
                 </div>
               </div>
             )}
 
-            <Separator className="my-6" />
-            <p className="text-2xl">Date</p>
-            <div className="space-y-6">
-              <p className="text-base text-muted-foreground pt-3">
+            <Separator className='my-6' />
+            <p className='text-2xl'>Date</p>
+            <div className='space-y-6'>
+              <p className='pt-3 text-base text-muted-foreground'>
                 {dateToString(event.date)}
               </p>
             </div>
-            <Separator className="my-6" />
+            <Separator className='my-6' />
             <div>
-              <p className="text-2xl">Artist</p>
-              <div className="flex items-center pt-3">
-                <Avatar className="h-14 w-14">
+              <p className='text-2xl'>Artist</p>
+              <div className='flex items-center pt-3'>
+                <Avatar className='h-14 w-14'>
                   {artist?.image ? (
-                    <AvatarImage src={artist?.image} alt="pfp" />
+                    <AvatarImage src={artist?.image} alt='pfp' />
                   ) : (
                     <AvatarFallback></AvatarFallback>
                   )}
                 </Avatar>
 
-                <p className="pl-4 text-muted-foreground">{artist?.name}</p>
-                <Link className="ml-auto" href={`/artist/${artist?.id}`}>
-                  <Button variant="link">View Profile</Button>
+                <p className='pl-4 text-muted-foreground'>{artist?.name}</p>
+                <Link className='ml-auto' href={`/artist/${artist?.id}`}>
+                  <Button variant='link'>View Profile</Button>
                 </Link>
               </div>
             </div>
-            <Separator className="my-6" />
-            <p className="text-2xl">Venue</p>
-            <div className="flex items-center pt-3">
-              <p className="text-muted-foreground">{venue?.name}</p>
-              <Link className="ml-auto" href={`/venue/${venue?.id}`}>
-                <Button variant="link">View Venue</Button>
+            <Separator className='my-6' />
+            <p className='text-2xl'>Venue</p>
+            <div className='flex items-center pt-3'>
+              <p className='text-muted-foreground'>{venue?.name}</p>
+              <Link className='ml-auto' href={`/venue/${venue?.id}`}>
+                <Button variant='link'>View Venue</Button>
               </Link>
             </div>
-            <Separator className="my-6" />
-            <p className="text-2xl">Description</p>
-            <div className="space-y-6">
-              <p className="text-base text-muted-foreground pt-3">
+            <Separator className='my-6' />
+            <p className='text-2xl'>Description</p>
+            <div className='space-y-6'>
+              <p className='pt-3 text-base text-muted-foreground'>
                 {event.description}
               </p>
             </div>
-            <Separator className="my-6" />
+            <Separator className='my-6' />
 
-            <div className="lg:col-span-2 lg:col-start-1 lg:border-rlg:pb-16">
+            <div className='lg:border-rlg:pb-16 lg:col-span-2 lg:col-start-1'>
               <div>
                 <EventPurchase user={user} event={event} />
               </div>

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       {
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      }
+      },
     );
     await supabase.auth.exchangeCodeForSession(code);
   }

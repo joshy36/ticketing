@@ -171,10 +171,10 @@ export default function UploadImage({ params }: { params: Props }) {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 grid-rows-1 gap-8">
+        <div className='grid grid-cols-2 grid-rows-1 gap-8'>
           <Input
-            id="picture"
-            type="file"
+            id='picture'
+            type='file'
             disabled={isLoading}
             {...register('file', {
               onChange: (e) => {
@@ -182,9 +182,9 @@ export default function UploadImage({ params }: { params: Props }) {
               },
             })}
           />
-          <Button type="submit" disabled={isLoading} className="max-w-[40%]">
+          <Button type='submit' disabled={isLoading} className='max-w-[40%]'>
             {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
             )}
             {params.bucket === 'events'
               ? 'Create Event'
@@ -204,10 +204,10 @@ export default function UploadImage({ params }: { params: Props }) {
           <div>
             <Image
               src={imgUrl}
-              alt="Image"
+              alt='Image'
               width={300}
               height={300}
-              className="rounded-lg"
+              className='rounded-lg'
             />
           </div>
         )}

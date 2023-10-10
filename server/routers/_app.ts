@@ -11,7 +11,7 @@ export const appRouter = mergeRouters(
   usersRouter,
   ticketsRouter,
   artistsRouter,
-  venuesRouter
+  venuesRouter,
 );
 
 export type AppRouter = typeof appRouter;

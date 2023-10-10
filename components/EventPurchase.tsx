@@ -21,7 +21,7 @@ export default function EventPurchase({
     });
 
   const notPurchasedEventTickets = eventTickets?.filter(
-    (x) => x.user_id === null
+    (x) => x.user_id === null,
   );
 
   const renderEventDetails = () => {
@@ -33,7 +33,7 @@ export default function EventPurchase({
       return <div>Loading...</div>;
     } else {
       return (
-        <div className="py-6">
+        <div className='py-6'>
           <DataTable columns={columns} data={notPurchasedEventTickets!} />
         </div>
       );
@@ -45,12 +45,12 @@ export default function EventPurchase({
       return renderEventDetails();
     } else {
       return (
-        <Link href="/sign-in">
+        <Link href='/sign-in'>
           <Button>Sign in to Purchase</Button>
         </Link>
       );
     }
   };
 
-  return <div className="py-10">{renderContent()}</div>;
+  return <div className='py-10'>{renderContent()}</div>;
 }

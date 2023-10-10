@@ -15,20 +15,20 @@ export default async function ArtistView({
 
   return (
     <div>
-      <div className="px-4 md:px-16 grid grid-cols-1 gap-8 pt-16 md:grid-cols-2">
-        <div className="flex justify-center items-center">
+      <div className='grid grid-cols-1 gap-8 px-4 pt-16 md:grid-cols-2 md:px-16'>
+        <div className='flex items-center justify-center'>
           <Image
             src={artist.image!}
             alt={artist.description}
             width={500}
             height={500}
-            className="rounded-lg"
+            className='rounded-lg'
           />
         </div>
         <div>
-          <p className="text-8xl py-4">{artist.name}</p>
-          <p className="text-2xl py-4">About</p>
-          <p className="text-xl text-muted-foreground">{artist.description}</p>
+          <p className='py-4 text-8xl'>{artist.name}</p>
+          <p className='py-4 text-2xl'>About</p>
+          <p className='text-xl text-muted-foreground'>{artist.description}</p>
         </div>
       </div>
     </div>

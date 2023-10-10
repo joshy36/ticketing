@@ -74,30 +74,30 @@ export function CommandMenu({ ...props }: DialogProps) {
   return (
     <>
       <Button
-        variant="outline"
+        variant='outline'
         className={cn(
-          'relative w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64'
+          'relative w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64',
         )}
         onClick={() => setOpen(true)}
         {...props}
       >
-        <span className="hidden lg:inline-flex pr-2">
+        <span className='hidden pr-2 lg:inline-flex'>
           <SearchIcon />
         </span>
-        <span className="hidden lg:inline-flex">Search events, artists...</span>
-        <span className="inline-flex lg:hidden">Search...</span>
+        <span className='hidden lg:inline-flex'>Search events, artists...</span>
+        <span className='inline-flex lg:hidden'>Search...</span>
         {/* <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
           <span className="text-xs">⌘</span>K
         </kbd> */}
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search events, artists, and venues..." />
+        <CommandInput placeholder='Search events, artists, and venues...' />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           {!events ? (
             <CommandEmpty>No results found.</CommandEmpty>
           ) : (
-            <CommandGroup heading="Events">
+            <CommandGroup heading='Events'>
               {events
                 // .filter((navitem: any) => !navitem.external)
                 .map((navItem: any) => (
@@ -106,7 +106,7 @@ export function CommandMenu({ ...props }: DialogProps) {
                     value={navItem.name}
                     onSelect={() => {
                       runCommand(() =>
-                        router.push(`/event/${navItem.id}` as string)
+                        router.push(`/event/${navItem.id}` as string),
                       );
                     }}
                   >
@@ -116,24 +116,24 @@ export function CommandMenu({ ...props }: DialogProps) {
                         alt={navItem.description}
                         width={500}
                         height={500}
-                        className="mr-4 h-12 w-12"
+                        className='mr-4 h-12 w-12'
                       />
                     ) : (
                       <Image
-                        src="/fallback.jpeg"
-                        alt="image"
+                        src='/fallback.jpeg'
+                        alt='image'
                         width={500}
                         height={500}
-                        className="mr-4 h-12 w-12"
+                        className='mr-4 h-12 w-12'
                       />
                     )}
                     {/* <FileIcon className="mr-2 h-4 w-4" /> */}
                     <div>
-                      <div className="text-lg">{navItem.name}</div>
-                      <div className="text-muted-foreground">
+                      <div className='text-lg'>{navItem.name}</div>
+                      <div className='text-muted-foreground'>
                         {dateToString(navItem.date)}
                       </div>
-                      <div className="text-muted-foreground">
+                      <div className='text-muted-foreground'>
                         {navItem.venues.name}
                       </div>
                     </div>
@@ -145,7 +145,7 @@ export function CommandMenu({ ...props }: DialogProps) {
           {!artists ? (
             <CommandEmpty>No results found.</CommandEmpty>
           ) : (
-            <CommandGroup heading="Artists">
+            <CommandGroup heading='Artists'>
               {artists
                 // .filter((navitem: any) => !navitem.external)
                 .map((navItem: Artist) => (
@@ -154,7 +154,7 @@ export function CommandMenu({ ...props }: DialogProps) {
                     value={navItem.name}
                     onSelect={() => {
                       runCommand(() =>
-                        router.push(`/artist/${navItem.id}` as string)
+                        router.push(`/artist/${navItem.id}` as string),
                       );
                     }}
                   >
@@ -164,20 +164,20 @@ export function CommandMenu({ ...props }: DialogProps) {
                         alt={navItem.description}
                         width={500}
                         height={500}
-                        className="mr-4 h-12 w-12"
+                        className='mr-4 h-12 w-12'
                       />
                     ) : (
                       <Image
-                        src="/fallback.jpeg"
-                        alt="image"
+                        src='/fallback.jpeg'
+                        alt='image'
                         width={500}
                         height={500}
-                        className="mr-4 h-12 w-12"
+                        className='mr-4 h-12 w-12'
                       />
                     )}
                     {/* <FileIcon className="mr-2 h-4 w-4" /> */}
                     <div>
-                      <div className="text-lg">{navItem.name}</div>
+                      <div className='text-lg'>{navItem.name}</div>
                     </div>
                   </CommandItem>
                 ))}
@@ -187,7 +187,7 @@ export function CommandMenu({ ...props }: DialogProps) {
           {!venues ? (
             <CommandEmpty>No results found.</CommandEmpty>
           ) : (
-            <CommandGroup heading="Venues">
+            <CommandGroup heading='Venues'>
               {venues
                 // .filter((navitem: any) => !navitem.external)
                 .map((navItem: Venue) => (
@@ -196,7 +196,7 @@ export function CommandMenu({ ...props }: DialogProps) {
                     value={navItem.name}
                     onSelect={() => {
                       runCommand(() =>
-                        router.push(`/venue/${navItem.id}` as string)
+                        router.push(`/venue/${navItem.id}` as string),
                       );
                     }}
                   >
@@ -206,20 +206,20 @@ export function CommandMenu({ ...props }: DialogProps) {
                         alt={navItem.description}
                         width={500}
                         height={500}
-                        className="mr-4 h-12 w-12"
+                        className='mr-4 h-12 w-12'
                       />
                     ) : (
                       <Image
-                        src="/fallback.jpeg"
-                        alt="image"
+                        src='/fallback.jpeg'
+                        alt='image'
                         width={500}
                         height={500}
-                        className="mr-4 h-12 w-12"
+                        className='mr-4 h-12 w-12'
                       />
                     )}
                     {/* <FileIcon className="mr-2 h-4 w-4" /> */}
                     <div>
-                      <div className="text-lg">{navItem.name}</div>
+                      <div className='text-lg'>{navItem.name}</div>
                     </div>
                   </CommandItem>
                 ))}

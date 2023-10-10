@@ -9,7 +9,7 @@ const panelHandler = () => {
     }),
     {
       headers: { 'Content-Type': 'text/html' },
-    }
+    },
   );
 };
 

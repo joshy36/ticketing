@@ -15,7 +15,7 @@ export default async function Home() {
 
   return (
     <main>
-      <div className="lg:px-80">
+      <div className='lg:px-80'>
         <ArtistCreate />
       </div>
     </main>

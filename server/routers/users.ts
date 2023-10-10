@@ -25,7 +25,7 @@ export const usersRouter = router({
         bio: z.string().nullable().optional(),
         wallet_address: z.string().nullable().optional(),
         profile_image: z.string().nullable().optional(),
-      })
+      }),
     )
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;

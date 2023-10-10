@@ -150,15 +150,15 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
             control={form.control}
-            name="username"
+            name='username'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="" disabled={isLoading} {...field} />
+                  <Input placeholder='' disabled={isLoading} {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name. It can be your real name or
@@ -170,12 +170,12 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
           />
           <FormField
             control={form.control}
-            name="firstname"
+            name='firstname'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="" disabled={isLoading} {...field} />
+                  <Input placeholder='' disabled={isLoading} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -183,12 +183,12 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
           />
           <FormField
             control={form.control}
-            name="lastname"
+            name='lastname'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="" disabled={isLoading} {...field} />
+                  <Input placeholder='' disabled={isLoading} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -196,14 +196,14 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
           />
           <FormField
             control={form.control}
-            name="bio"
+            name='bio'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Bio</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Tell us a little bit about yourself"
-                    className="resize-none"
+                    placeholder='Tell us a little bit about yourself'
+                    className='resize-none'
                     disabled={isLoading}
                     {...field}
                   />
@@ -245,13 +245,13 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
           </Button> */}
           </div>
           <Button
-            className="w-64"
-            variant="secondary"
-            type="submit"
+            className='w-64'
+            variant='secondary'
+            type='submit'
             disabled={isLoading}
           >
             {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
             )}
             Update profile
           </Button>

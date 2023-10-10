@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main>
-      <p className="py-20 px-10 text-center text-6xl md:text-9xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+      <p className='bg-gradient-to-r from-white to-gray-500 bg-clip-text px-10 py-20 text-center text-6xl font-bold tracking-tighter text-transparent md:text-9xl'>
         Welcome to the future of ticketing.
       </p>
     </main>

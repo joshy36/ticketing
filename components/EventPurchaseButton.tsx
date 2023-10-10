@@ -9,7 +9,7 @@ export default function EventPurchaseButton({ eventId }: { eventId: string }) {
   return (
     <div>
       <Button
-        variant="secondary"
+        variant='secondary'
         onClick={() => router.push(`/event/checkout/${eventId}`)}
       >
         Purchase

@@ -171,31 +171,31 @@ export default function EventCreate() {
   }
 
   return (
-    <div className="space-y-6 p-10 pb-16 sm:block">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Create Event</h2>
-        <p className="text-muted-foreground">
+    <div className='space-y-6 p-10 pb-16 sm:block'>
+      <div className='space-y-0.5'>
+        <h2 className='text-2xl font-bold tracking-tight'>Create Event</h2>
+        <p className='text-muted-foreground'>
           Please fill in all the details to create your event!
         </p>
       </div>
-      <Separator className="my-6" />
-      <div className="space-y-6">
+      <Separator className='my-6' />
+      <div className='space-y-6'>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+            <Accordion type='single' collapsible className='w-full'>
+              <AccordionItem value='item-1'>
                 <AccordionTrigger>General Information</AccordionTrigger>
                 <AccordionContent>
-                  <div className="space-y-6">
+                  <div className='space-y-6'>
                     <FormField
                       control={form.control}
-                      name="name"
+                      name='name'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Event Name</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder=""
+                              placeholder=''
                               disabled={isLoading}
                               {...field}
                             />
@@ -206,19 +206,19 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="artist"
+                      name='artist'
                       render={({ field }) => (
-                        <FormItem className="flex flex-col">
+                        <FormItem className='flex flex-col'>
                           <FormLabel>Artist</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
                                 <Button
-                                  variant="outline"
-                                  role="combobox"
+                                  variant='outline'
+                                  role='combobox'
                                   className={cn(
                                     'w-[200px] justify-between',
-                                    !field.value && 'text-muted-foreground'
+                                    !field.value && 'text-muted-foreground',
                                   )}
                                 >
                                   {artists ? (
@@ -226,22 +226,22 @@ export default function EventCreate() {
                                       {field.value
                                         ? artists.find(
                                             (artist) =>
-                                              artist.id === field.value
+                                              artist.id === field.value,
                                           )?.name
                                         : 'Select artist'}
                                     </div>
                                   ) : (
                                     <div></div>
                                   )}
-                                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                  <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>
-                            <PopoverContent className="w-[200px] p-0">
+                            <PopoverContent className='w-[200px] p-0'>
                               <Command>
                                 <CommandInput
-                                  placeholder="Search artists..."
-                                  className="h-9"
+                                  placeholder='Search artists...'
+                                  className='h-9'
                                 />
                                 <CommandEmpty>No artists found.</CommandEmpty>
                                 <CommandGroup>
@@ -261,7 +261,7 @@ export default function EventCreate() {
                                               'ml-auto h-4 w-4',
                                               artist.id === field.value
                                                 ? 'opacity-100'
-                                                : 'opacity-0'
+                                                : 'opacity-0',
                                             )}
                                           />
                                         </CommandItem>
@@ -278,8 +278,8 @@ export default function EventCreate() {
                             If you can&apos;t find the artist in this list,
                             create a profile{' '}
                             <Link
-                              href="/artist/create"
-                              className="underline underline-offset-4 hover:text-primary"
+                              href='/artist/create'
+                              className='underline underline-offset-4 hover:text-primary'
                             >
                               here.
                             </Link>
@@ -290,41 +290,41 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="venue"
+                      name='venue'
                       render={({ field }) => (
-                        <FormItem className="flex flex-col">
+                        <FormItem className='flex flex-col'>
                           <FormLabel>Venue</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
                                 <Button
-                                  variant="outline"
-                                  role="combobox"
+                                  variant='outline'
+                                  role='combobox'
                                   className={cn(
                                     'w-[200px] justify-between',
-                                    !field.value && 'text-muted-foreground'
+                                    !field.value && 'text-muted-foreground',
                                   )}
                                 >
                                   {venues ? (
                                     <div>
                                       {field.value
                                         ? venues.find(
-                                            (venue) => venue.id === field.value
+                                            (venue) => venue.id === field.value,
                                           )?.name
                                         : 'Select venue'}
                                     </div>
                                   ) : (
                                     <div></div>
                                   )}
-                                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                  <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>
-                            <PopoverContent className="w-[200px] p-0">
+                            <PopoverContent className='w-[200px] p-0'>
                               <Command>
                                 <CommandInput
-                                  placeholder="Search venues..."
-                                  className="h-9"
+                                  placeholder='Search venues...'
+                                  className='h-9'
                                 />
                                 <CommandEmpty>No venues found.</CommandEmpty>
                                 <CommandGroup>
@@ -344,7 +344,7 @@ export default function EventCreate() {
                                               'ml-auto h-4 w-4',
                                               venue.id === field.value
                                                 ? 'opacity-100'
-                                                : 'opacity-0'
+                                                : 'opacity-0',
                                             )}
                                           />
                                         </CommandItem>
@@ -361,8 +361,8 @@ export default function EventCreate() {
                             If you can&apos;t find the venue in this list,
                             create a profile{' '}
                             <Link
-                              href="/venue/create"
-                              className="underline underline-offset-4 hover:text-primary"
+                              href='/venue/create'
+                              className='underline underline-offset-4 hover:text-primary'
                             >
                               here.
                             </Link>
@@ -373,14 +373,14 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="description"
+                      name='description'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Description</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Come join us for an unforgettable night!!"
-                              className="resize-none"
+                              placeholder='Come join us for an unforgettable night!!'
+                              className='resize-none'
                               disabled={isLoading}
                               {...field}
                             />
@@ -391,9 +391,9 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="date"
+                      name='date'
                       render={({ field }) => (
-                        <FormItem className="flex flex-col">
+                        <FormItem className='flex flex-col'>
                           <FormLabel>Event date</FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -402,7 +402,7 @@ export default function EventCreate() {
                                   variant={'outline'}
                                   className={cn(
                                     'w-[240px] pl-3 text-left font-normal',
-                                    !field.value && 'text-muted-foreground'
+                                    !field.value && 'text-muted-foreground',
                                   )}
                                   disabled={isLoading}
                                 >
@@ -411,16 +411,16 @@ export default function EventCreate() {
                                   ) : (
                                     <span>Select a date</span>
                                   )}
-                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                  <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>
                             <PopoverContent
-                              className="w-auto p-0"
-                              align="start"
+                              className='w-auto p-0'
+                              align='start'
                             >
                               <Calendar
-                                mode="single"
+                                mode='single'
                                 selected={field.value}
                                 onSelect={field.onChange}
                                 disabled={(date) => date < new Date()}
@@ -434,13 +434,13 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="time"
+                      name='time'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Event Time (EST)</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="8:30"
+                              placeholder='8:30'
                               disabled={isLoading}
                               {...field}
                             />
@@ -451,29 +451,29 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="ampm"
+                      name='ampm'
                       render={({ field }) => (
-                        <FormItem className="space-y-3">
+                        <FormItem className='space-y-3'>
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
                               defaultValue={field.value}
                               disabled={isLoading}
-                              className="flex flex-col space-y-1"
+                              className='flex flex-col space-y-1'
                             >
-                              <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormItem className='flex items-center space-x-3 space-y-0'>
                                 <FormControl>
-                                  <RadioGroupItem value="pm" />
+                                  <RadioGroupItem value='pm' />
                                 </FormControl>
-                                <FormLabel className="font-normal">
+                                <FormLabel className='font-normal'>
                                   PM
                                 </FormLabel>
                               </FormItem>
-                              <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormItem className='flex items-center space-x-3 space-y-0'>
                                 <FormControl>
-                                  <RadioGroupItem value="am" />
+                                  <RadioGroupItem value='am' />
                                 </FormControl>
-                                <FormLabel className="font-normal">
+                                <FormLabel className='font-normal'>
                                   AM
                                 </FormLabel>
                               </FormItem>
@@ -486,19 +486,19 @@ export default function EventCreate() {
                   </div>
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-2">
+              <AccordionItem value='item-2'>
                 <AccordionTrigger>Ticketing Information</AccordionTrigger>
                 <AccordionContent>
-                  <div className="space-y-6">
+                  <div className='space-y-6'>
                     <FormField
                       control={form.control}
-                      name="ga_tickets"
+                      name='ga_tickets'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Number of GA Tickets</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder=""
+                              placeholder=''
                               disabled={isLoading}
                               {...field}
                             />
@@ -509,13 +509,13 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="ga_price"
+                      name='ga_price'
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>GA Ticket Price</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder=""
+                              placeholder=''
                               disabled={isLoading}
                               {...field}
                             />
@@ -529,11 +529,11 @@ export default function EventCreate() {
                     />
                     <FormField
                       control={form.control}
-                      name="seats"
+                      name='seats'
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                          <div className="space-y-0.5">
-                            <FormLabel className="text-base">Seating</FormLabel>
+                        <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                          <div className='space-y-0.5'>
+                            <FormLabel className='text-base'>Seating</FormLabel>
                             <FormDescription>
                               Are there seats in your venue?
                             </FormDescription>
@@ -550,16 +550,16 @@ export default function EventCreate() {
                     {noSeats ? (
                       <div></div>
                     ) : (
-                      <div className="space-y-6">
+                      <div className='space-y-6'>
                         <FormField
                           control={form.control}
-                          name="rows"
+                          name='rows'
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Number of Rows</FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder=""
+                                  placeholder=''
                                   disabled={isLoading || noSeats}
                                   {...field}
                                 />
@@ -570,13 +570,13 @@ export default function EventCreate() {
                         />
                         <FormField
                           control={form.control}
-                          name="seats_per_row"
+                          name='seats_per_row'
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Number of Seats Per Row</FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder=""
+                                  placeholder=''
                                   disabled={isLoading || noSeats}
                                   {...field}
                                 />
@@ -591,9 +591,9 @@ export default function EventCreate() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-            <Button type="submit" disabled={isLoading}>
+            <Button type='submit' disabled={isLoading}>
               {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
               )}
               Next Page
             </Button>
