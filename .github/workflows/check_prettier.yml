@@ -1,7 +1,6 @@
 name: Prettier Check
 
 on:
-  pull_request:
   push:
     - '*' # matches every branch that doesn't contain a '/'
 
