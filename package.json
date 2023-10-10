@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "update-types": "npx supabase gen types typescript --local > database.types.ts"
+    "update-types": "npx supabase gen types typescript --local > database.types.ts",
+    "prettier:check": "prettier . --check"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.2.0",
