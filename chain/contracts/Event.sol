@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "erc721a/contracts/ERC721A.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import 'erc721a/contracts/ERC721A.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
 
 error NotOnTransferList();
 
 contract Event is ERC721A, Ownable {
     string private _metadataBaseUri;
-    bytes32 public merkleRoot;
+    mapping(address => bool) public allowed;
 
     constructor(
         string memory name,
@@ -31,19 +31,20 @@ contract Event is ERC721A, Ownable {
         _mint(msg.sender, quantity);
     }
 
+    function authorizeAddress(address userAddress) public onlyOwner {
+        allowed[userAddress] = true;
+    }
+
+    function revokeAddress(address userAddress) public onlyOwner {
+        allowed[userAddress] = false;
+    }
+
     function transferFrom(
         address from,
         address to,
-        uint256 tokenId,
-        bytes32[] calldata proof
+        uint256 tokenId
     ) public payable virtual override {
-        if (
-            !MerkleProof.verify(
-                proof,
-                merkleRoot,
-                keccak256(abi.encodePacked(from))
-            )
-        ) {
+        if (!allowed[from]) {
             revert NotOnTransferList();
         }
         super.transferFrom(from, to, tokenId);
