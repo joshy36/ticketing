@@ -1,0 +1,5 @@
+"use strict";exports.id=8032,exports.ids=[8032],exports.modules={58032:(e,t,r)=>{r.d(t,{f:()=>s});var i=r(92503),o=r(78726),a=r(64049);let n="horizontal",l=["horizontal","vertical"],d=(0,o.forwardRef)((e,t)=>{let{decorative:r,orientation:l=n,...d}=e,s=$89eedd556c436f6a$var$isValidOrientation(l)?l:n;return(0,o.createElement)(a.WV.div,(0,i.Z)({"data-orientation":s},r?{role:"none"}:{"aria-orientation":"vertical"===s?s:void 0,role:"separator"},d,{ref:t}))});function $89eedd556c436f6a$var$isValidOrientation(e){return l.includes(e)}d.propTypes={orientation(e,t,r){let i=e[t],o=String(i);return i&&!$89eedd556c436f6a$var$isValidOrientation(i)?Error(`Invalid prop \`orientation\` of value \`${o}\` supplied to \`${r}\`, expected one of:
+  - horizontal
+  - vertical
+
+Defaulting to \`${n}\`.`):null}};let s=d}};
