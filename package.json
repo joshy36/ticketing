@@ -1,5 +1,6 @@
 {
   "private": true,
+  "packageManager": "npm@9.8.0",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -14,6 +15,5 @@
   "devDependencies": {
     "prettier": "latest",
     "turbo": "latest"
-  },
-  "packageManager": "npm@9.8.0"
+  }
 }
