@@ -48,3 +48,6 @@ artifacts
 
 # Metadata
 scripts/eventMetadata/
+
+# Turbo
+.turbo

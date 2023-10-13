@@ -1,4 +1,4 @@
-import { Database } from './../../database.types';
+import { Database } from '../../apps/web/database.types';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { createClient } from '@supabase/supabase-js';
@@ -72,14 +72,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const eventContract = new ethers.Contract(
     deployment.address,
     deployment.abi,
-    signer,
+    signer
   );
 
   // @ts-ignore
   let tx = await eventContract?.mint(numberOfTickets);
   await tx.wait();
   console.log(
-    `NFTs Minted! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`,
+    `NFTs Minted! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
   );
 };
 export default func;
