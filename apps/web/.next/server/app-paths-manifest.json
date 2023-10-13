@@ -1,0 +1,9 @@
+{
+  "/event/[id]/page": "app/event/[id]/page.js",
+  "/user/[id]/page": "app/user/[id]/page.js",
+  "/artist/[id]/page": "app/artist/[id]/page.js",
+  "/event/create/page": "app/event/create/page.js",
+  "/event/list/page": "app/event/list/page.js",
+  "/api/trpc/[trpc]/route": "app/api/trpc/[trpc]/route.js",
+  "/event/create/image/[id]/page": "app/event/create/image/[id]/page.js"
+}

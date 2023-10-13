@@ -1,0 +1,59 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // this handles the root
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true, // true required for zod
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "noErrorTruncation": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "strictNullChecks": true, // true required for prisma singleton mock
+    "sourceMap": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "notes",
+    "docs",
+    "dist",
+    ".next",
+    "apps/web/next.config.js",
+    "prisma",
+    "themes",
+    "packages/server",
+    "tests-e2e"
+  ],
+  "include": [
+    "apps/web/next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "apps/web/tailwind.config.js",
+    "apps/web/postcss.config.js",
+    "apps/web/next.config.js",
+    "scripts/metadata.js"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}
