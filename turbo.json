@@ -3,6 +3,7 @@
     "globalDotEnv": ["**/.env"],
     "pipeline": {
       "build": {
+        "dependsOn": ["^build"],
         "outputs": [".next/**", "!.next/cache/**"]
       },
       "dev": {

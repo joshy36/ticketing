@@ -1,9 +1,25 @@
 {
-  "/event/[id]/page": "app/event/[id]/page.js",
-  "/user/[id]/page": "app/user/[id]/page.js",
+  "/_not-found": "app/_not-found.js",
+  "/page": "app/page.js",
+  "/(auth)/unauthenticated/page": "app/(auth)/unauthenticated/page.js",
+  "/api/panel/route": "app/api/panel/route.js",
+  "/(auth)/unauthorized/page": "app/(auth)/unauthorized/page.js",
   "/artist/[id]/page": "app/artist/[id]/page.js",
+  "/artist/create/page": "app/artist/create/page.js",
+  "/event/[id]/page": "app/event/[id]/page.js",
   "/event/create/page": "app/event/create/page.js",
   "/event/list/page": "app/event/list/page.js",
+  "/user/[id]/page": "app/user/[id]/page.js",
+  "/venue/create/page": "app/venue/create/page.js",
+  "/venue/[id]/page": "app/venue/[id]/page.js",
+  "/auth/callback/route": "app/auth/callback/route.js",
+  "/(auth)/sign-up/page": "app/(auth)/sign-up/page.js",
+  "/(auth)/sign-in/page": "app/(auth)/sign-in/page.js",
   "/api/trpc/[trpc]/route": "app/api/trpc/[trpc]/route.js",
-  "/event/create/image/[id]/page": "app/event/create/image/[id]/page.js"
+  "/api/image/upload/route": "app/api/image/upload/route.js",
+  "/event/checkout/[id]/page": "app/event/checkout/[id]/page.js",
+  "/user/edit/[id]/page": "app/user/edit/[id]/page.js",
+  "/artist/create/image/[id]/page": "app/artist/create/image/[id]/page.js",
+  "/event/create/image/[id]/page": "app/event/create/image/[id]/page.js",
+  "/venue/create/image/[id]/page": "app/venue/create/image/[id]/page.js"
 }
