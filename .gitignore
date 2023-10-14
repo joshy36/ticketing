@@ -51,3 +51,6 @@ scripts/eventMetadata/
 
 # Turbo
 .turbo
+
+# Expo
+.expo
