@@ -1,6 +1,6 @@
 import { httpBatchLink } from '@trpc/client';
 
-import { appRouter } from '../../../../packages/server/routers/_app';
+import { appRouter } from 'api';
 
 export const serverClient = appRouter.createCaller({
   links: [

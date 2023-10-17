@@ -164,7 +164,6 @@ export default function EventCreate() {
       ga_price: values.ga_price,
       rows: values.rows,
       seats_per_row: values.seats_per_row,
-      // @ts-ignore
       date: values.date,
       image: null,
     });

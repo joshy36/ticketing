@@ -1,7 +1,7 @@
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
 import { ethers } from 'ethers';
-import contractAbi from '../../../chain/deployments/base-goerli/Event.json';
+import contractAbi from '../../../../chain/deployments/base-goerli/Event.json';
 import { TRPCError } from '@trpc/server';
 
 export const ticketsRouter = router({

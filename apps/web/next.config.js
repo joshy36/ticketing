@@ -15,4 +15,5 @@ module.exports = {
     ],
     domains: ['gclzfhnchcgtgcmzpvna.supabase.co', 'localhost'],
   },
+  transpilePackages: ['api'],
 };

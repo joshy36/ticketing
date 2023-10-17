@@ -38,7 +38,6 @@
       "apps/web/next.config.js",
       "prisma",
       "themes",
-      "packages/server",
       "tests-e2e"
     ],
     "include": [

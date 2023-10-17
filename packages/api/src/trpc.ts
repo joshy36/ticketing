@@ -1,7 +1,8 @@
-import createRouteClient from '../../apps/web/utils/supabaseRoute';
+import createRouteClient from '../../../apps/web/utils/supabaseRoute';
 import { TRPCError, initTRPC } from '@trpc/server';
+import superjson from 'superjson';
 
-const t = initTRPC.create();
+const t = initTRPC.create({ transformer: superjson });
 
 export const middleware = t.middleware;
 export const router = t.router;
