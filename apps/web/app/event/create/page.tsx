@@ -1,5 +1,5 @@
 import EventCreate from '@/components/EventCreate';
-import createServerClient from '../../../utils/supabaseServer';
+import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home() {

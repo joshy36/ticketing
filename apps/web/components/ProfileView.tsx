@@ -1,10 +1,9 @@
-import createServerClient from '../utils/supabaseServer';
+import createServerClient from '@/utils/supabaseServer';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { serverClient } from '../../../apps/web/app/_trpc/serverClient';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { ExternalLinkIcon } from '@radix-ui/react-icons';
 
 export default async function ProfileView({
   params,

@@ -62,7 +62,7 @@ export const eventsRouter = router({
           rows: opts.input.rows,
           seats_per_row: opts.input.seats_per_row,
           tickets_remaining: ticketsRemaining,
-          date: opts.input.date,
+          date: opts.input.date.toISOString(),
           created_by: opts.ctx.user?.id!,
           image: opts.input.image ?? null,
         })

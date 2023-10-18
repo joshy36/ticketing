@@ -1,5 +1,5 @@
 import ProfilePage from '@/components/ProfilePage';
-import createServerClient from '../../../../utils/supabaseServer';
+import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }: { params: { id: string } }) {

@@ -1,5 +1,5 @@
 import VenueCreate from '@/components/VenueCreate';
-import createServerClient from '../../../utils/supabaseServer';
+import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home() {

@@ -36,7 +36,6 @@
     "dist",
     ".next",
     "apps/web/next.config.js",
-    "prisma",
     "themes",
     "tests-e2e"
   ],

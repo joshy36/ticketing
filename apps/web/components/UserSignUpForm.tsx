@@ -8,7 +8,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { useState } from 'react';
-import createClientClient from '../utils/supabaseClient';
+import createClientClient from '@/utils/supabaseClient';
 import { useToast } from './ui/use-toast';
 import {
   uniqueNamesGenerator,

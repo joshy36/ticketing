@@ -1,5 +1,5 @@
 import { serverClient } from '../../web/app/_trpc/serverClient';
-import createServerClient from '../utils/supabaseServer';
+import createServerClient from '@/utils/supabaseServer';
 import Image from 'next/image';
 import EventPurchase from './EventPurchase';
 import { Button } from './ui/button';

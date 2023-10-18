@@ -1,0 +1,11 @@
+import type { Database as DB } from './database.types';
+import createRouteClient from './supabaseRoute';
+
+export type Database = DB;
+export type Events = DB['public']['Tables']['events']['Row'];
+export type UserProfile = DB['public']['Tables']['user_profiles']['Row'];
+export type Ticket = DB['public']['Tables']['tickets']['Row'];
+export type Artist = DB['public']['Tables']['artists']['Row'];
+export type Venue = DB['public']['Tables']['venues']['Row'];
+
+export { createRouteClient };

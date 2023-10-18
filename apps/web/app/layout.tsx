@@ -2,7 +2,7 @@ import NavBar from '@/components/NavBar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { Analytics } from '@vercel/analytics/react';
-import createServerClient from '../utils/supabaseServer';
+import createServerClient from '@/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 

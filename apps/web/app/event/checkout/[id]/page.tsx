@@ -1,6 +1,6 @@
 import { serverClient } from '../../../../../../apps/web/app/_trpc/serverClient';
 import EventCheckout from '@/components/EventCheckout';
-import createServerClient from '../../../../utils/supabaseServer';
+import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }: { params: { id: string } }) {

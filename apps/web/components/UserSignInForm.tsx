@@ -9,7 +9,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import createClientClient from '../utils/supabaseClient';
+import createClientClient from '@/utils/supabaseClient';
 import { AuthResponse } from '@supabase/supabase-js';
 import { useToast } from './ui/use-toast';
 

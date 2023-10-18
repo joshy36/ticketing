@@ -1,4 +1,4 @@
-import createRouteClient from '../../../apps/web/utils/supabaseRoute';
+import { createRouteClient } from 'supabase';
 import { TRPCError, initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 

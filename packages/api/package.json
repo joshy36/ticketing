@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "supabase": "*",
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
     "superjson": "1.13.1",

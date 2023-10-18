@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
-import createClientClient from '../utils/supabaseClient';
+import createClientClient from '@/utils/supabaseClient';
 import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
 
