@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 
-import { trpc } from '../utils/trpc';
+import { trpc } from '../../utils/trpc';
 import { Image } from 'expo-image';
 
 const blurhash =
