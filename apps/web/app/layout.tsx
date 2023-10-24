@@ -22,13 +22,13 @@ export default async function RootLayout({
   const supabase = createServerClient();
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
   let userProfile = null;
 
-  if (user) {
-    userProfile = await serverClient.getUserProfile({ id: user?.id });
+  if (session?.user) {
+    userProfile = await serverClient.getUserProfile({ id: session.user?.id });
   }
 
   return (
@@ -36,8 +36,8 @@ export default async function RootLayout({
       <body>
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            <NavBar user={user} userProfile={userProfile} />
-            <MobileNav user={user} userProfile={userProfile} />
+            <NavBar user={session?.user} userProfile={userProfile} />
+            <MobileNav user={session?.user} userProfile={userProfile} />
             <div className='min-h-screen'> {children}</div>
 
             <Toaster />

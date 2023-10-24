@@ -19,8 +19,8 @@ export default async function ProfileView({
   const supabase = createServerClient();
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
   return (
     <div className='bg-background'>
@@ -47,7 +47,7 @@ export default async function ProfileView({
           <div className='mt-4 lg:row-span-3 lg:mt-0'>
             {/* <h2 className="sr-only">Product information</h2>
             <p className="text-3xl tracking-tight text-accent-foreground">{`$99999`}</p> */}
-            {user! && user.id === params.id ? (
+            {session?.user! && session?.user.id === params.id ? (
               <form className='mt-10'>
                 <Link href={`/user/edit/${params.id}`}>
                   <Button variant='default' className='flex w-full'>

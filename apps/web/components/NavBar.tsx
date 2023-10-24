@@ -58,7 +58,7 @@ export default function NavBar({
   user,
   userProfile,
 }: {
-  user: User | null;
+  user: User | undefined;
   userProfile: UserProfile | null;
 }) {
   return (

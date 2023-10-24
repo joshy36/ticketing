@@ -19,7 +19,7 @@ export function MobileNav({
   user,
   userProfile,
 }: {
-  user: User | null;
+  user: User | undefined;
   userProfile: UserProfile | null;
 }) {
   const [open, setOpen] = React.useState(false);

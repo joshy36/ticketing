@@ -12,7 +12,7 @@ export default function EventPurchase({
   user,
   event,
 }: {
-  user: User | null;
+  user: User | undefined;
   event: Events | null;
 }) {
   const { data: eventTickets, isLoading: loading } =

@@ -28,8 +28,8 @@ export default async function EventView({
   const supabase = createServerClient();
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
   // const userProfile = await serverClient.getUserProfile({ id: user?.id });
 
@@ -133,7 +133,7 @@ export default async function EventView({
 
             <div className='lg:border-rlg:pb-16 lg:col-span-2 lg:col-start-1'>
               <div>
-                <EventPurchase user={user} event={event} />
+                <EventPurchase user={session?.user} event={event} />
               </div>
             </div>
           </div>

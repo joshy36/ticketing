@@ -33,19 +33,10 @@ export default function App() {
   const [scanned, setScanned] = useState(false);
 
   useEffect(() => {
-    let isMounted = true; // Flag to check if the component is mounted
-
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      if (isMounted) {
-        setHasPermission(status === 'granted');
-      }
+      setHasPermission(status === 'granted');
     })();
-
-    // Cleanup function
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
