@@ -45,6 +45,7 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
       },
     });
     const id = res.data.user?.id;
+    console.log(res);
 
     if (res.error?.message == 'User already registered') {
       toast({
