@@ -1,11 +1,10 @@
 import { Link, useLocalSearchParams } from 'expo-router';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { trpc } from '../../../utils/trpc';
 import { dateToString } from '../../../utils/helpers';
-
-export const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+import Separator from '../../components/Separator';
+import { blurhash } from '../../../utils/helpers';
 
 const Home = () => {
   const { id } = useLocalSearchParams();
@@ -13,6 +12,13 @@ const Home = () => {
     // @ts-ignore
     id: id!,
   });
+
+  const data = [
+    { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3' },
+    { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3' },
+
+    // Add more data objects as needed
+  ];
 
   const { data: artist, isLoading: artistLoading } =
     trpc.getArtistById.useQuery({ id: event?.artist! }, { enabled: !!event });
@@ -49,16 +55,16 @@ const Home = () => {
                 transition={1000}
               />
               <Text className="text-xl text-white">{'\n'}</Text>
-              <Text className="text-4xl text-white">
+              <Text className="text-4xl text-white font-bold">
                 {event?.name}
-                {'\n'}
               </Text>
+              <Separator />
               <Text className="text-white text-2xl">Date</Text>
-              <Text className="text-gray-400 text-xl">
+              <Text className="text-muted-foreground text-xl">
                 {dateToString(event?.date!)}
-                {'\n'}
               </Text>
-              <Text className="text-white text-2xl">Artist</Text>
+              <Separator />
+              <Text className="text-white text-xl">Artist</Text>
               <View className="flex flex-row items-center py-3 ">
                 <Image
                   style={{ borderRadius: 24 }}
@@ -68,25 +74,44 @@ const Home = () => {
                   contentFit="cover"
                   transition={1000}
                 />
-                <Text className="text-gray-400 pl-2 text-xl">
+                <Text className="text-muted-foreground pl-2 text-xl">
                   {artist?.name}
                 </Text>
-                <Link className="ml-auto" href={`/artist/${artist?.id}`}>
-                  <Text className="text-white text-2xl">Artist</Text>
-                </Link>
+                {/* <Link className="ml-auto" href={`/artist/${artist?.id}`}>
+                  <Text className="text-white text-xl underline">Artist</Text>
+                </Link> */}
               </View>
+              <Separator />
               <Text className="text-white text-2xl divide-gray-400 divide-solid divide-y">
                 Venue
               </Text>
-              <Text className="text-gray-400 text-xl">
+              <Text className="text-muted-foreground text-xl">
                 {venue?.name}
-                {'\n'}
               </Text>
-              <Text className="text-white">Description</Text>
-              <Text className="text-gray-400 text-xl">
+              <Separator />
+              <Text className="text-white text-2xl">Description</Text>
+              <Text className="text-muted-foreground text-xl pb-4">
                 {event.description}
-                {'\n'}
               </Text>
+              <View style={styles.table}>
+                <View style={styles.row}>
+                  <Text style={styles.cell}>Seat</Text>
+                  <Text style={styles.cell}>Price</Text>
+                  <Text style={styles.cell}>Purchase</Text>
+                </View>
+                {data.map((rowData, index) => (
+                  <View key={index} style={styles.row}>
+                    <Text style={styles.cell}>{rowData.column1}</Text>
+                    <Text style={styles.cell}>{rowData.column2}</Text>
+                    <Pressable
+                      style={styles.button}
+                      onPress={() => alert('Purchase!')}
+                    >
+                      <Text style={styles.buttonText}>{rowData.column3}</Text>
+                    </Pressable>
+                  </View>
+                ))}
+              </View>
             </View>
           )}
         </View>
@@ -94,5 +119,34 @@ const Home = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  table: {
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  cell: {
+    color: 'white',
+    flex: 1,
+    borderWidth: 1,
+    borderColor: 'white',
+    padding: 8,
+  },
+  button: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default Home;

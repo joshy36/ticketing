@@ -3,9 +3,7 @@ import { trpc } from '../../../utils/trpc';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { dateToString } from '../../../utils/helpers';
-
-export const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+import { blurhash } from '../../../utils/helpers';
 
 const Home = () => {
   const { data: events, isLoading: eventsLoading } = trpc.getEvents.useQuery();
@@ -19,29 +17,37 @@ const Home = () => {
             <Text className="text-white">Loading...</Text>
           ) : (
             events!.map((event) => (
-              <View className="p-4 self-center items-center " key={event.id}>
+              <View className="px-2 " key={event.id}>
                 <Link href={`/home/${event.id}`}>
-                  <Image
-                    style={{ borderRadius: 16 }}
-                    className="h-64 w-64 "
-                    source={{ uri: event.image! }}
-                    placeholder={blurhash}
-                    contentFit="cover"
-                    transition={1000}
-                  />
-                  <Text className="text-4xl text-white">{'\n'}</Text>
-                  <Text className="text-4xl text-white font-bold">
-                    {event.name}
-                    {'\n'}
-                  </Text>
-                  <Text className="text-gray-400 text-xl">
-                    {dateToString(event.date)}
-                    {'\n'}
-                  </Text>
-                  <Text className="text-gray-400 text-xl">
-                    {event.venues?.name}
-                    {'\n'}
-                  </Text>
+                  <View className="flex flex-row items-center py-3 ">
+                    <View>
+                      <Image
+                        style={{ borderRadius: 16 }}
+                        className="h-20 w-20"
+                        source={{ uri: event.image! }}
+                        placeholder={blurhash}
+                        contentFit="cover"
+                        transition={1000}
+                      />
+                    </View>
+                    <View className="flex flex-col">
+                      <View>
+                        <Text className="text-white pl-2 text-2xl text-bold">
+                          {event.name}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text className="text-muted-foreground pl-2">
+                          {dateToString(event.date)}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text className="text-muted-foreground pl-2">
+                          {event.venues?.name}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
                 </Link>
               </View>
             ))

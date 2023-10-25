@@ -37,7 +37,7 @@ export const getBaseUrl = () => {
       'Failed to get localhost. Please point to your production server.'
     );
   }
-  // return 'https://ticketing-lemon.vercel.app';
+  return 'https://ticketing-lemon.vercel.app';
 
   return `http://${localhost}:3000`;
 };

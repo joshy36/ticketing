@@ -35,8 +35,8 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
       dictionaries: [adjectives, colors, animals],
     });
     const res = await supabase.auth.signUp({
-      email,
-      password,
+      email: email,
+      password: password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
         data: {

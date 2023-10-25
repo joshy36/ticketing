@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const nativewind = require('nativewind/tailwind/css');
+
 module.exports = {
   darkMode: ['class'],
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
@@ -88,5 +90,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), nativewind],
 };

@@ -28,3 +28,5 @@ export const dateToString = (date: string): string => {
   const month = months[dateFormat.split('/')[0]!];
   return month + ' ' + day + ', ' + time;
 };
+
+export const blurhash = 'L04U]7j[fQj[offQfQfQfQfQfQfQ';
