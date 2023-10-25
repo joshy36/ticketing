@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
+import { Link } from 'expo-router';
 import { SupabaseContext } from '../../utils/supabaseProvider';
 import { trpc } from '../../utils/trpc';
 import { blurhash } from '../../utils/helpers';
@@ -74,27 +75,33 @@ const ProfilePage = () => {
                 <Text className="text-white">Loading...</Text>
               ) : (
                 userTickets!.map((ticket) => (
-                  <View
-                    className="p-4 self-center items-center "
-                    key={ticket.id}
-                  >
-                    {/* <Link href={`/profile/${ticket.id}`}> */}
-                    <Image
-                      style={{ borderRadius: 16 }}
-                      className="h-64 w-64 "
-                      source={{ uri: ticket.events?.image! }}
-                      placeholder={blurhash}
-                      contentFit="cover"
-                      transition={1000}
-                    />
-
-                    <Text className="text-xl text-white font-bold">
-                      {ticket.events?.name}
-                    </Text>
-                    <Text className="text-muted-foreground">
-                      {`Seat: ${ticket.seat}`}
-                    </Text>
-                    {/* </Link> */}
+                  <View className="p-1" key={ticket.id}>
+                    <Link href={`/profile/${ticket.id}`}>
+                      <View className="flex flex-row items-center py-3 ">
+                        <View>
+                          <Image
+                            style={{ borderRadius: 16 }}
+                            className="h-20 w-20"
+                            source={{ uri: ticket.events?.image! }}
+                            placeholder={blurhash}
+                            contentFit="cover"
+                            transition={1000}
+                          />
+                        </View>
+                        <View className="flex flex-col">
+                          <View>
+                            <Text className="text-white pl-2 text-2xl text-bold">
+                              {ticket.events?.name}
+                            </Text>
+                          </View>
+                          <View>
+                            <Text className="text-muted-foreground pl-2">
+                              {`Seat: ${ticket.seat}`}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </Link>
                   </View>
                 ))
               )}

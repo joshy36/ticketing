@@ -1,8 +1,8 @@
 import { View } from 'react-native';
 import { useContext } from 'react';
-import { SupabaseContext } from '../../utils/supabaseProvider';
-import UserSignInForm from '../components/UserSignInForm';
-import ProfilePage from '../components/ProfilePage';
+import { SupabaseContext } from '../../../utils/supabaseProvider';
+import UserSignInForm from '../../components/UserSignInForm';
+import ProfilePage from '../../components/ProfilePage';
 
 const Profile = () => {
   const supabaseContext = useContext(SupabaseContext);
