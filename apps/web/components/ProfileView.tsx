@@ -102,7 +102,7 @@ export default async function ProfileView({
                 {userTickets.map((ticket) => (
                   <a
                     key={ticket.id}
-                    // href={`/event/${ticket.id}`}
+                    href={`/ticket/${ticket.id}`}
                     className='group'
                   >
                     <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>

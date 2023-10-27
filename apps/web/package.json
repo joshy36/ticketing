@@ -11,8 +11,6 @@
     "prettier:check": "prettier . --check"
   },
   "dependencies": {
-    "api": "*",
-    "supabase": "*",
     "@hookform/resolvers": "^3.2.0",
     "@openzeppelin/contracts": "^4.9.3",
     "@radix-ui/react-accordion": "^1.1.2",
@@ -39,6 +37,7 @@
     "@trpc/react-query": "^10.40.0",
     "@vercel/analytics": "^1.0.2",
     "alchemy-sdk": "^2.10.1",
+    "api": "*",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
@@ -56,6 +55,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
     "sharp": "^0.32.6",
+    "supabase": "*",
     "superjson": "1.13.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
