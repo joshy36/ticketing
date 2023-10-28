@@ -3,16 +3,29 @@ import { z } from 'zod';
 
 export const usersRouter = router({
   getUserProfile: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .input(
+      z.object({ id: z.string().optional(), username: z.string().optional() })
+    )
     .query(async (opts) => {
       const supabase = opts.ctx.supabase;
-      const { data } = await supabase
-        .from('user_profiles')
-        .select()
-        .eq('id', opts.input.id)
-        .limit(1)
-        .single();
-      return data;
+
+      if (opts.input.id) {
+        const { data } = await supabase
+          .from('user_profiles')
+          .select()
+          .eq('id', opts.input.id)
+          .limit(1)
+          .single();
+        return data;
+      } else if (opts.input.username) {
+        const { data } = await supabase
+          .from('user_profiles')
+          .select()
+          .eq('username', opts.input.username)
+          .limit(1)
+          .single();
+        return data;
+      }
     }),
 
   updateUser: publicProcedure
@@ -25,7 +38,7 @@ export const usersRouter = router({
         bio: z.string().nullable().optional(),
         wallet_address: z.string().nullable().optional(),
         profile_image: z.string().nullable().optional(),
-      }),
+      })
     )
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;

@@ -1,32 +1,31 @@
-import { router, publicProcedure } from '../trpc';
+import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 import { ethers } from 'ethers';
 import contractAbi from '../../../../chain/deployments/base-goerli/Event.json';
 import { TRPCError } from '@trpc/server';
 
 export const ticketsRouter = router({
+  // probably need to seperate into public and authed procedure for available and owned tickets
   getTicketById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async (opts) => {
       const supabase = opts.ctx.supabase;
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('tickets')
-        .select(`*, events (image, name)`)
+        .select(`*, events (image, name, date)`)
         .eq('id', opts.input.id);
 
-      if (data?.length === 0) {
+      if (error) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'An unexpected error occurred, please try again later.',
-          // optional: pass the original error to retain stack trace
-          cause: 'No ticket with inputted id',
+          message: 'No ticket with inputted id!',
         });
       } else {
         return data![0];
       }
     }),
 
-  getTicketsForUser: publicProcedure
+  getTicketsForUser: authedProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async (opts) => {
       const supabase = opts.ctx.supabase;
@@ -49,7 +48,7 @@ export const ticketsRouter = router({
       return data;
     }),
 
-  sellTicket: publicProcedure
+  sellTicket: authedProcedure
     .input(
       z.object({
         ticket_id: z.string(),
@@ -59,14 +58,14 @@ export const ticketsRouter = router({
     )
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;
-      const { data: eventData } = await supabase
+      const { data: event } = await supabase
         .from('events')
         .select()
         .eq('id', opts.input.event_id)
         .limit(1)
         .single();
 
-      const { data: getTicket, error: getTicketError } = await supabase
+      const { data: ticket, error: ticketError } = await supabase
         .from('tickets')
         .select()
         .eq('id', opts.input.ticket_id)
@@ -80,21 +79,19 @@ export const ticketsRouter = router({
         .limit(1)
         .single();
 
-      if (getTicketError?.code == 'PGRST116') {
+      if (ticketError?.code == 'PGRST116') {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred, please try again later.',
-          // optional: pass the original error to retain stack trace
-          cause: getTicketError,
+          cause: ticketError,
         });
       }
 
-      const link = eventData?.etherscan_link?.split('/');
+      const link = event?.etherscan_link?.split('/');
       if (!link) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'An unexpected error occurred, please try again later.',
-          cause: 'No etherscan link',
+          message: 'No etherscan link!',
         });
       }
 
@@ -115,7 +112,7 @@ export const ticketsRouter = router({
       let tx = await eventContract.safeTransferFrom(
         signer.address,
         userProfile?.wallet_address,
-        getTicket?.token_id
+        ticket?.token_id
       );
       await tx.wait();
       console.log(
@@ -126,7 +123,7 @@ export const ticketsRouter = router({
         await supabase
           .from('tickets')
           .update({ user_id: opts.input.user_id })
-          .eq('id', getTicket?.id!)
+          .eq('id', ticket?.id!)
           .select()
           .single();
 
@@ -138,5 +135,56 @@ export const ticketsRouter = router({
       });
 
       return transferTicket;
+    }),
+
+  generateTicketQRCode: authedProcedure
+    .input(
+      z.object({
+        ticket_id: z.string(),
+        user_id: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      const supabase = opts.ctx.supabase;
+      const user = opts.ctx.user;
+
+      const { data: ticket, error: ticketError } = await supabase
+        .from('tickets')
+        .select()
+        .eq('id', opts.input.ticket_id)
+        .limit(1)
+        .single();
+
+      if (ticket?.user_id != user.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Only the owner can activate a ticket',
+        });
+      }
+
+      if (ticket.qr_code) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Ticket already activated!',
+        });
+      }
+
+      const qr = opts.input.user_id + opts.input.ticket_id;
+
+      const { data: ticketQRCode, error: ticketQRCodeError } = await supabase
+        .from('tickets')
+        .update({ qr_code: qr })
+        .eq('id', ticket?.id!)
+        .select()
+        .single();
+
+      if (ticketQRCodeError?.code === '23505') {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No duplicate qr codes!',
+        });
+      }
+
+      return ticketQRCode?.qr_code;
     }),
 });

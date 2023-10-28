@@ -159,6 +159,8 @@ export interface Database {
           event_id: string
           id: string
           price: number
+          qr_code: string | null
+          scanned: boolean
           seat: string
           token_id: number | null
           user_id: string | null
@@ -168,6 +170,8 @@ export interface Database {
           event_id: string
           id?: string
           price: number
+          qr_code?: string | null
+          scanned?: boolean
           seat?: string
           token_id?: number | null
           user_id?: string | null
@@ -177,6 +181,8 @@ export interface Database {
           event_id?: string
           id?: string
           price?: number
+          qr_code?: string | null
+          scanned?: boolean
           seat?: string
           token_id?: number | null
           user_id?: string | null
