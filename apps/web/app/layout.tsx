@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/react';
 import createServerClient from '@/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
+import { GeistSans } from 'geist/font';
 
 import './globals.css';
 import Footer from '@/components/Footer';
@@ -32,12 +33,12 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang='en'>
+    <html lang='en' className={GeistSans.className}>
       <body>
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            <NavBar user={session?.user} userProfile={userProfile} />
-            <MobileNav user={session?.user} userProfile={userProfile} />
+            <NavBar user={session?.user} userProfile={userProfile!} />
+            <MobileNav user={session?.user} userProfile={userProfile!} />
             <div className='min-h-screen'> {children}</div>
 
             <Toaster />

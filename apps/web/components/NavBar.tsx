@@ -17,6 +17,7 @@ import { Button, buttonVariants } from './ui/button';
 import { User } from '@supabase/supabase-js';
 import { UserNav } from './UserNav';
 import { CommandMenu } from './ui/command-menu';
+import { UserProfile } from 'supabase';
 
 export const mainComponents: {
   title: string;

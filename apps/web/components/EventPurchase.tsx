@@ -7,6 +7,7 @@ import { User } from '@supabase/auth-helpers-nextjs';
 import { trpc } from '../../../apps/web/app/_trpc/client';
 import { DataTable } from './DataTable';
 import { columns } from './Columns';
+import { Events } from 'supabase';
 
 export default function EventPurchase({
   user,

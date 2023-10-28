@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
+import { UserProfile } from 'supabase';
 
 export default function EventCheckout({
   ticketId,
@@ -50,7 +51,6 @@ export default function EventCheckout({
   }).format(Number(data?.price));
   return (
     <div className='flex items-center justify-center'>
-      {' '}
       <Card className='w-[500px]'>
         <CardHeader>
           <CardTitle>Checkout</CardTitle>

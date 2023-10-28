@@ -14,6 +14,7 @@ import React from 'react';
 import { useSignMessage } from 'wagmi';
 import { recoverMessageAddress } from 'viem';
 import { trpc } from '../../../apps/web/app/_trpc/client';
+import { UserProfile } from 'supabase';
 
 export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
   const {

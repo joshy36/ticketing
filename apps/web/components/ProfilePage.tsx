@@ -25,9 +25,13 @@ const sidebarNavItems = [
   },
 ];
 
-export default function ProfilePage({ params }: { params: { id: string } }) {
+export default function ProfilePage({
+  params,
+}: {
+  params: { username: string };
+}) {
   const { data: userProfile, isLoading } = trpc.getUserProfile.useQuery({
-    id: params.id,
+    username: params.username,
   });
 
   return (
@@ -69,7 +73,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                 <h3 className='text-lg font-medium'>Profile Picture</h3>
                 <Separator />
                 <UserUploadImage
-                  id={params.id}
+                  id={userProfile?.username!}
                   userImage={userProfile?.profile_image}
                   buttonText='Update profile picture'
                 />

@@ -21,6 +21,7 @@ import { toast } from './ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { Icons } from './ui/icons';
 import { trpc } from '../../../apps/web/app/_trpc/client';
+import { UserProfile } from 'supabase';
 
 const profileFormSchema = z.object({
   username: z

@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import createClientClient from '@/utils/supabaseClient';
 import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { UserProfile } from 'supabase';
 
 export function UserNav({
   user,
@@ -57,7 +58,7 @@ export function UserNav({
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href={`/user/${user?.id}`}>Profile</Link>
+            <Link href={`/${userProfile?.username}/`}>Profile</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

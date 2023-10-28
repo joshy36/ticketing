@@ -8,9 +8,11 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 export default async function ProfileView({
   params,
 }: {
-  params: { id: string };
+  params: { username: string };
 }) {
-  const userProfile = await serverClient.getUserProfile({ id: params.id });
+  const userProfile = await serverClient.getUserProfile({
+    username: params.username,
+  });
 
   const userTickets = await serverClient.getTicketsForUser({
     user_id: userProfile?.id!,
@@ -47,9 +49,9 @@ export default async function ProfileView({
           <div className='mt-4 lg:row-span-3 lg:mt-0'>
             {/* <h2 className="sr-only">Product information</h2>
             <p className="text-3xl tracking-tight text-accent-foreground">{`$99999`}</p> */}
-            {session?.user! && session?.user.id === params.id ? (
+            {session?.user! && session?.user.id === userProfile?.id ? (
               <form className='mt-10'>
-                <Link href={`/user/edit/${params.id}`}>
+                <Link href={`/${userProfile.username}/edit/`}>
                   <Button variant='default' className='flex w-full'>
                     Edit Profile
                   </Button>
@@ -102,7 +104,7 @@ export default async function ProfileView({
                 {userTickets.map((ticket) => (
                   <a
                     key={ticket.id}
-                    href={`/ticket/${ticket.id}`}
+                    href={`${userProfile?.username}/ticket/${ticket.id}`}
                     className='group'
                   >
                     <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>

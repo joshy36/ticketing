@@ -14,6 +14,7 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { CommandMenu } from './ui/command-menu';
 import { UserNav } from './UserNav';
 import { User } from '@supabase/supabase-js';
+import { UserProfile } from 'supabase';
 
 export function MobileNav({
   user,

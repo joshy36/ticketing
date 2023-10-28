@@ -20,6 +20,7 @@ import { SearchIcon } from 'lucide-react';
 import { trpc } from '../../../../apps/web/app/_trpc/client';
 import Image from 'next/image';
 import { dateToString } from '../../utils/helpers';
+import { Artist, Venue } from 'supabase';
 
 export interface NavItem {
   title: string;
