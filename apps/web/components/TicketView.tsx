@@ -55,7 +55,7 @@ export function TicketView({
   }, []);
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className='flex flex-col items-center justify-center px-8'>
       <div className='flex flex-row items-center pb-4'>
         <Button variant='secondary' onClick={() => setFront(!front)}>
           Flip
@@ -66,7 +66,7 @@ export function TicketView({
       </div>
 
       {front ? (
-        <Card className='w-[400px] '>
+        <Card className='max-w-[400px]'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>
@@ -121,7 +121,7 @@ export function TicketView({
           </CardFooter>
         </Card>
       ) : (
-        <Card className='w-[400px]'>
+        <Card className='max-w-[400px]'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>
