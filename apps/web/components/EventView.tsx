@@ -37,7 +37,7 @@ export default async function EventView({
     <div className='bg-background'>
       <div className='px-4 pt-9 md:px-16'>
         <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
-          <div className='aspect-h-1 aspect-w-1 xl:aspect-h-8 xl:aspect-w-7 flex w-full items-center justify-center overflow-hidden rounded-lg bg-background'>
+          <div className=''>
             {event.image ? (
               <Image
                 src={event.image!}

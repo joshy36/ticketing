@@ -48,9 +48,11 @@ export function MobileNav({
         </MobileLink> */}
           <ScrollArea className='my-4 h-[calc(100vh-8rem)] pb-10 pl-6'>
             <div className='flex flex-col space-y-3 pb-3'>
-              {mainComponents.map(
-                (item) =>
-                  item.href && (
+              {mainComponents.map((item) => (
+                <div key={item.href}>
+                  {item.title === 'My Tickets' && !user ? (
+                    <div key={item.href}></div>
+                  ) : (
                     <MobileLink
                       key={item.href}
                       href={item.href}
@@ -58,8 +60,9 @@ export function MobileNav({
                     >
                       {item.title}
                     </MobileLink>
-                  ),
-              )}
+                  )}
+                </div>
+              ))}
             </div>
             {user ? (
               <div className='flex flex-col space-y-3'>

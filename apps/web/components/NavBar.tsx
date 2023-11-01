@@ -28,8 +28,12 @@ export const mainComponents: {
     href: '/',
   },
   {
-    title: 'Upcoming Events',
+    title: 'Explore Events',
     href: '/event/list',
+  },
+  {
+    title: 'My Tickets',
+    href: '/ticket',
   },
 ];
 
@@ -67,13 +71,21 @@ export default function NavBar({
       <NavigationMenu>
         <NavigationMenuList>
           {mainComponents.map((component) => (
-            <NavigationMenuItem key={component.title}>
-              <Link href={component.href} legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  {component.title}
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            <div key={component.title}>
+              {component.title === 'My Tickets' && !user ? (
+                <div key={component.title}></div>
+              ) : (
+                <NavigationMenuItem key={component.title}>
+                  <Link href={component.href} legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      {component.title}
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              )}
+            </div>
           ))}
           {user ? (
             <NavigationMenuItem>

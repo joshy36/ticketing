@@ -92,63 +92,6 @@ export default async function ProfileView({
               </div>
             </div>
           </div>
-          <h1 className='text-2xl font-bold tracking-tight text-accent-foreground sm:text-3xl'>
-            Upcoming Events
-          </h1>
-        </div>
-        <div className='mx-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8'>
-          <h2 className='sr-only'>Tickets</h2>
-          <div className='grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
-            {userTickets ? (
-              <>
-                {userTickets.map((ticket) => (
-                  <a
-                    key={ticket.id}
-                    href={`${userProfile?.username}/ticket/${ticket.id}`}
-                    className='group'
-                  >
-                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
-                      {ticket.events?.image ? (
-                        <Image
-                          src={ticket.events?.image}
-                          alt='Ticket Image'
-                          width={500}
-                          height={500}
-                          className='h-full w-full object-cover object-center group-hover:opacity-75'
-                        />
-                      ) : (
-                        <Image
-                          src='/fallback.jpeg'
-                          alt='image'
-                          width={500}
-                          height={500}
-                          className='h-full w-full object-cover object-center group-hover:opacity-75'
-                        />
-                      )}
-                    </div>
-                    <h1 className='mt-4 text-lg text-accent-foreground'>
-                      {ticket.events?.name}
-                    </h1>
-                    <p className='font-sm mt-1 text-sm text-muted-foreground'>
-                      {`Seat: ${ticket.seat}`}
-                    </p>
-                    {/* Need event id */}
-                    {/* <a
-                      href={`https://goerli.basescan.org/token/${ticket.events?.etherscan_link}?a=${ticket.token_id}`}
-                      target="_blank"
-                    >
-                      <p className="text-muted-foreground">
-                        Link
-                        <ExternalLinkIcon className="text-muted-foreground" />
-                      </p>
-                    </a> */}
-                  </a>
-                ))}
-              </>
-            ) : (
-              <div>No upcoming events!</div>
-            )}
-          </div>
         </div>
       </div>
     </div>
