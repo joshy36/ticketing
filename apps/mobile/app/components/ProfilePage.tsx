@@ -15,13 +15,13 @@ const ProfilePage = () => {
       id: user?.id!,
     });
 
-  const { data: userTickets, isLoading: userTicketsLoading } =
-    trpc.getTicketsForUser.useQuery(
-      {
-        user_id: profile?.id!,
-      },
-      { enabled: !!profile }
-    );
+  // const { data: userTickets, isLoading: userTicketsLoading } =
+  //   trpc.getTicketsForUser.useQuery(
+  //     {
+  //       user_id: profile?.id!,
+  //     },
+  //     { enabled: !!profile }
+  //   );
 
   return (
     <View className="flex-1 bg-black px-4 pt-24">
@@ -70,7 +70,7 @@ const ProfilePage = () => {
               Upcoming Events
             </Text>
 
-            <View>
+            {/* <View>
               {userTicketsLoading ? (
                 <Text className="text-white">Loading...</Text>
               ) : (
@@ -105,7 +105,7 @@ const ProfilePage = () => {
                   </View>
                 ))
               )}
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       )}
