@@ -34,6 +34,7 @@ export default function UserUploadImage({
           description: 'Error updating profile',
         });
         console.error('Error updating profile:', error);
+        console.error('Error updating profile:', data);
       } else {
         setImgUrl(data.profile_image ?? '');
         router.refresh();

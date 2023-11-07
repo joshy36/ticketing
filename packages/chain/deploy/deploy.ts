@@ -1,4 +1,4 @@
-import { Database } from '../../apps/web/database.types';
+import { Database } from 'supabase';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
 import { createClient } from '@supabase/supabase-js';
@@ -13,9 +13,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts();
 
-  // id of event to deploy contract for
-  const id = '1c93a066-ae3f-4fce-ad35-85c631f2f872';
-  const env: string = 'prod';
+  // CHANGE
+  const id = '5558a855-3bd4-41b3-8144-3d81f815e331';
+  // CHANGE
+  const env: string = 'local';
+
   let SUPABASE_URL: string;
   let SUPABASE_ANON_KEY: string;
   if (env == 'local') {

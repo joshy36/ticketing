@@ -73,7 +73,7 @@ export default function ProfilePage({
                 <h3 className='text-lg font-medium'>Profile Picture</h3>
                 <Separator />
                 <UserUploadImage
-                  id={userProfile?.username!}
+                  id={userProfile?.id!}
                   userImage={userProfile?.profile_image}
                   buttonText='Update profile picture'
                 />

@@ -14,6 +14,8 @@
   "dependencies": {
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
+    "dotenv": "^16.3.1",
+    "stripe": "^14.2.0",
     "supabase": "*",
     "superjson": "1.13.1",
     "zod": "^3.22.2"

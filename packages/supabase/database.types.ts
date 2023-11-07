@@ -80,14 +80,11 @@ export interface Database {
           date: string
           description: string
           etherscan_link: string | null
-          ga_price: number | null
-          ga_tickets: number | null
           id: string
           image: string | null
           ipfs_image: string | null
+          max_tickets_per_user: number | null
           name: string
-          rows: number | null
-          seats_per_row: number | null
           tickets_remaining: number | null
           updated_at: string
           venue: string
@@ -100,14 +97,11 @@ export interface Database {
           date: string
           description: string
           etherscan_link?: string | null
-          ga_price?: number | null
-          ga_tickets?: number | null
           id?: string
           image?: string | null
           ipfs_image?: string | null
+          max_tickets_per_user?: number | null
           name: string
-          rows?: number | null
-          seats_per_row?: number | null
           tickets_remaining?: number | null
           updated_at?: string
           venue: string
@@ -120,14 +114,11 @@ export interface Database {
           date?: string
           description?: string
           etherscan_link?: string | null
-          ga_price?: number | null
-          ga_tickets?: number | null
           id?: string
           image?: string | null
           ipfs_image?: string | null
+          max_tickets_per_user?: number | null
           name?: string
-          rows?: number | null
-          seats_per_row?: number | null
           tickets_remaining?: number | null
           updated_at?: string
           venue?: string
@@ -148,6 +139,77 @@ export interface Database {
           {
             foreignKeyName: "events_venue_fkey"
             columns: ["venue"]
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      rows: {
+        Row: {
+          created_at: string
+          id: string
+          name: string | null
+          number_of_seats: number | null
+          section_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          number_of_seats?: number | null
+          section_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          number_of_seats?: number | null
+          section_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rows_section_id_fkey"
+            columns: ["section_id"]
+            referencedRelation: "sections"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      sections: {
+        Row: {
+          created_at: string
+          id: string
+          name: string | null
+          number_of_rows: number | null
+          seats_per_row: number | null
+          updated_at: string | null
+          venue_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          number_of_rows?: number | null
+          seats_per_row?: number | null
+          updated_at?: string | null
+          venue_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          number_of_rows?: number | null
+          seats_per_row?: number | null
+          updated_at?: string | null
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sections_venue_id_fkey"
+            columns: ["venue_id"]
             referencedRelation: "venues"
             referencedColumns: ["id"]
           }

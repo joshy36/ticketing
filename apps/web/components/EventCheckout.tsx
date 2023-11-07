@@ -5,7 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
 import { toast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from '@stripe/react-stripe-js';
 
 import {
   Card,
@@ -17,6 +22,9 @@ import {
 } from '@/components/ui/card';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import { UserProfile } from 'supabase';
+import stripe from 'stripe';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 export default function EventCheckout({
   ticketId,
@@ -26,6 +34,7 @@ export default function EventCheckout({
   userProfile: UserProfile;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [clientSecret, setClientSecret] = useState('');
   const router = useRouter();
   const sellTicket = trpc.sellTicket.useMutation({
     onSettled(data, error) {
@@ -41,6 +50,25 @@ export default function EventCheckout({
       }
     },
   });
+
+  const appearance = {
+    theme: 'flat',
+  };
+
+  // Pass the appearance object to the Elements instance
+  // const elements = stripe.elements({ clientSecret, appearance });
+
+  const createCheckoutSession = trpc.createCheckoutSession.useMutation({
+    onSettled(data) {
+      console.log(data);
+      setClientSecret(data?.clientSecret!);
+    },
+  });
+
+  useEffect(() => {
+    createCheckoutSession.mutate();
+  }, []);
+
   const { data, isLoading: loading } = trpc.getTicketById.useQuery({
     id: ticketId,
   });
@@ -51,7 +79,7 @@ export default function EventCheckout({
   }).format(Number(data?.price));
   return (
     <div className='flex items-center justify-center'>
-      <Card className='w-[500px]'>
+      <Card className='w-[700px]'>
         <CardHeader>
           <CardTitle>Checkout</CardTitle>
           <CardDescription>This will need to be updated</CardDescription>
@@ -66,6 +94,14 @@ export default function EventCheckout({
               <p className='font-sm mt-1 text-center text-lg text-accent-foreground'>
                 {`Confirm purchase of seat ${data?.seat} for ${formatted}`}
               </p>
+              {clientSecret && (
+                <EmbeddedCheckoutProvider
+                  stripe={stripePromise}
+                  options={{ clientSecret }}
+                >
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              )}
               <div>
                 {isLoading && (
                   <p className='text-muted-foreground'>
@@ -100,16 +136,14 @@ export default function EventCheckout({
             </Button>
           ) : (
             <Button
-              onClick={() => router.push(`/user/edit/${userProfile.id}`)}
+              onClick={() => router.push(`/${userProfile.username}/edit/`)}
               disabled={isLoading}
             >
               {isLoading && (
                 <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
               )}
 
-              <p className='underline'>
-                Please Connect Wallet in Profile Section
-              </p>
+              <p>Please Connect Wallet in Profile Section</p>
               <ExternalLinkIcon />
             </Button>
           )}

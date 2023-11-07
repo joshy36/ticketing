@@ -10,6 +10,7 @@ export default async function Home({ params }: { params: { id: string } }) {
     data: { session },
   } = await supabase.auth.getSession();
 
+  // event creator must match id
   if (!session?.user) {
     redirect('/unauthorized');
   }

@@ -7,13 +7,15 @@ import { usersRouter } from './users';
 import { ticketsRouter } from './tickets';
 import { artistsRouter } from './artists';
 import { venuesRouter } from './venues';
+import { paymentsRouter } from './payments';
 
 export const appRouter = mergeRouters(
   eventsRouter,
   usersRouter,
   ticketsRouter,
   artistsRouter,
-  venuesRouter
+  venuesRouter,
+  paymentsRouter
 );
 
 export type AppRouter = typeof appRouter;

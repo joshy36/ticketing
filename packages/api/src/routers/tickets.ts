@@ -1,7 +1,7 @@
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 import { ethers } from 'ethers';
-import contractAbi from '../../../../chain/deployments/base-goerli/Event.json';
+import contractAbi from '../../../chain/deployments/base-goerli/Event.json';
 import { TRPCError } from '@trpc/server';
 
 export const ticketsRouter = router({
@@ -46,6 +46,76 @@ export const ticketsRouter = router({
         .eq('event_id', opts.input.event_id)
         .order('price', { ascending: true });
       return data;
+    }),
+
+  createTicketsForEvent: authedProcedure
+    .input(
+      z.object({
+        max_tickets: z.number(),
+        event_id: z.string(),
+        venue_id: z.string(),
+        sections_ids: z.array(z.object({ value: z.string() })),
+        section_prices: z.array(z.object({ value: z.number() })),
+      })
+    )
+    .mutation(async (opts) => {
+      const supabase = opts.ctx.supabase;
+
+      await supabase
+        .from('events')
+        .update({ max_tickets_per_user: opts.input.max_tickets })
+        .eq('id', opts.input.event_id);
+
+      const { data: sections } = await supabase
+        .from('sections')
+        .select()
+        .eq('venue_id', opts.input.venue_id);
+
+      type Tickets = {
+        event_id: string;
+        price: number;
+        seat: string;
+      };
+
+      const names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const tickets: Tickets[] = [];
+      let count = 0;
+      for (const section_id of opts.input.sections_ids) {
+        const section = sections?.find(
+          (section) => section.id === section_id.value
+        );
+        if (section?.number_of_rows === 0) {
+          for (let i = 0; i < section.seats_per_row!; i++) {
+            tickets.push({
+              event_id: opts.input.event_id,
+              price: opts.input.section_prices[count]?.value!,
+              seat: section.name!,
+            });
+          }
+        } else {
+          const { data: rows } = await supabase
+            .from('rows')
+            .select()
+            .eq('section_id', section_id.value);
+
+          for (const row of rows!) {
+            for (let seat = 0; seat < row.number_of_seats!; seat++) {
+              tickets.push({
+                event_id: opts.input.event_id,
+                price: opts.input.section_prices[count]?.value!,
+                seat: section?.name! + ' ' + String(row.name) + names[seat],
+              });
+            }
+          }
+        }
+        count++;
+      }
+
+      const { data: ticketData, error: ticketError } = await supabase
+        .from('tickets')
+        .insert(tickets);
+
+      return ticketData;
     }),
 
   sellTicket: authedProcedure
