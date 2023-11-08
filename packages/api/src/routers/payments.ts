@@ -16,7 +16,6 @@ export const paymentsRouter = router({
       const session = await stripe.checkout.sessions.create({
         line_items: [
           {
-            // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
             price: opts.input.price,
             quantity: 1,
           },
