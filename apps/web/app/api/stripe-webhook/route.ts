@@ -75,6 +75,7 @@ async function executeOrder(
     x: -1,
     field_name: 'tickets_remaining',
   });
+  console.log('DONE EXECUTING');
 
   return transferTicket;
 }
@@ -106,8 +107,12 @@ export async function POST(req: NextRequest) {
     const metadata = sessionWithLineItems.metadata;
     console.log('METADATA: ', metadata);
 
-    executeOrder(metadata?.event_id!, metadata?.ticket_id!, metadata?.user_id!);
+    await executeOrder(
+      metadata?.event_id!,
+      metadata?.ticket_id!,
+      metadata?.user_id!,
+    );
   }
-
+  console.log('DONE');
   return NextResponse.json({ status: 200 });
 }
