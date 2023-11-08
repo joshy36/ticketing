@@ -12,6 +12,7 @@ async function executeOrder(
   ticket_id: string,
   user_id: string,
 ) {
+  console.log('EXECUTE');
   const supabase = createRouteClient();
   const { data: event } = await supabase
     .from('events')
@@ -103,6 +104,7 @@ export async function POST(req: NextRequest) {
 
     const lineItems = sessionWithLineItems.line_items;
     const metadata = sessionWithLineItems.metadata;
+    console.log('METADATA: ', metadata);
 
     executeOrder(metadata?.event_id!, metadata?.ticket_id!, metadata?.user_id!);
   }
