@@ -57,7 +57,7 @@ export const columns: ColumnDef<TableTicket>[] = [
     accessorKey: 'id',
     header: 'Purchase',
     cell: ({ row }) => {
-      const [amount, setAmount] = useState(0);
+      // const [amount, setAmount] = useState(0);
       return (
         // <div className='grid grid-cols-3 '>
         //   <Button
