@@ -7,85 +7,6 @@ import contractAbi from '../../../../../packages/chain/deployments/base-goerli/E
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-async function executeOrder(
-  event_id: string,
-  ticket_id: string,
-  user_id: string,
-) {
-  console.log('EXECUTE');
-  const supabase = createRouteClient();
-  const { data: event } = await supabase
-    .from('events')
-    .select()
-    .eq('id', event_id)
-    .limit(1)
-    .single();
-  console.log('EVENT: ', event);
-
-  const { data: ticket, error: ticketError } = await supabase
-    .from('tickets')
-    .select()
-    .eq('id', ticket_id)
-    .limit(1)
-    .single();
-  console.log('Ticket: ', ticket);
-
-  const { data: userProfile } = await supabase
-    .from('user_profiles')
-    .select()
-    .eq('id', user_id)
-    .limit(1)
-    .single();
-  console.log('User: ', userProfile);
-
-  if (ticketError?.code == 'PGRST116') {
-    return NextResponse.json({ error: ticketError }, { status: 500 });
-  }
-
-  const link = event?.etherscan_link?.split('/');
-  if (!link) {
-    return NextResponse.json({ error: 'No etherscan link!' }, { status: 500 });
-  }
-  console.log('LINK: ', link);
-
-  const address = link[link.length - 1]!;
-
-  const provider = new ethers.JsonRpcProvider(process.env.ALCHEMY_GOERLI_URL!);
-
-  const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-  const eventContract = new ethers.Contract(address, contractAbi.abi, signer);
-
-  console.log('EVENT Contract: ', eventContract);
-
-  // @ts-ignore
-  let tx = await eventContract.safeTransferFrom(
-    signer.address,
-    userProfile?.wallet_address,
-    ticket?.token_id,
-  );
-  await tx.wait();
-  console.log(
-    `Token transferred! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`,
-  );
-
-  const { data: transferTicket, error: transferTicketError } = await supabase
-    .from('tickets')
-    .update({ user_id: user_id })
-    .eq('id', ticket?.id!)
-    .select()
-    .single();
-
-  await supabase.rpc('increment', {
-    table_name: 'events',
-    row_id: event_id,
-    x: -1,
-    field_name: 'tickets_remaining',
-  });
-  console.log('DONE EXECUTING');
-
-  return transferTicket;
-}
-
 export async function POST(req: NextRequest) {
   const payload = await req.text();
   const sig = req.headers.get('stripe-signature') as string;
@@ -111,14 +32,7 @@ export async function POST(req: NextRequest) {
 
     const lineItems = sessionWithLineItems.line_items;
     const metadata = sessionWithLineItems.metadata;
-    console.log('METADATA: ', metadata);
 
-    // await executeOrder(
-    //   metadata?.event_id!,
-    //   metadata?.ticket_id!,
-    //   metadata?.user_id!,
-    // );
-    console.log('EXECUTE');
     const supabase = createRouteClient();
     const { data: eventDb } = await supabase
       .from('events')
@@ -126,7 +40,6 @@ export async function POST(req: NextRequest) {
       .eq('id', metadata?.event_id!)
       .limit(1)
       .single();
-    console.log('EVENT: ', eventDb);
 
     const { data: ticket, error: ticketError } = await supabase
       .from('tickets')
@@ -134,7 +47,6 @@ export async function POST(req: NextRequest) {
       .eq('id', metadata?.ticket_id!)
       .limit(1)
       .single();
-    console.log('Ticket: ', ticket);
 
     const { data: userProfile } = await supabase
       .from('user_profiles')
@@ -142,7 +54,6 @@ export async function POST(req: NextRequest) {
       .eq('id', metadata?.user_id!)
       .limit(1)
       .single();
-    console.log('User: ', userProfile);
 
     if (ticketError?.code == 'PGRST116') {
       return NextResponse.json({ error: ticketError }, { status: 500 });
@@ -155,7 +66,6 @@ export async function POST(req: NextRequest) {
         { status: 500 },
       );
     }
-    console.log('LINK: ', link);
 
     const address = link[link.length - 1]!;
 
@@ -165,8 +75,6 @@ export async function POST(req: NextRequest) {
 
     const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
     const eventContract = new ethers.Contract(address, contractAbi.abi, signer);
-
-    console.log('EVENT Contract: ', eventContract);
 
     // @ts-ignore
     let tx = await eventContract.safeTransferFrom(
@@ -192,8 +100,7 @@ export async function POST(req: NextRequest) {
       x: -1,
       field_name: 'tickets_remaining',
     });
-    console.log('DONE EXECUTING');
   }
-  console.log('DONE');
+
   return NextResponse.json({ status: 200 });
 }

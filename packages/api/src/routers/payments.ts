@@ -23,7 +23,7 @@ export const paymentsRouter = router({
         ],
         ui_mode: 'embedded',
         mode: 'payment',
-        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/event/list`,
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/ticket`,
         metadata: {
           event_id: opts.input.event_id,
           ticket_id: opts.input.ticket_id,
