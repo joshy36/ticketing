@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { ethers } from 'ethers';
 import contractAbi from '../../../chain/deployments/base-goerli/Event.json';
 import { TRPCError } from '@trpc/server';
+import { createStripePrice } from '../services/stripe';
 
 export const ticketsRouter = router({
   // probably need to seperate into public and authed procedure for available and owned tickets
@@ -61,10 +62,14 @@ export const ticketsRouter = router({
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;
 
-      await supabase
+      let tickets_rem = 0;
+
+      const { data: event } = await supabase
         .from('events')
         .update({ max_tickets_per_user: opts.input.max_tickets })
-        .eq('id', opts.input.event_id);
+        .eq('id', opts.input.event_id)
+        .select()
+        .single();
 
       const { data: sections } = await supabase
         .from('sections')
@@ -75,6 +80,7 @@ export const ticketsRouter = router({
         event_id: string;
         price: number;
         seat: string;
+        stripe_price_id: string;
       };
 
       const names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -84,13 +90,21 @@ export const ticketsRouter = router({
         const section = sections?.find(
           (section) => section.id === section_id.value
         );
+
+        const stripePrice = await createStripePrice(
+          event?.stripe_product_id!,
+          opts.input.section_prices[count]?.value! * 100
+        );
+
         if (section?.number_of_rows === 0) {
           for (let i = 0; i < section.seats_per_row!; i++) {
             tickets.push({
               event_id: opts.input.event_id,
               price: opts.input.section_prices[count]?.value!,
               seat: section.name!,
+              stripe_price_id: stripePrice.id,
             });
+            tickets_rem++;
           }
         } else {
           const { data: rows } = await supabase
@@ -104,12 +118,19 @@ export const ticketsRouter = router({
                 event_id: opts.input.event_id,
                 price: opts.input.section_prices[count]?.value!,
                 seat: section?.name! + ' ' + String(row.name) + names[seat],
+                stripe_price_id: stripePrice.id,
               });
+              tickets_rem++;
             }
           }
         }
         count++;
       }
+
+      await supabase
+        .from('events')
+        .update({ tickets_remaining: tickets_rem })
+        .eq('id', opts.input.event_id);
 
       const { data: ticketData, error: ticketError } = await supabase
         .from('tickets')
@@ -118,94 +139,94 @@ export const ticketsRouter = router({
       return ticketData;
     }),
 
-  sellTicket: authedProcedure
-    .input(
-      z.object({
-        ticket_id: z.string(),
-        event_id: z.string(),
-        user_id: z.string(),
-      })
-    )
-    .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
-      const { data: event } = await supabase
-        .from('events')
-        .select()
-        .eq('id', opts.input.event_id)
-        .limit(1)
-        .single();
+  // sellTicket: authedProcedure
+  //   .input(
+  //     z.object({
+  //       ticket_id: z.string(),
+  //       event_id: z.string(),
+  //       user_id: z.string(),
+  //     })
+  //   )
+  //   .mutation(async (opts) => {
+  //     const supabase = opts.ctx.supabase;
+  //     const { data: event } = await supabase
+  //       .from('events')
+  //       .select()
+  //       .eq('id', opts.input.event_id)
+  //       .limit(1)
+  //       .single();
 
-      const { data: ticket, error: ticketError } = await supabase
-        .from('tickets')
-        .select()
-        .eq('id', opts.input.ticket_id)
-        .limit(1)
-        .single();
+  //     const { data: ticket, error: ticketError } = await supabase
+  //       .from('tickets')
+  //       .select()
+  //       .eq('id', opts.input.ticket_id)
+  //       .limit(1)
+  //       .single();
 
-      const { data: userProfile } = await supabase
-        .from('user_profiles')
-        .select()
-        .eq('id', opts.input.user_id)
-        .limit(1)
-        .single();
+  //     const { data: userProfile } = await supabase
+  //       .from('user_profiles')
+  //       .select()
+  //       .eq('id', opts.input.user_id)
+  //       .limit(1)
+  //       .single();
 
-      if (ticketError?.code == 'PGRST116') {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'An unexpected error occurred, please try again later.',
-          cause: ticketError,
-        });
-      }
+  //     if (ticketError?.code == 'PGRST116') {
+  //       throw new TRPCError({
+  //         code: 'INTERNAL_SERVER_ERROR',
+  //         message: 'An unexpected error occurred, please try again later.',
+  //         cause: ticketError,
+  //       });
+  //     }
 
-      const link = event?.etherscan_link?.split('/');
-      if (!link) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'No etherscan link!',
-        });
-      }
+  //     const link = event?.etherscan_link?.split('/');
+  //     if (!link) {
+  //       throw new TRPCError({
+  //         code: 'INTERNAL_SERVER_ERROR',
+  //         message: 'No etherscan link!',
+  //       });
+  //     }
 
-      const address = link[link.length - 1]!;
+  //     const address = link[link.length - 1]!;
 
-      const provider = new ethers.JsonRpcProvider(
-        process.env.ALCHEMY_GOERLI_URL!
-      );
+  //     const provider = new ethers.JsonRpcProvider(
+  //       process.env.ALCHEMY_GOERLI_URL!
+  //     );
 
-      const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-      const eventContract = new ethers.Contract(
-        address,
-        contractAbi.abi,
-        signer
-      );
+  //     const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
+  //     const eventContract = new ethers.Contract(
+  //       address,
+  //       contractAbi.abi,
+  //       signer
+  //     );
 
-      // @ts-ignore
-      let tx = await eventContract.safeTransferFrom(
-        signer.address,
-        userProfile?.wallet_address,
-        ticket?.token_id
-      );
-      await tx.wait();
-      console.log(
-        `Token transferred! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
-      );
+  //     // @ts-ignore
+  //     let tx = await eventContract.safeTransferFrom(
+  //       signer.address,
+  //       userProfile?.wallet_address,
+  //       ticket?.token_id
+  //     );
+  //     await tx.wait();
+  //     console.log(
+  //       `Token transferred! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
+  //     );
 
-      const { data: transferTicket, error: transferTicketError } =
-        await supabase
-          .from('tickets')
-          .update({ user_id: opts.input.user_id })
-          .eq('id', ticket?.id!)
-          .select()
-          .single();
+  //     const { data: transferTicket, error: transferTicketError } =
+  //       await supabase
+  //         .from('tickets')
+  //         .update({ user_id: opts.input.user_id })
+  //         .eq('id', ticket?.id!)
+  //         .select()
+  //         .single();
 
-      await supabase.rpc('increment', {
-        table_name: 'events',
-        row_id: opts.input.event_id,
-        x: -1,
-        field_name: 'tickets_remaining',
-      });
+  //     await supabase.rpc('increment', {
+  //       table_name: 'events',
+  //       row_id: opts.input.event_id,
+  //       x: -1,
+  //       field_name: 'tickets_remaining',
+  //     });
 
-      return transferTicket;
-    }),
+  //     return transferTicket;
+  //   }),
 
   generateTicketQRCode: authedProcedure
     .input(

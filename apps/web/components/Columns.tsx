@@ -1,15 +1,12 @@
 'use client';
 
-import {
-  ReactQueryOptions,
-  RouterOutputs,
-  trpc,
-} from '../../../apps/web/app/_trpc/client';
+import { RouterOutputs } from '../../../apps/web/app/_trpc/client';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, MinusCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import EventPurchaseButton from './EventPurchaseButton';
-import { useRouter } from 'next/navigation';
+import { MinusCircledIcon, PlusCircledIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -60,7 +57,30 @@ export const columns: ColumnDef<TableTicket>[] = [
     accessorKey: 'id',
     header: 'Purchase',
     cell: ({ row }) => {
-      return <EventPurchaseButton eventId={row.getValue('id')} />;
+      const [amount, setAmount] = useState(0);
+      return (
+        // <div className='grid grid-cols-3 '>
+        //   <Button
+        //     className='justify-self-center'
+        //     variant='ghost'
+        //     size='icon'
+        //     onClick={() => setAmount(amount - 1)}
+        //     disabled={amount <= 0}
+        //   >
+        //     <MinusCircledIcon className='h-8 w-8' />
+        //   </Button>
+        //   <div className='text-center align-middle font-bold'>{amount}</div>
+        <EventPurchaseButton eventId={row.getValue('id')} />
+        //    <Button
+        //     className='justify-self-center'
+        //     variant='ghost'
+        //     size='icon'
+        //     onClick={() => setAmount(amount + 1)}
+        //   >
+        //     <PlusCircledIcon className='h-8 w-8' />
+        //   </Button>
+        // </div>
+      );
     },
   },
 ];

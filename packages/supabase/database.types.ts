@@ -85,6 +85,7 @@ export interface Database {
           ipfs_image: string | null
           max_tickets_per_user: number | null
           name: string
+          stripe_product_id: string | null
           tickets_remaining: number | null
           updated_at: string
           venue: string
@@ -102,6 +103,7 @@ export interface Database {
           ipfs_image?: string | null
           max_tickets_per_user?: number | null
           name: string
+          stripe_product_id?: string | null
           tickets_remaining?: number | null
           updated_at?: string
           venue: string
@@ -119,6 +121,7 @@ export interface Database {
           ipfs_image?: string | null
           max_tickets_per_user?: number | null
           name?: string
+          stripe_product_id?: string | null
           tickets_remaining?: number | null
           updated_at?: string
           venue?: string
@@ -224,6 +227,7 @@ export interface Database {
           qr_code: string | null
           scanned: boolean
           seat: string
+          stripe_price_id: string | null
           token_id: number | null
           user_id: string | null
         }
@@ -235,6 +239,7 @@ export interface Database {
           qr_code?: string | null
           scanned?: boolean
           seat?: string
+          stripe_price_id?: string | null
           token_id?: number | null
           user_id?: string | null
         }
@@ -246,6 +251,7 @@ export interface Database {
           qr_code?: string | null
           scanned?: boolean
           seat?: string
+          stripe_price_id?: string | null
           token_id?: number | null
           user_id?: string | null
         }

@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/card';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import { UserProfile } from 'supabase';
-import stripe from 'stripe';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
@@ -36,20 +35,24 @@ export default function EventCheckout({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [clientSecret, setClientSecret] = useState('');
   const router = useRouter();
-  const sellTicket = trpc.sellTicket.useMutation({
-    onSettled(data, error) {
-      if (!data) {
-        toast({
-          description: 'Error selling ticket!',
-        });
-        console.error('Error selling ticket:', error);
-        setIsLoading(false);
-      } else {
-        router.push(`/user/${userProfile.id}`);
-        setIsLoading(false);
-      }
-    },
-  });
+
+  const { data: ticket, isLoading: ticketLoading } =
+    trpc.getTicketById.useQuery({ id: ticketId });
+
+  // const sellTicket = trpc.sellTicket.useMutation({
+  //   onSettled(data, error) {
+  //     if (!data) {
+  //       toast({
+  //         description: 'Error selling ticket!',
+  //       });
+  //       console.error('Error selling ticket:', error);
+  //       setIsLoading(false);
+  //     } else {
+  //       router.push(`/user/${userProfile.id}`);
+  //       setIsLoading(false);
+  //     }
+  //   },
+  // });
 
   const appearance = {
     theme: 'flat',
@@ -60,14 +63,20 @@ export default function EventCheckout({
 
   const createCheckoutSession = trpc.createCheckoutSession.useMutation({
     onSettled(data) {
-      console.log(data);
       setClientSecret(data?.clientSecret!);
     },
   });
 
   useEffect(() => {
-    createCheckoutSession.mutate();
-  }, []);
+    if (!ticketLoading) {
+      createCheckoutSession.mutate({
+        price: ticket?.stripe_price_id!,
+        ticket_id: ticketId,
+        event_id: data?.event_id!,
+        user_id: userProfile.id,
+      });
+    }
+  }, [ticketLoading]);
 
   const { data, isLoading: loading } = trpc.getTicketById.useQuery({
     id: ticketId,
@@ -79,7 +88,7 @@ export default function EventCheckout({
   }).format(Number(data?.price));
   return (
     <div className='flex items-center justify-center'>
-      <Card className='w-[700px]'>
+      <Card className='w-[800px]'>
         <CardHeader>
           <CardTitle>Checkout</CardTitle>
           <CardDescription>This will need to be updated</CardDescription>
@@ -90,18 +99,35 @@ export default function EventCheckout({
               Confirm purchase of seat ... for ...
             </p>
           ) : (
-            <div>
+            <div className='flex flex-col items-center justify-center'>
               <p className='font-sm mt-1 text-center text-lg text-accent-foreground'>
                 {`Confirm purchase of seat ${data?.seat} for ${formatted}`}
               </p>
-              {clientSecret && (
-                <EmbeddedCheckoutProvider
-                  stripe={stripePromise}
-                  options={{ clientSecret }}
+              {userProfile.wallet_address ? (
+                <div>
+                  {clientSecret && (
+                    <EmbeddedCheckoutProvider
+                      stripe={stripePromise}
+                      options={{ clientSecret }}
+                    >
+                      <EmbeddedCheckout />
+                    </EmbeddedCheckoutProvider>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  onClick={() => router.push(`/${userProfile.username}/edit`)}
+                  disabled={isLoading}
                 >
-                  <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
+                  {isLoading && (
+                    <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                  )}
+
+                  <p>Please Connect Wallet in Profile Section</p>
+                  <ExternalLinkIcon />
+                </Button>
               )}
+
               <div>
                 {isLoading && (
                   <p className='text-muted-foreground'>
@@ -117,36 +143,6 @@ export default function EventCheckout({
           <Button variant='outline' onClick={() => router.back()}>
             Cancel
           </Button>
-          {userProfile.wallet_address ? (
-            <Button
-              onClick={async () => {
-                setIsLoading(true);
-                sellTicket.mutate({
-                  ticket_id: ticketId,
-                  event_id: data?.event_id!,
-                  user_id: userProfile.id,
-                });
-              }}
-              disabled={isLoading}
-            >
-              {isLoading && (
-                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-              )}
-              Purchase
-            </Button>
-          ) : (
-            <Button
-              onClick={() => router.push(`/${userProfile.username}/edit/`)}
-              disabled={isLoading}
-            >
-              {isLoading && (
-                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-              )}
-
-              <p>Please Connect Wallet in Profile Section</p>
-              <ExternalLinkIcon />
-            </Button>
-          )}
         </CardFooter>
       </Card>
     </div>

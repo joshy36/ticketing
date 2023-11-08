@@ -1,5 +1,6 @@
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
+import { createStripeProduct } from '../services/stripe';
 
 export const eventsRouter = router({
   getEvents: publicProcedure.query(async (opts) => {
@@ -36,6 +37,8 @@ export const eventsRouter = router({
     .mutation(async (opts) => {
       const supabase = opts.ctx.supabase;
 
+      const stripeProduct = await createStripeProduct(opts.input.name);
+
       const { data: eventData, error: eventError } = await supabase
         .from('events')
         .insert({
@@ -45,6 +48,7 @@ export const eventsRouter = router({
           description: opts.input.description,
           date: opts.input.date.toISOString(),
           created_by: opts.ctx.user?.id!,
+          stripe_product_id: stripeProduct.id,
           image: opts.input.image ?? null,
         })
         .select()

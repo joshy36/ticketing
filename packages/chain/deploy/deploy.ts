@@ -14,7 +14,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
 
   // CHANGE
-  const id = '5558a855-3bd4-41b3-8144-3d81f815e331';
+  const id = '1a29748d-d15e-412f-a560-e7cba6cfb86d';
   // CHANGE
   const env: string = 'local';
 
@@ -77,8 +77,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     signer
   );
 
-  // @ts-ignore
-  let tx = await eventContract?.mint(numberOfTickets);
+  let tx = await eventContract.mint(numberOfTickets);
   await tx.wait();
   console.log(
     `NFTs Minted! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
