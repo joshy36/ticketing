@@ -36,8 +36,8 @@ export default async function TicketList({
             <p className='text-sm text-muted-foreground'>
               It may take recently purchased tickets a few seconds to appear as
               the payment processes and your token is transferred to your wallet
-              on chain. If you don't see it immediately, please wait 30 seconds
-              and refresh the page.
+              on chain. If you don&apos;t see it immediately, please wait 30
+              seconds and refresh the page.
             </p>
           </CardContent>
         </Card>
