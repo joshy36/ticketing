@@ -20,6 +20,7 @@ async function executeOrder(
     .eq('id', event_id)
     .limit(1)
     .single();
+  console.log('EVENT: ', event);
 
   const { data: ticket, error: ticketError } = await supabase
     .from('tickets')
@@ -27,6 +28,7 @@ async function executeOrder(
     .eq('id', ticket_id)
     .limit(1)
     .single();
+  console.log('Ticket: ', ticket);
 
   const { data: userProfile } = await supabase
     .from('user_profiles')
@@ -34,6 +36,7 @@ async function executeOrder(
     .eq('id', user_id)
     .limit(1)
     .single();
+  console.log('User: ', userProfile);
 
   if (ticketError?.code == 'PGRST116') {
     return NextResponse.json({ error: ticketError }, { status: 500 });
@@ -43,6 +46,7 @@ async function executeOrder(
   if (!link) {
     return NextResponse.json({ error: 'No etherscan link!' }, { status: 500 });
   }
+  console.log('LINK: ', link);
 
   const address = link[link.length - 1]!;
 
@@ -50,6 +54,8 @@ async function executeOrder(
 
   const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
   const eventContract = new ethers.Contract(address, contractAbi.abi, signer);
+
+  console.log('EVENT Contract: ', eventContract);
 
   // @ts-ignore
   let tx = await eventContract.safeTransferFrom(
