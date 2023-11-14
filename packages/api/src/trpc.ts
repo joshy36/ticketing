@@ -30,19 +30,23 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
   );
 
   let sessionData;
+  let user;
   if (opts.req.headers.get('x-trpc-source') === 'expo-react') {
-    console.log('>>> tRPC Request from APP');
     if (req.headers.get('mobile-session')) {
       sessionData = JSON.parse(req.headers.get('mobile-session')!);
     }
   } else {
-    console.log('>>> tRPC Request from WEB');
     const {
       data: { session },
     } = await supabase.auth.getSession();
     sessionData = session;
   }
-  const user = sessionData.user;
+
+  if (sessionData) {
+    user = sessionData.user;
+  } else {
+    user = null;
+  }
 
   return createInnerTRPCContext({
     user,

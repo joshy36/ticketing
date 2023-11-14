@@ -1,22 +1,18 @@
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
-import { ethers } from 'ethers';
-import contractAbi from '../../../chain/deployments/base-goerli/Event.json';
 import { TRPCError } from '@trpc/server';
 import { createStripePrice } from '../services/stripe';
-import { createRouteClient } from 'supabase';
 
 export const ticketsRouter = router({
   // probably need to seperate into public and authed procedure for available and owned tickets
   getTicketById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async (opts) => {
-      // const supabase = opts.ctx.supabase;
-      const supabase = createRouteClient();
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data, error } = await supabase
         .from('tickets')
         .select(`*, events (image, name, date)`)
-        .eq('id', opts.input.id);
+        .eq('id', input.id);
 
       if (error) {
         throw new TRPCError({
@@ -28,30 +24,25 @@ export const ticketsRouter = router({
       }
     }),
 
-  // needs to be authed but making public for mobile testing
-  getTicketsForUser: publicProcedure
+  getTicketsForUser: authedProcedure
     .input(z.object({ user_id: z.string() }))
-    .query(async (opts) => {
-      // const supabase = opts.ctx.supabase;
-      const supabase = createRouteClient();
-
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data } = await supabase
         .from('tickets')
         .select(`*, events (id, image, name, etherscan_link)`)
-        .eq('user_id', opts.input.user_id);
+        .eq('user_id', input.user_id);
       return data;
     }),
 
   getTicketsForEvent: publicProcedure
     .input(z.object({ event_id: z.string() }))
-    .query(async (opts) => {
-      // const supabase = opts.ctx.supabase;
-      const supabase = createRouteClient();
-
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data } = await supabase
         .from('tickets')
         .select(`*`)
-        .eq('event_id', opts.input.event_id)
+        .eq('event_id', input.event_id)
         .order('price', { ascending: true });
       return data;
     }),
@@ -66,23 +57,20 @@ export const ticketsRouter = router({
         section_prices: z.array(z.object({ value: z.number() })),
       })
     )
-    .mutation(async (opts) => {
-      // const supabase = opts.ctx.supabase;
-      const supabase = createRouteClient();
-
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       let tickets_rem = 0;
-
       const { data: event } = await supabase
         .from('events')
-        .update({ max_tickets_per_user: opts.input.max_tickets })
-        .eq('id', opts.input.event_id)
+        .update({ max_tickets_per_user: input.max_tickets })
+        .eq('id', input.event_id)
         .select()
         .single();
 
       const { data: sections } = await supabase
         .from('sections')
         .select()
-        .eq('venue_id', opts.input.venue_id);
+        .eq('venue_id', input.venue_id);
 
       type Tickets = {
         event_id: string;
@@ -94,21 +82,21 @@ export const ticketsRouter = router({
       const names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       const tickets: Tickets[] = [];
       let count = 0;
-      for (const section_id of opts.input.sections_ids) {
+      for (const section_id of input.sections_ids) {
         const section = sections?.find(
           (section) => section.id === section_id.value
         );
 
         const stripePrice = await createStripePrice(
           event?.stripe_product_id!,
-          opts.input.section_prices[count]?.value! * 100
+          input.section_prices[count]?.value! * 100
         );
 
         if (section?.number_of_rows === 0) {
           for (let i = 0; i < section.seats_per_row!; i++) {
             tickets.push({
-              event_id: opts.input.event_id,
-              price: opts.input.section_prices[count]?.value!,
+              event_id: input.event_id,
+              price: input.section_prices[count]?.value!,
               seat: section.name!,
               stripe_price_id: stripePrice.id,
             });
@@ -123,8 +111,8 @@ export const ticketsRouter = router({
           for (const row of rows!) {
             for (let seat = 0; seat < row.number_of_seats!; seat++) {
               tickets.push({
-                event_id: opts.input.event_id,
-                price: opts.input.section_prices[count]?.value!,
+                event_id: input.event_id,
+                price: input.section_prices[count]?.value!,
                 seat: section?.name! + ' ' + String(row.name) + names[seat],
                 stripe_price_id: stripePrice.id,
               });
@@ -138,13 +126,63 @@ export const ticketsRouter = router({
       await supabase
         .from('events')
         .update({ tickets_remaining: tickets_rem })
-        .eq('id', opts.input.event_id);
+        .eq('id', input.event_id);
 
       const { data: ticketData, error: ticketError } = await supabase
         .from('tickets')
         .insert(tickets);
 
       return ticketData;
+    }),
+
+  generateTicketQRCode: authedProcedure
+    .input(
+      z.object({
+        ticket_id: z.string(),
+        user_id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+      const { data: ticket, error: ticketError } = await supabase
+        .from('tickets')
+        .select()
+        .eq('id', input.ticket_id)
+        .limit(1)
+        .single();
+
+      if (ticket?.user_id != user.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Only the owner can activate a ticket',
+        });
+      }
+
+      if (ticket?.qr_code) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Ticket already activated!',
+        });
+      }
+
+      const qr = input.user_id + input.ticket_id;
+
+      const { data: ticketQRCode, error: ticketQRCodeError } = await supabase
+        .from('tickets')
+        .update({ qr_code: qr })
+        .eq('id', ticket?.id!)
+        .select()
+        .single();
+
+      if (ticketQRCodeError?.code === '23505') {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No duplicate qr codes!',
+        });
+      }
+
+      return ticketQRCode?.qr_code;
     }),
 
   // sellTicket: authedProcedure
@@ -235,57 +273,4 @@ export const ticketsRouter = router({
 
   //     return transferTicket;
   //   }),
-
-  generateTicketQRCode: authedProcedure
-    .input(
-      z.object({
-        ticket_id: z.string(),
-        user_id: z.string(),
-      })
-    )
-    .mutation(async (opts) => {
-      // const supabase = opts.ctx.supabase;
-      const supabase = createRouteClient();
-
-      const user = opts.ctx.user;
-
-      const { data: ticket, error: ticketError } = await supabase
-        .from('tickets')
-        .select()
-        .eq('id', opts.input.ticket_id)
-        .limit(1)
-        .single();
-
-      if (ticket?.user_id != user.id) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Only the owner can activate a ticket',
-        });
-      }
-
-      if (ticket?.qr_code) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Ticket already activated!',
-        });
-      }
-
-      const qr = opts.input.user_id + opts.input.ticket_id;
-
-      const { data: ticketQRCode, error: ticketQRCodeError } = await supabase
-        .from('tickets')
-        .update({ qr_code: qr })
-        .eq('id', ticket?.id!)
-        .select()
-        .single();
-
-      if (ticketQRCodeError?.code === '23505') {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'No duplicate qr codes!',
-        });
-      }
-
-      return ticketQRCode?.qr_code;
-    }),
 });
