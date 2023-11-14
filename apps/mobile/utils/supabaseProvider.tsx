@@ -1,7 +1,7 @@
 import { Session, User } from '@supabase/supabase-js';
 import { createContext, useEffect, useState } from 'react';
 
-import { supabase } from './supabaseExpo';
+import { ExpoSecureStoreAdapter, supabase } from './supabaseExpo';
 import { Alert } from 'react-native';
 
 type SupabaseContextProps = {
@@ -64,6 +64,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   useEffect(() => {
     // Listen for changes to authentication state
     const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+      ExpoSecureStoreAdapter.setItem('mobile-session', JSON.stringify(session));
       setSession(session);
       setUser(session ? session.user : null);
       setInitialized(true);

@@ -3,21 +3,20 @@ import { z } from 'zod';
 import { createStripeProduct } from '../services/stripe';
 
 export const eventsRouter = router({
-  getEvents: publicProcedure.query(async (opts) => {
-    const supabase = opts.ctx.supabase;
+  getEvents: publicProcedure.query(async ({ ctx }) => {
+    const supabase = ctx.supabase;
     const { data } = await supabase.from('events').select(`*, venues (name)`);
-
     return data;
   }),
 
   getEventById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async (opts) => {
-      const supabase = opts.ctx.supabase;
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data } = await supabase
         .from('events')
         .select()
-        .eq('id', opts.input.id)
+        .eq('id', input.id)
         .limit(1)
         .single();
       return data;
@@ -34,22 +33,21 @@ export const eventsRouter = router({
         image: z.string().nullable(),
       })
     )
-    .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
-
-      const stripeProduct = await createStripeProduct(opts.input.name);
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const stripeProduct = await createStripeProduct(input.name);
 
       const { data: eventData, error: eventError } = await supabase
         .from('events')
         .insert({
-          name: opts.input.name,
-          artist: opts.input.artist,
-          venue: opts.input.venue,
-          description: opts.input.description,
-          date: opts.input.date.toISOString(),
-          created_by: opts.ctx.user?.id!,
+          name: input.name,
+          artist: input.artist,
+          venue: input.venue,
+          description: input.description,
+          date: input.date.toISOString(),
+          created_by: ctx.user?.id!,
           stripe_product_id: stripeProduct.id,
-          image: opts.input.image ?? null,
+          image: input.image ?? null,
         })
         .select()
         .limit(1)
@@ -65,12 +63,12 @@ export const eventsRouter = router({
         image: z.string(),
       })
     )
-    .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data } = await supabase
         .from('events')
-        .update(opts.input)
-        .eq('id', opts.input.id)
+        .update(input)
+        .eq('id', input.id)
         .select()
         .single();
 

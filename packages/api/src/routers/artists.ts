@@ -2,20 +2,20 @@ import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
 export const artistsRouter = router({
-  getArtists: publicProcedure.query(async (opts) => {
-    const supabase = opts.ctx.supabase;
+  getArtists: publicProcedure.query(async ({ ctx }) => {
+    const supabase = ctx.supabase;
     const { data } = await supabase.from('artists').select();
     return data;
   }),
 
   getArtistById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(async (opts) => {
-      const supabase = opts.ctx.supabase;
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data } = await supabase
         .from('artists')
         .select()
-        .eq('id', opts.input.id)
+        .eq('id', input.id)
         .limit(1)
         .single();
       return data;
@@ -23,15 +23,14 @@ export const artistsRouter = router({
 
   createArtist: authedProcedure
     .input(z.object({ name: z.string(), description: z.string() }))
-    .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
-
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data } = await supabase
         .from('artists')
         .insert({
-          created_by: opts.ctx.user?.id,
-          name: opts.input.name,
-          description: opts.input.description,
+          created_by: ctx.user?.id,
+          name: input.name,
+          description: input.description,
         })
         .select()
         .limit(1)
@@ -45,14 +44,14 @@ export const artistsRouter = router({
       z.object({
         id: z.string(),
         image: z.string(),
-      }),
+      })
     )
-    .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
       const { data } = await supabase
         .from('artists')
-        .update(opts.input)
-        .eq('id', opts.input.id)
+        .update(input)
+        .eq('id', input.id)
         .select()
         .single();
 

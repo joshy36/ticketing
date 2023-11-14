@@ -29,7 +29,9 @@ export default async function RootLayout({
   let userProfile = null;
 
   if (session?.user) {
-    userProfile = await serverClient.getUserProfile({ id: session.user?.id });
+    userProfile = await serverClient.getUserProfile.query({
+      id: session.user?.id,
+    });
   }
 
   return (

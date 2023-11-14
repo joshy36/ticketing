@@ -1,11 +1,29 @@
-import { httpBatchLink } from '@trpc/client';
+import {
+  createTRPCProxyClient,
+  loggerLink,
+  unstable_httpBatchStreamLink,
+} from '@trpc/client';
+import { cookies } from 'next/headers';
 
-import { appRouter } from 'api';
+import { type AppRouter } from 'api';
+import { getUrl, transformer } from './shared';
 
-export const serverClient = appRouter.createCaller({
+export const serverClient = createTRPCProxyClient<AppRouter>({
+  transformer,
   links: [
-    httpBatchLink({
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/trpc`,
+    loggerLink({
+      enabled: (op) =>
+        process.env.NODE_ENV === 'development' ||
+        (op.direction === 'down' && op.result instanceof Error),
+    }),
+    unstable_httpBatchStreamLink({
+      url: getUrl(),
+      headers() {
+        return {
+          cookie: cookies().toString(),
+          'x-trpc-source': 'rsc',
+        };
+      },
     }),
   ],
 });

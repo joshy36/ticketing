@@ -3,22 +3,16 @@ import { Stack } from 'expo-router';
 const Layout = () => {
   return (
     <Stack
+      initialRouteName="index"
       screenOptions={{
         headerStyle: { backgroundColor: '#000000' },
         headerTintColor: '#FFFFFF',
-        headerTitle: 'Profile',
+        headerTitle: 'My Tickets',
         headerTitleStyle: {
           fontWeight: 'bold',
         },
       }}
     >
-      <Stack.Screen
-        name="index"
-        options={{
-          headerTitle: 'Profile',
-          headerBackTitleVisible: false,
-        }}
-      />
       <Stack.Screen
         name="[id]"
         options={{

@@ -15,15 +15,15 @@ export default async function EventView({
 }: {
   params: { id: string };
 }) {
-  const event = await serverClient.getEventById({ id: params.id });
+  const event = await serverClient.getEventById.query({ id: params.id });
 
   if (!event) {
     notFound();
   }
 
-  const artist = await serverClient.getArtistById({ id: event.artist });
+  const artist = await serverClient.getArtistById.query({ id: event.artist });
 
-  const venue = await serverClient.getVenueById({ id: event.venue });
+  const venue = await serverClient.getVenueById.query({ id: event.venue });
 
   const supabase = createServerClient();
 
@@ -31,7 +31,7 @@ export default async function EventView({
     data: { session },
   } = await supabase.auth.getSession();
 
-  // const userProfile = await serverClient.getUserProfile({ id: user?.id });
+  // const userProfile = await serverClient.getUserProfile.query({ id: user?.id });
 
   return (
     <div className='bg-background'>
@@ -59,7 +59,7 @@ export default async function EventView({
 
           <div>
             <div className='lg:border-rlg:pr-8 lg:col-span-2'>
-              <h1 className='text-8xl'>{event.name}</h1>
+              <h1 className='text-8xl font-medium'>{event.name}</h1>
             </div>
 
             {event.etherscan_link ? (

@@ -14,7 +14,7 @@ export default async function Home() {
     redirect('/unauthorized');
   }
 
-  const userProfile = await serverClient.getUserProfile({
+  const userProfile = await serverClient.getUserProfile.query({
     id: session.user.id,
   });
 

@@ -10,11 +10,11 @@ export default async function ProfileView({
 }: {
   params: { username: string };
 }) {
-  const userProfile = await serverClient.getUserProfile({
+  const userProfile = await serverClient.getUserProfile.query({
     username: params.username,
   });
 
-  const userTickets = await serverClient.getTicketsForUser({
+  const userTickets = await serverClient.getTicketsForUser.query({
     user_id: userProfile?.id!,
   });
 

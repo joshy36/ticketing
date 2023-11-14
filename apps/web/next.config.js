@@ -16,4 +16,9 @@ module.exports = {
     domains: ['gclzfhnchcgtgcmzpvna.supabase.co', 'localhost'],
   },
   transpilePackages: ['api', 'supabase'],
+  // logging: {
+  //   fetches: {
+  //     fullUrl: true,
+  //   },
+  // },
 };

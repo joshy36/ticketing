@@ -15,14 +15,6 @@ const ProfilePage = () => {
       id: user?.id!,
     });
 
-  // const { data: userTickets, isLoading: userTicketsLoading } =
-  //   trpc.getTicketsForUser.useQuery(
-  //     {
-  //       user_id: profile?.id!,
-  //     },
-  //     { enabled: !!profile }
-  //   );
-
   return (
     <View className="flex-1 bg-black px-4 pt-24">
       {profileLoading ? (
@@ -66,46 +58,6 @@ const ProfilePage = () => {
                 {profile?.bio}
               </Text>
             </View>
-            <Text className="text-2xl font-bold  text-white">
-              Upcoming Events
-            </Text>
-
-            {/* <View>
-              {userTicketsLoading ? (
-                <Text className="text-white">Loading...</Text>
-              ) : (
-                userTickets!.map((ticket) => (
-                  <View className="p-1" key={ticket.id}>
-                    <Link href={`/profile/${ticket.id}`}>
-                      <View className="flex flex-row items-center py-3 ">
-                        <View>
-                          <Image
-                            style={{ borderRadius: 16 }}
-                            className="h-20 w-20"
-                            source={{ uri: ticket.events?.image! }}
-                            placeholder={blurhash}
-                            contentFit="cover"
-                            transition={1000}
-                          />
-                        </View>
-                        <View className="flex flex-col">
-                          <View>
-                            <Text className="text-white pl-2 text-2xl text-bold">
-                              {ticket.events?.name}
-                            </Text>
-                          </View>
-                          <View>
-                            <Text className="text-muted-foreground pl-2">
-                              {`Seat: ${ticket.seat}`}
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
-                    </Link>
-                  </View>
-                ))
-              )}
-            </View> */}
           </View>
         </ScrollView>
       )}

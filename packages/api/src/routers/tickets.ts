@@ -4,13 +4,15 @@ import { ethers } from 'ethers';
 import contractAbi from '../../../chain/deployments/base-goerli/Event.json';
 import { TRPCError } from '@trpc/server';
 import { createStripePrice } from '../services/stripe';
+import { createRouteClient } from 'supabase';
 
 export const ticketsRouter = router({
   // probably need to seperate into public and authed procedure for available and owned tickets
   getTicketById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async (opts) => {
-      const supabase = opts.ctx.supabase;
+      // const supabase = opts.ctx.supabase;
+      const supabase = createRouteClient();
       const { data, error } = await supabase
         .from('tickets')
         .select(`*, events (image, name, date)`)
@@ -26,10 +28,13 @@ export const ticketsRouter = router({
       }
     }),
 
-  getTicketsForUser: authedProcedure
+  // needs to be authed but making public for mobile testing
+  getTicketsForUser: publicProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async (opts) => {
-      const supabase = opts.ctx.supabase;
+      // const supabase = opts.ctx.supabase;
+      const supabase = createRouteClient();
+
       const { data } = await supabase
         .from('tickets')
         .select(`*, events (id, image, name, etherscan_link)`)
@@ -40,7 +45,9 @@ export const ticketsRouter = router({
   getTicketsForEvent: publicProcedure
     .input(z.object({ event_id: z.string() }))
     .query(async (opts) => {
-      const supabase = opts.ctx.supabase;
+      // const supabase = opts.ctx.supabase;
+      const supabase = createRouteClient();
+
       const { data } = await supabase
         .from('tickets')
         .select(`*`)
@@ -60,7 +67,8 @@ export const ticketsRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
+      // const supabase = opts.ctx.supabase;
+      const supabase = createRouteClient();
 
       let tickets_rem = 0;
 
@@ -236,7 +244,9 @@ export const ticketsRouter = router({
       })
     )
     .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
+      // const supabase = opts.ctx.supabase;
+      const supabase = createRouteClient();
+
       const user = opts.ctx.user;
 
       const { data: ticket, error: ticketError } = await supabase
@@ -253,7 +263,7 @@ export const ticketsRouter = router({
         });
       }
 
-      if (ticket.qr_code) {
+      if (ticket?.qr_code) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Ticket already activated!',

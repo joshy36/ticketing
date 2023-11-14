@@ -10,7 +10,7 @@ export default async function Home({
 }) {
   let ticket;
   try {
-    ticket = await serverClient.getTicketById({ id: params.ticket_id });
+    ticket = await serverClient.getTicketById.query({ id: params.ticket_id });
   } catch {
     notFound();
   }
@@ -25,7 +25,7 @@ export default async function Home({
     redirect('/unauthorized');
   }
 
-  const userProfile = await serverClient.getUserProfile({
+  const userProfile = await serverClient.getUserProfile.query({
     id: session.user.id,
   });
 

@@ -3,7 +3,7 @@ import { dateToString } from '../utils/helpers';
 import Image from 'next/image';
 
 export default async function EventsList() {
-  const data = await serverClient.getEvents();
+  const data = await serverClient.getEvents.query();
 
   if (!data || data.length === 0) {
     return <div>Error: Failed to fetch events</div>;

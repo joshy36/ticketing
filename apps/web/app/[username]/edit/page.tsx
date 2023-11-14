@@ -10,7 +10,7 @@ export default async function Home({
 }) {
   const supabase = createServerClient();
 
-  const userProfile = await serverClient.getUserProfile({
+  const userProfile = await serverClient.getUserProfile.query({
     username: params.username,
   });
 

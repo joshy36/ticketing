@@ -7,7 +7,7 @@ export default async function VenueView({
 }: {
   params: { id: string };
 }) {
-  const venue = await serverClient.getVenueById({ id: params.id });
+  const venue = await serverClient.getVenueById.query({ id: params.id });
 
   if (!venue) {
     notFound();

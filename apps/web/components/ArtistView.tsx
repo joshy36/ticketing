@@ -7,7 +7,7 @@ export default async function ArtistView({
 }: {
   params: { id: string };
 }) {
-  const artist = await serverClient.getArtistById({ id: params.id });
+  const artist = await serverClient.getArtistById.query({ id: params.id });
 
   if (!artist) {
     notFound();

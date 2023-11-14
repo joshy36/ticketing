@@ -6,22 +6,21 @@ export const usersRouter = router({
     .input(
       z.object({ id: z.string().optional(), username: z.string().optional() })
     )
-    .query(async (opts) => {
-      const supabase = opts.ctx.supabase;
-
-      if (opts.input.id) {
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      if (input.id) {
         const { data } = await supabase
           .from('user_profiles')
           .select()
-          .eq('id', opts.input.id)
+          .eq('id', input.id)
           .limit(1)
           .single();
         return data;
-      } else if (opts.input.username) {
+      } else if (input.username) {
         const { data } = await supabase
           .from('user_profiles')
           .select()
-          .eq('username', opts.input.username)
+          .eq('username', input.username)
           .limit(1)
           .single();
         return data;
@@ -40,15 +39,14 @@ export const usersRouter = router({
         profile_image: z.string().nullable().optional(),
       })
     )
-    .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
-      const { data, error } = await supabase
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
         .from('user_profiles')
-        .update(opts.input)
-        .eq('id', opts.input.id)
+        .update(input)
+        .eq('id', input.id)
         .select()
         .single();
-
       return data;
     }),
 });

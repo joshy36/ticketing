@@ -16,7 +16,7 @@ export default async function TicketList({
 }: {
   userProfile: UserProfile;
 }) {
-  const userTickets = await serverClient.getTicketsForUser({
+  const userTickets = await serverClient.getTicketsForUser.query({
     user_id: userProfile?.id!,
   });
 

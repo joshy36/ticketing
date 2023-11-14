@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
 import superjson from 'superjson';
+import { ExpoSecureStoreAdapter } from './supabaseExpo';
 
 import type { AppRouter } from 'api';
 
@@ -37,7 +38,7 @@ export const getBaseUrl = () => {
       'Failed to get localhost. Please point to your production server.'
     );
   }
-  return 'https://ticketing-lemon.vercel.app';
+  // return 'https://ticketing-lemon.vercel.app';
 
   return `http://${localhost}:3000`;
 };
@@ -55,9 +56,14 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
       links: [
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
-          headers() {
+          async headers() {
             const headers = new Map<string, string>();
             headers.set('x-trpc-source', 'expo-react');
+            const sessionToken =
+              await ExpoSecureStoreAdapter.getItem('mobile-session');
+            if (sessionToken) {
+              headers.set('mobile-session', sessionToken);
+            }
             return Object.fromEntries(headers);
           },
         }),
