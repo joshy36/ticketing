@@ -22,6 +22,43 @@ export const eventsRouter = router({
       return data;
     }),
 
+  getSectionPriceByEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: event } = await supabase
+        .from('events')
+        .select()
+        .eq('id', input.event_id)
+        .limit(1)
+        .single();
+      const { data: venue } = await supabase
+        .from('venues')
+        .select()
+        .eq('id', event?.venue!)
+        .limit(1)
+        .single();
+      const { data: sections } = await supabase
+        .from('sections')
+        .select()
+        .eq('venue_id', venue?.id!);
+      let sectionPrices = [];
+      for (let i = 0; i < sections!.length; i++) {
+        const { data: ticket } = await supabase
+          .from('tickets')
+          .select()
+          .eq('section_id', sections![i].id)
+          .limit(1)
+          .single();
+        sectionPrices.push({
+          section_id: sections![i].id,
+          section_name: sections![i].name,
+          price: ticket?.price!,
+        });
+      }
+      return sectionPrices;
+    }),
+
   createEvent: authedProcedure
     .input(
       z.object({

@@ -60,13 +60,10 @@ export function TicketView({
         <Button variant='secondary' onClick={() => setFront(!front)}>
           Flip
         </Button>
-        <div className='px-2 font-bold'>
-          {front ? <h1>Front</h1> : <h1>Back</h1>}
-        </div>
       </div>
 
       {front ? (
-        <Card className='max-w-[400px]'>
+        <Card className='h-[700px] w-[350px]'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>
@@ -121,7 +118,7 @@ export function TicketView({
           </CardFooter>
         </Card>
       ) : (
-        <Card className='max-w-[400px]'>
+        <Card className='h-[700px] w-[350px]'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>

@@ -74,6 +74,7 @@ export const ticketsRouter = router({
 
       type Tickets = {
         event_id: string;
+        section_id: string;
         price: number;
         seat: string;
         stripe_price_id: string;
@@ -96,6 +97,7 @@ export const ticketsRouter = router({
           for (let i = 0; i < section.seats_per_row!; i++) {
             tickets.push({
               event_id: input.event_id,
+              section_id: section_id.value,
               price: input.section_prices[count]?.value!,
               seat: section.name!,
               stripe_price_id: stripePrice.id,
@@ -112,6 +114,7 @@ export const ticketsRouter = router({
             for (let seat = 0; seat < row.number_of_seats!; seat++) {
               tickets.push({
                 event_id: input.event_id,
+                section_id: section_id.value,
                 price: input.section_prices[count]?.value!,
                 seat: section?.name! + ' ' + String(row.name) + names[seat],
                 stripe_price_id: stripePrice.id,
@@ -183,6 +186,43 @@ export const ticketsRouter = router({
       }
 
       return ticketQRCode?.qr_code;
+    }),
+
+  scanTicket: authedProcedure
+    .input(z.object({ event_id: z.string(), qr_code: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: user } = await supabase
+        .from('scanners')
+        .select()
+        .eq('user_id', ctx.user.id)
+        .eq('event_id', input.event_id)
+        .single();
+      if (!user) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Unauthorized scanner!',
+        });
+      }
+      const { data: ticket } = await supabase
+        .from('tickets')
+        .select()
+        .eq('qr_code', input.qr_code)
+        .limit(1)
+        .single();
+      if (ticket?.scanned) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Ticket already scanned!',
+        });
+      }
+      const { data } = await supabase
+        .from('tickets')
+        .update({ scanned: true })
+        .eq('qr_code', input.qr_code)
+        .select()
+        .single();
+      return data;
     }),
 
   // sellTicket: authedProcedure

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { SupabaseContext } from '../../utils/supabaseProvider';
@@ -22,12 +22,12 @@ const ProfilePage = () => {
       ) : (
         <ScrollView>
           <View>
-            <Pressable
+            <TouchableOpacity
               className="bg-white py-3 rounded-xl flex w-24 justify-end"
               onPress={() => signOut()}
             >
               <Text className="text-black text-center font-bold">Sign Out</Text>
-            </Pressable>
+            </TouchableOpacity>
             <View className="justify-center items-center">
               <Image
                 className="h-40 w-40 rounded-full flex justify-center items-center"

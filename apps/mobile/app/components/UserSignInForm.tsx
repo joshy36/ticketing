@@ -1,4 +1,10 @@
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { SupabaseContext } from '../../utils/supabaseProvider';
 import { Link } from 'expo-router';
 import { useContext, useState } from 'react';
@@ -38,7 +44,7 @@ const UserSignInForm = () => {
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Pressable
+        <TouchableOpacity
           className="bg-white py-3 rounded-xl"
           disabled={loading}
           onPress={() => signInWithPassword(email, password)}
@@ -46,7 +52,7 @@ const UserSignInForm = () => {
           <Text className="text-black text-center font-bold">
             Sign In with Email
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <Text className="text-muted-foreground pt-4">Don't have an account?</Text>
       <Link

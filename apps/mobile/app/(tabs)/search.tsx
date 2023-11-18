@@ -1,115 +1,66 @@
-// import React, { useState } from 'react';
-// import { SearchBar } from '@rneui/themed';
-// import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, FlatList, Text } from 'react-native';
+import { trpc } from '../../utils/trpc';
 
-// const Search = () => {
-//   const [search, setSearch] = useState('');
+const Search = () => {
+  const { data: events, isLoading: eventsLoading } = trpc.getEvents.useQuery();
+  const { data: artists, isLoading: artistsLoading } =
+    trpc.getArtists.useQuery();
+  const { data: venues, isLoading: venuesLoading } = trpc.getVenues.useQuery();
 
-//   const updateSearch = (search: string) => {
-//     setSearch(search);
-//   };
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredEvents, setFilteredEvents] = useState<(typeof events)[]>([]);
+  const [filteredArtists, setFilteredArtists] = useState([]);
+  const [filteredVenues, setFilteredVenues] = useState([]);
 
-//   return (
-//     <View className="flex-1 items-center justify-center bg-black">
-//       <Text>Search Page</Text>
-//       <SearchBar
-//         className="bg-black text-green-600"
-//         placeholder="Type Here..."
-//         onChangeText={updateSearch}
-//         value={search}
-//       />
-//     </View>
-//   );
-// };
+  const handleSearch = (text: any) => {
+    setSearchQuery(text);
 
-// export default Search;
+    // Filter events
+    const filteredEvents = events?.filter((event) =>
+      event.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredEvents(filteredEvents);
 
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+    // Filter artists
+    const filteredArtists = artists?.filter((artist) =>
+      artist.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredArtists(filteredArtists);
 
-export default function App() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    // Filter venues
+    const filteredVenues = venues?.filter((venue) =>
+      venue.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredVenues(filteredVenues);
   };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>Scan a ticket.</Text>
-      {scanned ? (
-        <Text style={styles.paragraph}>Scanned</Text>
-      ) : (
-        <Text style={styles.paragraph}>Not scanned</Text>
-      )}
-      <View style={styles.cameraContainer}>
-        <BarCodeScanner
-          barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={styles.camera}
-        />
-      </View>
-      <Pressable style={styles.button} onPress={() => setScanned(false)}>
-        <Text style={styles.buttonText}>Tap to scan again</Text>
-      </Pressable>
+    <View className="p-5 pt-20 flex-1 justify-center bg-black">
+      <TextInput
+        className="h-10 border-2 rounded-full mb-2 text-white pl-4 bg-gray-900"
+        placeholder="Search..."
+        onChangeText={handleSearch}
+        value={searchQuery}
+      />
+
+      {filteredEvents?.map((event) => (
+        <Text key={event.id} className="text-white text-xl">
+          {event.name}
+        </Text>
+      ))}
+      {filteredArtists?.map((artist) => (
+        <Text key={artist.id} className="text-white text-xl">
+          {artist.name}
+        </Text>
+      ))}
+      {filteredVenues?.map((venue) => (
+        <Text key={venue.id} className="text-white text-xl">
+          {venue.name}
+        </Text>
+      ))}
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'black',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'white',
-  },
-  paragraph: {
-    fontSize: 16,
-    marginBottom: 40,
-    color: 'white',
-  },
-  cameraContainer: {
-    width: '80%',
-    aspectRatio: 1,
-    overflow: 'hidden',
-    borderRadius: 10,
-    marginBottom: 40,
-  },
-  camera: {
-    flex: 1,
-  },
-  button: {
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
+export default Search;

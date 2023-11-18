@@ -19,6 +19,20 @@ const Layout = () => {
           headerBackTitleVisible: false,
         }}
       />
+      <Stack.Screen
+        name="scan/[id]"
+        options={{
+          headerTitle: 'Scan Ticket',
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="checkout/[id]"
+        options={{
+          headerTitle: 'Purchase Ticket',
+          headerBackTitleVisible: false,
+        }}
+      />
     </Stack>
   );
 };

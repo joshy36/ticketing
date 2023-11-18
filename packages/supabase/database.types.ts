@@ -181,6 +181,43 @@ export interface Database {
           }
         ]
       }
+      scanners: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scanners_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scanners_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       sections: {
         Row: {
           created_at: string
@@ -227,6 +264,7 @@ export interface Database {
           qr_code: string | null
           scanned: boolean
           seat: string
+          section_id: string | null
           stripe_price_id: string | null
           token_id: number | null
           user_id: string | null
@@ -239,6 +277,7 @@ export interface Database {
           qr_code?: string | null
           scanned?: boolean
           seat?: string
+          section_id?: string | null
           stripe_price_id?: string | null
           token_id?: number | null
           user_id?: string | null
@@ -251,6 +290,7 @@ export interface Database {
           qr_code?: string | null
           scanned?: boolean
           seat?: string
+          section_id?: string | null
           stripe_price_id?: string | null
           token_id?: number | null
           user_id?: string | null
@@ -260,6 +300,12 @@ export interface Database {
             foreignKeyName: "tickets_event_id_fkey"
             columns: ["event_id"]
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_section_id_fkey"
+            columns: ["section_id"]
+            referencedRelation: "sections"
             referencedColumns: ["id"]
           },
           {

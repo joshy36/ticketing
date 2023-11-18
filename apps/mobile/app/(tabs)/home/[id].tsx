@@ -1,24 +1,33 @@
 import { Link, useLocalSearchParams } from 'expo-router';
-import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { trpc } from '../../../utils/trpc';
 import { dateToString } from '../../../utils/helpers';
 import Separator from '../../components/Separator';
 import { blurhash } from '../../../utils/helpers';
+import { SupabaseContext } from '../../../utils/supabaseProvider';
+import { useContext } from 'react';
+import TicketSection from '../../components/TicketSection';
+import { A } from '@expo/html-elements';
+
+export type Section = {
+  created_at: string;
+  id: string;
+  name: string | null;
+  number_of_rows: number | null;
+  seats_per_row: number | null;
+  updated_at: string | null;
+  venue_id: string | null;
+};
 
 const Home = () => {
+  const supabaseContext = useContext(SupabaseContext);
+  const { user } = supabaseContext;
   const { id } = useLocalSearchParams();
+
   const { data: event, isLoading: eventLoading } = trpc.getEventById.useQuery({
-    // @ts-ignore
-    id: id!,
+    id: id! as string,
   });
-
-  const data = [
-    { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3' },
-    { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3' },
-
-    // Add more data objects as needed
-  ];
 
   const { data: artist, isLoading: artistLoading } =
     trpc.getArtistById.useQuery({ id: event?.artist! }, { enabled: !!event });
@@ -30,13 +39,26 @@ const Home = () => {
     { enabled: !!event }
   );
 
-  if (!event) {
-    return (
-      <View>
-        <Text className="text-white">Loading...</Text>
-      </View>
+  const { data: isScanner, isLoading: isScannerLoading } =
+    trpc.isScannerForEvent.useQuery(
+      {
+        user_id: user?.id!,
+        event_id: event?.id!,
+      },
+      { enabled: !!event && !!user }
     );
-  }
+
+  const { data: sections, isLoading: sectionsLoading } =
+    trpc.getSectionsForVenue.useQuery(
+      { id: event?.venue! },
+      { enabled: !!event }
+    );
+
+  const { data: sectionPrices, isLoading: sectionPricesLoading } =
+    trpc.getSectionPriceByEvent.useQuery(
+      { event_id: event?.id! },
+      { enabled: !!event }
+    );
 
   return (
     <View className="flex-1 justify-center bg-black">
@@ -46,6 +68,17 @@ const Home = () => {
             <Text className="text-white text-2xl">Loading...</Text>
           ) : (
             <View className="p-4">
+              {isScanner ? (
+                <Link href={`/home/scan/${event?.id}`} asChild>
+                  <TouchableOpacity className="bg-white py-3 rounded-xl flex">
+                    <Text className="text-black text-center font-bold">
+                      Scan Tickets
+                    </Text>
+                  </TouchableOpacity>
+                </Link>
+              ) : (
+                <View></View>
+              )}
               <Image
                 style={{ borderRadius: 16 }}
                 className="h-64 w-64 self-center items-center"
@@ -82,7 +115,7 @@ const Home = () => {
                 </Link> */}
               </View>
               <Separator />
-              <Text className="text-white text-2xl divide-gray-400 divide-solid divide-y">
+              <Text className="text-white text-2xl Viewide-gray-400 Viewide-solid Viewide-y">
                 Venue
               </Text>
               <Text className="text-muted-foreground text-xl">
@@ -91,27 +124,38 @@ const Home = () => {
               <Separator />
               <Text className="text-white text-2xl">Description</Text>
               <Text className="text-muted-foreground text-xl pb-4">
-                {event.description}
+                {event?.description}
               </Text>
-              <View style={styles.table}>
-                <View style={styles.row}>
-                  <Text style={styles.cell}>Seat</Text>
-                  <Text style={styles.cell}>Price</Text>
-                  <Text style={styles.cell}>Purchase</Text>
+              <Separator />
+              {event?.etherscan_link ? (
+                <View>
+                  <A href={`${event.etherscan_link}`}>
+                    <View className="flex flex-row items-center space-x-1.5">
+                      <View className="relative flex h-3 w-3">
+                        <View className="relative inline-flex h-3 w-3 rounded-full bg-green-600 "></View>
+                      </View>
+                      <Text className="text-muted-foreground">
+                        Contract live
+                      </Text>
+                    </View>
+                  </A>
+                  <TicketSection
+                    event={event!}
+                    sections={sections!}
+                    user={user}
+                    sectionPrices={sectionPrices}
+                  />
                 </View>
-                {data.map((rowData, index) => (
-                  <View key={index} style={styles.row}>
-                    <Text style={styles.cell}>{rowData.column1}</Text>
-                    <Text style={styles.cell}>{rowData.column2}</Text>
-                    <Pressable
-                      style={styles.button}
-                      onPress={() => alert('Purchase!')}
-                    >
-                      <Text style={styles.buttonText}>{rowData.column3}</Text>
-                    </Pressable>
+              ) : (
+                <View className="flex flex-row items-center space-x-1.5">
+                  <View className="relative flex h-3 w-3">
+                    <View className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500 "></View>
                   </View>
-                ))}
-              </View>
+                  <Text className="text-muted-foreground">
+                    Contract pending deployment
+                  </Text>
+                </View>
+              )}
             </View>
           )}
         </View>
@@ -119,34 +163,5 @@ const Home = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  table: {
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: '#000',
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  cell: {
-    color: 'white',
-    flex: 1,
-    borderWidth: 1,
-    borderColor: 'white',
-    padding: 8,
-  },
-  button: {
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export default Home;

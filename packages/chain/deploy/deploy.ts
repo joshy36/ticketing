@@ -14,9 +14,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
 
   // CHANGE
-  const id = 'd5b7eea3-7c65-46a6-8f16-fb446bf1c35d';
+  const id = '340b883c-6474-4567-8866-f79fac1f243e';
   // CHANGE
-  const env: string = 'prod';
+  const env: string = 'local';
 
   let SUPABASE_URL: string;
   let SUPABASE_ANON_KEY: string;

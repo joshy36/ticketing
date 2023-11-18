@@ -49,4 +49,21 @@ export const usersRouter = router({
         .single();
       return data;
     }),
+
+  isScannerForEvent: publicProcedure
+    .input(z.object({ user_id: z.string(), event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('scanners')
+        .select()
+        .eq('user_id', input.user_id)
+        .eq('event_id', input.event_id)
+        .single();
+
+      if (!data) {
+        return false;
+      }
+      return true;
+    }),
 });
