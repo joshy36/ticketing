@@ -1,3 +1,4 @@
+import { stripe } from './../../../../apps/web/app/api/stripe-webhook/route';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 import { createStripeProduct } from '../services/stripe';
@@ -46,18 +47,21 @@ export const eventsRouter = router({
         section_id: string;
         section_name: string | null;
         price: number;
+        stripe_price_id: string;
       }[] = [];
       for (let i = 0; i < sections!.length; i++) {
         const { data: ticket } = await supabase
           .from('tickets')
           .select()
           .eq('section_id', sections![i]?.id!)
+          .eq('event_id', input.event_id)
           .limit(1)
           .single();
         sectionPrices.push({
           section_id: sections![i]?.id!,
           section_name: sections![i]?.name!,
           price: ticket?.price!,
+          stripe_price_id: ticket?.stripe_price_id!,
         });
       }
       return sectionPrices;

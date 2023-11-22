@@ -3,23 +3,30 @@
 import Link from 'next/link';
 
 import { Button } from './ui/button';
-import { User } from '@supabase/auth-helpers-nextjs';
+
 import { trpc } from '../../../apps/web/app/_trpc/client';
 import { DataTable } from './DataTable';
 import { columns } from './Columns';
-import { Events } from 'supabase';
+import { Events, UserProfile } from 'supabase';
+import TicketSection from './TicketSection';
 
 export default function EventPurchase({
-  user,
+  userProfile,
   event,
 }: {
-  user: User | undefined;
+  userProfile: UserProfile | null | undefined;
   event: Events | null;
 }) {
   const { data: eventTickets, isLoading: loading } =
     trpc.getTicketsForEvent.useQuery({
       event_id: event?.id!,
     });
+
+  const { data: sections, isLoading: sectionsLoading } =
+    trpc.getSectionsForVenue.useQuery({ id: event?.venue! });
+
+  const { data: sectionPrices, isLoading: sectionPricesLoading } =
+    trpc.getSectionPriceByEvent.useQuery({ event_id: event?.id! });
 
   const notPurchasedEventTickets = eventTickets?.filter(
     (x) => x.user_id === null,
@@ -34,24 +41,18 @@ export default function EventPurchase({
       return <div>Loading...</div>;
     } else {
       return (
-        <div className='py-6'>
-          <DataTable columns={columns} data={notPurchasedEventTickets!} />
+        <div>
+          <TicketSection
+            event={event}
+            sections={sections!}
+            userProfile={userProfile}
+            sectionPrices={sectionPrices}
+          />
+          {/* <DataTable columns={columns} data={notPurchasedEventTickets!} /> */}
         </div>
       );
     }
   };
 
-  const renderContent = () => {
-    if (user) {
-      return renderEventDetails();
-    } else {
-      return (
-        <Link href='/sign-in'>
-          <Button>Sign in to Purchase</Button>
-        </Link>
-      );
-    }
-  };
-
-  return <div className='py-10'>{renderContent()}</div>;
+  return <div className=''>{renderEventDetails()}</div>;
 }

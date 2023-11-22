@@ -9,6 +9,7 @@ import { Separator } from './ui/separator';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Card, CardContent, CardHeader } from './ui/card';
 
 export default async function EventView({
   params,
@@ -22,81 +23,44 @@ export default async function EventView({
   }
 
   const artist = await serverClient.getArtistById.query({ id: event.artist });
-
   const venue = await serverClient.getVenueById.query({ id: event.venue });
-
   const supabase = createServerClient();
-
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // const userProfile = await serverClient.getUserProfile.query({ id: user?.id });
+  let userProfile = null;
+
+  if (session?.user) {
+    userProfile = await serverClient.getUserProfile.query({
+      id: session.user?.id,
+    });
+  }
 
   return (
     <div className='bg-background'>
       <div className='px-4 pt-9 md:px-16'>
-        <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
-          <div className=''>
-            {event.image ? (
-              <Image
-                src={event.image!}
-                alt={event.description}
-                width={500}
-                height={500}
-                className='rounded-lg'
-              />
-            ) : (
-              <Image
-                src='/fallback.jpeg'
-                alt='image'
-                width={500}
-                height={500}
-                className='rounded-lg'
-              />
-            )}
-          </div>
-
+        <div className='lg:border-rlg:pr-8 text-center lg:col-span-2'>
+          <h1 className='text-8xl font-medium'>{event.name}</h1>
+        </div>
+        <div className='space-y-6 text-center'>
+          <p className='py-3 text-xl text-muted-foreground'>
+            {dateToString(event.date)}
+          </p>
+        </div>
+        <div className='grid grid-cols-1 gap-8 pt-6 md:grid-cols-2'>
           <div>
-            <div className='lg:border-rlg:pr-8 lg:col-span-2'>
-              <h1 className='text-8xl font-medium'>{event.name}</h1>
-            </div>
-
-            {event.etherscan_link ? (
-              <a href={`${event.etherscan_link}`} target='_blank'>
-                <Button variant='link'>
-                  <div className='flex items-center space-x-1.5'>
-                    <span className='relative flex h-3 w-3'>
-                      {/* Uncomment to animate */}
-                      {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
-                      <div className='relative inline-flex h-3 w-3 rounded-full bg-green-600 '></div>
-                    </span>
-                    <div className='text-muted-foreground'>Contract live</div>
-                    <ExternalLinkIcon className='text-muted-foreground' />
-                  </div>
-                </Button>
-              </a>
-            ) : (
-              <div className='flex items-center space-x-1.5'>
-                <span className='relative flex h-3 w-3'>
-                  {/* Uncomment to animate */}
-                  {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
-                  <div className='relative inline-flex h-3 w-3 rounded-full bg-yellow-500 '></div>
-                </span>
-                <div className='text-muted-foreground'>
-                  Contract pending deployment
-                </div>
-              </div>
-            )}
-
-            <Separator className='my-6' />
-            <p className='text-2xl'>Date</p>
-            <div className='space-y-6'>
-              <p className='pt-3 text-base text-muted-foreground'>
-                {dateToString(event.date)}
-              </p>
-            </div>
-            <Separator className='my-6' />
+            {/* bg-stone-950 */}
+            <Card className='w-full  p-2'>
+              <CardHeader className='text-2xl font-bold'>
+                Buy Tickets
+              </CardHeader>
+              <CardContent>
+                <EventPurchase userProfile={userProfile} event={event} />
+              </CardContent>
+            </Card>
+          </div>
+          <div>
             <div>
               <p className='text-2xl'>Artist</p>
               <div className='flex items-center pt-3'>
@@ -130,12 +94,49 @@ export default async function EventView({
               </p>
             </div>
             <Separator className='my-6' />
-
-            <div className='lg:border-rlg:pb-16 lg:col-span-2 lg:col-start-1'>
-              <div>
-                <EventPurchase user={session?.user} event={event} />
+            {event.image ? (
+              <Image
+                src={event.image!}
+                alt={event.description}
+                width={500}
+                height={500}
+                className='rounded-lg'
+              />
+            ) : (
+              <Image
+                src='/fallback.jpeg'
+                alt='image'
+                width={500}
+                height={500}
+                className='rounded-lg'
+              />
+            )}
+            {event.etherscan_link ? (
+              <a href={`${event.etherscan_link}`} target='_blank'>
+                <Button variant='link'>
+                  <div className='flex items-center space-x-1.5'>
+                    <span className='relative flex h-3 w-3'>
+                      {/* Uncomment to animate */}
+                      {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
+                      <div className='relative inline-flex h-3 w-3 rounded-full bg-green-600 '></div>
+                    </span>
+                    <div className='text-muted-foreground'>Contract live</div>
+                    <ExternalLinkIcon className='text-muted-foreground' />
+                  </div>
+                </Button>
+              </a>
+            ) : (
+              <div className='flex items-center space-x-1.5'>
+                <span className='relative flex h-3 w-3'>
+                  {/* Uncomment to animate */}
+                  {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
+                  <div className='relative inline-flex h-3 w-3 rounded-full bg-yellow-500 '></div>
+                </span>
+                <div className='text-muted-foreground'>
+                  Contract pending deployment
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

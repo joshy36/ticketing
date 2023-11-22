@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
   ) {
     let metadata;
     if (event.type === 'checkout.session.completed') {
+      console.log('🔔  CHECKOUT');
+
       // Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
       const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
         event.data.object.id,
@@ -46,10 +48,13 @@ export async function POST(req: NextRequest) {
     } else {
       metadata = event.data.object.metadata;
     }
+    // console.log('🔔  Metadata received! ', metadata.cart_info);
     const cartInfo: {
       section: { id: string; name: string };
       quantity: number;
-    }[] = JSON.parse(event.data.object.metadata?.cart_info!);
+      // @ts-ignore
+    }[] = JSON.parse(metadata.cart_info);
+    console.log('🔔 cartInfo: ', cartInfo);
     const supabase = createRouteClient();
     for (let i = 0; i < cartInfo.length; i++) {
       console.log('i: ', i);

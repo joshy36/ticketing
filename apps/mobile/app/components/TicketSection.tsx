@@ -21,6 +21,7 @@ const TicketSection = ({
         section_id: string;
         section_name: string | null;
         price: number;
+        stripe_price_id: string;
       }[]
     | undefined;
 }) => {
