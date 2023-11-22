@@ -42,17 +42,21 @@ export const eventsRouter = router({
         .from('sections')
         .select()
         .eq('venue_id', venue?.id!);
-      let sectionPrices = [];
+      let sectionPrices: {
+        section_id: string;
+        section_name: string | null;
+        price: number;
+      }[] = [];
       for (let i = 0; i < sections!.length; i++) {
         const { data: ticket } = await supabase
           .from('tickets')
           .select()
-          .eq('section_id', sections![i].id)
+          .eq('section_id', sections![i]?.id!)
           .limit(1)
           .single();
         sectionPrices.push({
-          section_id: sections![i].id,
-          section_name: sections![i].name,
+          section_id: sections![i]?.id!,
+          section_name: sections![i]?.name!,
           price: ticket?.price!,
         });
       }
