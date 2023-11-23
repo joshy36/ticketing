@@ -17,6 +17,9 @@ import {
   CardTitle,
 } from './ui/card';
 import { dateToString } from '@/utils/helpers';
+import { Separator } from './ui/separator';
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export function TicketView({
   ticket,
@@ -29,6 +32,16 @@ export function TicketView({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [qr, setQR] = useState<string>('');
   const [front, setFront] = useState<boolean>(true);
+
+  const { data: event } = trpc.getEventById.useQuery({ id: ticket?.event_id! });
+  const { data: artist } = trpc.getArtistById.useQuery(
+    { id: event?.artist! },
+    { enabled: !!event },
+  );
+  const { data: venue } = trpc.getVenueById.useQuery(
+    { id: event?.venue! },
+    { enabled: !!event },
+  );
   const activateTicket = trpc.generateTicketQRCode.useMutation({
     onSettled(data, error) {
       if (error) {
@@ -63,7 +76,7 @@ export function TicketView({
       </div>
 
       {front ? (
-        <Card className='h-[700px] w-[350px]'>
+        <Card className='w-[350px] bg-zinc-950'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>
@@ -118,17 +131,40 @@ export function TicketView({
           </CardFooter>
         </Card>
       ) : (
-        <Card className='h-[700px] w-[350px]'>
+        <Card className='w-[350px] bg-zinc-950'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className='bg-background p-2 '>
-              <h1>Artist Info</h1>
-              <h1>Venue Info</h1>
+            <div className='bg-zinc-950 p-2 '>
+              <div>
+                <p className='pb-4 text-2xl'>Artist</p>
+                <Link className='ml-auto' href={`/artist/${artist?.id}`}>
+                  <div className='flex flex-row items-center justify-start'>
+                    <Avatar className='h-14 w-14'>
+                      {artist?.image ? (
+                        <AvatarImage src={artist?.image} alt='pfp' />
+                      ) : (
+                        <AvatarFallback></AvatarFallback>
+                      )}
+                    </Avatar>
+                    <p className='pl-4 text-muted-foreground'>{artist?.name}</p>
+                  </div>
+                </Link>
+              </div>
+              <Separator className='my-6' />
+              <p className='pb-4 text-2xl'>Venue</p>
+              <Link className='ml-auto' href={`/venue/${venue?.id}`}>
+                <p className='text-muted-foreground'>{venue?.name}</p>
+              </Link>
             </div>
           </CardContent>
+          <CardFooter className='flex justify-between'>
+            <p className='text-muted-foreground'>
+              {dateToString(ticket?.events?.date!)}
+            </p>
+          </CardFooter>
         </Card>
       )}
     </div>

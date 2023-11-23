@@ -52,7 +52,7 @@ export default async function EventView({
           <div>
             {/* bg-stone-950 */}
             <Card className='w-full  p-2'>
-              <CardHeader className='text-2xl font-bold'>
+              <CardHeader className='text-3xl font-bold'>
                 Buy Tickets
               </CardHeader>
               <CardContent>

@@ -42,7 +42,6 @@ export default async function RootLayout({
             <NavBar user={session?.user} userProfile={userProfile!} />
             <MobileNav user={session?.user} userProfile={userProfile!} />
             <div className='min-h-screen'> {children}</div>
-
             <Toaster />
             <Analytics />
             <Footer />
