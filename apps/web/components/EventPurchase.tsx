@@ -9,6 +9,8 @@ import { DataTable } from './DataTable';
 import { columns } from './Columns';
 import { Events, UserProfile } from 'supabase';
 import TicketSection from './TicketSection';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from './ui/separator';
 
 export default function EventPurchase({
   userProfile,
@@ -38,7 +40,18 @@ export default function EventPurchase({
     } else if (!event?.etherscan_link) {
       // Don't want to render tickets yet
     } else if (loading) {
-      return <div>Loading...</div>;
+      return (
+        <div className='flex flex-col space-y-4 pt-2'>
+          <Skeleton className='h-12 w-full' />
+          <Skeleton className='h-12 w-full' />
+          <Skeleton className='h-12 w-full' />
+          <Separator />
+          <div className='text-xl text-white'>Total: ...</div>
+          <Button variant='default' className='flex w-full' disabled={true}>
+            Add tickets to cart
+          </Button>
+        </div>
+      );
     } else {
       return (
         <div>

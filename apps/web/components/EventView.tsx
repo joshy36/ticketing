@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Card, CardContent, CardHeader } from './ui/card';
+import { Suspense } from 'react';
 
 export default async function EventView({
   params,
