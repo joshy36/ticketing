@@ -131,7 +131,7 @@ export default async function TicketList({
                 ))}
               </>
             ) : (
-              <div>No past events!</div>
+              <div></div>
             )}
           </div>
         </TabsContent>

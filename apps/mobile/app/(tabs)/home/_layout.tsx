@@ -35,6 +35,24 @@ const Layout = () => {
           headerBackTitleVisible: false,
         }}
       />
+      <Stack.Screen
+        name="artist/[id]"
+        options={{
+          headerTitle: '',
+          headerBackTitleVisible: false,
+          headerTransparent: true,
+          headerStyle: { backgroundColor: 'transparent' },
+        }}
+      />
+      <Stack.Screen
+        name="venue/[id]"
+        options={{
+          headerTitle: '',
+          headerBackTitleVisible: false,
+          headerTransparent: true,
+          headerStyle: { backgroundColor: 'transparent' },
+        }}
+      />
     </Stack>
   );
 };

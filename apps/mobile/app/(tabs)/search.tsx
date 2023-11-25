@@ -97,7 +97,7 @@ const Search = () => {
         )}
         {filteredArtists?.map((artist) => (
           <Text key={artist.id} className="text-white text-xl">
-            <Link href={`/home/${artist.id}`}>
+            <Link href={`/home/artist/${artist.id}`}>
               <View className="flex flex-row items-center py-3 ">
                 <View>
                   <Image
@@ -126,7 +126,7 @@ const Search = () => {
         )}
         {filteredVenues?.map((venue) => (
           <Text key={venue.id} className="text-white text-xl">
-            <Link href={`/home/${venue.id}`}>
+            <Link href={`/home/venue/${venue.id}`}>
               <View className="flex flex-row items-center py-3 ">
                 <View>
                   <Image

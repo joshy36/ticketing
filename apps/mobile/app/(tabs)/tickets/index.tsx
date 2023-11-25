@@ -1,16 +1,8 @@
-import {
-  View,
-  ScrollView,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { View, ScrollView, RefreshControl, Text } from 'react-native';
 import { trpc } from '../../../utils/trpc';
 import { useCallback, useContext, useState } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import TicketsPage from '../../components/TicketsPage';
-import UserSignInForm from '../../components/UserSignInForm';
-import { Link } from 'expo-router';
 
 const Tickets = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -49,16 +41,6 @@ const Tickets = () => {
           <Text className="text-white font-bold text-3xl pb-6">
             Sign In to View tickets
           </Text>
-
-          {/* <View className="py-2 w-full">
-            <Link href="/profile">
-              <TouchableOpacity className="bg-white py-3 rounded-xl">
-                <Text className="text-black text-center font-bold">
-                  Sign In Page
-                </Text>
-              </TouchableOpacity>
-            </Link>
-          </View> */}
         </View>
       )}
     </View>

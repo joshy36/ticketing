@@ -110,25 +110,29 @@ const Home = () => {
                   )}
                 </View>
 
-                <Text className="text-white text-xl pt-6">Artist</Text>
-                <View className="flex flex-row items-center py-3 ">
-                  <Image
-                    style={{ borderRadius: 24 }}
-                    className="h-12 w-12"
-                    source={{ uri: artist?.image! }}
-                    placeholder={blurhash}
-                    contentFit="cover"
-                    transition={1000}
-                  />
-                  <Text className="text-muted-foreground pl-2 text-xl">
-                    {artist?.name}
-                  </Text>
-                </View>
+                <Text className="text-white text-xl py-6">Artist</Text>
+                <Link className="py-2" href={`/home/artist/${artist?.id}`}>
+                  <View className="flex flex-row items-center">
+                    <Image
+                      style={{ borderRadius: 24 }}
+                      className="h-12 w-12"
+                      source={{ uri: artist?.image! }}
+                      placeholder={blurhash}
+                      contentFit="cover"
+                      transition={1000}
+                    />
+                    <Text className="text-muted-foreground pl-2 text-xl">
+                      {artist?.name}
+                    </Text>
+                  </View>
+                </Link>
                 <Separator />
                 <Text className="text-white text-xl pt-4">Venue</Text>
-                <Text className="text-muted-foreground text-xl pb-4">
-                  {venue?.name}
-                </Text>
+                <Link className="py-4" href={`/home/venue/${venue?.id}`}>
+                  <Text className="text-muted-foreground text-xl">
+                    {venue?.name}
+                  </Text>
+                </Link>
                 <Separator />
                 <Text className="text-white text-xl pt-4">Description</Text>
                 <Text className="text-muted-foreground text-xl pb-4">
