@@ -2,7 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { trpc } from '../../../utils/trpc';
-import { blurhash } from '../../../utils/helpers';
+import { blurhash, dateToString } from '../../../utils/helpers';
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 
@@ -24,7 +24,7 @@ const Home = () => {
   return (
     <View className="flex-1 bg-black p-4 items-center">
       <ScrollView>
-        <View className="bg-black p-4 border border-gray-500">
+        <View className="bg-zinc-950 p-4 border rounded-xl border-zinc-800">
           {ticketLoading ? (
             <Text className="text-white">Loading...</Text>
           ) : (
@@ -76,6 +76,9 @@ const Home = () => {
                   </TouchableOpacity>
                 </View>
               )}
+              <Text className="text-muted-foreground  pt-4">
+                {dateToString(ticket.events?.date!)}
+              </Text>
             </View>
           )}
         </View>

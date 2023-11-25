@@ -45,7 +45,8 @@
     "supabase": "*",
     "superjson": "1.13.1",
     "tailwindcss": "3.3.2",
-    "uuid": "3.4.0"
+    "uuid": "3.4.0",
+    "expo-linear-gradient": "~12.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

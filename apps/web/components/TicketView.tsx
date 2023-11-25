@@ -76,7 +76,7 @@ export function TicketView({
       </div>
 
       {front ? (
-        <Card className='w-[350px] bg-zinc-950'>
+        <Card className='w-[350px] border bg-zinc-950'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>
@@ -131,7 +131,7 @@ export function TicketView({
           </CardFooter>
         </Card>
       ) : (
-        <Card className='w-[350px] bg-zinc-950'>
+        <Card className='w-[350px] border bg-zinc-950'>
           <CardHeader>
             <CardTitle>{ticket?.events?.name}</CardTitle>
             <CardDescription> {`Seat: ${ticket!.seat}`}</CardDescription>

@@ -16,18 +16,20 @@ const ProfilePage = () => {
     });
 
   return (
-    <View className="flex-1 bg-black px-4 pt-24">
+    <View className="flex-1 bg-black px-4 pt-12">
       {profileLoading ? (
         <Text className="text-white">Loading...</Text>
       ) : (
-        <ScrollView>
-          <View>
+        <View>
+          <View className="flex flex-row justify-end pr-2">
             <TouchableOpacity
-              className="bg-white py-3 rounded-xl flex w-24 justify-end"
+              className="bg-white py-3 rounded-xl w-24 "
               onPress={() => signOut()}
             >
               <Text className="text-black text-center font-bold">Sign Out</Text>
             </TouchableOpacity>
+          </View>
+          <ScrollView>
             <View className="justify-center items-center">
               <Image
                 className="h-40 w-40 rounded-full flex justify-center items-center"
@@ -58,8 +60,8 @@ const ProfilePage = () => {
                 {profile?.bio}
               </Text>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       )}
     </View>
   );

@@ -46,7 +46,7 @@ export default function TicketSection({
     };
   }>({});
 
-  const getTotalTicketCount = () => {
+  const getTotalTicketCount = (): number => {
     return Object.values(ticketQuantities).reduce(
       (total, count) => total + count.quantity,
       0,
@@ -185,7 +185,7 @@ export default function TicketSection({
               }}
             >
               {getTotalTicketCount() === 0 ? (
-                'Add tickets to cart'
+                'Add tickets above'
               ) : (
                 <div className='flex flex-row items-center'>
                   <div>Proceed to Checkout</div>

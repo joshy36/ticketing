@@ -122,7 +122,7 @@ const TicketSection = ({
         <View></View>
       )}
       <Separator />
-      <View className="pb-4">
+      <View className="py-4">
         <Text className="text-white text-xl">Total: ${getTotalPrice()}</Text>
       </View>
       {user ? (
@@ -136,16 +136,25 @@ const TicketSection = ({
           }}
           asChild
         >
-          <TouchableOpacity
-            className="bg-white py-3 rounded-xl flex"
-            disabled={getTotalTicketCount() == 0}
-          >
-            <Text className="text-black text-center font-bold">
-              {getTotalTicketCount() === 0
-                ? 'Add tickets to cart'
-                : 'Proceed to Checkout'}
-            </Text>
-          </TouchableOpacity>
+          {getTotalTicketCount() === 0 ? (
+            <TouchableOpacity
+              className="bg-white opacity-50 py-3 rounded-xl flex"
+              disabled={getTotalTicketCount() == 0}
+            >
+              <Text className="text-black text-center font-bold">
+                Add tickets above
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              className="bg-white py-3 rounded-xl flex"
+              disabled={getTotalTicketCount() == 0}
+            >
+              <Text className="text-black text-center font-bold">
+                Proceed to Checkout
+              </Text>
+            </TouchableOpacity>
+          )}
         </Link>
       ) : (
         <Link href={`/profile`} asChild>

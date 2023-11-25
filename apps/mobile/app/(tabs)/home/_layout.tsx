@@ -15,8 +15,10 @@ const Layout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          headerTitle: 'Event',
+          headerTitle: '',
           headerBackTitleVisible: false,
+          headerTransparent: true,
+          headerStyle: { backgroundColor: 'transparent' },
         }}
       />
       <Stack.Screen

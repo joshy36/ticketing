@@ -48,7 +48,7 @@ export default function EventPurchase({
           <Separator />
           <div className='text-xl text-white'>Total: ...</div>
           <Button variant='default' className='flex w-full' disabled={true}>
-            Add tickets to cart
+            Add tickets above
           </Button>
         </div>
       );

@@ -23,7 +23,7 @@ const UserSignInForm = () => {
       <Text className="text-muted-foreground pt-2">
         Enter your email below to sign in.
       </Text>
-      <View style={styles.verticallySpaced}>
+      <View className="py-2 w-full">
         <Text className="text-white">Email</Text>
         <TextInput
           style={styles.input}
@@ -33,7 +33,7 @@ const UserSignInForm = () => {
           autoCapitalize={'none'}
         />
       </View>
-      <View style={styles.verticallySpaced}>
+      <View className="py-2 w-full">
         <Text className="text-white">Password</Text>
         <TextInput
           style={styles.input}
@@ -43,7 +43,7 @@ const UserSignInForm = () => {
           autoCapitalize={'none'}
         />
       </View>
-      <View style={styles.verticallySpaced}>
+      <View className="py-2 w-full">
         <TouchableOpacity
           className="bg-white py-3 rounded-xl"
           disabled={loading}
@@ -66,11 +66,6 @@ const UserSignInForm = () => {
 };
 
 const styles = StyleSheet.create({
-  verticallySpaced: {
-    paddingTop: 6,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
   input: {
     color: 'white', // Text color
     borderBottomColor: 'white', // Bottom border color

@@ -1,5 +1,11 @@
 import { Link, useLocalSearchParams } from 'expo-router';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { trpc } from '../../../utils/trpc';
 import { dateToString } from '../../../utils/helpers';
@@ -9,6 +15,7 @@ import { SupabaseContext } from '../../../utils/supabaseProvider';
 import { useContext } from 'react';
 import TicketSection from '../../components/TicketSection';
 import { A } from '@expo/html-elements';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export type Section = {
   created_at: string;
@@ -67,95 +74,101 @@ const Home = () => {
           {eventLoading ? (
             <Text className="text-white text-2xl">Loading...</Text>
           ) : (
-            <View className="p-4">
-              {isScanner ? (
-                <Link href={`/home/scan/${event?.id}`} asChild>
-                  <TouchableOpacity className="bg-white py-3 rounded-xl flex">
-                    <Text className="text-black text-center font-bold">
-                      Scan Tickets
-                    </Text>
-                  </TouchableOpacity>
-                </Link>
-              ) : (
-                <View></View>
-              )}
-              <Image
-                style={{ borderRadius: 16 }}
-                className="h-64 w-64 self-center items-center"
-                source={{ uri: event?.image! }}
-                placeholder={blurhash}
-                contentFit="fill"
-                transition={1000}
-              />
-              <Text className="text-xl text-white">{'\n'}</Text>
-              <Text className="text-4xl text-white font-bold">
-                {event?.name}
-              </Text>
-              <Separator />
-              <Text className="text-white text-2xl">Date</Text>
-              <Text className="text-muted-foreground text-xl">
-                {dateToString(event?.date!)}
-              </Text>
-              <Separator />
-              <Text className="text-white text-xl">Artist</Text>
-              <View className="flex flex-row items-center py-3 ">
-                <Image
-                  style={{ borderRadius: 24 }}
-                  className="h-12 w-12"
-                  source={{ uri: artist?.image! }}
-                  placeholder={blurhash}
-                  contentFit="cover"
-                  transition={1000}
-                />
-                <Text className="text-muted-foreground pl-2 text-xl">
-                  {artist?.name}
+            <View>
+              <ImageBackground
+                style={{ width: '100%', height: 200 }}
+                source={{
+                  uri: 'https://i.scdn.co/image/ab6761610000517431f6ab67e6025de876475814',
+                }}
+              >
+                <LinearGradient
+                  colors={['#00000000', '#000000']}
+                  style={{ height: '100%', width: '100%' }}
+                ></LinearGradient>
+              </ImageBackground>
+              <View className="p-4">
+                <Text className="text-5xl text-white text-center font-bold">
+                  {event?.name}
                 </Text>
-                {/* <Link className="ml-auto" href={`/artist/${artist?.id}`}>
-                  <Text className="text-white text-xl underline">Artist</Text>
-                </Link> */}
-              </View>
-              <Separator />
-              <Text className="text-white text-2xl Viewide-gray-400 Viewide-solid Viewide-y">
-                Venue
-              </Text>
-              <Text className="text-muted-foreground text-xl">
-                {venue?.name}
-              </Text>
-              <Separator />
-              <Text className="text-white text-2xl">Description</Text>
-              <Text className="text-muted-foreground text-xl pb-4">
-                {event?.description}
-              </Text>
-              <Separator />
-              {event?.etherscan_link ? (
-                <View>
-                  <A href={`${event.etherscan_link}`}>
-                    <View className="flex flex-row items-center space-x-1.5">
-                      <View className="relative flex h-3 w-3">
-                        <View className="relative inline-flex h-3 w-3 rounded-full bg-green-600 "></View>
-                      </View>
-                      <Text className="text-muted-foreground">
-                        Contract live
-                      </Text>
-                    </View>
-                  </A>
-                  <TicketSection
-                    event={event!}
-                    sections={sections!}
-                    user={user}
-                    sectionPrices={sectionPrices}
-                  />
+                <Text className="text-muted-foreground text-xl text-center pb-4">
+                  {dateToString(event?.date!)}
+                </Text>
+
+                <View className="bg-zinc-950 p-4 rounded-xl border-zinc-800">
+                  <Text className="text-white text-2xl font-bold pb-2">
+                    Buy Tickets
+                  </Text>
+                  {event?.etherscan_link ? (
+                    <TicketSection
+                      event={event!}
+                      sections={sections!}
+                      user={user}
+                      sectionPrices={sectionPrices}
+                    />
+                  ) : (
+                    <View></View>
+                  )}
                 </View>
-              ) : (
-                <View className="flex flex-row items-center space-x-1.5">
-                  <View className="relative flex h-3 w-3">
-                    <View className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500 "></View>
-                  </View>
-                  <Text className="text-muted-foreground">
-                    Contract pending deployment
+
+                <Text className="text-white text-xl pt-6">Artist</Text>
+                <View className="flex flex-row items-center py-3 ">
+                  <Image
+                    style={{ borderRadius: 24 }}
+                    className="h-12 w-12"
+                    source={{ uri: artist?.image! }}
+                    placeholder={blurhash}
+                    contentFit="cover"
+                    transition={1000}
+                  />
+                  <Text className="text-muted-foreground pl-2 text-xl">
+                    {artist?.name}
                   </Text>
                 </View>
-              )}
+                <Separator />
+                <Text className="text-white text-xl pt-4">Venue</Text>
+                <Text className="text-muted-foreground text-xl pb-4">
+                  {venue?.name}
+                </Text>
+                <Separator />
+                <Text className="text-white text-xl pt-4">Description</Text>
+                <Text className="text-muted-foreground text-xl pb-4">
+                  {event?.description}
+                </Text>
+                {event?.etherscan_link ? (
+                  <View>
+                    <A href={`${event.etherscan_link}`}>
+                      <View className="flex flex-row items-center space-x-1.5">
+                        <View className="relative flex h-3 w-3">
+                          <View className="relative inline-flex h-3 w-3 rounded-full bg-green-600 "></View>
+                        </View>
+                        <Text className="text-muted-foreground">
+                          Contract live
+                        </Text>
+                      </View>
+                    </A>
+                  </View>
+                ) : (
+                  <View className="flex flex-row items-center space-x-1.5">
+                    <View className="relative flex h-3 w-3">
+                      <View className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500 "></View>
+                    </View>
+                    <Text className="text-muted-foreground">
+                      Contract pending deployment
+                    </Text>
+                  </View>
+                )}
+                {isScanner ? (
+                  <Link href={`/home/scan/${event?.id}`} asChild>
+                    <TouchableOpacity className="bg-white py-3 rounded-xl flex">
+                      <Text className="text-black text-center font-bold">
+                        Scan Tickets
+                      </Text>
+                    </TouchableOpacity>
+                  </Link>
+                ) : (
+                  <View></View>
+                )}
+              </View>
             </View>
           )}
         </View>

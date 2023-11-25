@@ -39,8 +39,8 @@ export default async function EventView({
   }
 
   return (
-    <div className='bg-background'>
-      <div className='px-4 pt-9 md:px-16'>
+    <div className='flex justify-center bg-background px-4'>
+      <div className='pt-9 md:px-16'>
         <div className='lg:border-rlg:pr-8 text-center lg:col-span-2'>
           <h1 className='text-8xl font-medium'>{event.name}</h1>
         </div>
@@ -49,10 +49,9 @@ export default async function EventView({
             {dateToString(event.date)}
           </p>
         </div>
-        <div className='grid grid-cols-1 gap-8 pt-6 md:grid-cols-2'>
+        <div className='grid grid-cols-1 justify-center gap-8 pt-6 md:max-w-[1200px] md:grid-cols-2'>
           <div>
-            {/* bg-stone-950 */}
-            <Card className='w-full  p-2'>
+            <Card className='w-full bg-zinc-950 p-2'>
               <CardHeader className='text-3xl font-bold'>
                 Buy Tickets
               </CardHeader>
@@ -62,7 +61,27 @@ export default async function EventView({
             </Card>
           </div>
           <div>
-            <div>
+            {event.image ? (
+              // <div className='relative'>
+              <Image
+                src={event.image!}
+                alt={event.description}
+                width={500}
+                height={500}
+                className='rounded-lg'
+              />
+            ) : (
+              // {/* <div className='absolute inset-0 bg-gradient-to-t from-black from-40% to-transparent'></div> */}
+              // </div>
+              <Image
+                src='/fallback.jpeg'
+                alt='image'
+                width={500}
+                height={500}
+                className='rounded-lg'
+              />
+            )}
+            <div className='pt-4'>
               <p className='text-2xl'>Artist</p>
               <div className='flex items-center pt-3'>
                 <Avatar className='h-14 w-14'>
@@ -95,23 +114,6 @@ export default async function EventView({
               </p>
             </div>
             <Separator className='my-6' />
-            {event.image ? (
-              <Image
-                src={event.image!}
-                alt={event.description}
-                width={500}
-                height={500}
-                className='rounded-lg'
-              />
-            ) : (
-              <Image
-                src='/fallback.jpeg'
-                alt='image'
-                width={500}
-                height={500}
-                className='rounded-lg'
-              />
-            )}
             {event.etherscan_link ? (
               <a href={`${event.etherscan_link}`} target='_blank'>
                 <Button variant='link'>

@@ -18,15 +18,21 @@ export const dateToString = (date: string): string => {
 
   const dateFormat = dateObj.toLocaleString();
   const timeFormat = dateObj.toLocaleTimeString();
-  const time =
-    timeFormat.split(':')[0] +
-    ':' +
-    timeFormat.split(':')[1] +
-    ' ' +
-    timeFormat.split(' ')[1];
+  const time = timeFormat.split(':')[0] + ':' + timeFormat.split(':')[1];
+  let ampm;
+  switch (true) {
+    case timeFormat.includes('PM'):
+      ampm = 'PM';
+      break;
+    case timeFormat.includes('AM'):
+      ampm = 'AM';
+      break;
+    default:
+      ampm = '';
+  }
   const day = dateFormat.split('/')[1]!;
   const month = months[dateFormat.split('/')[0]!];
-  return month + ' ' + day + ', ' + time;
+  return month + ' ' + day + ', ' + time + ' ' + ampm;
 };
 
 export const blurhash = 'L04U]7j[fQj[offQfQfQfQfQfQfQ';

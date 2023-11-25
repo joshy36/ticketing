@@ -28,7 +28,7 @@ export default async function TicketList({
     .then((res) => res?.filter((ticket) => ticket.scanned));
 
   return (
-    <div className='flex flex-col items-center justify-center px-4 md:px-24'>
+    <div className='flex flex-col items-center justify-center px-4 md:px-48'>
       <Tabs defaultValue='upcoming' className='items-center '>
         <TabsList className='items-center justify-center'>
           <TabsTrigger value='upcoming'>Upcoming Events</TabsTrigger>
