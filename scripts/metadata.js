@@ -5,13 +5,17 @@ const { createClient } = require('@supabase/supabase-js');
 const { NFTStorage } = require('nft.storage');
 require('dotenv').config();
 
-// Make sure to update based on environment
 const API_KEY = process.env.NFT_STORAGE_API_KEY;
 let SUPABASE_URL;
 let SUPABASE_ANON_KEY;
 
-// prod vs local
-
+/**
+ * Uploads an image to IPFS and updates the metadata in a Supabase table.
+ * @async
+ * @function uploadMetadataImage
+ * @param {number} id - The ID of the event for which the image is being uploaded.
+ * @returns {Promise<void>} A promise that resolves once the upload is complete.
+ */
 async function uploadMetadataImage(id) {
   console.log('Starting image ipfs upload...');
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -50,6 +54,13 @@ async function uploadMetadataImage(id) {
   console.log('Finished uploading image to ipfs!\n');
 }
 
+/**
+ * Uploads full metadata for an event to IPFS, including ticket information.
+ * @async
+ * @function uploadFullMetadata
+ * @param {number} id - The ID of the event for which full metadata is being uploaded.
+ * @returns {Promise<void>} A promise that resolves once the upload is complete.
+ */
 async function uploadFullMetadata(id) {
   await uploadMetadataImage(id);
   console.log('Starting full metadata ipfs upload...');

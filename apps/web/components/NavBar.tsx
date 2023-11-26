@@ -67,7 +67,7 @@ export default function NavBar({
   userProfile: UserProfile | null;
 }) {
   return (
-    <div className='hidden h-16 items-center px-8 md:flex'>
+    <div className='sticky top-0 z-40 hidden h-16 items-center border-b bg-black/80 px-8  backdrop-blur transition-colors duration-500 md:flex'>
       <NavigationMenu>
         <NavigationMenuList>
           {mainComponents.map((component) => (

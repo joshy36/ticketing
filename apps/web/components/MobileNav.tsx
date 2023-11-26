@@ -26,12 +26,12 @@ export function MobileNav({
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className='flex p-2'>
+    <div className='sticky top-0 z-40 flex border-b bg-black/80 p-2 backdrop-blur transition-colors duration-500 md:hidden'>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
             variant='ghost'
-            className='mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden'
+            className='mr-2 pr-4 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden'
           >
             <HamburgerMenuIcon className='h-5 w-5' />
             <span className='sr-only'>Toggle Menu</span>
