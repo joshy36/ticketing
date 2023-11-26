@@ -67,7 +67,7 @@ export default function NavBar({
   userProfile: UserProfile | null;
 }) {
   return (
-    <div className='fixed top-0 z-40 hidden h-16 w-full items-center border-b bg-black/80 px-8  backdrop-blur transition-colors duration-500 md:flex'>
+    <div className='fixed top-0 z-40 hidden h-16 w-full items-center border-b bg-black/80 px-8 backdrop-blur transition-colors duration-500 md:flex'>
       <NavigationMenu>
         <NavigationMenuList>
           {mainComponents.map((component) => (

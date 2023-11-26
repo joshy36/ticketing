@@ -40,7 +40,7 @@ export default function ProfilePage({
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className=' space-y-6 p-10 pb-16 sm:block'>
+          <div className=' space-y-6 p-10 py-16 sm:block'>
             <div className='space-y-0.5'>
               <h2 className='text-2xl font-bold tracking-tight'>Settings</h2>
               <p className='text-muted-foreground'>
@@ -62,21 +62,21 @@ export default function ProfilePage({
                 <Separator />
                 <ProfileForm userProfile={userProfile!} />
                 <Separator />
-                <h3 className='text-lg font-medium'>Web3 Connection</h3>
-                <p className='text-sm text-muted-foreground'>
-                  Connect your wallet to custody your tickets! Probably need
-                  some better explanation for users.
-                </p>
-                <Separator />
-                <WalletConnect userProfile={userProfile!} />
-                <Separator />
+
                 <h3 className='text-lg font-medium'>Profile Picture</h3>
-                <Separator />
+
                 <UserUploadImage
                   id={userProfile?.id!}
                   userImage={userProfile?.profile_image}
                   buttonText='Update profile picture'
                 />
+                <Separator />
+                <h3 className='text-lg font-medium'>Web3 Connection</h3>
+                <p className='text-sm text-muted-foreground'>
+                  Connect your wallet to custody your tickets! Probably need
+                  some better explanation for users.
+                </p>
+                <WalletConnect userProfile={userProfile!} />
               </div>
             </div>
           </div>

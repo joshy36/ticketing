@@ -40,7 +40,7 @@ export default async function EventView({
 
   return (
     <div className='flex justify-center bg-background px-4'>
-      <div className='pt-9 md:px-16'>
+      <div className='py-16 md:px-16'>
         <div className='lg:border-rlg:pr-8 text-center lg:col-span-2'>
           <h1 className='text-8xl font-medium'>{event.name}</h1>
         </div>
@@ -51,7 +51,7 @@ export default async function EventView({
         </div>
         <div className='grid grid-cols-1 justify-center gap-8 pt-6 md:max-w-[1200px] md:grid-cols-2 '>
           <div>
-            <Card className='w-full border bg-zinc-950 p-2 shadow-2xl shadow-zinc-800 '>
+            <Card className='w-full border bg-zinc-950 p-2 shadow-2xl shadow-zinc-700'>
               <CardHeader className='text-3xl font-bold'>
                 Buy Tickets
               </CardHeader>

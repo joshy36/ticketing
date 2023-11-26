@@ -12,7 +12,7 @@ export default async function EventsList() {
   return (
     <div className='bg-background'>
       <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
-        <h2 className='sr-only'>Events</h2>
+        <h1 className='pb-8 text-4xl font-light'>Explore Upcoming Events</h1>
         <div className='grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
           {data.map((event: any) => (
             <a key={event.id} href={`/event/${event.id}`} className='group'>

@@ -39,7 +39,9 @@ export default async function RootLayout({
       <body>
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            <NavBar user={session?.user} userProfile={userProfile!} />
+            <div className='pb-16'>
+              <NavBar user={session?.user} userProfile={userProfile!} />
+            </div>
             <MobileNav user={session?.user} userProfile={userProfile!} />
             <div className='min-h-screen'> {children}</div>
             <Toaster />
