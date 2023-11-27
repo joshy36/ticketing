@@ -42,10 +42,10 @@ export default async function EventView({
     <div className='flex justify-center bg-background px-4'>
       <div className='py-16 md:px-16'>
         <div className='lg:border-rlg:pr-8 text-center lg:col-span-2'>
-          <h1 className='text-8xl font-medium'>{event.name}</h1>
+          <h1 className='text-8xl font-bold'>{event.name}</h1>
         </div>
         <div className='space-y-6 text-center'>
-          <p className='py-3 text-xl text-muted-foreground'>
+          <p className='py-3 text-xl font-light text-muted-foreground'>
             {dateToString(event.date)}
           </p>
         </div>
