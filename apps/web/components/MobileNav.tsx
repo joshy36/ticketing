@@ -26,7 +26,7 @@ export function MobileNav({
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className='fixed top-0 z-40 flex w-full border-b bg-black/80 p-2 backdrop-blur transition-colors duration-500 md:hidden'>
+    <div className='fixed top-0 z-40 flex w-full bg-black/80 p-2 backdrop-blur transition-colors duration-500 md:hidden'>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
