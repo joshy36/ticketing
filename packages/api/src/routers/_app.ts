@@ -8,6 +8,8 @@ import { ticketsRouter } from './tickets';
 import { artistsRouter } from './artists';
 import { venuesRouter } from './venues';
 import { paymentsRouter } from './payments';
+import { sbtsRouter } from './sbts';
+import { collectiblesRouter } from './collectibles';
 
 export const appRouter = mergeRouters(
   eventsRouter,
@@ -15,7 +17,9 @@ export const appRouter = mergeRouters(
   ticketsRouter,
   artistsRouter,
   venuesRouter,
-  paymentsRouter
+  paymentsRouter,
+  sbtsRouter,
+  collectiblesRouter
 );
 
 export type AppRouter = typeof appRouter;

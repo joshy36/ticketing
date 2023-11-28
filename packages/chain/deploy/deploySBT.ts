@@ -9,14 +9,13 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY!;
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
+  const { deployer } = await getNamedAccounts();
   const { deploy } = deployments;
 
-  const { deployer } = await getNamedAccounts();
-
   // CHANGE
-  const id = '0638f02e-e0ce-402d-8e46-3de3e7485b8a';
+  const id = '3ff38f66-326f-4b5c-ae8f-c0ea236ac409';
   // CHANGE
-  const env: string = 'prod';
+  const env: string = 'local';
 
   let SUPABASE_URL: string;
   let SUPABASE_ANON_KEY: string;
@@ -29,25 +28,35 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   }
   const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const { data } = await supabase
+  const { data: event } = await supabase
     .from('events')
     .select()
     .eq('id', id)
     .limit(1)
     .single();
 
-  if (!data?.base_url) {
+  const { data: sbt } = await supabase
+    .from('sbts')
+    .select()
+    .eq('event_id', id)
+    .limit(1)
+    .single();
+
+  if (!sbt?.base_url) {
     console.log('No baseUrl yet!');
     return;
   }
 
-  const numberOfTickets = data.tickets_remaining!;
+  const { count: numberOfTickets } = await supabase
+    .from('tickets')
+    .select('*', { count: 'exact', head: true })
+    .eq('event_id', id);
 
-  const name = data.name;
-  const symbol = data.name.substring(0, 2);
-  const baseUri = data.base_url;
+  const name = event?.name;
+  const symbol = event?.name.substring(0, 2);
+  const baseUri = event?.base_url;
 
-  const deployment = await deploy('Event', {
+  const deployment = await deploy('SBT', {
     from: deployer!,
     args: [name, symbol, baseUri],
     log: true,
@@ -57,18 +66,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const etherscanLink =
     'https://goerli.basescan.org/address/' + deployment.address;
 
-  const { data: updateData } = await supabase
-    .from('events')
+  await supabase
+    .from('sbts')
     .update({ etherscan_link: etherscanLink })
-    .eq('id', id);
+    .eq('event_id', id);
 
-  console.log(`Event with name ${name} deployed to ${etherscanLink}`);
+  console.log(`SBT with name ${name} deployed to ${etherscanLink}`);
 
   // MINT TOKENS
-
-  // const network = new ethers.Network('base-goerli', 84531);
-  // console.log(network.name);
-  // const provider = new ethers.AlchemyProvider(network, ALCHEMY_API_KEY);
   const provider = new ethers.JsonRpcProvider(ALCHEMY_GOERLI_URL);
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
   const eventContract = new ethers.Contract(
@@ -84,4 +89,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   );
 };
 export default func;
-func.tags = ['Event'];
+func.tags = ['SBT'];

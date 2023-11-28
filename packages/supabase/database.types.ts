@@ -71,6 +71,61 @@ export interface Database {
           }
         ]
       }
+      collectibles: {
+        Row: {
+          base_url: string | null
+          created_at: string
+          etherscan_link: string | null
+          event_id: string | null
+          id: string
+          ipfs_image: string | null
+          ticket_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          base_url?: string | null
+          created_at?: string
+          etherscan_link?: string | null
+          event_id?: string | null
+          id?: string
+          ipfs_image?: string | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          base_url?: string | null
+          created_at?: string
+          etherscan_link?: string | null
+          event_id?: string | null
+          id?: string
+          ipfs_image?: string | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collectibles_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collectibles_ticket_id_fkey"
+            columns: ["ticket_id"]
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collectibles_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       events: {
         Row: {
           artist: string
@@ -181,6 +236,61 @@ export interface Database {
           }
         ]
       }
+      sbts: {
+        Row: {
+          base_url: string | null
+          created_at: string
+          etherscan_link: string | null
+          event_id: string | null
+          id: string
+          ipfs_image: string | null
+          ticket_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          base_url?: string | null
+          created_at?: string
+          etherscan_link?: string | null
+          event_id?: string | null
+          id?: string
+          ipfs_image?: string | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          base_url?: string | null
+          created_at?: string
+          etherscan_link?: string | null
+          event_id?: string | null
+          id?: string
+          ipfs_image?: string | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sbts_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sbts_ticket_id_fkey"
+            columns: ["ticket_id"]
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sbts_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       scanners: {
         Row: {
           created_at: string
@@ -267,6 +377,7 @@ export interface Database {
           section_id: string | null
           stripe_price_id: string | null
           token_id: number | null
+          updated_at: string | null
           user_id: string | null
         }
         Insert: {
@@ -280,6 +391,7 @@ export interface Database {
           section_id?: string | null
           stripe_price_id?: string | null
           token_id?: number | null
+          updated_at?: string | null
           user_id?: string | null
         }
         Update: {
@@ -293,6 +405,7 @@ export interface Database {
           section_id?: string | null
           stripe_price_id?: string | null
           token_id?: number | null
+          updated_at?: string | null
           user_id?: string | null
         }
         Relationships: [

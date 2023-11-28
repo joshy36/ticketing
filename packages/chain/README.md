@@ -14,7 +14,17 @@ npx hardhat run scripts/deploy.ts
 
 deploy Event contract
 ```shell
-npx hardhat --network base-goerli deploy
+npx hardhat --network base-goerli deploy --tags Event
+```
+
+deploy SBT contract
+```shell
+npx hardhat --network base-goerli deploy --tags SBT
+```
+
+deploy Collectible contract
+```shell
+npx hardhat --network base-goerli deploy --tags Collectible
 ```
 
 verify Event contract on etherscan

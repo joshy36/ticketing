@@ -1,14 +1,13 @@
+'use client';
+
 import { Separator } from '@/components/ui/separator';
 import { useState } from 'react';
-import { MinusCircledIcon, PlusCircledIcon } from '@radix-ui/react-icons';
-import { User } from '@supabase/supabase-js';
-// import { Section } from '../(tabs)/home/[id]';
 import { RouterOutputs } from 'api';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import EventCheckout from './EventCheckout';
 import { UserProfile } from 'supabase';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MinusIcon, PlusIcon } from 'lucide-react';
 
 // need a better way to share this type between web and mobile
 export type Section = {
@@ -132,23 +131,24 @@ export default function TicketSection({
               <div className='flex flex-row items-center justify-center'>
                 <Button
                   variant='secondary'
+                  className='rounded-full'
                   size='icon'
                   onClick={() => {
                     handleRemoveTicket(section);
                   }}
                   disabled={
-                    !ticketQuantities ||
-                    // @ts-ignore
-                    ticketQuantities[section.id!]?.quantity <= 0
+                    !ticketQuantities[section.id!] ||
+                    ticketQuantities[section.id!]?.quantity! <= 0
                   }
                 >
-                  <MinusCircledIcon />
+                  <MinusIcon />
                 </Button>
                 <div className='w-8 px-2 text-center text-white'>
                   {ticketQuantities[section.id!]?.quantity || 0}
                 </div>
                 <Button
                   variant='secondary'
+                  className='rounded-full'
                   size='icon'
                   onClick={() => {
                     handleAddTicket(section);
@@ -157,7 +157,7 @@ export default function TicketSection({
                     getTotalTicketCount() >= event?.max_tickets_per_user!
                   }
                 >
-                  <PlusCircledIcon />
+                  <PlusIcon />
                 </Button>
               </div>
             </div>

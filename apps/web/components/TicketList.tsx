@@ -28,14 +28,13 @@ export default async function TicketList({
     .then((res) => res?.filter((ticket) => ticket.scanned));
 
   return (
-    <div className='flex flex-col items-center justify-center px-4 py-16 md:px-48'>
-      <Tabs defaultValue='upcoming' className='items-center '>
-        <TabsList className='items-center justify-center'>
+    <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+      <Tabs defaultValue='upcoming' className='items-center'>
+        <TabsList className='-ml-4 items-center justify-center '>
           <TabsTrigger value='upcoming'>Upcoming Events</TabsTrigger>
           <TabsTrigger value='Past'>Past Events</TabsTrigger>
         </TabsList>
-        <div className='py-3'></div>
-        <Card className='bg-zinc-950'>
+        {/* <Card className='bg-zinc-950'>
           <CardHeader>
             <CardTitle>Note</CardTitle>
           </CardHeader>
@@ -47,7 +46,7 @@ export default async function TicketList({
               seconds and refresh the page.
             </p>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <TabsContent value='upcoming' className='py-6'>
           <div className='grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
@@ -66,7 +65,7 @@ export default async function TicketList({
                           alt='Ticket Image'
                           width={500}
                           height={500}
-                          className='h-full w-full object-cover object-center group-hover:opacity-75'
+                          className='h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75'
                         />
                       ) : (
                         <Image

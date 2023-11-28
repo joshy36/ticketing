@@ -78,11 +78,13 @@ export const ticketsRouter = router({
         price: number;
         seat: string;
         stripe_price_id: string;
+        token_id: number;
       };
 
       const names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       const tickets: Tickets[] = [];
       let count = 0;
+      let tokenId = 0;
       for (const section_id of input.sections_ids) {
         const section = sections?.find(
           (section) => section.id === section_id.value
@@ -101,7 +103,9 @@ export const ticketsRouter = router({
               price: input.section_prices[count]?.value!,
               seat: section.name!,
               stripe_price_id: stripePrice.id,
+              token_id: tokenId,
             });
+            tokenId++;
             tickets_rem++;
           }
         } else {
@@ -118,7 +122,9 @@ export const ticketsRouter = router({
                 price: input.section_prices[count]?.value!,
                 seat: section?.name! + ' ' + String(row.name) + names[seat],
                 stripe_price_id: stripePrice.id,
+                token_id: tokenId,
               });
+              tokenId++;
               tickets_rem++;
             }
           }
@@ -133,7 +139,20 @@ export const ticketsRouter = router({
 
       const { data: ticketData, error: ticketError } = await supabase
         .from('tickets')
-        .insert(tickets);
+        .insert(tickets)
+        .select();
+
+      const numberOfTickets = tickets.length;
+      const sbtsAndCollectibles = new Array(numberOfTickets);
+      for (let i = 0; i < numberOfTickets; i++) {
+        sbtsAndCollectibles[i] = {
+          event_id: input.event_id,
+          ticket_id: ticketData![i]?.id,
+        };
+      }
+
+      await supabase.from('sbts').insert(sbtsAndCollectibles);
+      await supabase.from('collectibles').insert(sbtsAndCollectibles);
 
       return ticketData;
     }),

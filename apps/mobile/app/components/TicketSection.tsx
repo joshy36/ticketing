@@ -96,7 +96,10 @@ const TicketSection = ({
               onPress={() => {
                 handleRemoveTicket(section);
               }}
-              disabled={ticketQuantities[section.id!]?.quantity <= 0}
+              disabled={
+                !ticketQuantities[section.id!] ||
+                ticketQuantities[section.id!]?.quantity! <= 0
+              }
             >
               <Ionicons name="remove-circle-outline" size={50} color="white" />
             </TouchableOpacity>
