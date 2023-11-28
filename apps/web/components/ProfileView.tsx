@@ -143,11 +143,11 @@ export default async function ProfileView({
               </div>
             ) : (
               <div className='grid grid-cols-1 '>
-                {sbts?.map((ticket) => (
-                  <div>
-                    <div>You have some SBTs that i need to show</div>
-                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
-                      {/* {ticket.events?.image ? (
+                {/* {sbts?.map((ticket) => ( */}
+                <div>
+                  <div>You have some SBTs that i need to show</div>
+                  <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
+                    {/* {ticket.events?.image ? (
                         <Image
                           src={ticket.events?.image}
                           alt='Ticket Image'
@@ -164,15 +164,15 @@ export default async function ProfileView({
                           className='h-full w-full object-cover object-center group-hover:opacity-75'
                         />
                       )} */}
-                    </div>
-                    {/* <h1 className='mt-4 text-lg text-accent-foreground'>
+                  </div>
+                  {/* <h1 className='mt-4 text-lg text-accent-foreground'>
                       {ticket.events?.name}
                     </h1>
                     <p className='font-sm mt-1 text-sm text-muted-foreground'>
                       {`Seat: ${ticket.seat}`}
                     </p> */}
-                  </div>
-                ))}
+                </div>
+                {/* ))} */}
               </div>
             )}
           </div>
