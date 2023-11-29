@@ -11,6 +11,7 @@ import { Events, UserProfile } from 'supabase';
 import TicketSection from './TicketSection';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from './ui/separator';
+import { useState } from 'react';
 
 export default function EventPurchase({
   userProfile,
@@ -19,6 +20,8 @@ export default function EventPurchase({
   userProfile: UserProfile | null | undefined;
   event: Events | null;
 }) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const { data: eventTickets, isLoading: loading } =
     trpc.getTicketsForEvent.useQuery({
       event_id: event?.id!,
@@ -33,6 +36,30 @@ export default function EventPurchase({
   const notPurchasedEventTickets = eventTickets?.filter(
     (x) => x.user_id === null,
   );
+
+  const releaseCollectibles = trpc.releaseCollectiblesForEvent.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        console.error('Release collectibles error:', error);
+        setIsLoading(false);
+      } else {
+        console.log('collectibles released!');
+        setIsLoading(false);
+      }
+    },
+  });
+
+  const releaseSbts = trpc.releaseSbtsForEvent.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        console.error('Release sbts error:', error);
+        setIsLoading(false);
+      } else {
+        console.log('sbts released!');
+        setIsLoading(false);
+      }
+    },
+  });
 
   const renderEventDetails = () => {
     if (event?.tickets_remaining === 0) {
@@ -62,6 +89,25 @@ export default function EventPurchase({
             sectionPrices={sectionPrices}
           />
           {/* <DataTable columns={columns} data={notPurchasedEventTickets!} /> */}
+          <div className='py-4'></div>
+          <Button
+            onClick={() => {
+              setIsLoading(true);
+              releaseCollectibles.mutate({ event_id: event.id });
+            }}
+            disabled={isLoading}
+          >
+            Release Collectibles
+          </Button>
+          <Button
+            onClick={() => {
+              setIsLoading(true);
+              releaseSbts.mutate({ event_id: event.id });
+            }}
+            disabled={isLoading}
+          >
+            Release SBTs
+          </Button>
         </div>
       );
     }
