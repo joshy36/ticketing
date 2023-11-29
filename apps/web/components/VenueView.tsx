@@ -17,7 +17,7 @@ export default async function VenueView({
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
       <div className='flex flex-col gap-8 md:flex-row'>
-        <div className='flex items-center justify-center'>
+        <div className='items-center justify-center'>
           <Image
             src={venue.image!}
             alt={venue.description}
@@ -26,7 +26,7 @@ export default async function VenueView({
             className='rounded-lg'
           />
         </div>
-        <div>
+        <div className='flex-1'>
           <p className='py-4 text-6xl font-light'>{venue.name}</p>
           <p className='py-4 text-2xl'>About</p>
           <p className='text-xl font-light text-muted-foreground'>
