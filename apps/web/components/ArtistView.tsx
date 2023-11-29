@@ -21,8 +21,8 @@ export default async function ArtistView({
           <Image
             src={artist.image!}
             alt={artist.description}
-            width={500}
-            height={500}
+            width={250}
+            height={250}
             className='rounded-lg'
           />
         </div>
