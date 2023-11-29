@@ -72,6 +72,7 @@ export async function POST(req: NextRequest) {
           .select()
           .is('user_id', null)
           .eq('section_id', cartInfo[i]?.section?.id!)
+          .eq('event_id', metadata?.event_id!)
           .limit(1)
           .single();
 

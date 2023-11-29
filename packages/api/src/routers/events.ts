@@ -1,4 +1,3 @@
-import { stripe } from './../../../../apps/web/app/api/stripe-webhook/route';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 import { createStripeProduct } from '../services/stripe';
