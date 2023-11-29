@@ -1,6 +1,7 @@
 import { serverClient } from '../../../apps/web/app/_trpc/serverClient';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { Separator } from './ui/separator';
 
 export default async function VenueView({
   params,
@@ -14,8 +15,8 @@ export default async function VenueView({
   }
 
   return (
-    <div>
-      <div className='grid grid-cols-1 gap-8 px-4 pt-16 md:grid-cols-2 md:px-16'>
+    <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+      <div className='flex flex-col gap-8 md:flex-row'>
         <div className='flex items-center justify-center'>
           <Image
             src={venue.image!}
@@ -26,11 +27,15 @@ export default async function VenueView({
           />
         </div>
         <div>
-          <p className='py-4 text-8xl'>{venue.name}</p>
+          <p className='py-4 text-6xl font-light'>{venue.name}</p>
           <p className='py-4 text-2xl'>About</p>
-          <p className='text-xl text-muted-foreground'>{venue.description}</p>
+          <p className='text-xl font-light text-muted-foreground'>
+            {venue.description}
+          </p>
         </div>
       </div>
+      <Separator className='my-8' />
+      <h1 className='pb-8 text-4xl font-light'>Upcoming Events</h1>
     </div>
   );
 }

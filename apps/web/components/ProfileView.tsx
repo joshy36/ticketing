@@ -15,6 +15,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
+import { Separator } from './ui/separator';
 
 export default async function ProfileView({
   params,
@@ -41,7 +42,7 @@ export default async function ProfileView({
 
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
-      <div className='flex flex-col gap-8 md:flex-row '>
+      <div className='flex flex-col gap-8 md:flex-row'>
         <div className='flex flex-col items-center justify-center '>
           <Image
             src={userProfile?.profile_image!}
@@ -79,6 +80,7 @@ export default async function ProfileView({
           )}
         </div>
       </div>
+      <Separator className='my-8' />
       <div className='grid grid-cols-1 gap-8 px-4 pt-8 md:grid-cols-2 md:px-16'>
         <div>
           <div className='flex flex-row items-center justify-center gap-2'>
