@@ -11,7 +11,7 @@ export const sbtsRouter = router({
       const supabase = ctx.supabase;
       const { data } = await supabase
         .from('sbts')
-        .select()
+        .select(`*, events (id, image, name, etherscan_link)`)
         .eq('user_id', input.user_id);
       return data;
     }),

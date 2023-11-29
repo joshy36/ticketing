@@ -36,6 +36,9 @@ export default async function ProfileView({
     user_id: userProfile?.id!,
   });
 
+  console.log(collectibles);
+  console.log(sbts);
+
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -104,14 +107,39 @@ export default async function ProfileView({
               </AlertDialogContent>
             </AlertDialog>
           </div>
-          <div className='grid grid-cols-1 gap-8 px-4 pt-8 md:pt-32'>
+          <div className='grid grid-cols-1 gap-8 px-4 pt-8'>
             {collectibles?.length === 0 ? (
-              <div className='text-center text-2xl font-extralight'>
+              <div className='text-center text-2xl font-extralight md:pt-32'>
                 Attend events to build a collection!
               </div>
             ) : (
-              <div className='grid grid-cols-1 gap-8 px-4 pt-8 md:pt-32'>
-                You have some collectibles that i need to show
+              <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+                {collectibles?.map((sbt) => (
+                  <div key={sbt.id}>
+                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
+                      {sbt.events?.image ? (
+                        <Image
+                          src={sbt.events?.image}
+                          alt='sbt Image'
+                          width={500}
+                          height={500}
+                          className='h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75'
+                        />
+                      ) : (
+                        <Image
+                          src='/fallback.jpeg'
+                          alt='image'
+                          width={500}
+                          height={500}
+                          className='h-full w-full object-cover object-center group-hover:opacity-75'
+                        />
+                      )}
+                    </div>
+                    <h1 className='mt-4 text-lg text-accent-foreground'>
+                      {sbt.events?.name}
+                    </h1>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -138,21 +166,20 @@ export default async function ProfileView({
               </AlertDialogContent>
             </AlertDialog>
           </div>
-          <div className='grid grid-cols-1 gap-8 px-4 pt-8 md:pt-32'>
+          <div className='grid grid-cols-1 gap-8 px-4 pt-8'>
             {sbts?.length === 0 ? (
-              <div className='text-center text-2xl font-extralight'>
+              <div className='text-center text-2xl font-extralight md:pt-32'>
                 Attend events to build a collection!
               </div>
             ) : (
-              <div className='grid grid-cols-1 '>
-                {/* {sbts?.map((ticket) => ( */}
-                <div>
-                  <div>You have some SBTs that i need to show</div>
-                  <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
-                    {/* {ticket.events?.image ? (
+              <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+                {sbts?.map((sbt) => (
+                  <div key={sbt.id}>
+                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
+                      {sbt.events?.image ? (
                         <Image
-                          src={ticket.events?.image}
-                          alt='Ticket Image'
+                          src={sbt.events?.image}
+                          alt='sbt Image'
                           width={500}
                           height={500}
                           className='h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75'
@@ -165,16 +192,13 @@ export default async function ProfileView({
                           height={500}
                           className='h-full w-full object-cover object-center group-hover:opacity-75'
                         />
-                      )} */}
-                  </div>
-                  {/* <h1 className='mt-4 text-lg text-accent-foreground'>
-                      {ticket.events?.name}
+                      )}
+                    </div>
+                    <h1 className='mt-4 text-lg text-accent-foreground'>
+                      {sbt.events?.name}
                     </h1>
-                    <p className='font-sm mt-1 text-sm text-muted-foreground'>
-                      {`Seat: ${ticket.seat}`}
-                    </p> */}
-                </div>
-                {/* ))} */}
+                  </div>
+                ))}
               </div>
             )}
           </div>
