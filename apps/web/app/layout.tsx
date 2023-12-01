@@ -1,7 +1,7 @@
 import NavBar from '@/components/NavBar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
-import { Analytics } from '@vercel/analytics/react';
+// import { Analytics } from '@vercel/analytics/react';
 import createServerClient from '@/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
@@ -45,7 +45,7 @@ export default async function RootLayout({
             <MobileNav user={session?.user} userProfile={userProfile!} />
             <div className='min-h-screen'> {children}</div>
             <Toaster />
-            <Analytics />
+            {/* <Analytics /> */}
             <Footer />
           </ThemeProvider>
         </Provider>
