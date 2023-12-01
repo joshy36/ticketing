@@ -25,12 +25,12 @@ export default async function Footer() {
               </h2>
               <ul className='font-medium text-gray-500 dark:text-gray-400'>
                 <li className='mb-4'>
-                  <a href='/#' className='hover:text-gray-300'>
-                    Stuff
+                  <a href='/#' className='font-light hover:text-gray-300'>
+                    About
                   </a>
                 </li>
                 <li>
-                  <a href='/#' className='hover:text-gray-300'>
+                  <a href='/#' className='font-light hover:text-gray-300'>
                     FAQ
                   </a>
                 </li>
@@ -42,12 +42,12 @@ export default async function Footer() {
               </h2>
               <ul className='font-medium text-gray-500 dark:text-gray-400'>
                 <li className='mb-4'>
-                  <a href='#' className='hover:text-gray-300'>
+                  <a href='#' className='font-light hover:text-gray-300'>
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a href='#' className='hover:text-gray-300'>
+                  <a href='#' className='font-light hover:text-gray-300'>
                     Terms &amp; Conditions
                   </a>
                 </li>
@@ -57,9 +57,9 @@ export default async function Footer() {
         </div>
         <hr className='my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8' />
         <div className='sm:flex sm:items-center sm:justify-between'>
-          <span className='text-sm text-gray-500 dark:text-gray-400 sm:text-center'>
+          <span className='text-sm font-light text-gray-500 dark:text-gray-400 sm:text-center'>
             © 2023{' '}
-            <a href='/#' className='hover:text-gray-300'>
+            <a href='/#' className='font-light hover:text-gray-300'>
               Name™
             </a>
             . All Rights Reserved.

@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Card, CardContent, CardHeader } from './ui/card';
-import { Suspense } from 'react';
 
 export default async function EventView({
   params,
@@ -49,7 +48,7 @@ export default async function EventView({
             {dateToString(event.date)}
           </p>
         </div>
-        <div className='grid grid-cols-1 justify-center gap-8 pt-6 md:max-w-[1200px] md:grid-cols-2 '>
+        <div className='grid grid-cols-1 justify-center gap-8 pt-6 md:max-w-[1000px] md:grid-cols-2 '>
           <div>
             <Card className='w-full border p-2 shadow-2xl shadow-zinc-800'>
               <CardHeader className='text-3xl font-bold'>
@@ -61,6 +60,41 @@ export default async function EventView({
             </Card>
           </div>
           <div>
+            <div className='pt-4'>
+              <p className='text-2xl font-semibold'>Artist</p>
+              <div className='flex items-center pt-4'>
+                <Avatar className='h-14 w-14'>
+                  {artist?.image ? (
+                    <AvatarImage src={artist?.image} alt='pfp' />
+                  ) : (
+                    <AvatarFallback></AvatarFallback>
+                  )}
+                </Avatar>
+
+                <p className='pl-4 font-light text-muted-foreground'>
+                  {artist?.name}
+                </p>
+                <Link className='ml-auto' href={`/artist/${artist?.id}`}>
+                  <Button variant='outline'>View Profile</Button>
+                </Link>
+              </div>
+            </div>
+            <Separator className='my-6' />
+            <p className='text-2xl font-semibold'>Venue</p>
+            <div className='flex items-center pt-3'>
+              <p className='font-light text-muted-foreground'>{venue?.name}</p>
+              <Link className='ml-auto' href={`/venue/${venue?.id}`}>
+                <Button variant='outline'>View Venue</Button>
+              </Link>
+            </div>
+            <Separator className='my-6' />
+            <p className='text-2xl font-semibold'>Description</p>
+            <div className='space-y-6'>
+              <p className='pt-3 text-base font-light text-muted-foreground'>
+                {event.description}
+              </p>
+            </div>
+            <Separator className='my-6' />
             {event.image ? (
               // <div className='relative'>
               <Image
@@ -81,39 +115,6 @@ export default async function EventView({
                 className='rounded-lg'
               />
             )}
-            <div className='pt-4'>
-              <p className='text-2xl'>Artist</p>
-              <div className='flex items-center pt-3'>
-                <Avatar className='h-14 w-14'>
-                  {artist?.image ? (
-                    <AvatarImage src={artist?.image} alt='pfp' />
-                  ) : (
-                    <AvatarFallback></AvatarFallback>
-                  )}
-                </Avatar>
-
-                <p className='pl-4 text-muted-foreground'>{artist?.name}</p>
-                <Link className='ml-auto' href={`/artist/${artist?.id}`}>
-                  <Button variant='link'>View Profile</Button>
-                </Link>
-              </div>
-            </div>
-            <Separator className='my-6' />
-            <p className='text-2xl'>Venue</p>
-            <div className='flex items-center pt-3'>
-              <p className='text-muted-foreground'>{venue?.name}</p>
-              <Link className='ml-auto' href={`/venue/${venue?.id}`}>
-                <Button variant='link'>View Venue</Button>
-              </Link>
-            </div>
-            <Separator className='my-6' />
-            <p className='text-2xl'>Description</p>
-            <div className='space-y-6'>
-              <p className='pt-3 text-base text-muted-foreground'>
-                {event.description}
-              </p>
-            </div>
-            <Separator className='my-6' />
             {event.etherscan_link ? (
               <a href={`${event.etherscan_link}`} target='_blank'>
                 <Button variant='link'>

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import EventCheckout from './EventCheckout';
 import { UserProfile } from 'supabase';
 import { ChevronLeft, ChevronRight, MinusIcon, PlusIcon } from 'lucide-react';
+import { trpc } from '@/app/_trpc/client';
 
 // need a better way to share this type between web and mobile
 export type Section = {
@@ -38,12 +39,24 @@ export default function TicketSection({
     | undefined;
 }) {
   const [checkout, setCheckout] = useState<boolean>(false);
+  const [clientSecret, setClientSecret] = useState('');
   const [ticketQuantities, setTicketQuantities] = useState<{
     [id: string]: {
       quantity: number;
       section: Section;
     };
   }>({});
+
+  const createPaymentIntent = trpc.createPaymentIntent.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        console.error('Error fetching payment intent ticket:', error);
+        alert(`Error!`);
+      } else {
+        setClientSecret(data?.paymentIntent!);
+      }
+    },
+  });
 
   const getTotalTicketCount = (): number => {
     return Object.values(ticketQuantities).reduce(
@@ -108,8 +121,9 @@ export default function TicketSection({
           <EventCheckout
             event={event!}
             userProfile={userProfile!}
-            ticketQuantities={Object.values(ticketQuantities)}
+            cart={Object.values(ticketQuantities)}
             totalPrice={getTotalPrice()}
+            clientSecret={clientSecret}
           />
         </div>
       ) : (
@@ -121,7 +135,7 @@ export default function TicketSection({
             >
               <div className='flex flex-col'>
                 <div className='text-xl text-white'>{section.name}</div>
-                <div className='text text-gray-400'>
+                <div className='text font-extralight text-gray-400'>
                   {`$` +
                     sectionPrices?.find(
                       (sectionPrice) => sectionPrice.section_id === section.id,
@@ -130,7 +144,7 @@ export default function TicketSection({
               </div>
               <div className='flex flex-row items-center justify-center'>
                 <Button
-                  variant='secondary'
+                  // variant='secondary'
                   className='rounded-full'
                   size='icon'
                   onClick={() => {
@@ -147,7 +161,7 @@ export default function TicketSection({
                   {ticketQuantities[section.id!]?.quantity || 0}
                 </div>
                 <Button
-                  variant='secondary'
+                  // variant='secondary'
                   className='rounded-full'
                   size='icon'
                   onClick={() => {
@@ -181,6 +195,24 @@ export default function TicketSection({
               className='flex w-full'
               disabled={getTotalTicketCount() == 0}
               onClick={() => {
+                const filteredCartInfo = Object.values(ticketQuantities).map(
+                  (item) => ({
+                    quantity: item.quantity,
+                    section: {
+                      id: item.section.id,
+                      name: item.section.name,
+                      // stripe_price_id: sectionPrices?.find(
+                      //   (price) => price.section_id === item.section.id,
+                      // )?.stripe_price_id!,
+                    },
+                  }),
+                );
+
+                createPaymentIntent.mutate({
+                  event_id: event?.id!,
+                  cart_info: filteredCartInfo,
+                  price: getTotalPrice(),
+                });
                 setCheckout(true);
               }}
             >

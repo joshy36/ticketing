@@ -1,12 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-
 import { Button } from './ui/button';
-
 import { trpc } from '../../../apps/web/app/_trpc/client';
-import { DataTable } from './DataTable';
-import { columns } from './Columns';
 import { Events, UserProfile } from 'supabase';
 import TicketSection from './TicketSection';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -90,7 +85,7 @@ export default function EventPurchase({
           />
           {/* <DataTable columns={columns} data={notPurchasedEventTickets!} /> */}
           <div className='py-4'></div>
-          <Button
+          {/* <Button
             onClick={() => {
               setIsLoading(true);
               releaseCollectibles.mutate({ event_id: event.id });
@@ -107,7 +102,7 @@ export default function EventPurchase({
             disabled={isLoading}
           >
             Release SBTs
-          </Button>
+          </Button> */}
         </div>
       );
     }

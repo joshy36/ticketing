@@ -121,10 +121,10 @@ export function MobileNav({
         ) : (
           <div className='ml-auto flex items-center space-x-4'>
             <Link href='/sign-in'>
-              {' '}
-              <Button className={cn(buttonVariants({ variant: 'default' }))}>
-                Sign In
-              </Button>
+              <Button variant='secondary'>Sign In</Button>
+            </Link>
+            <Link href='/sign-up'>
+              <Button>Sign Up</Button>
             </Link>
           </div>
         )}

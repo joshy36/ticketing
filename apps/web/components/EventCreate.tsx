@@ -102,6 +102,8 @@ export default function EventCreate() {
     },
   });
 
+  console.log(form.getValues());
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 

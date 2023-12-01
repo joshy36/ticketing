@@ -58,7 +58,7 @@ export const paymentsRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      console.log(input);
+      console.log('payments: ', input);
       const paymentIntent = await stripe.paymentIntents.create({
         amount: input.price * 100,
         currency: 'usd',

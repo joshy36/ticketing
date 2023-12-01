@@ -76,13 +76,13 @@ export function CommandMenu({ ...props }: DialogProps) {
     <div className=''>
       <Button
         className={cn(
-          'relative w-full justify-start border bg-transparent text-sm text-muted-foreground hover:bg-transparent sm:pr-12 md:w-40 lg:w-64',
+          'relative w-full justify-start bg-zinc-900/50 text-sm text-muted-foreground hover:bg-transparent hover:bg-zinc-800 sm:pr-12 md:w-40 lg:w-64',
         )}
         onClick={() => setOpen(true)}
         {...props}
       >
-        <span className='hidden pr-2 lg:inline-flex'>
-          <SearchIcon />
+        <span className='pr-2 lg:inline-flex'>
+          <SearchIcon className='h-4 w-4' />
         </span>
         <span className='hidden lg:inline-flex'>Search events, artists...</span>
         <span className='inline-flex lg:hidden'>Search...</span>

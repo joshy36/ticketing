@@ -49,10 +49,10 @@ export default async function TicketList({
         </Card> */}
 
         <TabsContent value='upcoming' className='py-6'>
-          <div className='grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
-            {userTicketsUpcoming ? (
-              <>
-                {userTicketsUpcoming.map((ticket) => (
+          <div>
+            {userTicketsUpcoming?.length != 0 ? (
+              <div className='grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
+                {userTicketsUpcoming?.map((ticket) => (
                   <a
                     key={ticket.id}
                     href={`/ticket/${ticket.id}`}
@@ -85,9 +85,14 @@ export default async function TicketList({
                     </p>
                   </a>
                 ))}
-              </>
+              </div>
             ) : (
-              <div>No upcoming events!</div>
+              <div>
+                <p className='pt-12 text-3xl'>No upcoming events</p>
+                <p className='pt-2 font-light text-muted-foreground'>
+                  Check out the events page to explore upcoming events
+                </p>
+              </div>
             )}
           </div>
         </TabsContent>

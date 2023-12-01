@@ -1,6 +1,4 @@
 import createServerClient from '@/utils/supabaseServer';
-import { Button } from './ui/button';
-import Link from 'next/link';
 import Image from 'next/image';
 import { serverClient } from '../../../apps/web/app/_trpc/serverClient';
 import {
@@ -16,6 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Separator } from './ui/separator';
+import UserSignOut from './UserSignOut';
 
 export default async function ProfileView({
   params,
@@ -36,8 +35,8 @@ export default async function ProfileView({
     user_id: userProfile?.id!,
   });
 
-  console.log(collectibles);
-  console.log(sbts);
+  // console.log(collectibles);
+  // console.log(sbts);
 
   const {
     data: { session },
@@ -55,11 +54,7 @@ export default async function ProfileView({
             className='rounded-lg'
           />
           {session?.user! && session?.user.id === userProfile?.id ? (
-            <Link className='pt-4' href={`/${userProfile.username}/edit/`}>
-              <Button variant='default' className='flex w-full'>
-                Edit Profile
-              </Button>
-            </Link>
+            <UserSignOut userProfile={userProfile} />
           ) : (
             <div></div>
           )}

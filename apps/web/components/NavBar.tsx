@@ -67,7 +67,7 @@ export default function NavBar({
   userProfile: UserProfile | null;
 }) {
   return (
-    <div className='fixed top-0 z-40 hidden h-16 w-full items-center bg-black/80 px-8 backdrop-blur transition-colors duration-500 md:flex'>
+    <div className='fixed top-0 z-40 hidden h-16 w-full items-center bg-black/40 px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
       <NavigationMenu>
         <NavigationMenuList>
           {mainComponents.map((component) => (
@@ -114,16 +114,16 @@ export default function NavBar({
           <CommandMenu />
         </div>
         {user ? (
-          <div className='ml-auto flex items-center space-x-4'>
+          <div className='mt-1'>
             <UserNav user={user} userProfile={userProfile} />
           </div>
         ) : (
-          <div className='ml-auto flex items-center space-x-4'>
+          <div className=''>
             <Link href='/sign-in'>
-              {' '}
-              <Button className={cn(buttonVariants({ variant: 'default' }))}>
-                Sign In
-              </Button>
+              <Button variant='secondary'>Sign In</Button>
+            </Link>
+            <Link href='/sign-up'>
+              <Button>Sign Up</Button>
             </Link>
           </div>
         )}
