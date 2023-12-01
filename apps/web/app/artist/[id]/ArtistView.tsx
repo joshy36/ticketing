@@ -1,7 +1,7 @@
-import { serverClient } from '../../../apps/web/app/_trpc/serverClient';
+import { serverClient } from '../../_trpc/serverClient';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { Separator } from './ui/separator';
+import { Separator } from '@/components/ui/separator';
 
 export default async function ArtistView({
   params,

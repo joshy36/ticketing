@@ -1,6 +1,6 @@
 import createServerClient from '@/utils/supabaseServer';
 import Image from 'next/image';
-import { serverClient } from '../../../apps/web/app/_trpc/serverClient';
+import { serverClient } from '../_trpc/serverClient';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { Separator } from './ui/separator';
+import { Separator } from '@/components/ui/separator';
 import UserSignOut from './UserSignOut';
 
 export default async function ProfileView({

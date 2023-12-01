@@ -1,4 +1,4 @@
-import EventCreateTickets from '@/components/EventCreateTickets';
+import EventCreateTickets from './EventCreateTickets';
 import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 

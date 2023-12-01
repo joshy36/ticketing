@@ -3,7 +3,7 @@
 import { Separator } from '@/components/ui/separator';
 import { useState } from 'react';
 import { RouterOutputs } from 'api';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import EventCheckout from './EventCheckout';
 import { UserProfile } from 'supabase';

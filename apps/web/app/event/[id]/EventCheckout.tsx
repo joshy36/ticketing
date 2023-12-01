@@ -1,6 +1,6 @@
 'use client';
 
-import { trpc } from '../../../apps/web/app/_trpc/client';
+import { trpc } from '../../_trpc/client';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
 import { useRouter } from 'next/navigation';
@@ -11,10 +11,10 @@ import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import { Events, UserProfile } from 'supabase';
 import { Section } from './TicketSection';
 import CheckoutForm from './CheckoutForm';
-import { Separator } from './ui/separator';
-import { Badge } from './ui/badge';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { Label } from './ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { AnimatedGradientBorderTW } from './AnimatedGradientBorderTW';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);

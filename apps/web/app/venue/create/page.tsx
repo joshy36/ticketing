@@ -1,4 +1,4 @@
-import VenueCreate from '@/components/VenueCreate';
+import VenueCreate from './VenueCreate';
 import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 

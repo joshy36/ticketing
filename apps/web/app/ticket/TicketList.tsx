@@ -1,7 +1,12 @@
 import { UserProfile } from 'supabase';
-import { serverClient } from '../../../apps/web/app/_trpc/serverClient';
+import { serverClient } from '../_trpc/serverClient';
 import Image from 'next/image';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '../../components/ui/tabs';
 import {
   Card,
   CardContent,

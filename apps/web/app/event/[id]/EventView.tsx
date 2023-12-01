@@ -1,15 +1,15 @@
-import { serverClient } from '../../web/app/_trpc/serverClient';
+import { serverClient } from '../../_trpc/serverClient';
 import createServerClient from '@/utils/supabaseServer';
 import Image from 'next/image';
 import EventPurchase from './EventPurchase';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
-import { dateToString } from '../utils/helpers';
-import { Separator } from './ui/separator';
+import { dateToString } from '@/utils/helpers';
+import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Card, CardContent, CardHeader } from './ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export default async function EventView({
   params,

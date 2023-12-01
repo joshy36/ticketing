@@ -17,12 +17,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { Textarea } from './ui/textarea';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
-import { Icons } from './ui/icons';
-import { Separator } from './ui/separator';
+import { Icons } from '@/components/ui/icons';
+import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../apps/web/app/_trpc/client';
+import { trpc } from '../../_trpc/client';
 
 const formSchema = z.object({
   name: z.string().min(2, {

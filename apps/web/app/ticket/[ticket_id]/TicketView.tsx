@@ -15,10 +15,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './ui/card';
+} from '../../../components/ui/card';
 import { dateToString } from '@/utils/helpers';
-import { Separator } from './ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Separator } from '../../../components/ui/separator';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '../../../components/ui/avatar';
 
 export function TicketView({
   ticket,

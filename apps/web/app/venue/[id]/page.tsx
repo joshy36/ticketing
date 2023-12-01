@@ -1,4 +1,4 @@
-import VenueView from '@/components/VenueView';
+import VenueView from './VenueView';
 
 export default function Home({ params }: { params: { id: string } }) {
   return (

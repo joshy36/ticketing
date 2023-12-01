@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { UserSignInForm } from '@/components/UserSignInForm';
+import { UserSignInForm } from './UserSignInForm';
 import Link from 'next/link';
 
 export const metadata: Metadata = {

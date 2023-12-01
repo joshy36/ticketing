@@ -1,5 +1,5 @@
 import { serverClient } from '@/app/_trpc/serverClient';
-import ProfilePage from '@/components/ProfilePage';
+import ProfilePage from './ProfilePage';
 import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 

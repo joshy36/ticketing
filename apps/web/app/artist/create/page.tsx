@@ -1,4 +1,4 @@
-import ArtistCreate from '@/components/ArtistCreate';
+import ArtistCreate from './ArtistCreate';
 import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 

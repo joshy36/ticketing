@@ -1,11 +1,11 @@
 'use client';
 
-import { Button } from './ui/button';
-import { trpc } from '../../../apps/web/app/_trpc/client';
+import { Button } from '@/components/ui/button';
+import { trpc } from '../../_trpc/client';
 import { Events, UserProfile } from 'supabase';
 import TicketSection from './TicketSection';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from './ui/separator';
+import { Separator } from '@/components/ui/separator';
 import { useState } from 'react';
 
 export default function EventPurchase({
@@ -83,7 +83,6 @@ export default function EventPurchase({
             userProfile={userProfile}
             sectionPrices={sectionPrices}
           />
-          {/* <DataTable columns={columns} data={notPurchasedEventTickets!} /> */}
           <div className='py-4'></div>
           {/* <Button
             onClick={() => {

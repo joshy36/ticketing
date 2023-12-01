@@ -1,5 +1,5 @@
 import { serverClient } from '@/app/_trpc/serverClient';
-import TicketList from '@/components/TicketList';
+import TicketList from './TicketList';
 import createServerClient from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 

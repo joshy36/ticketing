@@ -1,5 +1,5 @@
-import { serverClient } from '../../../apps/web/app/_trpc/serverClient';
-import { dateToString } from '../utils/helpers';
+import { serverClient } from '../../_trpc/serverClient';
+import { dateToString } from '@/utils/helpers';
 import Image from 'next/image';
 
 export default async function EventsList() {

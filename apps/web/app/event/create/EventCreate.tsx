@@ -23,18 +23,18 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { Calendar } from './ui/calendar';
+import { Calendar } from '@/components/ui/calendar';
 
 import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-import { cn } from './ui/utils';
+import { cn } from '@/components/ui/utils';
 import { format } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from './ui/textarea';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
-import { Icons } from './ui/icons';
-import { Separator } from './ui/separator';
+import { Icons } from '@/components/ui/icons';
+import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../apps/web/app/_trpc/client';
+import { trpc } from '../../_trpc/client';
 
 import {
   Command,
@@ -42,7 +42,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from './ui/command';
+} from '../../../components/ui/command';
 import Link from 'next/link';
 import { useState } from 'react';
 

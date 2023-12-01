@@ -1,4 +1,4 @@
-import EventsList from '@/components/EventsList';
+import EventsList from './EventsList';
 
 export default function Home() {
   return (

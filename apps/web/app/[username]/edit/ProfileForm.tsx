@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,13 +14,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { toast } from './ui/use-toast';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
-import { Icons } from './ui/icons';
-import { trpc } from '../../../apps/web/app/_trpc/client';
+import { Icons } from '@/components/ui/icons';
+import { trpc } from '../../_trpc/client';
 import { UserProfile } from 'supabase';
 
 const profileFormSchema = z.object({

@@ -1,11 +1,11 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import { ProfileForm } from '@/components/ProfileForm';
-import { SidebarNav } from '@/components/SidebarNav';
+import { ProfileForm } from './ProfileForm';
+import { SidebarNav } from './SidebarNav';
 import { WagmiConfig } from 'wagmi';
-import { wagmiConfig } from '../utils/wagmiClient';
-import { trpc } from '../../../apps/web/app/_trpc/client';
+import { wagmiConfig } from '@/utils/wagmiClient';
+import { trpc } from '../../_trpc/client';
 import UserUploadImage from './UserUploadImage';
 import { WalletConnect } from './WalletConnect';
 

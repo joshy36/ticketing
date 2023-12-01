@@ -1,4 +1,4 @@
-import ArtistView from '@/components/ArtistView';
+import ArtistView from './ArtistView';
 
 export default function Home({ params }: { params: { id: string } }) {
   return (

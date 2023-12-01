@@ -2,13 +2,13 @@
 
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from './ui/button';
-import { useToast } from './ui/use-toast';
-import { Input } from './ui/input';
-import { Icons } from './ui/icons';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import { Input } from '@/components/ui/input';
+import { Icons } from '@/components/ui/icons';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../apps/web/app/_trpc/client';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { trpc } from '../../_trpc/client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 

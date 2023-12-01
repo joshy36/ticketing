@@ -18,13 +18,13 @@ import {
 import { Input } from '@/components/ui/input';
 
 import { useToast } from '@/components/ui/use-toast';
-import { Icons } from './ui/icons';
-import { Separator } from './ui/separator';
+import { Icons } from '@/components/ui/icons';
+import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../apps/web/app/_trpc/client';
+import { trpc } from '../../../../_trpc/client';
 
 import { useState } from 'react';
-import { cn } from './ui/utils';
+import { cn } from '@/components/ui/utils';
 
 const formSchema = z.object({
   max: z.coerce.number({ required_error: 'Please enter a value.' }),

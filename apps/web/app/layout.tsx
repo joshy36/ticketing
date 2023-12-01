@@ -6,10 +6,10 @@ import createServerClient from '@/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font';
-
-import './globals.css';
 import Footer from '@/components/Footer';
 import { MobileNav } from '@/components/MobileNav';
+
+import './globals.css';
 
 export const revalidate = 0;
 
