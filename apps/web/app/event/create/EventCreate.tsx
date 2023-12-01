@@ -102,15 +102,13 @@ export default function EventCreate() {
     },
   });
 
-  console.log(form.getValues());
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
     const time = values.time.split(':');
 
-    if (values.ampm == 'pm') {
-      time[0] += 12;
+    if (values.ampm === 'pm') {
+      time[0] = ((Number(time[0]) + 12) % 24).toString();
     }
 
     values.date.setHours(Number(time[0]));
