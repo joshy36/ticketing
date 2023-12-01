@@ -120,9 +120,9 @@ export function MobileNav({
           </div>
         ) : (
           <div className='ml-auto flex items-center space-x-4'>
-            <Link href='/sign-in'>
+            {/* <Link href='/sign-in'>
               <Button variant='secondary'>Sign In</Button>
-            </Link>
+            </Link> */}
             <Link href='/sign-up'>
               <Button>Sign Up</Button>
             </Link>
