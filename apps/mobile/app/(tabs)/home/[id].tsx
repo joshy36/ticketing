@@ -80,6 +80,7 @@ const Home = () => {
                 source={{
                   uri: 'https://i.scdn.co/image/ab6761610000517431f6ab67e6025de876475814',
                 }}
+                // blurRadius={20}
               >
                 <LinearGradient
                   colors={['#00000000', '#000000']}
@@ -90,12 +91,12 @@ const Home = () => {
                 <Text className="text-5xl text-white text-center font-bold">
                   {event?.name}
                 </Text>
-                <Text className="text-muted-foreground text-xl text-center pb-4">
+                <Text className="text-muted-foreground text-xl font-light text-center pb-4">
                   {dateToString(event?.date!)}
                 </Text>
 
-                <View className="bg-zinc-950 p-4 rounded-xl border-zinc-800">
-                  <Text className="text-white text-2xl font-bold pb-2">
+                <View className="border p-6 rounded-xl bg-black border-zinc-800 shadow-2xl shadow-gray-900">
+                  <Text className="text-white text-3xl font-bold pb-2">
                     Buy Tickets
                   </Text>
                   {event?.etherscan_link ? (
@@ -110,7 +111,9 @@ const Home = () => {
                   )}
                 </View>
 
-                <Text className="text-white text-xl py-6">Artist</Text>
+                <Text className="text-white text-2xl font-semibold py-6">
+                  Artist
+                </Text>
                 <Link className="py-2" href={`/home/artist/${artist?.id}`}>
                   <View className="flex flex-row items-center">
                     <Image
@@ -121,21 +124,25 @@ const Home = () => {
                       contentFit="cover"
                       transition={1000}
                     />
-                    <Text className="text-muted-foreground pl-2 text-xl">
+                    <Text className="text-muted-foreground pl-2 text-xl font-light">
                       {artist?.name}
                     </Text>
                   </View>
                 </Link>
                 <Separator />
-                <Text className="text-white text-xl pt-4">Venue</Text>
+                <Text className="text-white text-2xl font-semibold pt-4">
+                  Venue
+                </Text>
                 <Link className="py-4" href={`/home/venue/${venue?.id}`}>
-                  <Text className="text-muted-foreground text-xl">
+                  <Text className="text-muted-foreground font-light text-xl">
                     {venue?.name}
                   </Text>
                 </Link>
                 <Separator />
-                <Text className="text-white text-xl pt-4">Description</Text>
-                <Text className="text-muted-foreground text-xl pb-4">
+                <Text className="text-white text-2xl font-semibold pt-4">
+                  Description
+                </Text>
+                <Text className="text-muted-foreground text-xl font-light py-4">
                   {event?.description}
                 </Text>
                 {event?.etherscan_link ? (
@@ -163,7 +170,7 @@ const Home = () => {
                 )}
                 {isScanner ? (
                   <Link href={`/home/scan/${event?.id}`} asChild>
-                    <TouchableOpacity className="bg-white py-3 rounded-xl flex">
+                    <TouchableOpacity className="bg-white py-3 rounded-full flex">
                       <Text className="text-black text-center font-bold">
                         Scan Tickets
                       </Text>

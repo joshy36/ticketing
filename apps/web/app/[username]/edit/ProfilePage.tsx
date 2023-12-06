@@ -8,6 +8,7 @@ import { wagmiConfig } from '@/utils/wagmiClient';
 import { trpc } from '../../_trpc/client';
 import UserUploadImage from './UserUploadImage';
 import { WalletConnect } from './WalletConnect';
+import Turnkey from './Turnkey';
 
 const sidebarNavItems = [
   {
@@ -54,29 +55,42 @@ export default function ProfilePage({
               </aside>
               <div className='space-y-6'>
                 <div>
-                  <h3 className='text-lg font-medium'>Profile</h3>
+                  <h3 className='text-lg font-medium'>Wallet</h3>
+                  <p className='text-sm text-muted-foreground'>
+                    Create a wallet to recieve tokens on chain.
+                  </p>
+                </div>
+                {/* <Separator /> */}
+                <Turnkey userProfile={userProfile!} />
+                <Separator />
+                <div>
+                  <h3 className='text-lg font-medium'>Profile Picture</h3>
                   <p className='text-sm text-muted-foreground'>
                     This is how others will see you on the site.
                   </p>
                 </div>
-                <Separator />
-                <ProfileForm userProfile={userProfile!} />
-                <Separator />
-
-                <h3 className='text-lg font-medium'>Profile Picture</h3>
-
+                {/* <Separator /> */}
                 <UserUploadImage
                   id={userProfile?.id!}
                   userImage={userProfile?.profile_image}
                   buttonText='Update profile picture'
                 />
                 <Separator />
+                <div>
+                  <h3 className='text-lg font-medium'>Profile</h3>
+                  <p className='text-sm text-muted-foreground'>
+                    This is how others will see you on the site.
+                  </p>
+                </div>
+                {/* <Separator /> */}
+                <ProfileForm userProfile={userProfile!} />
+                {/* <Separator />
                 <h3 className='text-lg font-medium'>Web3 Connection</h3>
                 <p className='text-sm text-muted-foreground'>
                   Connect your wallet to custody your tickets! Probably need
                   some better explanation for users.
                 </p>
-                <WalletConnect userProfile={userProfile!} />
+                <WalletConnect userProfile={userProfile!} /> */}
               </div>
             </div>
           </div>

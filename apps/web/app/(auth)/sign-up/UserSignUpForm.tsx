@@ -83,7 +83,7 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={onSubmit}>
-        <div className='grid gap-2'>
+        <div className='grid gap-4'>
           <div className='grid gap-1'>
             <p>Email</p>
             <Label className='sr-only' htmlFor='email'>
@@ -114,7 +114,7 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
               value={password}
             />
           </div>
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} className='rounded-md'>
             {isLoading && (
               <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
             )}

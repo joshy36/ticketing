@@ -54,7 +54,7 @@ const Home = () => {
       <ScrollView>
         <View className="max-w-[50px] pb-2 ">
           <TouchableOpacity
-            className="bg-white py-3 rounded-xl"
+            className="bg-white py-3 rounded-full"
             onPress={() => setFront(!front)}
           >
             <Text className="text-black text-center font-bold">Flip</Text>
@@ -96,7 +96,7 @@ const Home = () => {
                   ) : (
                     <View className="flex items-center justify-center pt-4">
                       <TouchableOpacity
-                        className="bg-white py-3 rounded-xl flex w-24 justify-end"
+                        className="bg-white py-3 rounded-full flex w-24 justify-end"
                         onPress={() => {
                           setIsLoading(true);
 

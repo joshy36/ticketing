@@ -71,7 +71,7 @@ export function TicketView({
   }, []);
 
   return (
-    <div className='flex flex-col items-center justify-center px-8 py-16'>
+    <div className='flex flex-col items-center justify-center'>
       <div className='flex flex-row items-center pb-4'>
         <Button variant='secondary' onClick={() => setFront(!front)}>
           Flip

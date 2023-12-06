@@ -23,7 +23,7 @@ const ProfilePage = () => {
         <View>
           <View className="flex flex-row justify-end pr-2">
             <TouchableOpacity
-              className="bg-white py-3 rounded-xl w-24 "
+              className="bg-white py-3 rounded-full w-24 "
               onPress={() => signOut()}
             >
               <Text className="text-black text-center font-bold">Sign Out</Text>

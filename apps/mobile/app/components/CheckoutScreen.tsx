@@ -79,7 +79,7 @@ export default function CheckoutScreen({
   return (
     <View>
       <TouchableOpacity
-        className="bg-white py-3 rounded-xl flex "
+        className="bg-white py-3 rounded-full flex "
         onPress={openPaymentSheet}
       >
         <Text className="text-black text-center font-bold">Checkout</Text>

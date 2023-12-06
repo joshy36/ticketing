@@ -170,10 +170,14 @@ export default function EventCheckout({
             </div>
           </div>
         ) : (
-          <Button onClick={() => router.push(`/${userProfile.username}/edit`)}>
-            <p>Please Connect Wallet in Profile Section</p>
-            <ExternalLinkIcon />
-          </Button>
+          <div className='flex items-center justify-center pt-4'>
+            <Button
+              onClick={() => router.push(`/${userProfile.username}/edit`)}
+            >
+              <p>Please set up a wallet</p>
+              <ExternalLinkIcon />
+            </Button>
+          </div>
         )}
       </div>
     </div>

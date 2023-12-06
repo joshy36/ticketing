@@ -246,7 +246,7 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
           </Button> */}
           </div>
           <Button
-            className='w-64'
+            className='w-48'
             variant='secondary'
             type='submit'
             disabled={isLoading}

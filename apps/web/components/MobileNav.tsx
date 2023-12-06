@@ -115,7 +115,7 @@ export function MobileNav({
           <CommandMenu />
         </div>
         {user ? (
-          <div className='ml-auto flex items-center space-x-4'>
+          <div className='ml-auto mt-1.5 flex items-center space-x-4'>
             <UserNav user={user} userProfile={userProfile} />
           </div>
         ) : (

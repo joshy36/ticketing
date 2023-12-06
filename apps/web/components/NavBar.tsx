@@ -114,7 +114,7 @@ export default function NavBar({
           <CommandMenu />
         </div>
         {user ? (
-          <div className='mt-1'>
+          <div className='ml-auto mt-1.5 flex items-center space-x-4'>
             <UserNav user={user} userProfile={userProfile} />
           </div>
         ) : (

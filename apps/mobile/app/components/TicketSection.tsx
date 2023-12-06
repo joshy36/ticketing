@@ -141,7 +141,7 @@ const TicketSection = ({
         >
           {getTotalTicketCount() === 0 ? (
             <TouchableOpacity
-              className="bg-white opacity-50 py-3 rounded-xl flex"
+              className="bg-white opacity-50 py-3 rounded-full flex"
               disabled={getTotalTicketCount() == 0}
             >
               <Text className="text-black text-center font-bold">
@@ -150,7 +150,7 @@ const TicketSection = ({
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              className="bg-white py-3 rounded-xl flex"
+              className="bg-white py-3 rounded-full flex"
               disabled={getTotalTicketCount() == 0}
             >
               <Text className="text-black text-center font-bold">
@@ -161,7 +161,7 @@ const TicketSection = ({
         </Link>
       ) : (
         <Link href={`/profile`} asChild>
-          <TouchableOpacity className="bg-white py-3 rounded-xl flex">
+          <TouchableOpacity className="bg-white py-3 rounded-full flex">
             <Text className="text-black text-center font-bold">
               Sign in to Purchase
             </Text>

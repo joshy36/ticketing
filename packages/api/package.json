@@ -12,12 +12,19 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@alchemy/aa-accounts": "^1.2.0",
+    "@alchemy/aa-alchemy": "^1.2.0",
+    "@alchemy/aa-core": "^1.2.0",
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
+    "@turnkey/api-key-stamper": "^0.3.0",
+    "@turnkey/http": "^2.4.2",
+    "@turnkey/viem": "^0.4.2",
     "dotenv": "^16.3.1",
     "stripe": "^14.2.0",
     "supabase": "*",
     "superjson": "1.13.1",
+    "viem": "^1.19.11",
     "zod": "^3.22.2"
   },
   "devDependencies": {

@@ -48,7 +48,7 @@ export default async function EventView({
             {dateToString(event.date)}
           </p>
         </div>
-        <div className='grid grid-cols-1 justify-center gap-8 pt-6 md:max-w-[1000px] md:grid-cols-2 '>
+        <div className='grid grid-cols-1 justify-center gap-8 pt-6 md:max-w-[1000px] md:grid-cols-2'>
           <div>
             <Card className='w-full border p-2 shadow-2xl shadow-zinc-800'>
               <CardHeader className='text-3xl font-bold'>

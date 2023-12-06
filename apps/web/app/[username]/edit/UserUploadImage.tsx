@@ -133,12 +133,12 @@ export default function UserUploadImage({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='grid grid-cols-2 grid-rows-1'>
+        <div className='grid grid-cols-2 grid-rows-1 gap-12'>
           <Button
             variant='secondary'
             type='submit'
             disabled={isLoading}
-            className='w-64'
+            className='w-full'
           >
             {isLoading && (
               <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
@@ -149,6 +149,7 @@ export default function UserUploadImage({
             id='picture'
             type='file'
             disabled={isLoading}
+            className='rounded-full'
             {...register('file', {
               onChange: (e) => {
                 setImgUrl(URL.createObjectURL(e.target.files[0]));

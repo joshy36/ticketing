@@ -10,6 +10,8 @@ import { venuesRouter } from './venues';
 import { paymentsRouter } from './payments';
 import { sbtsRouter } from './sbts';
 import { collectiblesRouter } from './collectibles';
+// import { alchemyRouter } from './alchemy';
+import { turnkeyRouter } from './turnkey';
 
 export const appRouter = mergeRouters(
   eventsRouter,
@@ -19,7 +21,9 @@ export const appRouter = mergeRouters(
   venuesRouter,
   paymentsRouter,
   sbtsRouter,
-  collectiblesRouter
+  collectiblesRouter,
+  // alchemyRouter,
+  turnkeyRouter
 );
 
 export type AppRouter = typeof appRouter;
