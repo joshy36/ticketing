@@ -35,7 +35,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     }
   }, [userProfile]);
 
-  console.log('suborg: ', subOrgId);
+  console.log('sub_org: ', rp_id);
 
   const subOrg = trpc.subOrg.useMutation({
     onSettled(data, error) {
