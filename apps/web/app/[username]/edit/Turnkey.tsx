@@ -23,10 +23,16 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const [subOrgId, setSubOrgId] = useState<string | null>(null);
   const [privateKey, setPrivateKey] = useState<TPrivateKeyState>(null);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [rp_id, setRpId] = useState<string | null>(null);
 
   useEffect(() => {
     setSubOrgId(userProfile?.turnkey_sub_org);
     setWalletAddress(userProfile?.wallet_address);
+    if (process.env.ENVIRONMENT === 'local') {
+      setRpId('localhost');
+    } else {
+      setRpId(process.env.NEXT_PUBLIC_BASE_URL!);
+    }
   }, [userProfile]);
 
   console.log('suborg: ', subOrgId);
@@ -58,7 +64,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   });
 
   const stamper = new WebauthnStamper({
-    rpId: 'localhost',
+    rpId: rp_id!,
   });
 
   const passkeyHttpClient = new TurnkeyClient(
@@ -76,7 +82,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     const attestation = await getWebAuthnAttestation({
       publicKey: {
         rp: {
-          id: 'localhost',
+          id: rp_id!,
           name: 'Turnkey Viem Passkey Demo',
         },
         challenge,
