@@ -84,7 +84,7 @@ export default function EventPurchase({
             sectionPrices={sectionPrices}
           />
           <div className='py-4'></div>
-          {/* <Button
+          <Button
             onClick={() => {
               setIsLoading(true);
               releaseCollectibles.mutate({ event_id: event.id });
@@ -101,7 +101,7 @@ export default function EventPurchase({
             disabled={isLoading}
           >
             Release SBTs
-          </Button> */}
+          </Button>
         </div>
       );
     }
