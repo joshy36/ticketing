@@ -21,7 +21,6 @@ type TPrivateKeyState = {
 export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const [loading, setLoading] = useState(false);
   const [subOrgId, setSubOrgId] = useState<string | null>(null);
-  const [privateKey, setPrivateKey] = useState<TPrivateKeyState>(null);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [rp_id, setRpId] = useState<string | null>(null);
 
@@ -55,10 +54,6 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
         console.error('Error creating key:', error);
       } else {
         console.log('key created: ', data);
-        setPrivateKey({
-          id: data!['privateKeyId']!,
-          address: data!['address']!,
-        });
         setWalletAddress(data!['address']!);
       }
     },
