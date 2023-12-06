@@ -31,7 +31,8 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     if (process.env.ENVIRONMENT === 'local') {
       setRpId('localhost');
     } else {
-      setRpId(process.env.NEXT_PUBLIC_BASE_URL!);
+      // setRpId(process.env.NEXT_PUBLIC_BASE_URL!);
+      setRpId('ticketing-lemon.vercel.app');
     }
   }, [userProfile]);
 
