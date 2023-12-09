@@ -4,6 +4,7 @@ import {
   unstable_httpBatchStreamLink,
 } from '@trpc/client';
 import { cookies } from 'next/headers';
+import fetchPonyfill from 'fetch-ponyfill';
 
 import { type AppRouter } from 'api';
 import { getUrl, transformer } from './shared';
@@ -18,6 +19,7 @@ export const serverClient = createTRPCProxyClient<AppRouter>({
     // }),
     unstable_httpBatchStreamLink({
       url: getUrl(),
+      fetch: fetchPonyfill().fetch,
       headers() {
         const heads = new Map();
         heads.set('cookie', cookies().toString());
