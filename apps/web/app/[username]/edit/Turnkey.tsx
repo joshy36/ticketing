@@ -12,6 +12,7 @@ import { Icons } from '@/components/ui/icons';
 import { WebauthnStamper } from '@turnkey/webauthn-stamper';
 import { trpc } from '../../_trpc/client';
 import { UserProfile } from 'supabase';
+import { revalidatePath } from 'next/cache';
 
 type TPrivateKeyState = {
   id: string;
@@ -50,6 +51,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
       } else {
         console.log('sub-org created: ', data);
         setSubOrgId(data?.subOrgId!);
+        revalidatePath('/');
       }
     },
   });

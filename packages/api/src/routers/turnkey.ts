@@ -150,10 +150,14 @@ export const turnkeyRouter = router({
               ?.map((pk) => pk.privateKeyId)
               .join('');
 
-            await supabase
+            const t = await supabase
               .from('user_profiles')
               .update({ wallet_address: address })
               .eq('id', ctx.user?.id);
+
+            console.log('turnkeyRouter.createKey.t: ', t);
+
+            console.log('turnkeyRouter.createKey.address: ', address);
 
             return {
               message: 'successfully created key',
