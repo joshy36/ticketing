@@ -22,6 +22,7 @@ export const serverClient = createTRPCProxyClient<AppRouter>({
         const heads = new Map();
         heads.set('cookie', cookies().toString());
         heads.set('x-trpc-source', 'rsc');
+        console.log(Object.fromEntries(heads));
         return Object.fromEntries(heads);
       },
     }),
