@@ -56,7 +56,10 @@ export async function POST(req: NextRequest) {
           field_name: 'tickets_remaining',
         });
 
-        console.log('Adding job to queue');
+        console.log('Adding job to queue :', metadata?.event_id!);
+        console.log('Adding job to queue :', ticket?.id!);
+        console.log('Adding job to queue :', metadata?.user_id!);
+
         const jobId = await serverClient.addJobToQueue.mutate({
           method: 'transferTicket',
           params: {
