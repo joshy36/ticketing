@@ -84,24 +84,26 @@ export default function EventPurchase({
             sectionPrices={sectionPrices}
           />
           <div className='py-4'></div>
-          <Button
-            onClick={() => {
-              setIsLoading(true);
-              releaseCollectibles.mutate({ event_id: event.id });
-            }}
-            disabled={isLoading}
-          >
-            Release Collectibles
-          </Button>
-          <Button
-            onClick={() => {
-              setIsLoading(true);
-              releaseSbts.mutate({ event_id: event.id });
-            }}
-            disabled={isLoading}
-          >
-            Release SBTs
-          </Button>
+          <div className='flex flex-row items-center justify-between '>
+            <Button
+              onClick={() => {
+                setIsLoading(true);
+                releaseCollectibles.mutate({ event_id: event.id });
+              }}
+              disabled={isLoading}
+            >
+              Release Collectibles
+            </Button>
+            <Button
+              onClick={() => {
+                setIsLoading(true);
+                releaseSbts.mutate({ event_id: event.id });
+              }}
+              disabled={isLoading}
+            >
+              Release SBTs
+            </Button>
+          </div>
         </div>
       );
     }

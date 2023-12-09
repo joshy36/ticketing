@@ -317,5 +317,7 @@ export const ticketsRouter = router({
       console.log(
         `Token transferred! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
       );
+
+      return tx.hash;
     }),
 });

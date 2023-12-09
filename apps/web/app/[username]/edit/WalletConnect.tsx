@@ -39,13 +39,13 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
     variables,
   } = useSignMessage();
 
-  const updateWallet = trpc.updateUser.useMutation({
-    onSettled(data, error) {
-      if (!data) {
-        console.error('Error adding wallet:', error);
-      }
-    },
-  });
+  // const updateWallet = trpc.updateUser.useMutation({
+  //   onSettled(data, error) {
+  //     if (!data) {
+  //       console.error('Error adding wallet:', error);
+  //     }
+  //   },
+  // });
 
   React.useEffect(() => {
     (async () => {
@@ -55,10 +55,10 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
           signature: signMessageData,
         });
         if (recoveredAddress === address) {
-          updateWallet.mutate({
-            id: userProfile.id,
-            wallet_address: String(recoveredAddress),
-          });
+          // updateWallet.mutate({
+          //   id: userProfile.id,
+          //   wallet_address: String(recoveredAddress),
+          // });
         } else {
           console.error('Signature did not recover to correct address');
         }
@@ -68,7 +68,7 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
     signMessageData,
     variables?.message,
     address,
-    updateWallet,
+    // updateWallet,
     userProfile.id,
   ]);
 

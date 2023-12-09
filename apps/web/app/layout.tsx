@@ -11,7 +11,7 @@ import { MobileNav } from '@/components/MobileNav';
 
 import './globals.css';
 
-export const revalidate = 0;
+export const revalidate = 0; //disable cache
 
 export default async function RootLayout({
   // Layouts must accept a children prop.

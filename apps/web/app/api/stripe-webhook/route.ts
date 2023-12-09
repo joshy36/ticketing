@@ -28,9 +28,7 @@ export async function POST(req: NextRequest) {
     console.log('🔔 cartInfo: ', cartInfo);
     const supabase = createRouteClient();
     for (let i = 0; i < cartInfo.length; i++) {
-      console.log('🔔 i: ', i);
       for (let j = 0; j < cartInfo[i]!.quantity; j++) {
-        console.log('🔔 j: ', j);
         const { data: ticket, error: ticketError } = await supabase
           .from('tickets')
           .select()
@@ -58,11 +56,16 @@ export async function POST(req: NextRequest) {
           field_name: 'tickets_remaining',
         });
 
-        serverClient.transferTicket.mutate({
-          event_id: metadata?.event_id!,
-          ticket_id: ticket?.id!,
-          user_id: metadata?.user_id!,
+        console.log('Adding job to queue');
+        const jobId = await serverClient.addJobToQueue.mutate({
+          method: 'transferTicket',
+          params: {
+            event_id: metadata?.event_id!,
+            ticket_id: ticket?.id!,
+            user_id: metadata?.user_id!,
+          },
         });
+        console.log('Done adding jobId: ', jobId);
       }
     }
   }

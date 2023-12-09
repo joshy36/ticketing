@@ -8,7 +8,7 @@ export const transformer = superjson;
 function getBaseUrl() {
   //   if (typeof window !== 'undefined') return '';
   //   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  if (process.env.ENVIRONMENT === 'test') {
+  if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'local') {
     return `http://localhost:3000`;
   }
   return `http://ticketing-lemon.vercel.app/`;

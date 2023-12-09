@@ -9,6 +9,8 @@ import { trpc } from '../../_trpc/client';
 import UserUploadImage from './UserUploadImage';
 import { WalletConnect } from './WalletConnect';
 import Turnkey from './Turnkey';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 const sidebarNavItems = [
   {
@@ -17,7 +19,7 @@ const sidebarNavItems = [
   },
   {
     title: 'Account',
-    href: '/',
+    href: '/events',
   },
 ];
 
@@ -26,13 +28,60 @@ export default function ProfilePage({
 }: {
   params: { username: string };
 }) {
+  // const router = useRouter();
+
   const { data: userProfile, isLoading } = trpc.getUserProfile.useQuery({
     username: params.username,
   });
 
+  // const add = trpc.addJobToQueue.useMutation({
+  //   onSettled(data, error) {
+  //     if (!data) {
+  //       console.log('Error pushing to queue:', error);
+  //     } else {
+  //       console.log('added: ', data);
+  //       router.refresh();
+  //     }
+  //   },
+  // });
+
+  // const execute = trpc.executeJobFromQueue.useMutation({
+  //   onSettled(data, error) {
+  //     if (!data) {
+  //       console.log('Error executing job:', error);
+  //     } else {
+  //       console.log('executed: ', data);
+  //     }
+  //   },
+  // });
+
   return (
     <WagmiConfig config={wagmiConfig}>
       <div>
+        {/* <div className='flex flex-row items-center justify-between '>
+          <Button
+            onClick={() => {
+              console.log('adding job');
+              add.mutate({
+                method: 'transferTicket',
+                params: {
+                  event_id: 'asdf',
+                  ticket_id: 'asdf',
+                  user_id: 'asdf',
+                },
+              });
+            }}
+          >
+            Add Job
+          </Button>
+          <Button
+            onClick={() => {
+              execute.mutate();
+            }}
+          >
+            Execute Job
+          </Button>
+        </div> */}
         {isLoading ? (
           <div>Loading...</div>
         ) : (
@@ -79,13 +128,13 @@ export default function ProfilePage({
                 </div>
                 {/* <Separator /> */}
                 <ProfileForm userProfile={userProfile!} />
-                {/* <Separator />
+                <Separator />
                 <h3 className='text-lg font-medium'>Web3 Connection</h3>
                 <p className='text-sm text-muted-foreground'>
                   Connect your wallet to custody your tickets! Probably need
                   some better explanation for users.
                 </p>
-                <WalletConnect userProfile={userProfile!} /> */}
+                <WalletConnect userProfile={userProfile!} />
               </div>
             </div>
           </div>

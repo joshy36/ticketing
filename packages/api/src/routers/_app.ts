@@ -10,7 +10,7 @@ import { venuesRouter } from './venues';
 import { paymentsRouter } from './payments';
 import { sbtsRouter } from './sbts';
 import { collectiblesRouter } from './collectibles';
-// import { alchemyRouter } from './alchemy';
+import { queueRouter } from './queue';
 import { turnkeyRouter } from './turnkey';
 
 export const appRouter = mergeRouters(
@@ -22,7 +22,7 @@ export const appRouter = mergeRouters(
   paymentsRouter,
   sbtsRouter,
   collectiblesRouter,
-  // alchemyRouter,
+  queueRouter,
   turnkeyRouter
 );
 

@@ -27,7 +27,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   useEffect(() => {
     setSubOrgId(userProfile?.turnkey_sub_org);
     setWalletAddress(userProfile?.wallet_address);
-    if (process.env.ENVIRONMENT === 'local') {
+    if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'local') {
       setRpId('localhost');
     } else {
       // setRpId(process.env.NEXT_PUBLIC_BASE_URL!);
@@ -35,6 +35,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     }
   }, [userProfile]);
 
+  console.log(process.env.NEXT_PUBLIC_ENVIRONMENT);
   console.log('sub_org: ', rp_id);
 
   const subOrg = trpc.subOrg.useMutation({
