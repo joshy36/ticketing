@@ -27,7 +27,7 @@ export const ticketsRouter = router({
       }
     }),
 
-  getTicketsForUser: authedProcedure
+  getTicketsForUser: publicProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
