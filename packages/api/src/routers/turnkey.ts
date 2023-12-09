@@ -25,6 +25,7 @@ export const turnkeyRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      console.log('turnkeyRouter.subOrg');
       const supabase = ctx.supabase;
       const createSubOrgRequest = input as CreateSubOrgRequest;
 
@@ -95,6 +96,7 @@ export const turnkeyRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      console.log('turnkeyRouter.createKey');
       const supabase = ctx.supabase;
       let signedRequest = input as TSignedRequest;
 

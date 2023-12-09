@@ -28,10 +28,12 @@
 //   return month + ' ' + day + ', ' + time;
 // };
 
-import { format, parseISO } from 'date-fns';
+import { add, format, parseISO } from 'date-fns';
 
 export const dateToString = (dateString: string): string => {
   const dateObj = parseISO(dateString);
+  // // Subtract 5 hours for Eastern Standard Time (EST)
+  // const estTime = add(dateObj, { hours: -5 });
   const formattedDate = format(dateObj, 'MMM d, h:mm a');
   return formattedDate;
 };

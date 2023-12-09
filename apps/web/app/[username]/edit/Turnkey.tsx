@@ -35,9 +35,14 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     }
   }, [userProfile]);
 
-  console.log(process.env.NEXT_PUBLIC_ENVIRONMENT);
-  console.log('sub_org: ', rp_id);
+  const logObject = {
+    env: process.env.NEXT_PUBLIC_ENVIRONMENT,
+    sub_org: rp_id,
+    wallet_address: walletAddress,
+    sub_org_id: subOrgId,
+  };
 
+  console.log('Log Object:', logObject);
   const subOrg = trpc.subOrg.useMutation({
     onSettled(data, error) {
       if (error) {

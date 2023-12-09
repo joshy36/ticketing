@@ -111,8 +111,11 @@ export default function EventCreate() {
       time[0] = ((Number(time[0]) + 12) % 24).toString();
     }
 
+    // console.log('date: ', values.date);
+
     values.date.setHours(Number(time[0]));
     values.date.setMinutes(Number(time[1]));
+    // console.log('date: ', values.date);
 
     createEvent.mutate({
       name: values.name,

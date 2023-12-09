@@ -27,6 +27,7 @@ export const ticketsRouter = router({
       }
     }),
 
+  // should be authed, was having bugs
   getTicketsForUser: publicProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async ({ ctx, input }) => {
