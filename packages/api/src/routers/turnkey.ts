@@ -167,6 +167,7 @@ export const turnkeyRouter = router({
           }
         }
       } catch (e) {
+        console.log('GOTCHA');
         console.error(e);
 
         throw new TRPCError({

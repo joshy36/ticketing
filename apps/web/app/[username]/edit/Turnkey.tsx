@@ -23,6 +23,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const [loading, setLoading] = useState(false);
   const [subOrgId, setSubOrgId] = useState<string | null>(null);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [walletError, setWalletError] = useState<string | null>(null);
   const [rp_id, setRpId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,11 +59,13 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
 
   const createKey = trpc.createKey.useMutation({
     onSettled(data, error) {
-      if (error) {
+      if (!data) {
         console.error('Error creating key:', error);
+        setWalletError('Incorrect passkey');
       } else {
         console.log('key created: ', data);
         setWalletAddress(data!['address']!);
+        setWalletError(null);
       }
     },
   });
@@ -165,19 +168,26 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
             Create a passkey
           </Button>
         )}
-        {subOrgId && !walletAddress && (
-          <Button
-            onClick={async () => {
-              setLoading(true);
-              await createPrivateKey();
-              setLoading(false);
-            }}
-            disabled={loading}
-          >
-            {loading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
-            Create your wallet
-          </Button>
-        )}
+        <div className='flex flex-col items-center justify-center gap-2'>
+          {subOrgId && !walletAddress && (
+            <Button
+              onClick={async () => {
+                setLoading(true);
+                await createPrivateKey();
+                setLoading(false);
+              }}
+              disabled={loading}
+            >
+              {loading && (
+                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+              )}
+              Create your wallet
+            </Button>
+          )}
+          {walletError && (
+            <div className='font-light text-red-700'>{walletError}</div>
+          )}
+        </div>
       </div>
     </div>
   );
