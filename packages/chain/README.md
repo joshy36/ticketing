@@ -14,20 +14,20 @@ npx hardhat run scripts/deploy.ts
 
 deploy Event contract
 ```shell
-npx hardhat --network base-goerli deploy --tags Event
+npx hardhat --network base-sepolia deploy --tags Event
 ```
 
 deploy SBT contract
 ```shell
-npx hardhat --network base-goerli deploy --tags SBT
+npx hardhat --network base-sepolia deploy --tags SBT
 ```
 
 deploy Collectible contract
 ```shell
-npx hardhat --network base-goerli deploy --tags Collectible
+npx hardhat --network base-sepolia deploy --tags Collectible
 ```
 
 verify Event contract on etherscan
 ```shell
-npx hardhat verify --network base-goerli <address> <name> <symbol> <baseUri>
+npx hardhat verify --network base-sepolia <address> <name> <symbol> <baseUri>
 ```

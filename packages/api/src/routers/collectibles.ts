@@ -65,7 +65,7 @@ export const collectiblesRouter = router({
 
         const address = link[link.length - 1]!;
         const provider = new ethers.JsonRpcProvider(
-          process.env.ALCHEMY_GOERLI_URL!
+          process.env.ALCHEMY_SEPOLIA_URL!
         );
         const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
         const eventContract = new ethers.Contract(
@@ -82,7 +82,7 @@ export const collectiblesRouter = router({
         console.log('tx: ', tx);
         await tx.wait();
         console.log(
-          `Token transferred! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
+          `Token transferred! Check it out at: https://base-sepolia.blockscout.com/tx/${tx.hash}`
         );
 
         await supabase

@@ -4,7 +4,7 @@ import { DeployFunction } from 'hardhat-deploy/types';
 import { createClient } from '@supabase/supabase-js';
 import { ethers } from 'ethers';
 
-const ALCHEMY_GOERLI_URL = process.env.ALCHEMY_GOERLI_URL!;
+const ALCHEMY_SEPOLIA_URL = process.env.ALCHEMY_SEPOLIA_URL!;
 const PRIVATE_KEY = process.env.PRIVATE_KEY!;
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -13,7 +13,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deploy } = deployments;
 
   // CHANGE
-  const id = 'bcc98273-19ab-4624-a6ff-96c8c83de839';
+  const id = 'd34f35ce-405e-4e84-a3fc-ea88a5e35065';
   // CHANGE
   const env: string = 'prod';
 
@@ -64,7 +64,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
 
   const etherscanLink =
-    'https://goerli.basescan.org/address/' + deployment.address;
+    'https://base-sepolia.blockscout.com/address/' + deployment.address;
 
   await supabase
     .from('sbts')
@@ -74,7 +74,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   console.log(`SBT with name ${name} deployed to ${etherscanLink}`);
 
   // MINT TOKENS
-  const provider = new ethers.JsonRpcProvider(ALCHEMY_GOERLI_URL);
+  const provider = new ethers.JsonRpcProvider(ALCHEMY_SEPOLIA_URL);
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
   const eventContract = new ethers.Contract(
     deployment.address,
@@ -85,7 +85,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   let tx = await eventContract.mint(numberOfTickets);
   await tx.wait();
   console.log(
-    `NFTs Minted! Check it out at: https://goerli.basescan.org/tx/${tx.hash}`
+    `NFTs Minted! Check it out at: https://base-sepolia.blockscout.com/tx/${tx.hash}`
   );
 };
 export default func;
