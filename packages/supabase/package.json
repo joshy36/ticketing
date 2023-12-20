@@ -10,7 +10,6 @@
     "update-types": "npx supabase gen types typescript --local > database.types.ts"
   },
   "dependencies": {
-    "@supabase/auth-helpers-nextjs": "^0.7.4",
     "@supabase/supabase-js": "^2.32.0"
   },
   "devDependencies": {
