@@ -47,7 +47,8 @@ export const ticketsRouter = router({
         .from('tickets')
         .select(`*, events (id, image, name, etherscan_link, date)`)
         .eq('user_id', input.user_id)
-        .eq('event_id', input.event_id);
+        .eq('event_id', input.event_id)
+        .order('id', { ascending: true });
       return data;
     }),
 
