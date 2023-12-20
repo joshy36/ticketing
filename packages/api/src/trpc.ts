@@ -21,13 +21,7 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = async (opts: { req: NextRequest }) => {
   const { req } = opts;
   const res = NextResponse.next();
-  const supabase = createMiddlewareClient(
-    { req, res },
-    {
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    }
-  );
+  const supabase = createRouteClient();
 
   let sessionData;
   let user;
@@ -41,6 +35,7 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
     } = await supabase.auth.getSession();
     sessionData = session;
   }
+  console.log('sessionData: ', sessionData);
 
   if (sessionData) {
     user = sessionData.user;

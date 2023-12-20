@@ -28,6 +28,7 @@ export const usersRouter = router({
     }),
 
   getUpcomingEventsForUser: publicProcedure.query(async ({ ctx }) => {
+    console.log('USER: ', ctx.user);
     const supabase = ctx.supabase;
     const { data: upcomingTickets } = await supabase
       .from('tickets')

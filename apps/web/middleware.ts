@@ -5,6 +5,7 @@ import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+  console.log('MIDDLE');
   const supabase = createMiddlewareClient(
     { req, res },
     {
