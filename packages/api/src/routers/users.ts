@@ -27,6 +27,31 @@ export const usersRouter = router({
       }
     }),
 
+  getUpcomingEventsForUser: publicProcedure.query(async ({ ctx }) => {
+    const supabase = ctx.supabase;
+    const { data: upcomingTickets } = await supabase
+      .from('tickets')
+      .select('*')
+      .eq('user_id', ctx.user.id)
+      .eq('scanned', false);
+
+    const eventIds = upcomingTickets?.map((ticket) => ticket.event_id!);
+    const uniqueEventIds = [...new Set(eventIds)];
+
+    let events: any[] = [];
+    for (let i = 0; i < uniqueEventIds.length; i++) {
+      const { data: event } = await supabase
+        .from('events')
+        .select(`*, venues (name)`)
+        .eq('id', uniqueEventIds[i]!)
+        .limit(1)
+        .single();
+      events.push(event);
+    }
+
+    return events;
+  }),
+
   updateUser: publicProcedure
     .input(
       z.object({

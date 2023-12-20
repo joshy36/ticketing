@@ -7,13 +7,58 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Icons } from '@/components/ui/icons';
+import confetti from 'canvas-confetti';
+import { useRouter } from 'next/navigation';
+import { Events } from 'supabase';
 
-export default function CheckoutForm() {
+export default function CheckoutForm({ event }: { event: Events }) {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
 
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const fireConfetti = () => {
+    const defaults = {
+      scalar: 1.5,
+      particleCount: 600,
+      origin: { y: -0.1 },
+    };
+
+    function fire(particleRatio: any, opts: any) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(defaults.particleCount * particleRatio),
+        colors: ['#0099ff', '#0066cc', '#003366', '#ffffff'],
+        duration: 3000,
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+    fire(0.2, {
+      spread: 60,
+    });
+    fire(0.35, {
+      spread: 140,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+    fire(0.1, {
+      spread: 160,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+    fire(0.1, {
+      spread: 180,
+      startVelocity: 45,
+    });
+  };
 
   useEffect(() => {
     if (!stripe) {
@@ -57,21 +102,30 @@ export default function CheckoutForm() {
 
     setIsLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const { paymentIntent, error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: process.env.NEXT_PUBLIC_BASE_URL + '/ticket',
+        return_url: process.env.NEXT_PUBLIC_BASE_URL + '/ticket/' + event.id,
       },
+      redirect: 'if_required',
     });
+
+    if (paymentIntent) {
+      console.log('PaymentIntent', paymentIntent);
+      fireConfetti();
+      // wait 1 sec before redirecting
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      router.push(process.env.NEXT_PUBLIC_BASE_URL + '/ticket/' + event.id);
+    }
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === 'card_error' || error.type === 'validation_error') {
+    if (error?.type === 'card_error' || error?.type === 'validation_error') {
       setMessage(error.message!);
-    } else {
+    } else if (error) {
       setMessage('An unexpected error occurred.');
     }
 

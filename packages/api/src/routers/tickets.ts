@@ -39,6 +39,19 @@ export const ticketsRouter = router({
       return data;
     }),
 
+  getTicketsForUserByEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = ctx.user;
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('tickets')
+        .select(`*, events (id, image, name, etherscan_link, date)`)
+        .eq('user_id', user.id)
+        .eq('event_id', input.event_id);
+      return data;
+    }),
+
   getTicketsForEvent: publicProcedure
     .input(z.object({ event_id: z.string() }))
     .query(async ({ ctx, input }) => {

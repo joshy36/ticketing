@@ -6,23 +6,25 @@ import { notFound, redirect } from 'next/navigation';
 export default async function Home({
   params,
 }: {
-  params: { ticket_id: string };
+  params: { event_id: string };
 }) {
-  let ticket;
-  try {
-    ticket = await serverClient.getTicketById.query({ id: params.ticket_id });
-  } catch {
-    notFound();
-  }
-
   const supabase = createServerClient();
 
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session || session?.user.id != ticket?.user_id) {
+  if (!session) {
     redirect('/unauthorized');
+  }
+
+  let tickets;
+  try {
+    tickets = await serverClient.getTicketsForUserByEvent.query({
+      event_id: params.event_id,
+    });
+  } catch {
+    notFound();
   }
 
   const userProfile = await serverClient.getUserProfile.query({
@@ -31,7 +33,11 @@ export default async function Home({
 
   return (
     <main>
-      <TicketView ticket={ticket} userProfile={userProfile!} />
+      <TicketView
+        tickets={tickets}
+        userProfile={userProfile!}
+        event_id={params.event_id}
+      />
     </main>
   );
 }
