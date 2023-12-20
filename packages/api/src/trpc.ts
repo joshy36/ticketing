@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 import { TRPCError, initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
+import { CookieOptions, createServerClient } from '@supabase/ssr';
 
 type CreateContextOptions = {
   user: any;
@@ -17,33 +18,75 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
   };
 };
 
-export const createTRPCContext = async (opts: { req: NextRequest }) => {
-  const { req } = opts;
-  const res = NextResponse.next();
-  const supabase = createRouteClient();
+export const createTRPCContext = async (opts: { request: NextRequest }) => {
+  // @ts-ignore
+  const request = opts.req;
+  console.log('request: ', request);
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+        },
+      },
+    }
+  );
 
   let sessionData;
   let user;
-  if (opts.req.headers.get('x-trpc-source') === 'expo-react') {
-    if (req.headers.get('mobile-session')) {
-      sessionData = JSON.parse(req.headers.get('mobile-session')!);
+  if (request.headers.get('x-trpc-source') === 'expo-react') {
+    if (request.headers.get('mobile-session')) {
+      sessionData = JSON.parse(request.headers.get('mobile-session')!);
     }
   } else {
     // const {
     //   data: { session },
     // } = await supabase.auth.getSession();
     // sessionData = session;
+
     const {
       data: { user: supabaseUser },
     } = await supabase.auth.getUser();
 
     const {
-      data: { session },
+      data: { session: sessionData },
     } = await supabase.auth.getSession();
-
-    console.log('sessionData: ', session);
+    console.log('sessionData: ', sessionData);
 
     user = supabaseUser;
+    console.log('user: ', user);
   }
 
   // if (sessionData) {
@@ -51,8 +94,6 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
   // } else {
   //   user = null;
   // }
-
-  console.log('user: ', user);
 
   return createInnerTRPCContext({
     user,
