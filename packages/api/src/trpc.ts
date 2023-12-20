@@ -30,18 +30,25 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
       sessionData = JSON.parse(req.headers.get('mobile-session')!);
     }
   } else {
+    // const {
+    //   data: { session },
+    // } = await supabase.auth.getSession();
+    // sessionData = session;
     const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    sessionData = session;
+      data: { user: supabaseUser },
+    } = await supabase.auth.getUser();
+
+    user = supabaseUser;
   }
   console.log('sessionData: ', sessionData);
 
-  if (sessionData) {
-    user = sessionData.user;
-  } else {
-    user = null;
-  }
+  // if (sessionData) {
+  //   user = sessionData.user;
+  // } else {
+  //   user = null;
+  // }
+
+  console.log('user: ', user);
 
   return createInnerTRPCContext({
     user,

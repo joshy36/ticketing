@@ -13,7 +13,10 @@ export async function middleware(req: NextRequest) {
     },
   );
   const sess = await supabase.auth.getSession();
-  console.log('req and sess: ', req, sess);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return res;
 }
 
