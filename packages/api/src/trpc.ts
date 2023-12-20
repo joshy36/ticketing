@@ -18,8 +18,7 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
   };
 };
 
-export const createTRPCContext = async (opts: { request: NextRequest }) => {
-  // @ts-ignore
+export const createTRPCContext = async (opts: { req: NextRequest }) => {
   const request = opts.req;
   console.log('request: ', request);
   let response = NextResponse.next({
