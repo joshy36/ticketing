@@ -5,7 +5,6 @@ import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  console.log('MIDDLE');
   const supabase = createMiddlewareClient(
     { req, res },
     {
@@ -13,7 +12,8 @@ export async function middleware(req: NextRequest) {
       supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     },
   );
-  await supabase.auth.getSession();
+  const sess = await supabase.auth.getSession();
+  console.log('req and sess: ', req, sess);
   return res;
 }
 
