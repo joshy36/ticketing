@@ -26,7 +26,7 @@ export default function UserSignOut({
         <Button variant='default'>Edit Profile</Button>
       </Link>
       <Button variant='outline' onClick={handleSignOut}>
-        Sign out
+        Sign Out
       </Button>
     </div>
   );
