@@ -37,9 +37,14 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
       data: { user: supabaseUser },
     } = await supabase.auth.getUser();
 
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    console.log('sessionData: ', session);
+
     user = supabaseUser;
   }
-  console.log('sessionData: ', sessionData);
 
   // if (sessionData) {
   //   user = sessionData.user;
