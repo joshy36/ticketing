@@ -113,6 +113,7 @@ export default function CheckoutForm({
       confirmParams: {
         return_url:
           process.env.NEXT_PUBLIC_BASE_URL! +
+          +'/' +
           userProfile.username +
           '/tickets/' +
           event.id,
@@ -127,6 +128,7 @@ export default function CheckoutForm({
       await new Promise((resolve) => setTimeout(resolve, 1000));
       router.push(
         process.env.NEXT_PUBLIC_BASE_URL! +
+          +'/' +
           userProfile.username +
           '/tickets/' +
           event.id,
