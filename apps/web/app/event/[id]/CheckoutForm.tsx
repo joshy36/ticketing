@@ -111,12 +111,9 @@ export default function CheckoutForm({
     const { paymentIntent, error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url:
-          process.env.NEXT_PUBLIC_BASE_URL! +
-          +'/' +
-          userProfile.username +
-          '/tickets/' +
-          event.id,
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL!}/${
+          userProfile.username
+        }/tickets/${event.id}`,
       },
       redirect: 'if_required',
     });
@@ -127,11 +124,9 @@ export default function CheckoutForm({
       // wait 1 sec before redirecting
       await new Promise((resolve) => setTimeout(resolve, 1000));
       router.push(
-        process.env.NEXT_PUBLIC_BASE_URL! +
-          +'/' +
-          userProfile.username +
-          '/tickets/' +
-          event.id,
+        `${process.env.NEXT_PUBLIC_BASE_URL!}/${userProfile.username}/tickets/${
+          event.id
+        }`,
       );
     }
 
