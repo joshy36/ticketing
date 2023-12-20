@@ -20,7 +20,6 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
 
 export const createTRPCContext = async (opts: { req: NextRequest }) => {
   const request = opts.req;
-  console.log('request: ', request);
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -70,22 +69,18 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
       sessionData = JSON.parse(request.headers.get('mobile-session')!);
     }
   } else {
-    // const {
-    //   data: { session },
-    // } = await supabase.auth.getSession();
-    // sessionData = session;
-
     const {
       data: { user: supabaseUser },
     } = await supabase.auth.getUser();
 
     const {
-      data: { session: sessionData },
+      data: { session },
     } = await supabase.auth.getSession();
-    console.log('sessionData: ', sessionData);
 
+    sessionData = session;
     user = supabaseUser;
-    console.log('user: ', user);
+    // console.log('user: ', user);
+    // console.log('sessionData: ', sessionData);
   }
 
   // if (sessionData) {

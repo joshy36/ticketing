@@ -15,14 +15,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../../../components/ui/card';
+} from '../../../../components/ui/card';
 import { dateToString } from '@/utils/helpers';
-import { Separator } from '../../../components/ui/separator';
+import { Separator } from '../../../../components/ui/separator';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '../../../components/ui/avatar';
+} from '../../../../components/ui/avatar';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 
 export function TicketView({

@@ -9,9 +9,15 @@ import Link from 'next/link';
 import { Icons } from '@/components/ui/icons';
 import confetti from 'canvas-confetti';
 import { useRouter } from 'next/navigation';
-import { Events } from 'supabase';
+import { Events, UserProfile } from 'supabase';
 
-export default function CheckoutForm({ event }: { event: Events }) {
+export default function CheckoutForm({
+  event,
+  userProfile,
+}: {
+  event: Events;
+  userProfile: UserProfile;
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -105,7 +111,11 @@ export default function CheckoutForm({ event }: { event: Events }) {
     const { paymentIntent, error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: process.env.NEXT_PUBLIC_BASE_URL + '/ticket/' + event.id,
+        return_url:
+          process.env.NEXT_PUBLIC_BASE_URL! +
+          userProfile.username +
+          '/tickets/' +
+          event.id,
       },
       redirect: 'if_required',
     });
@@ -115,7 +125,12 @@ export default function CheckoutForm({ event }: { event: Events }) {
       fireConfetti();
       // wait 1 sec before redirecting
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push(process.env.NEXT_PUBLIC_BASE_URL + '/ticket/' + event.id);
+      router.push(
+        process.env.NEXT_PUBLIC_BASE_URL! +
+          userProfile.username +
+          '/tickets/' +
+          event.id,
+      );
     }
 
     // This point will only be reached if there is an immediate error when

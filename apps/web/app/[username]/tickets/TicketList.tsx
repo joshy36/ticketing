@@ -1,12 +1,12 @@
 import { UserProfile } from 'supabase';
-import { serverClient } from '../_trpc/serverClient';
+import { serverClient } from '../../_trpc/serverClient';
 import Image from 'next/image';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '../../components/ui/tabs';
+} from '../../../components/ui/tabs';
 import { dateToString } from '@/utils/helpers';
 
 export default async function TicketList({
@@ -14,7 +14,9 @@ export default async function TicketList({
 }: {
   userProfile: UserProfile;
 }) {
-  const upcomingEvents = await serverClient.getUpcomingEventsForUser.query();
+  const upcomingEvents = await serverClient.getUpcomingEventsForUser.query({
+    user_id: userProfile.id,
+  });
 
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
@@ -30,7 +32,7 @@ export default async function TicketList({
                 {upcomingEvents?.map((event) => (
                   <a
                     key={event?.id}
-                    href={`/ticket/${event?.id}`}
+                    href={`tickets/${event?.id}`}
                     className='group'
                   >
                     <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
@@ -81,7 +83,7 @@ export default async function TicketList({
                 {userTicketsPast.map((ticket) => (
                   <a
                     key={ticket.id}
-                    href={`/ticket/${ticket.id}`}
+                    href={`tickets/${ticket.id}`}
                     className='group'
                   >
                     <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>

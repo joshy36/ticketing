@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 
 import { createComponents } from './NavBar';
-import { mainComponents } from './NavBar';
 import { cn } from './ui/utils';
 import { Button, buttonVariants } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
@@ -24,6 +23,24 @@ export function MobileNav({
   userProfile: UserProfile | null;
 }) {
   const [open, setOpen] = React.useState(false);
+
+  const mainComponents: {
+    title: string;
+    href: string;
+  }[] = [
+    {
+      title: 'Home',
+      href: '/',
+    },
+    {
+      title: 'Explore Events',
+      href: '/event/list',
+    },
+    {
+      title: 'My Tickets',
+      href: `/${userProfile?.username}/tickets`,
+    },
+  ];
 
   return (
     <div className='fixed top-0 z-40 flex w-full items-center bg-black/80 p-2 backdrop-blur transition-colors duration-500 md:hidden'>

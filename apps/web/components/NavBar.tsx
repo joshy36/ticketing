@@ -18,24 +18,7 @@ import { User } from '@supabase/supabase-js';
 import { UserNav } from './UserNav';
 import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
-
-export const mainComponents: {
-  title: string;
-  href: string;
-}[] = [
-  {
-    title: 'Home',
-    href: '/',
-  },
-  {
-    title: 'Explore Events',
-    href: '/event/list',
-  },
-  {
-    title: 'My Tickets',
-    href: '/ticket',
-  },
-];
+import { useEffect } from 'react';
 
 export const createComponents: {
   title: string;
@@ -66,6 +49,24 @@ export default function NavBar({
   user: User | undefined;
   userProfile: UserProfile | null;
 }) {
+  const mainComponents: {
+    title: string;
+    href: string;
+  }[] = [
+    {
+      title: 'Home',
+      href: '/',
+    },
+    {
+      title: 'Explore Events',
+      href: '/event/list',
+    },
+    {
+      title: 'My Tickets',
+      href: `/${userProfile?.username}/tickets`,
+    },
+  ];
+
   return (
     <div className='fixed top-0 z-40 hidden h-16 w-full items-center bg-black/40 px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
       <NavigationMenu>

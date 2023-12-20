@@ -33,7 +33,7 @@ export const paymentsRouter = router({
         ui_mode: 'embedded',
         mode: 'payment',
         // redirect_on_completion: 'never',
-        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/ticket`,
+        // return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/ticket`,
         metadata: {
           event_id: input.event_id,
           cart_info: JSON.stringify(input.cart_info),
