@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { UserProfile } from 'supabase';
-import createClientClient from '@/utils/supabaseClient';
+import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
 
 export default function UserSignOut({
   userProfile,
@@ -12,7 +12,7 @@ export default function UserSignOut({
   userProfile: UserProfile;
 }) {
   const router = useRouter();
-  const supabase = createClientClient();
+  const supabase = createSupabaseBrowserClient();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

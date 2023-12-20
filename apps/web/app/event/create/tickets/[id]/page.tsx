@@ -1,9 +1,9 @@
 import EventCreateTickets from './EventCreateTickets';
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }: { params: { id: string } }) {
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
 
   const {
     data: { session },

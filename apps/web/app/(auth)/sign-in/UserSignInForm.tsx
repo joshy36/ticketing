@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import createClientClient from '@/utils/supabaseClient';
+import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
 import { AuthResponse } from '@supabase/supabase-js';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -22,7 +22,7 @@ export function UserSignInForm({ className, ...props }: UserAuthFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
-  const supabase = createClientClient();
+  const supabase = createSupabaseBrowserClient();
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();

@@ -1,5 +1,5 @@
 import { serverClient } from '../../_trpc/serverClient';
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import Image from 'next/image';
 import EventPurchase from './EventPurchase';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ export default async function EventView({
 
   const artist = await serverClient.getArtistById.query({ id: event.artist });
   const venue = await serverClient.getVenueById.query({ id: event.venue });
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
   const {
     data: { session },
   } = await supabase.auth.getSession();

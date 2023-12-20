@@ -1,9 +1,9 @@
 import ArtistCreate from './ArtistCreate';
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home() {
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
 
   const {
     data: { session },

@@ -1,6 +1,6 @@
 import { serverClient } from '@/app/_trpc/serverClient';
 import ProfilePage from './ProfilePage';
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({
@@ -8,7 +8,7 @@ export default async function Home({
 }: {
   params: { username: string };
 }) {
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
 
   const userProfile = await serverClient.getUserProfile.query({
     username: params.username,

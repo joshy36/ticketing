@@ -1,10 +1,10 @@
 import UploadImage from '@/components/UploadImage';
 import { Separator } from '@/components/ui/separator';
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }: { params: { id: string } }) {
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
 
   const {
     data: { session },

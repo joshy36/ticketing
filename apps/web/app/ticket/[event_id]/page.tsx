@@ -1,6 +1,6 @@
 import { serverClient } from '@/app/_trpc/serverClient';
 import { TicketView } from './TicketView';
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import { notFound, redirect } from 'next/navigation';
 
 export default async function Home({
@@ -8,7 +8,7 @@ export default async function Home({
 }: {
   params: { event_id: string };
 }) {
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
 
   const {
     data: { session },

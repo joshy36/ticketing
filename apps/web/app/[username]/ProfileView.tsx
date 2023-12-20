@@ -1,4 +1,4 @@
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import Image from 'next/image';
 import { serverClient } from '../_trpc/serverClient';
 import {
@@ -21,7 +21,7 @@ export default async function ProfileView({
 }: {
   params: { username: string };
 }) {
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
 
   const userProfile = await serverClient.getUserProfile.query({
     username: params.username,

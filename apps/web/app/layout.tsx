@@ -2,7 +2,7 @@ import NavBar from '@/components/NavBar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import createServerClient from '@/utils/supabaseServer';
+import createSupabaseServer from '@/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font';
@@ -20,7 +20,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerClient();
+  const supabase = createSupabaseServer();
 
   const {
     data: { session },
