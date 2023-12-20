@@ -22,8 +22,10 @@ export default async function Home({
   try {
     tickets = await serverClient.getTicketsForUserByEvent.query({
       event_id: params.event_id,
+      user_id: session.user.id,
     });
-  } catch {
+  } catch (e) {
+    console.log('error', e);
     notFound();
   }
 
