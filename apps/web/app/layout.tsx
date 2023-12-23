@@ -8,10 +8,17 @@ import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font';
 import Footer from '@/components/Footer';
 import { MobileNav } from '@/components/MobileNav';
+import { Metadata } from 'next';
 
 import './globals.css';
 
 export const revalidate = 0; //disable cache
+
+export const metadata: Metadata = {
+  title: 'Ticketing',
+  description: 'This is a ticketing app',
+  manifest: '/manifest.json',
+};
 
 export default async function RootLayout({
   // Layouts must accept a children prop.

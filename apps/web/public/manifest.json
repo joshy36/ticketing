@@ -1,0 +1,19 @@
+{
+    "name": "Ticketing",
+    "short_name": "TKT",
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "display": "fullscreen",
+    "orientation": "portrait",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "ticket.png",
+        "sizes": "48x48",
+        "type": "image/png",
+        "purpose": "maskable any"
+      }
+    ],
+    "splash_pages": null
+  }
