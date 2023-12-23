@@ -54,3 +54,7 @@ scripts/eventMetadata/
 
 # Expo
 .expo
+
+sw.*
+workbox-*
+swe-worker-*
