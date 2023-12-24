@@ -15,6 +15,8 @@ export default function Home() {
       setDeferredPrompt(e);
       setInstallable(true);
     });
+    console.log('installable', installable);
+    console.log('deferredPrompt', deferredPrompt);
 
     window.addEventListener('appinstalled', () => {
       console.log('INSTALL: Success');
@@ -39,11 +41,10 @@ export default function Home() {
 
   return (
     <main>
-      {installable && (
-        <Button className='w-full rounded-none' onClick={handleInstallClick}>
-          Install App For Native Experience
-        </Button>
-      )}
+      <Button className='w-full rounded-none' onClick={handleInstallClick}>
+        Install App For Native Experience
+      </Button>
+
       <p className='bg-gradient-to-r from-white to-gray-500 bg-clip-text px-20 py-20 text-center text-4xl font-bold tracking-tighter text-transparent md:text-9xl'>
         Welcome to the future of ticketing.
       </p>
