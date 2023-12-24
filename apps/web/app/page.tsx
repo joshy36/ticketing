@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 
+// https://github.com/adueck/pwa-install-demo/blob/badb37b641fb115867fd0b90d54d1cd91eaf22b6/src/App.js#L11
 let deferredPrompt: any;
 
 export default function Home() {
@@ -24,7 +25,7 @@ export default function Home() {
     });
   }, []);
 
-  const handleInstallClick = (e) => {
+  const handleInstallClick = (e: any) => {
     // Hide the app provided install promotion
     setInstallable(false);
     // Show the install prompt
