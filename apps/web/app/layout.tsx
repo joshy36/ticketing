@@ -17,7 +17,6 @@ export const revalidate = 0; //disable cache
 export const metadata: Metadata = {
   title: 'Ticketing',
   description: 'This is a ticketing app',
-  manifest: '/manifest.json',
 };
 
 export default async function RootLayout({
