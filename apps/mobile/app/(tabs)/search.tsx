@@ -36,10 +36,11 @@ const Search = () => {
   };
 
   return (
-    <View className="pt-20 px-5 flex-1 justify-start bg-black">
+    <View className="pt-14 px-5 flex-1 justify-start bg-black">
       <TextInput
         className="h-12 border-2 rounded-full mb-2 text-muted-foreground pl-4 bg-zinc-900"
         placeholder="Search events, artists, venues"
+        placeholderTextColor="#6B7280"
         onChangeText={handleSearch}
         value={searchQuery}
       />

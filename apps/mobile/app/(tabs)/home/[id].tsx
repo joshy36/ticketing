@@ -95,7 +95,7 @@ const Home = () => {
                   {dateToString(event?.date!)}
                 </Text>
 
-                <View className="border p-6 rounded-xl bg-black border-zinc-800 shadow-2xl shadow-gray-900">
+                <View className="border p-6 rounded-xl bg-black border-zinc-800 shadow-2xl shadow-zinc-900">
                   <Text className="text-white text-3xl font-bold pb-2">
                     Buy Tickets
                   </Text>

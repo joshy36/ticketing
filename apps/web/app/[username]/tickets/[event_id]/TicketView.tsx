@@ -105,9 +105,6 @@ export function TicketView({
             <Button
               variant='outline'
               size='icon'
-              onClick={() => {
-                setTicketNumber(ticketNumber - 1);
-              }}
               className='invisible rounded-md'
             >
               <ChevronLeftIcon className='h-4 w-4' />
@@ -136,7 +133,6 @@ export function TicketView({
             <Button
               variant='outline'
               size='icon'
-              onClick={() => setTicketNumber(ticketNumber + 1)}
               className='invisible rounded-md'
             >
               <ChevronRightIcon className='h-4 w-4' />

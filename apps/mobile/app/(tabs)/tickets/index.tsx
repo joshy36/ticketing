@@ -17,10 +17,12 @@ const Tickets = () => {
   const { session, user } = supabaseContext;
 
   const {
-    data: tickets,
-    isLoading: ticketsLoading,
+    data: upcomingEvents,
+    isLoading: upcomingEventsLoading,
     refetch,
-  } = trpc.getTicketsForUser.useQuery({ user_id: user?.id! });
+  } = trpc.getUpcomingEventsForUser.useQuery({
+    user_id: user?.id!,
+  });
 
   return (
     <View className="flex-1 bg-black">
@@ -34,7 +36,10 @@ const Tickets = () => {
             />
           }
         >
-          <TicketsPage tickets={tickets} ticketsLoading={ticketsLoading} />
+          <TicketsPage
+            upcomingEvents={upcomingEvents}
+            upcomingEventsLoading={upcomingEventsLoading}
+          />
         </ScrollView>
       ) : (
         <View className="flex-1 items-center justify-center bg-black px-4">

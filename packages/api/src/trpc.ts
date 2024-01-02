@@ -67,6 +67,7 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
   if (request.headers.get('x-trpc-source') === 'expo-react') {
     if (request.headers.get('mobile-session')) {
       sessionData = JSON.parse(request.headers.get('mobile-session')!);
+      user = sessionData.user;
     }
   } else {
     const {

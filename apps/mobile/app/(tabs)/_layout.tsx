@@ -18,8 +18,12 @@ export default function TabsLayout() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarActiveTintColor: 'white',
-          tabBarIcon: ({ color, size }) => (
-            <Foundation name="home" size={30} color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'home-variant' : 'home-variant-outline'}
+              size={30}
+              color={color}
+            />
           ),
         }}
       />
@@ -30,8 +34,12 @@ export default function TabsLayout() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarActiveTintColor: 'white',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search" size={30} color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'search' : 'search-outline'}
+              size={30}
+              color={color}
+            />
           ),
         }}
       />
@@ -42,9 +50,9 @@ export default function TabsLayout() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarActiveTintColor: 'white',
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ color, size, focused }) => (
             <MaterialCommunityIcons
-              name="ticket-outline"
+              name={focused ? 'ticket-confirmation' : 'ticket-outline'}
               size={30}
               color={color}
             />
@@ -59,7 +67,11 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarActiveTintColor: 'white',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons name="person-circle-outline" size={30} color={color} />
+            <Ionicons
+              name={focused ? 'person-circle' : 'person-circle-outline'}
+              size={30}
+              color={color}
+            />
           ),
         }}
       />

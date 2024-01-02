@@ -5,6 +5,7 @@ import { Link } from 'expo-router';
 import { SupabaseContext } from '../../utils/supabaseProvider';
 import { trpc } from '../../utils/trpc';
 import { blurhash } from '../../utils/helpers';
+import Separator from './Separator';
 
 const ProfilePage = () => {
   const supabaseContext = useContext(SupabaseContext);
@@ -23,43 +24,47 @@ const ProfilePage = () => {
         <View>
           <View className="flex flex-row justify-end pr-2">
             <TouchableOpacity
-              className="bg-white py-3 rounded-full w-24 "
+              className="bg-black border border-gray-800 py-3 rounded-full w-24 "
               onPress={() => signOut()}
             >
-              <Text className="text-black text-center font-bold">Sign Out</Text>
+              <Text className="text-white text-center font-bold">Sign Out</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView>
-            <View className="justify-center items-center">
+
+          <View className="flex flex-col gap-2">
+            <View className="justify-center">
               <Image
-                className="h-40 w-40 rounded-full flex justify-center items-center"
+                className="h-20 w-20 rounded-2xl flex justify-center items-center"
                 source={{ uri: profile?.profile_image! }}
                 placeholder={blurhash}
                 contentFit="cover"
                 transition={1000}
               />
             </View>
-
-            <Text className="text-white text-2xl font-bold py-4 text-center">
-              {`@${profile?.username}`}
-            </Text>
-            <View className="space-y-6">
-              {profile?.first_name ? (
-                <Text className="text-white text-base text-accent-foreground">{`${profile.first_name} `}</Text>
-              ) : (
-                <Text></Text>
-              )}
-              {profile?.last_name ? (
-                <Text className="text-white text-base text-accent-foreground">{`${profile.last_name}`}</Text>
-              ) : (
-                <Text></Text>
-              )}
-            </View>
-            <View className="space-y-6">
-              <Text className="text-white text-base text-accent-foreground">
-                {profile?.bio}
+            <View className="pb-6">
+              <View className="flex flex-row">
+                {profile?.first_name && (
+                  <Text className="text-white text-2xl font-bold">{`${profile.first_name} `}</Text>
+                )}
+                {profile?.last_name && (
+                  <Text className="text-white text-2xl font-bold">{`${profile.last_name}`}</Text>
+                )}
+              </View>
+              <Text className="text-muted-foreground py-2">
+                {`@${profile?.username}`}
               </Text>
+              <View className="space-y-6">
+                <Text className="text-white text-base text-accent-foreground">
+                  {profile?.bio}
+                </Text>
+              </View>
             </View>
+            <Separator />
+          </View>
+          <ScrollView>
+            <Text className="text-white text-5xl pt-20">
+              SBTS and Collectibles
+            </Text>
           </ScrollView>
         </View>
       )}
