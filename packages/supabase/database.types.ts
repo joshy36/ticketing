@@ -202,6 +202,27 @@ export interface Database {
           }
         ]
       }
+      organizations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       rows: {
         Row: {
           created_at: string
@@ -436,6 +457,7 @@ export interface Database {
           first_name: string | null
           id: string
           last_name: string | null
+          organization_id: string | null
           profile_image: string | null
           turnkey_sub_org: string | null
           updated_at: string | null
@@ -448,6 +470,7 @@ export interface Database {
           first_name?: string | null
           id: string
           last_name?: string | null
+          organization_id?: string | null
           profile_image?: string | null
           turnkey_sub_org?: string | null
           updated_at?: string | null
@@ -460,6 +483,7 @@ export interface Database {
           first_name?: string | null
           id?: string
           last_name?: string | null
+          organization_id?: string | null
           profile_image?: string | null
           turnkey_sub_org?: string | null
           updated_at?: string | null
@@ -471,6 +495,12 @@ export interface Database {
             foreignKeyName: "user_profiles_id_fkey"
             columns: ["id"]
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_profiles_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
         ]

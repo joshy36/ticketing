@@ -70,9 +70,9 @@ export default function ArtistCreate() {
   }
 
   return (
-    <div className='space-y-6 p-10 pb-16 sm:block'>
+    <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
       <div className='space-y-0.5'>
-        <h2 className='text-2xl font-bold tracking-tight'>Create Artist</h2>
+        <h1 className='pb-2 text-4xl font-light'>Create Artist</h1>
         <p className='text-muted-foreground'>
           Please fill in all the details to create a profile for an artist!
         </p>

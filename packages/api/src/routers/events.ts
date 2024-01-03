@@ -22,6 +22,31 @@ export const eventsRouter = router({
       return data;
     }),
 
+  getEventsByOrganization: publicProcedure
+    .input(z.object({ organization_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: orgMembers } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('organization_id', input.organization_id);
+
+      if (!orgMembers) return null;
+
+      let orgEvents: any[] = [];
+
+      for (let i = 0; i < orgMembers!.length; i++) {
+        const { data: events } = await supabase
+          .from('events')
+          .select(`*, venues (name), artists (name)`)
+          .eq('created_by', orgMembers[i]?.id!);
+
+        orgEvents.push(...events!);
+      }
+
+      return orgEvents;
+    }),
+
   getSectionPriceByEvent: publicProcedure
     .input(z.object({ event_id: z.string() }))
     .query(async ({ ctx, input }) => {

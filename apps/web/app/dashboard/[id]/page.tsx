@@ -1,17 +1,25 @@
-import { serverClient } from '@/app/_trpc/serverClient';
-import EventCreateTickets from './EventCreateTickets';
+import DashBoard from './Dashboard';
+import { serverClient } from '../../_trpc/serverClient';
+import { notFound } from 'next/navigation';
 import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }: { params: { id: string } }) {
+  const organization = await serverClient.getOrganizationById.query({
+    organization_id: params.id,
+  });
+
+  if (!organization) {
+    notFound();
+  }
+
   const supabase = createSupabaseServer();
 
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // event creator must match id
-  if (!session?.user) {
+  if (!session) {
     redirect('/unauthorized');
   }
 
@@ -25,9 +33,7 @@ export default async function Home({ params }: { params: { id: string } }) {
 
   return (
     <main>
-      <div className='lg:px-80'>
-        <EventCreateTickets eventId={params.id} />
-      </div>
+      <DashBoard params={{ id: params.id }} />
     </main>
   );
 }

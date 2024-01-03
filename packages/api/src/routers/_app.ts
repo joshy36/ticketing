@@ -12,6 +12,7 @@ import { sbtsRouter } from './sbts';
 import { collectiblesRouter } from './collectibles';
 import { queueRouter } from './queue';
 import { turnkeyRouter } from './turnkey';
+import { organizationsRouter } from './organizations';
 
 export const appRouter = mergeRouters(
   eventsRouter,
@@ -23,7 +24,8 @@ export const appRouter = mergeRouters(
   sbtsRouter,
   collectiblesRouter,
   queueRouter,
-  turnkeyRouter
+  turnkeyRouter,
+  organizationsRouter
 );
 
 export type AppRouter = typeof appRouter;

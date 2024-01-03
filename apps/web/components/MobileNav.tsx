@@ -81,7 +81,15 @@ export function MobileNav({
                 </div>
               ))}
             </div>
-            {user ? (
+            {userProfile?.organization_id && (
+              <MobileLink
+                href={`/dashboard/${userProfile.organization_id}`}
+                onOpenChange={setOpen}
+              >
+                Admin Dashboard
+              </MobileLink>
+            )}
+            {/* {user ? (
               <div className='flex flex-col space-y-3'>
                 {createComponents.map(
                   (item) =>
@@ -98,7 +106,7 @@ export function MobileNav({
               </div>
             ) : (
               <div></div>
-            )}
+            )} */}
 
             <div className='flex flex-col space-y-2'>
               {/* {docsConfig.sidebarNav.map((item, index) => (

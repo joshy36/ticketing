@@ -88,7 +88,20 @@ export default function NavBar({
               )}
             </div>
           ))}
-          {user ? (
+          {userProfile?.organization_id && (
+            <NavigationMenuItem>
+              <Link
+                href={`/dashboard/${userProfile.organization_id}`}
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Admin Dashboard
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          )}
+          {/* {user ? (
             <NavigationMenuItem>
               <NavigationMenuTrigger>Admin</NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -107,7 +120,7 @@ export default function NavBar({
             </NavigationMenuItem>
           ) : (
             <div></div>
-          )}
+          )} */}
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex flex-1 items-center justify-between space-x-6 md:justify-end'>
