@@ -101,7 +101,7 @@ const TicketSection = ({
                 ticketQuantities[section.id!]?.quantity! <= 0
               }
             >
-              <Ionicons name="remove-circle-outline" size={50} color="white" />
+              <Ionicons name="remove-circle" size={50} color="white" />
             </TouchableOpacity>
             <Text className="text-white px-2">
               {ticketQuantities[section.id!]?.quantity || 0}
@@ -112,14 +112,16 @@ const TicketSection = ({
               }}
               disabled={getTotalTicketCount() >= event?.max_tickets_per_user!}
             >
-              <Ionicons name="add-circle-outline" size={50} color="white" />
+              <Ionicons name="add-circle" size={50} color="white" />
             </TouchableOpacity>
           </View>
         </View>
       ))}
       {getTotalTicketCount() >= event?.max_tickets_per_user! ? (
         <View>
-          <Text className="text-white text-center">Max 2 tickets per user</Text>
+          <Text className="text-white text-center">
+            Max {event?.max_tickets_per_user} tickets per user
+          </Text>
         </View>
       ) : (
         <View></View>

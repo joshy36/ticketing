@@ -179,7 +179,7 @@ export default function TicketSection({
           {getTotalTicketCount() >= event?.max_tickets_per_user! ? (
             <div>
               <div className='text-center text-white'>
-                Max 2 tickets per user
+                Max {event?.max_tickets_per_user} tickets per user
               </div>
             </div>
           ) : (

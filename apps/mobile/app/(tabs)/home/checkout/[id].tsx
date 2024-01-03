@@ -24,29 +24,43 @@ const Checkout = () => {
 
   return (
     <View className="flex-1 bg-black p-4">
-      <Text className="text-white text-2xl">Cart</Text>
-      <Separator />
+      <Text className="text-white font-bold text-3xl pb-4">Cart</Text>
       {cart!.map((section: any) => (
         <View key={section.section.id}>
           {section.quantity == 0 ? (
             <View></View>
           ) : (
-            <View>
-              <Text className="text-white text-xl">{section.section.name}</Text>
-              <Text className="text-gray-400 text">
-                {`$` +
-                  sectionPrices?.find(
-                    (sectionPrice) =>
-                      sectionPrice.section_name === section.section.name
-                  )?.price}
-              </Text>
-              <Text className="text-white text-xl">{`Quantity: ${section.quantity}`}</Text>
-              <Separator />
+            <View className="flex flex-row justify-between pb-4">
+              <View className="flex flex-row gap-2 items-center">
+                <View className="bg-zinc-800 py-1 px-4 rounded-full">
+                  <Text className="text-white font-bold">
+                    {section.quantity}
+                  </Text>
+                </View>
+                <Text className="text-white text-xl">
+                  {section.section.name}
+                </Text>
+              </View>
+              <View>
+                <Text className="text-white text-xl">
+                  {`$` +
+                    sectionPrices?.find(
+                      (sectionPrice) =>
+                        sectionPrice.section_name === section.section.name
+                    )?.price}
+                </Text>
+              </View>
             </View>
           )}
         </View>
       ))}
-      <Text className="text-white text-xl pb-4">Total: ${totalPrice}</Text>
+      <Separator />
+      <View className="flex flex-row justify-between">
+        <Text className="py-4 font-bold text-xl text-white">Total:</Text>
+        <Text className="py-4 font-bold text-xl text-white">${totalPrice}</Text>
+      </View>
+      <Separator />
+
       <CheckoutScreen
         event_id={id! as string}
         cart_info={cart}

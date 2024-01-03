@@ -1,8 +1,9 @@
-import { useStripe } from '@stripe/stripe-react-native';
-import { useState } from 'react';
+import { CardField, useStripe } from '@stripe/stripe-react-native';
+import { useEffect, useState } from 'react';
 import { Alert, TouchableOpacity, View, Text } from 'react-native';
 import { trpc } from '../../utils/trpc';
 import { Section } from '../(tabs)/home/[id]';
+import { router } from 'expo-router';
 
 export default function CheckoutScreen({
   price,
@@ -31,7 +32,6 @@ export default function CheckoutScreen({
   });
 
   const initializePaymentSheet = async () => {
-    console.log('price', price);
     const filteredCartInfo = cart_info.map((item) => ({
       quantity: item.quantity,
       section: {
@@ -39,17 +39,16 @@ export default function CheckoutScreen({
         name: item.section.name,
       },
     }));
-    console.log('filteredCartInfo', filteredCartInfo);
-    const test = await getPaymentSheetParams.mutateAsync({
+
+    const payment = await getPaymentSheetParams.mutateAsync({
       event_id: event_id,
       cart_info: filteredCartInfo,
       price: price,
     });
-    console.log('resolution: ', test);
 
     const { error } = await initPaymentSheet({
       merchantDisplayName: 'Ticketing',
-      paymentIntentClientSecret: paymentIntent,
+      paymentIntentClientSecret: payment.paymentIntent!,
       // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
       //methods that complete payment after a delay, like SEPA Debit and Sofort.
       // allowsDelayedPaymentMethods: true,
@@ -72,7 +71,8 @@ export default function CheckoutScreen({
         Alert.alert(`Error code: ${error.code}`, error.message);
       }
     } else {
-      Alert.alert('Success', 'Your order is confirmed!');
+      // Alert.alert('Success', 'Your order is confirmed!');
+      router.replace('/tickets');
     }
   };
 
@@ -84,6 +84,29 @@ export default function CheckoutScreen({
       >
         <Text className="text-black text-center font-bold">Checkout</Text>
       </TouchableOpacity>
+      {/* <View>
+        <CardField
+          postalCodeEnabled={true}
+          placeholders={{
+            number: '4242 4242 4242 4242',
+          }}
+          cardStyle={{
+            backgroundColor: '#000000',
+            textColor: '#FFFFFF',
+          }}
+          style={{
+            width: '100%',
+            height: 50,
+            marginVertical: 30,
+          }}
+          onCardChange={(cardDetails) => {
+            console.log('cardDetails', cardDetails);
+          }}
+          onFocus={(focusedField) => {
+            console.log('focusField', focusedField);
+          }}
+        />
+      </View> */}
     </View>
   );
 }

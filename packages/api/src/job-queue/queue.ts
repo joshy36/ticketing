@@ -126,6 +126,7 @@ export class Queue extends EventEmitter {
       this.running -= 1;
     } catch (error) {
       hasError = true;
+      console.log('Error processing job:', error);
     } finally {
       const [jobStatus, job] = await this.finishJob<TJobPayload>(
         jobCreatedById,

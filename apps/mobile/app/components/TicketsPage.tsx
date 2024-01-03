@@ -1,7 +1,11 @@
 import { View, Text, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { blurhash, dateToString } from '../../utils/helpers';
+import {
+  blurhash,
+  dateToString,
+  replaceLocalhostWithIP,
+} from '../../utils/helpers';
 
 const TicketsPage = ({
   upcomingEvents,
@@ -32,7 +36,9 @@ const TicketsPage = ({
                           <Image
                             style={{ borderRadius: 16 }}
                             className="h-20 w-20"
-                            source={{ uri: event.image }}
+                            source={{
+                              uri: replaceLocalhostWithIP(event).image,
+                            }}
                             placeholder={blurhash}
                             contentFit="cover"
                             transition={1000}

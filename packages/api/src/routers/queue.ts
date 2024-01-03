@@ -29,7 +29,7 @@ export const queueRouter = router({
     .input(z.object({ method: z.string(), params: z.any() }))
     .mutation(async ({ ctx, input }) => {
       const payload = {
-        url: `${process.env.UPSTASH_URL}/qstash-endpoint`,
+        url: 'https://qstash.upstash.io/v2/publish/https://internally-internal-walleye.ngrok-free.app/api/qstash-endpoint',
         body: {
           method: input.method,
           params: input.params,

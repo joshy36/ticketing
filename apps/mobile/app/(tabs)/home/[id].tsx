@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { trpc } from '../../../utils/trpc';
-import { dateToString } from '../../../utils/helpers';
+import { dateToString, replaceLocalhostWithIP } from '../../../utils/helpers';
 import Separator from '../../components/Separator';
 import { blurhash } from '../../../utils/helpers';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
@@ -78,7 +78,7 @@ const Home = () => {
               <ImageBackground
                 style={{ width: '100%', height: 200 }}
                 source={{
-                  uri: 'https://i.scdn.co/image/ab6761610000517431f6ab67e6025de876475814',
+                  uri: replaceLocalhostWithIP(event).image,
                 }}
                 // blurRadius={20}
               >
@@ -116,14 +116,16 @@ const Home = () => {
                 </Text>
                 <Link className="py-2" href={`/home/artist/${artist?.id}`}>
                   <View className="flex flex-row items-center">
-                    <Image
+                    {/* <Image
                       style={{ borderRadius: 24 }}
                       className="h-12 w-12"
-                      source={{ uri: artist?.image! }}
+                      source={{
+                        uri: replaceLocalhostWithIP(artist).image,
+                      }}
                       placeholder={blurhash}
                       contentFit="cover"
                       transition={1000}
-                    />
+                    /> */}
                     <Text className="text-muted-foreground pl-2 text-xl font-light">
                       {artist?.name}
                     </Text>

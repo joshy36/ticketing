@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { SupabaseContext } from '../../utils/supabaseProvider';
 import { trpc } from '../../utils/trpc';
-import { blurhash } from '../../utils/helpers';
+import { blurhash, replaceLocalhostWithIP } from '../../utils/helpers';
 import Separator from './Separator';
 
 const ProfilePage = () => {
@@ -35,7 +35,7 @@ const ProfilePage = () => {
             <View className="justify-center">
               <Image
                 className="h-20 w-20 rounded-2xl flex justify-center items-center"
-                source={{ uri: profile?.profile_image! }}
+                source={{ uri: replaceLocalhostWithIP(profile).profile_image }}
                 placeholder={blurhash}
                 contentFit="cover"
                 transition={1000}
