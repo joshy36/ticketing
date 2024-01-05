@@ -16,7 +16,7 @@ const Home = () => {
           {eventsLoading ? (
             <Text className="text-white">Loading...</Text>
           ) : (
-            events!.map((event: any) => (
+            events?.map((event: any) => (
               <View className="px-2 " key={event.id}>
                 <Link href={`/home/${event.id}`}>
                   <View className="flex flex-row items-center py-3 ">

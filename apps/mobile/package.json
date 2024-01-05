@@ -23,10 +23,12 @@
     "css-tree": "^2.3.1",
     "expo": "~49.0.13",
     "expo-barcode-scanner": "^12.7.0",
+    "expo-blur": "^12.6.0",
     "expo-camera": "~13.4.4",
     "expo-constants": "~14.4.2",
     "expo-crypto": "~12.4.1",
     "expo-image": "~1.3.4",
+    "expo-linear-gradient": "~12.3.0",
     "expo-linking": "~5.0.2",
     "expo-router": "^2.0.0",
     "expo-secure-store": "^12.5.0",
@@ -45,8 +47,7 @@
     "supabase": "*",
     "superjson": "1.13.1",
     "tailwindcss": "3.3.2",
-    "uuid": "3.4.0",
-    "expo-linear-gradient": "~12.3.0"
+    "uuid": "3.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

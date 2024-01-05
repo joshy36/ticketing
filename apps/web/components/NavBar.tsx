@@ -10,6 +10,15 @@ import {
   NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from './ui/navigation-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
 import Link from 'next/link';
 import { cn } from './ui/utils';
 import * as React from 'react';
@@ -18,7 +27,7 @@ import { User } from '@supabase/supabase-js';
 import { UserNav } from './UserNav';
 import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
-import { useEffect } from 'react';
+import { Bell } from 'lucide-react';
 
 export const createComponents: {
   title: string;
@@ -68,7 +77,7 @@ export default function NavBar({
   ];
 
   return (
-    <div className='fixed top-0 z-40 hidden h-16 w-full items-center bg-black/40 px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
+    <div className='fixed top-0 z-40 hidden h-20 w-full items-center bg-black/40 px-16 backdrop-blur-md transition-colors duration-500 md:flex'>
       <NavigationMenu>
         <NavigationMenuList>
           {mainComponents.map((component) => (
@@ -128,7 +137,25 @@ export default function NavBar({
           <CommandMenu />
         </div>
         {user ? (
-          <div className='ml-auto mt-1.5 flex items-center space-x-4'>
+          <div className='ml-auto mt-1.5 flex space-x-4'>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className='relative'>
+                  <Button variant='outline' size='icon'>
+                    <Bell className='h-4 w-4' />
+                  </Button>
+                  <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700 font-bold text-white'></span>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Billing</DropdownMenuItem>
+                <DropdownMenuItem>Team</DropdownMenuItem>
+                <DropdownMenuItem>Subscription</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <UserNav user={user} userProfile={userProfile} />
           </div>
         ) : (
