@@ -1,85 +1,16 @@
-import { dateToString } from '@/utils/helpers';
 import { serverClient } from '../../_trpc/serverClient';
-
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ChevronRight } from 'lucide-react';
-import { Tabs } from 'antd';
-import type { TabsProps } from 'antd';
-import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import EventTable from './EventTable';
+import SendMessage from './SendMessage';
+import { Separator } from '@radix-ui/react-dropdown-menu';
 
 export default async function DashBoard({ id }: { id: string }) {
   const events = await serverClient.getEventsByOrganization.query({
     organization_id: id,
   });
-
-  const items: TabsProps['items'] = [
-    {
-      key: '1',
-      label: 'Manage Events',
-      children: (
-        <Table>
-          {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-          <TableHeader>
-            <TableRow>
-              <TableHead className='w-[100px] text-white'>Name</TableHead>
-              <TableHead className='text-white'>Venue</TableHead>
-              <TableHead className='text-white'>Artist</TableHead>
-              <TableHead className='text-white'>Date</TableHead>
-              <TableHead className='text-right'></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {events?.map((event: any, index: number) => (
-              <TableRow
-                key={event.id}
-                className={index % 2 === 0 ? 'gap-4 bg-black' : 'bg-zinc-950'}
-              >
-                <TableCell className='font-medium text-white'>
-                  {event.name}
-                </TableCell>
-                <TableCell className='text-white'>
-                  {event.venues.name}
-                </TableCell>
-                <TableCell className='text-white'>
-                  {event.artists.name}
-                </TableCell>
-                <TableCell className='text-white'>
-                  {dateToString(event.date)}
-                </TableCell>
-                <TableCell className='text-right'>
-                  <Button
-                    variant='secondary'
-                    className='rounded-md text-white'
-                    asChild
-                  >
-                    <Link href={`/dashboard/event/${event.id}`}>
-                      Manage
-                      <ChevronRight />
-                    </Link>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      ),
-    },
-    {
-      key: '2',
-      label: 'Send Message',
-      children: 'Send Message',
-    },
-  ];
 
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
@@ -99,7 +30,21 @@ export default async function DashBoard({ id }: { id: string }) {
           </Button>
         </div>
       </div>
-      <Tabs defaultActiveKey='1' items={items} />
+      <Tabs defaultValue='events'>
+        <TabsList className='-ml-4'>
+          <TabsTrigger value='events'>Manage Events</TabsTrigger>
+          <TabsTrigger value='org'>Manage Organization</TabsTrigger>
+          <TabsTrigger value='message'>Send Message</TabsTrigger>
+        </TabsList>
+        {/* <Separator /> */}
+        <TabsContent value='events'>
+          <EventTable events={events} />
+        </TabsContent>
+        <TabsContent value='org'>Change your password here.</TabsContent>
+        <TabsContent value='message'>
+          <SendMessage />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

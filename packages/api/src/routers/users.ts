@@ -1,7 +1,13 @@
-import { router, publicProcedure } from '../trpc';
+import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
 export const usersRouter = router({
+  getAllUsers: authedProcedure.query(async ({ ctx, input }) => {
+    const supabase = ctx.supabase;
+    const { data } = await supabase.from('user_profiles').select();
+    return data;
+  }),
+
   getUserProfile: publicProcedure
     .input(
       z.object({ id: z.string().optional(), username: z.string().optional() })

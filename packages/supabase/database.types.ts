@@ -202,6 +202,46 @@ export interface Database {
           }
         ]
       }
+      messages: {
+        Row: {
+          created_at: string
+          from: string | null
+          id: string
+          message: string
+          status: Database["public"]["Enums"]["message_status"]
+          to: string | null
+        }
+        Insert: {
+          created_at?: string
+          from?: string | null
+          id?: string
+          message: string
+          status?: Database["public"]["Enums"]["message_status"]
+          to?: string | null
+        }
+        Update: {
+          created_at?: string
+          from?: string | null
+          id?: string
+          message?: string
+          status?: Database["public"]["Enums"]["message_status"]
+          to?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_from_fkey"
+            columns: ["from"]
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_to_fkey"
+            columns: ["to"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       organizations: {
         Row: {
           created_at: string
@@ -558,7 +598,7 @@ export interface Database {
       }
     }
     Enums: {
-      [_ in never]: never
+      message_status: "read" | "unread" | "deleted"
     }
     CompositeTypes: {
       [_ in never]: never
