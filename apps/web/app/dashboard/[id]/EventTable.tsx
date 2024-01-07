@@ -13,7 +13,7 @@ import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-export default async function EventTable({ events }: { events: any }) {
+export default function EventTable({ events }: { events: any }) {
   return (
     <div>
       <div className='grid gap-4 py-4 md:grid-cols-2 lg:grid-cols-4'>
@@ -132,14 +132,10 @@ export default async function EventTable({ events }: { events: any }) {
               key={event.id}
               className={index % 2 === 0 ? 'gap-4 bg-black' : 'bg-zinc-950'}
             >
-              <TableCell className='font-medium text-white'>
-                {event.name}
-              </TableCell>
-              <TableCell className='text-white'>{event.venues.name}</TableCell>
-              <TableCell className='text-white'>{event.artists.name}</TableCell>
-              <TableCell className='text-white'>
-                {dateToString(event.date)}
-              </TableCell>
+              <TableCell className='font-medium'>{event.name}</TableCell>
+              <TableCell>{event.venues.name}</TableCell>
+              <TableCell>{event.artists.name}</TableCell>
+              <TableCell>{dateToString(event.date)}</TableCell>
               <TableCell className='text-right'>
                 <Button
                   variant='secondary'

@@ -7,5 +7,6 @@ export type UserProfile = DB['public']['Tables']['user_profiles']['Row'];
 export type Ticket = DB['public']['Tables']['tickets']['Row'];
 export type Artist = DB['public']['Tables']['artists']['Row'];
 export type Venue = DB['public']['Tables']['venues']['Row'];
+export type Organization = DB['public']['Tables']['organizations']['Row'];
 
 export { createRouteClient };

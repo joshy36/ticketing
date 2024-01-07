@@ -2,7 +2,7 @@
 
 import { Separator } from '@/components/ui/separator';
 import { ProfileForm } from './ProfileForm';
-import { SidebarNav } from './SidebarNav';
+import { SidebarNav } from '../../../components/SidebarNav';
 import { WagmiConfig } from 'wagmi';
 import { wagmiConfig } from '@/utils/wagmiClient';
 import { trpc } from '../../_trpc/client';

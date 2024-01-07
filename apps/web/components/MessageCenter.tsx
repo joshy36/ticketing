@@ -53,7 +53,10 @@ export default function MessageCenter() {
                   new Date(a.created_at).getTime(),
               )
               ?.map((message) => (
-                <button className='my-2 flex w-full flex-row items-center justify-between rounded-md border bg-zinc-900/60 p-4 pt-4 hover:border-muted-foreground hover:bg-zinc-800/60'>
+                <button
+                  key={message.id}
+                  className='my-2 flex w-full flex-row items-center justify-between rounded-md border bg-zinc-900/60 p-4 pt-4 hover:border-muted-foreground hover:bg-zinc-800/60'
+                >
                   <div className='flex flex-col gap-2'>
                     <div className='text-left text-white'>
                       {message.message}
