@@ -43,6 +43,7 @@
     "@trpc/react-query": "^10.40.0",
     "@upstash/qstash": "^2.3.0",
     "@upstash/redis": "^1.25.1",
+    "@vercel/analytics": "^1.1.1",
     "@vercel/speed-insights": "^1.0.2",
     "alchemy-sdk": "^2.12.0",
     "antd": "^5.12.7",
