@@ -17,9 +17,11 @@ import MessageCenter from './MessageCenter';
 export function MobileNav({
   user,
   userProfile,
+  userOrg,
 }: {
   user: User | undefined;
   userProfile: UserProfile | null;
+  userOrg: string | null | undefined;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -80,11 +82,8 @@ export function MobileNav({
                 </div>
               ))}
             </div>
-            {userProfile?.organization_id && (
-              <MobileLink
-                href={`/dashboard/${userProfile.organization_id}`}
-                onOpenChange={setOpen}
-              >
+            {userOrg && (
+              <MobileLink href={`/dashboard/${userOrg}`} onOpenChange={setOpen}>
                 Admin Dashboard
               </MobileLink>
             )}

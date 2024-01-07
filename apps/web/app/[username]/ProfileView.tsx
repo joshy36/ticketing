@@ -46,13 +46,24 @@ export default async function ProfileView({
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
       <div className='flex flex-col gap-8 md:flex-row'>
         <div className='flex flex-col items-center justify-center '>
-          <Image
-            src={userProfile?.profile_image!}
-            alt='user pfp'
-            width={250}
-            height={250}
-            className='rounded-lg'
-          />
+          {userProfile?.profile_image ? (
+            <Image
+              src={userProfile?.profile_image!}
+              alt='user pfp'
+              width={250}
+              height={250}
+              className='rounded-lg'
+            />
+          ) : (
+            <Image
+              src='/fallback.jpeg'
+              alt='image'
+              width={250}
+              height={250}
+              className='rounded-lg'
+            />
+          )}
+
           {session?.user! && session?.user.id === userProfile?.id ? (
             <UserSignOut userProfile={userProfile} />
           ) : (

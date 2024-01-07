@@ -33,10 +33,15 @@ export default async function RootLayout({
   } = await supabase.auth.getSession();
 
   let userProfile = null;
+  let userOrg = null;
 
   if (session?.user) {
     userProfile = await serverClient.getUserProfile.query({
       id: session.user?.id,
+    });
+
+    userOrg = await serverClient.getUserOrganization.query({
+      user_id: userProfile?.id!,
     });
   }
 
@@ -46,9 +51,17 @@ export default async function RootLayout({
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
             <div className='pb-16'>
-              <NavBar user={session?.user} userProfile={userProfile!} />
+              <NavBar
+                user={session?.user}
+                userProfile={userProfile!}
+                userOrg={userOrg}
+              />
             </div>
-            <MobileNav user={session?.user} userProfile={userProfile!} />
+            <MobileNav
+              user={session?.user}
+              userProfile={userProfile!}
+              userOrg={userOrg}
+            />
             <div className='min-h-screen'> {children}</div>
             <Toaster />
             <SpeedInsights />

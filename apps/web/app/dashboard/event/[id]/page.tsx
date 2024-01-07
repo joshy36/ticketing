@@ -21,26 +21,30 @@ export default async function Home({ params }: { params: { id: string } }) {
     redirect('/unauthorized');
   }
 
-  const isInOrganization = await serverClient.getUserOrganization.query({
+  const organizationId = await serverClient.getUserOrganization.query({
     user_id: session?.user.id,
   });
 
-  if (!isInOrganization) {
+  if (!organizationId) {
     redirect('/unauthorized');
   }
 
   // check if user org is the same as the org of the user who created the event
-  const eventCreator = await serverClient.getUserProfile.query({
-    id: event?.created_by,
+  const eventCreatorOrg = await serverClient.getUserOrganization.query({
+    user_id: event?.created_by,
   });
 
-  if (eventCreator?.organization_id !== isInOrganization) {
+  if (eventCreatorOrg !== organizationId) {
     redirect('/unauthorized');
   }
 
+  const organization = await serverClient.getOrganizationById.query({
+    organization_id: organizationId,
+  });
+
   return (
     <main>
-      <ManageEvent id={params.id} />
+      <ManageEvent event={event} organization={organization!} />
     </main>
   );
 }

@@ -242,6 +242,46 @@ export interface Database {
           }
         ]
       }
+      organization_members: {
+        Row: {
+          created_at: string
+          id: string
+          organization_id: string | null
+          role: Database["public"]["Enums"]["role"] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          organization_id?: string | null
+          role?: Database["public"]["Enums"]["role"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          organization_id?: string | null
+          role?: Database["public"]["Enums"]["role"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_members_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       organizations: {
         Row: {
           created_at: string
@@ -497,7 +537,6 @@ export interface Database {
           first_name: string | null
           id: string
           last_name: string | null
-          organization_id: string | null
           profile_image: string | null
           turnkey_sub_org: string | null
           updated_at: string | null
@@ -510,7 +549,6 @@ export interface Database {
           first_name?: string | null
           id: string
           last_name?: string | null
-          organization_id?: string | null
           profile_image?: string | null
           turnkey_sub_org?: string | null
           updated_at?: string | null
@@ -523,7 +561,6 @@ export interface Database {
           first_name?: string | null
           id?: string
           last_name?: string | null
-          organization_id?: string | null
           profile_image?: string | null
           turnkey_sub_org?: string | null
           updated_at?: string | null
@@ -535,12 +572,6 @@ export interface Database {
             foreignKeyName: "user_profiles_id_fkey"
             columns: ["id"]
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_profiles_organization_id_fkey"
-            columns: ["organization_id"]
-            referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
         ]
@@ -599,6 +630,7 @@ export interface Database {
     }
     Enums: {
       message_status: "read" | "unread" | "deleted"
+      role: "owner" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never

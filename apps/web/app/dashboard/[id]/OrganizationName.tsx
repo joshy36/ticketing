@@ -21,8 +21,27 @@ export default function OrganizationName({
 }: {
   organization: Organization | null | undefined;
 }) {
+  const [name, setName] = useState<string>(organization?.name!);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
+
+  const updateName = trpc.updateOrganizationName.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        console.error(error);
+        toast({
+          title: 'Error updating organization name.',
+          description: 'Please try again.',
+          variant: 'destructive',
+        });
+      } else if (data) {
+        toast({
+          title: 'Organization name updated.',
+          description: 'Organization name has been updated.',
+        });
+      }
+    },
+  });
 
   return (
     <Card className='mt-4 rounded-md border bg-zinc-950'>
@@ -35,16 +54,16 @@ export default function OrganizationName({
             type='email'
             defaultValue={organization?.name!}
             className='text-muted-foreground'
-            //   onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
           <Button
             disabled={isLoading}
             className='w-32 rounded-md'
             onClick={() => {
-              //   sendMessage.mutate({
-              //     to: users!.map((user) => user.id),
-              //     message: message,
-              //   });
+              updateName.mutate({
+                organization_id: organization?.id!,
+                name: name,
+              });
             }}
           >
             {isLoading && (

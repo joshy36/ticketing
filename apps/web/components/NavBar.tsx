@@ -47,9 +47,11 @@ export const createComponents: {
 export default function NavBar({
   user,
   userProfile,
+  userOrg,
 }: {
   user: User | undefined;
   userProfile: UserProfile | null;
+  userOrg: string | null | undefined;
 }) {
   const mainComponents: {
     title: string;
@@ -90,13 +92,9 @@ export default function NavBar({
               )}
             </div>
           ))}
-          {userProfile?.organization_id && (
+          {userOrg && (
             <NavigationMenuItem>
-              <Link
-                href={`/dashboard/${userProfile.organization_id}`}
-                legacyBehavior
-                passHref
-              >
+              <Link href={`/dashboard/${userOrg}`} legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Admin Dashboard
                 </NavigationMenuLink>

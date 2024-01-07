@@ -24,9 +24,17 @@ export const messagesRouter = router({
         .eq('id', user?.id)
         .limit(1)
         .single();
+
+      const { data: userOrg } = await supabase
+        .from('organization_members')
+        .select()
+        .eq('user_id', user?.id)
+        .limit(1)
+        .single();
+
       for (let i = 0; i < input.to.length; i++) {
         const { error } = await supabase.from('messages').insert({
-          from: from?.organization_id,
+          from: userOrg?.organization_id,
           to: input.to[i],
           message: input.message,
         });

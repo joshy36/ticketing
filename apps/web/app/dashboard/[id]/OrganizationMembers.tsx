@@ -16,6 +16,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { Icons } from '@/components/ui/icons';
 import { useState } from 'react';
 import { Organization } from 'supabase';
+import { Badge } from '@/components/ui/badge';
+import { X } from 'lucide-react';
 
 export default function OrganizationMembers({
   organization,
@@ -25,7 +27,7 @@ export default function OrganizationMembers({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<string>('');
   const { toast } = useToast();
-  const { data: members } = trpc.getOrganizationMembers.useQuery(
+  const { data: members, refetch } = trpc.getOrganizationMembers.useQuery(
     {
       organization_id: organization?.id!,
     },
@@ -34,12 +36,27 @@ export default function OrganizationMembers({
 
   const addUser = trpc.addUserToOrganization.useMutation({
     onSettled(data, error) {
-      if (!data) {
-        console.error('Error adding user to org, user not found');
+      if (error) {
+        console.error(error);
+        if (error.message === 'User is already in an organization') {
+          toast({
+            title: 'User already in organization.',
+            description: 'Please try a differnt username.',
+            variant: 'destructive',
+          });
+        } else {
+          console.error('Error adding user to org, user not found');
+          toast({
+            title: 'User not found.',
+            description: 'Please try a differnt username.',
+            variant: 'destructive',
+          });
+        }
+      } else if (data) {
+        refetch();
         toast({
-          title: 'User not found.',
-          description: 'Please try a differnt username.',
-          variant: 'destructive',
+          title: 'User added to organization.',
+          description: 'User has been added to your organization.',
         });
       }
       setIsLoading(false);
@@ -61,30 +78,50 @@ export default function OrganizationMembers({
           {members?.map((member) => (
             <div
               key={member.id}
-              className='flex flex-row items-center gap-4 border-b border-t py-3'
+              className='flex flex-row items-center justify-between gap-4 border-b border-t py-3'
             >
-              <div>
+              <div className='flex flex-row items-center gap-2'>
                 <Avatar>
-                  {member?.profile_image ? (
-                    <AvatarImage src={member?.profile_image!} alt='pfp' />
+                  {member?.profile.profile_image ? (
+                    <AvatarImage
+                      src={member?.profile.profile_image!}
+                      alt='pfp'
+                    />
                   ) : (
                     <AvatarFallback></AvatarFallback>
                   )}
                 </Avatar>
-              </div>
-              <div>
-                <div className='flex'>
-                  {member?.first_name && (
-                    <p className='py-1 font-medium'>{member.first_name}</p>
-                  )}
-                  {member?.last_name && (
-                    <p className='ml-1 py-1 font-medium'>{member.last_name}</p>
-                  )}
+
+                <div>
+                  <div className='flex'>
+                    {member?.profile.first_name && (
+                      <p className='py-1 font-medium'>
+                        {member.profile.first_name}
+                      </p>
+                    )}
+                    {member?.profile.last_name && (
+                      <p className='ml-1 py-1 font-medium'>
+                        {member.profile.last_name}
+                      </p>
+                    )}
+                  </div>
+                  <div className='text-sm text-muted-foreground'>
+                    {`@${member.profile.username}`}
+                  </div>
                 </div>
-                <div className='text-sm text-muted-foreground'>
-                  {`@${member.username}`}
-                </div>
               </div>
+
+              {member.role === 'owner' ? (
+                <Badge variant='secondary'>Owner</Badge>
+              ) : (
+                <Button
+                  variant='outline'
+                  className='rounded-md border-red-900 text-red-900 hover:bg-red-900'
+                >
+                  <X className='mr-2 h-4 w-4' />
+                  Remove
+                </Button>
+              )}
             </div>
           ))}
           <div className='flex w-full max-w-sm items-center space-x-2 pt-4'>

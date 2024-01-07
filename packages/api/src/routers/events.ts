@@ -27,7 +27,7 @@ export const eventsRouter = router({
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const { data: orgMembers } = await supabase
-        .from('user_profiles')
+        .from('organization_members')
         .select()
         .eq('organization_id', input.organization_id);
 
@@ -39,7 +39,7 @@ export const eventsRouter = router({
         const { data: events } = await supabase
           .from('events')
           .select(`*, venues (name), artists (name)`)
-          .eq('created_by', orgMembers[i]?.id!);
+          .eq('created_by', orgMembers[i]?.user_id!);
 
         orgEvents.push(...events!);
       }
