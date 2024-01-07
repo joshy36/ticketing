@@ -59,7 +59,10 @@ export default function OrganizationMembers({
       <CardContent>
         <div>
           {members?.map((member) => (
-            <div className='flex flex-row items-center gap-4 border-b border-t py-3'>
+            <div
+              key={member.id}
+              className='flex flex-row items-center gap-4 border-b border-t py-3'
+            >
               <div>
                 <Avatar>
                   {member?.profile_image ? (
