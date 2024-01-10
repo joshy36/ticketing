@@ -21,7 +21,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../../_trpc/client';
+import { trpc } from '../../../../../_trpc/client';
 
 import { useState } from 'react';
 import { cn } from '@/components/ui/utils';
@@ -39,7 +39,13 @@ const formSchema = z.object({
     .optional(),
 });
 
-export default function EventCreateTickets({ eventId }: { eventId: string }) {
+export default function EventCreateTickets({
+  eventId,
+  organizationId,
+}: {
+  eventId: string;
+  organizationId: string;
+}) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -53,7 +59,7 @@ export default function EventCreateTickets({ eventId }: { eventId: string }) {
         console.error('Error updating event:', error);
         setIsLoading(false);
       } else {
-        router.push(`/event/create/image/${eventId}`);
+        router.push(`/dashboard/event/image/${organizationId}/${eventId}`);
       }
     },
   });

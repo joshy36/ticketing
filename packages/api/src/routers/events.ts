@@ -1,6 +1,8 @@
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 import { createStripeProduct } from '../services/stripe';
+import { getOrganizationMembers } from '../shared/organizations';
+import { TRPCError } from '@trpc/server';
 
 export const eventsRouter = router({
   getEvents: publicProcedure.query(async ({ ctx }) => {
@@ -26,25 +28,13 @@ export const eventsRouter = router({
     .input(z.object({ organization_id: z.string() }))
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
-      const { data: orgMembers } = await supabase
-        .from('organization_members')
-        .select()
+
+      const { data: events } = await supabase
+        .from('events')
+        .select(`*, venues (name), artists (name)`)
         .eq('organization_id', input.organization_id);
 
-      if (!orgMembers) return null;
-
-      let orgEvents: any[] = [];
-
-      for (let i = 0; i < orgMembers!.length; i++) {
-        const { data: events } = await supabase
-          .from('events')
-          .select(`*, venues (name), artists (name)`)
-          .eq('created_by', orgMembers[i]?.user_id!);
-
-        orgEvents.push(...events!);
-      }
-
-      return orgEvents;
+      return events;
     }),
 
   getSectionPriceByEvent: publicProcedure
@@ -100,6 +90,7 @@ export const eventsRouter = router({
         description: z.string(),
         date: z.date(),
         image: z.string().nullable(),
+        organization_id: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -117,10 +108,27 @@ export const eventsRouter = router({
           created_by: ctx.user?.id!,
           stripe_product_id: stripeProduct.id,
           image: input.image ?? null,
+          organization_id: input.organization_id,
         })
         .select()
         .limit(1)
         .single();
+
+      const orgMembers = await getOrganizationMembers(
+        supabase,
+        input.organization_id
+      );
+
+      // make all org members scanners for this event
+      for (let i = 0; i < orgMembers!.length; i++) {
+        await supabase
+          .from('scanners')
+          .insert({
+            user_id: orgMembers![i]?.user_id!,
+            event_id: eventData?.id!,
+          })
+          .select();
+      }
 
       return eventData;
     }),
@@ -142,5 +150,123 @@ export const eventsRouter = router({
         .single();
 
       return data;
+    }),
+
+  getScannersForEvent: authedProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('scanners')
+        .select(
+          `*, user_profiles (first_name, last_name, profile_image, username)`
+        )
+        .eq('event_id', input.event_id);
+      return data;
+    }),
+
+  addScannerToEvent: authedProcedure
+    .input(z.object({ username: z.string(), event_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: user } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .limit(1)
+        .single();
+
+      if (!user) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User not found',
+        });
+      }
+
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .limit(1)
+        .single();
+
+      const { data: isScanner } = await supabase
+        .from('scanners')
+        .select()
+        .eq('user_id', userProfile?.id!)
+        .eq('event_id', input.event_id)
+        .limit(1)
+        .single();
+
+      if (isScanner) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User is already a scanner',
+        });
+      }
+
+      const { data } = await supabase
+        .from('scanners')
+        .insert({
+          user_id: userProfile?.id!,
+          event_id: input.event_id,
+        })
+        .select();
+
+      return data;
+    }),
+
+  removeScannerFromEvent: authedProcedure
+    .input(z.object({ username: z.string(), event_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: user } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .limit(1)
+        .single();
+
+      if (!user) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User not found',
+        });
+      }
+
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .limit(1)
+        .single();
+
+      const { data: isScanner } = await supabase
+        .from('scanners')
+        .select()
+        .eq('user_id', userProfile?.id!)
+        .eq('event_id', input.event_id)
+        .limit(1)
+        .single();
+
+      if (!isScanner) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User is not a scanner',
+        });
+      }
+
+      const { error } = await supabase
+        .from('scanners')
+        .delete()
+        .eq('user_id', userProfile?.id!)
+        .eq('event_id', input.event_id);
+
+      if (error) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Error removing scanner: ' + error,
+        });
+      }
     }),
 });

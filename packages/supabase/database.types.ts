@@ -42,6 +42,7 @@ export interface Database {
           id: string
           image: string | null
           name: string
+          organization_id: string | null
           updated_at: string
         }
         Insert: {
@@ -51,6 +52,7 @@ export interface Database {
           id?: string
           image?: string | null
           name: string
+          organization_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -60,6 +62,7 @@ export interface Database {
           id?: string
           image?: string | null
           name?: string
+          organization_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -67,6 +70,12 @@ export interface Database {
             foreignKeyName: "artists_created_by_fkey"
             columns: ["created_by"]
             referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "artists_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
         ]
@@ -140,6 +149,7 @@ export interface Database {
           ipfs_image: string | null
           max_tickets_per_user: number | null
           name: string
+          organization_id: string | null
           stripe_product_id: string | null
           tickets_remaining: number | null
           updated_at: string
@@ -158,6 +168,7 @@ export interface Database {
           ipfs_image?: string | null
           max_tickets_per_user?: number | null
           name: string
+          organization_id?: string | null
           stripe_product_id?: string | null
           tickets_remaining?: number | null
           updated_at?: string
@@ -176,6 +187,7 @@ export interface Database {
           ipfs_image?: string | null
           max_tickets_per_user?: number | null
           name?: string
+          organization_id?: string | null
           stripe_product_id?: string | null
           tickets_remaining?: number | null
           updated_at?: string
@@ -192,6 +204,12 @@ export interface Database {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
           {
@@ -584,6 +602,7 @@ export interface Database {
           id: string
           image: string | null
           name: string
+          organization_id: string | null
           updated_at: string
         }
         Insert: {
@@ -593,6 +612,7 @@ export interface Database {
           id?: string
           image?: string | null
           name: string
+          organization_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -602,6 +622,7 @@ export interface Database {
           id?: string
           image?: string | null
           name?: string
+          organization_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -609,6 +630,12 @@ export interface Database {
             foreignKeyName: "venues_created_by_fkey"
             columns: ["created_by"]
             referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venues_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
         ]

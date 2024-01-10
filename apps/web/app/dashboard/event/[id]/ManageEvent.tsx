@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Events, Organization } from 'supabase';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
+import Scanners from './Scanners';
 
 export default function ManageEvent({
   event,
@@ -66,10 +67,10 @@ export default function ManageEvent({
       <Button
         variant='link'
         className='my-1 -ml-4 rounded-md'
-        onClick={() => router.back()}
+        onClick={() => router.push(`/dashboard/${organization?.id}`)}
       >
         <ArrowLeft className='mr-2 h-4 w-4' />
-        Back To Dashboard
+        Main Dashboard
       </Button>
       <Separator />
 
@@ -77,6 +78,7 @@ export default function ManageEvent({
       <h4 className='font-light text-muted-foreground'>
         {dateToString(event.date)}
       </h4>
+      <Scanners event={event} />
       <div className='flex flex-row items-center gap-2 pt-8'>
         <Button
           onClick={() => {

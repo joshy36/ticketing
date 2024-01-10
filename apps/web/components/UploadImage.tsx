@@ -33,7 +33,7 @@ export default function UploadImage({ params }: { params: Props }) {
         console.error('Error updating event:', error);
         setIsLoading(false);
       } else {
-        router.push(`/event/${params.id}`);
+        router.push(`/dashboard/event/${params.id}`);
       }
     },
   });

@@ -37,10 +37,6 @@ export default function MessageCenter() {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Messages</SheetTitle>
-          <SheetDescription>
-            This is where you recieve messages from artists and venues about
-            upcoming events and promotions.
-          </SheetDescription>
         </SheetHeader>
         {messages?.length == 0 ? (
           <div className='pt-4'>No messages yet, check back later.</div>
@@ -55,7 +51,7 @@ export default function MessageCenter() {
               ?.map((message) => (
                 <button
                   key={message.id}
-                  className='my-2 flex w-full flex-row items-center justify-between rounded-md border bg-zinc-900/60 p-4 pt-4 hover:border-muted-foreground hover:bg-zinc-800/60'
+                  className='my-2 flex w-full flex-row items-center justify-between rounded-md border bg-zinc-900/60 p-4 pt-4 hover:border-muted-foreground hover:bg-zinc-800/60 hover:backdrop-blur-lg'
                 >
                   <div className='flex flex-col gap-2'>
                     <div className='text-left text-white'>

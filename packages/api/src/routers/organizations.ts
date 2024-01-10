@@ -1,3 +1,4 @@
+import { getOrganizationMembers } from './../shared/organizations';
 import { z } from 'zod';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
@@ -35,41 +36,7 @@ export const organizationsRouter = router({
   getOrganizationMembers: authedProcedure
     .input(z.object({ organization_id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const supabase = ctx.supabase;
-      const { data: members } = await supabase
-        .from('organization_members')
-        .select()
-        .eq('organization_id', input.organization_id);
-
-      if (!members) return null;
-
-      type Member = {
-        created_at: string;
-        id: string;
-        organization_id: string | null;
-        role: 'owner' | 'admin' | null;
-        updated_at: string | null;
-        user_id: string | null;
-        profile: UserProfile;
-      };
-
-      let memberProfiles: Member[] = [];
-
-      for (let i = 0; i < members?.length!; i++) {
-        const { data: memberProfile } = await supabase
-          .from('user_profiles')
-          .select()
-          .eq('id', members[i]!.user_id!)
-          .limit(1)
-          .single();
-
-        memberProfiles.push({
-          ...members[i]!,
-          profile: memberProfile!,
-        });
-      }
-
-      return memberProfiles;
+      return getOrganizationMembers(ctx.supabase, input.organization_id);
     }),
 
   addUserToOrganization: authedProcedure

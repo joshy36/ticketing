@@ -34,7 +34,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../_trpc/client';
+import { trpc } from '../../../../_trpc/client';
 
 import {
   Command,
@@ -42,7 +42,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '../../../components/ui/command';
+} from '../../../../../components/ui/command';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -70,7 +70,11 @@ const formSchema = z.object({
   }),
 });
 
-export default function EventCreate() {
+export default function EventCreate({
+  organizationId,
+}: {
+  organizationId: string;
+}) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -90,7 +94,7 @@ export default function EventCreate() {
         setIsLoading(false);
       } else {
         router.refresh();
-        router.push(`/event/create/tickets/${data.id}`);
+        router.push(`/dashboard/event/tickets/${organizationId}/${data.id}`);
       }
     },
   });
@@ -124,6 +128,7 @@ export default function EventCreate() {
       description: values.description,
       date: values.date,
       image: null,
+      organization_id: organizationId,
     });
   }
 

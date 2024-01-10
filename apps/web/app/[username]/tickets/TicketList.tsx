@@ -21,9 +21,19 @@ export default async function TicketList({
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
       <Tabs defaultValue='upcoming' className='items-center'>
-        <TabsList className='-ml-4 items-center justify-center '>
-          <TabsTrigger value='upcoming'>Upcoming Events</TabsTrigger>
-          <TabsTrigger value='Past'>Past Events</TabsTrigger>
+        <TabsList className='-ml-4 items-center justify-center'>
+          <TabsTrigger
+            value='upcoming'
+            className='text-sm font-semibold md:text-sm'
+          >
+            Upcoming Events
+          </TabsTrigger>
+          <TabsTrigger
+            value='Past'
+            className='text-sm font-semibold md:text-sm'
+          >
+            Past Events
+          </TabsTrigger>
         </TabsList>
         <TabsContent value='upcoming' className='py-6'>
           <div>

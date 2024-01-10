@@ -3,7 +3,11 @@ import EventCreate from './EventCreate';
 import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: { organizationId: string };
+}) {
   const supabase = createSupabaseServer();
 
   const {
@@ -24,7 +28,7 @@ export default async function Home() {
 
   return (
     <main>
-      <EventCreate />
+      <EventCreate organizationId={params.organizationId} />
     </main>
   );
 }

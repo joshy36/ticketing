@@ -99,4 +99,15 @@ export const usersRouter = router({
       }
       return true;
     }),
+
+  makeScannerForEvent: authedProcedure
+    .input(z.object({ user_id: z.string(), event_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('scanners')
+        .insert({ user_id: input.user_id, event_id: input.event_id })
+        .single();
+      return data;
+    }),
 });

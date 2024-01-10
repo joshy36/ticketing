@@ -32,13 +32,13 @@ export default function DashBoard({ id }: { id: string }) {
         </div>
         <div className='flex flex-row gap-2'>
           <Button className='rounded-md' variant='outline' asChild>
-            <Link href='/artist/create'>Create Artist</Link>
+            <Link href='artist/create'>Create Artist</Link>
           </Button>
           <Button className='rounded-md' variant='outline' asChild>
-            <Link href='/venue/create'>Create Venue</Link>
+            <Link href='venue/create'>Create Venue</Link>
           </Button>
           <Button className='rounded-md' asChild>
-            <Link href='/event/create'>Create Event</Link>
+            <Link href={`event/create/${id}`}>Create Event</Link>
           </Button>
         </div>
       </div>
