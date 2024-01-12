@@ -48,7 +48,7 @@ export default function Revenue({ event }: { event: Events }) {
           <p>Profit</p>
           {sections?.map((section) => {
             return (
-              <div id={section.id}>
+              <div key={section.id}>
                 <p>{section.name}</p>
                 <div className='text font-extralight text-gray-400'>
                   {`$` +
