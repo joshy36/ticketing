@@ -37,20 +37,19 @@ export const dateToString = (date: string): string => {
 
 export const blurhash = 'L04U]7j[fQj[offQfQfQfQfQfQfQ';
 
+export const ipAddress = '192.168.1.213';
+
 export const replaceLocalhostWithIP = (event: any) => {
   if (!event) {
     return null;
   }
 
   if (event.image && typeof event.image === 'string') {
-    event.image = event.image.replace('localhost', '192.168.1.15');
+    event.image = event.image.replace('localhost', ipAddress);
   }
 
   if (event.profile_image && typeof event.profile_image === 'string') {
-    event.profile_image = event.profile_image.replace(
-      'localhost',
-      '192.168.1.15'
-    );
+    event.profile_image = event.profile_image.replace('localhost', ipAddress);
   }
 
   return event;

@@ -72,7 +72,7 @@ export default function OrganizationMembers({
           anything within the organization including creating artists, venues
           and events. All members are automatically added as scanners for each
           event you create. You can add or remove scanners on the specific
-          event`&apos;`s management page.
+          event&apos;s management page.
         </CardDescription>
       </CardHeader>
       <CardContent>

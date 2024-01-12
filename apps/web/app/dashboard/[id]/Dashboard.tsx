@@ -9,6 +9,7 @@ import ManageOrg from './ManageOrg';
 import { trpc } from '../../_trpc/client';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { ComboboxDemo } from './Combo';
 
 export default function DashBoard({ id }: { id: string }) {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function DashBoard({ id }: { id: string }) {
         <div>
           <h1 className=' text-4xl font-light'>Dashboard</h1>
           <h3 className='pb-8 text-muted-foreground'>{organization?.name}</h3>
+          {/* <ComboboxDemo /> */}
         </div>
         <div className='flex flex-row gap-2'>
           <Button className='rounded-md' variant='outline' asChild>

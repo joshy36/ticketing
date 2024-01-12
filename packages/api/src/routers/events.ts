@@ -64,6 +64,7 @@ export const eventsRouter = router({
         stripe_price_id: string;
       }[] = [];
       for (let i = 0; i < sections!.length; i++) {
+        // console.log('Sections', sections![i]?.id!);
         const { data: ticket } = await supabase
           .from('tickets')
           .select()
@@ -71,6 +72,7 @@ export const eventsRouter = router({
           .eq('event_id', input.event_id)
           .limit(1)
           .single();
+        // console.log(ticket);
         sectionPrices.push({
           section_id: sections![i]?.id!,
           section_name: sections![i]?.name!,

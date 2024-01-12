@@ -11,6 +11,7 @@ import { Events, Organization } from 'supabase';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import Scanners from './Scanners';
+import Revenue from './Revenue';
 
 export default function ManageEvent({
   event,
@@ -78,6 +79,7 @@ export default function ManageEvent({
       <h4 className='font-light text-muted-foreground'>
         {dateToString(event.date)}
       </h4>
+      <Revenue event={event} />
       <Scanners event={event} />
       <div className='flex flex-row items-center gap-2 pt-8'>
         <Button
