@@ -30,7 +30,7 @@ export default function EventPurchase({
   );
 
   const renderEventDetails = () => {
-    if (event?.tickets_remaining === 0) {
+    if (event?.tickets_remaining! <= 0) {
       return <h1>Event sold out!</h1>;
     } else if (!event?.etherscan_link) {
       // Don't want to render tickets yet
