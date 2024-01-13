@@ -35,6 +35,7 @@ export const queueRouter = router({
           params: input.params,
         },
       };
+      console.log('Adding job to queue :', payload);
       const jobId = await queue.add(payload);
       console.log(`Added job with jobId: ${jobId}`);
       await queue.executeJobFromQueue<Payload>(async (job) => {
@@ -44,6 +45,7 @@ export const queueRouter = router({
           // callback: `${process.env.UPSTASH_URL}/qstash-callback`,
           body: job.body,
         });
+        console.log('res:', res);
       });
       return jobId;
     }),
