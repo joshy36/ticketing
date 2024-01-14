@@ -38,8 +38,9 @@ export const getBaseUrl = () => {
       'Failed to get localhost. Please point to your production server.'
     );
   }
-  // for testing to prod
-  // return 'https://ticketing-lemon.vercel.app';
+  if (process.env.EXPO_PUBLIC_ENV === 'prod') {
+    return 'https://ticketing-lemon.vercel.app';
+  }
 
   return `http://${localhost}:3000`;
 };

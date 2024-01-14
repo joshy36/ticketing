@@ -3,7 +3,14 @@ import * as SecureStore from 'expo-secure-store';
 import { createClient } from '@supabase/supabase-js';
 import { ipAddress } from './helpers';
 
-const supabaseUrl = `http://${ipAddress}:54321`;
+let supabaseUrl;
+
+if (process.env.EXPO_PUBLIC_ENV === 'prod') {
+  supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
+} else {
+  supabaseUrl = `http://${ipAddress}:54321`;
+}
+
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const ExpoSecureStoreAdapter = {

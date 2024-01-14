@@ -13,6 +13,7 @@ import { WebauthnStamper } from '@turnkey/webauthn-stamper';
 import { trpc } from '../../_trpc/client';
 import { UserProfile } from 'supabase';
 import { revalidatePath } from 'next/cache';
+import { Fingerprint } from 'lucide-react';
 
 type TPrivateKeyState = {
   id: string;
@@ -165,6 +166,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
             disabled={loading}
           >
             {loading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
+            <Fingerprint className='pr-2' />
             Create a passkey
           </Button>
         )}

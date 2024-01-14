@@ -28,60 +28,13 @@ export default function ProfilePage({
 }: {
   params: { username: string };
 }) {
-  // const router = useRouter();
-
   const { data: userProfile, isLoading } = trpc.getUserProfile.useQuery({
     username: params.username,
   });
 
-  // const add = trpc.addJobToQueue.useMutation({
-  //   onSettled(data, error) {
-  //     if (!data) {
-  //       console.log('Error pushing to queue:', error);
-  //     } else {
-  //       console.log('added: ', data);
-  //       router.refresh();
-  //     }
-  //   },
-  // });
-
-  // const execute = trpc.executeJobFromQueue.useMutation({
-  //   onSettled(data, error) {
-  //     if (!data) {
-  //       console.log('Error executing job:', error);
-  //     } else {
-  //       console.log('executed: ', data);
-  //     }
-  //   },
-  // });
-
   return (
     <WagmiConfig config={wagmiConfig}>
-      <div>
-        {/* <div className='flex flex-row items-center justify-between '>
-          <Button
-            onClick={() => {
-              console.log('adding job');
-              add.mutate({
-                method: 'transferTicket',
-                params: {
-                  event_id: 'asdf',
-                  ticket_id: 'asdf',
-                  user_id: 'asdf',
-                },
-              });
-            }}
-          >
-            Add Job
-          </Button>
-          <Button
-            onClick={() => {
-              execute.mutate();
-            }}
-          >
-            Execute Job
-          </Button>
-        </div> */}
+      <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
         {isLoading ? (
           <div>Loading...</div>
         ) : (

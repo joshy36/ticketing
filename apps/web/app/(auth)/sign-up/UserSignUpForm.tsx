@@ -38,7 +38,7 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
       email: email,
       password: password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/auth/confirm`,
         data: {
           username: randomName,
         },
