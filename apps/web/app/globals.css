@@ -90,3 +90,26 @@
 .ant-tabs-tab-active .ant-tabs-tab-btn {
   color: white !important;
 }
+
+.box {
+  height: 400px;
+  width: 400px;
+}
+
+.b {
+  background-image: conic-gradient(
+    from 90deg,
+    rgb(76, 0, 217),
+    transparent,
+    transparent
+  );
+}
+
+.b2 {
+  background-image: conic-gradient(
+    from 270deg,
+    transparent,
+    transparent,
+    rgb(76, 0, 217)
+  );
+}
