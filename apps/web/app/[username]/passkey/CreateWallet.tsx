@@ -15,6 +15,7 @@ import { Fingerprint } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { formatEthAddress } from '@/utils/helpers';
 
 export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const router = useRouter();
@@ -101,16 +102,19 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
             You can find out more about how your private key is stored in a
             secure enclave{' '}
             <Link
+              target='_blank'
               href='https://docs.turnkey.com/'
               className='font-light underline underline-offset-4 hover:text-primary'
             >
               here.
             </Link>
           </p>
+
           {walletAddress && (
-            <div>
-              <p className=''>ETH address:</p>
-              <p className='text-muted-foreground'>{walletAddress}</p>
+            <div className='pt-8'>
+              <p className=''>
+                Wallet address: {formatEthAddress(walletAddress)}
+              </p>
             </div>
           )}
           <div className='flex justify-center pt-8'>
@@ -132,6 +136,10 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
               </Button>
             )}
           </div>
+          <p className='pt-4 text-xs font-light text-muted-foreground'>
+            <b>Note:</b> If you are on an iPhone you may need to enable iCloud
+            Passwords & Keychain under Password &gt; Password Options.
+          </p>
         </CardContent>
       </Card>
     </div>

@@ -71,7 +71,9 @@ export default async function ProfileView({
             <div></div>
           )}
           <div className='py-3'></div>
-          <CopyWallet userProfile={userProfile} />
+          {userProfile?.wallet_address && (
+            <CopyWallet userProfile={userProfile} />
+          )}
         </div>
         <div className='flex flex-col items-start justify-start'>
           <div className='flex items-center'>

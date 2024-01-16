@@ -38,8 +38,8 @@ export const dateToString = (dateString: string): string => {
   return formattedDate;
 };
 
-export const formatEthAddress = (address: string): string => {
+export const formatEthAddress = (address: string | null): string => {
   return (
-    address.substring(0, 6) + '...' + address.substring(address.length - 4)
+    address?.substring(0, 6) + '...' + address?.substring(address.length - 4)
   );
 };
