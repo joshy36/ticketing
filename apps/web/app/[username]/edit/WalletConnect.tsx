@@ -15,6 +15,7 @@ import { useSignMessage } from 'wagmi';
 import { recoverMessageAddress } from 'viem';
 import { trpc } from '../../_trpc/client';
 import { UserProfile } from 'supabase';
+import { formatEthAddress } from '@/utils/helpers';
 
 export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
   const {
@@ -123,11 +124,7 @@ export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
           </div>
           <div>
             <h3 className='text-lg font-medium'>
-              {ensName
-                ? `${ensName} (${address})`
-                : address?.substring(0, 6) +
-                  '...' +
-                  address?.substring(address.length - 4)}
+              {ensName ? `${ensName} (${address})` : formatEthAddress(address!)}
             </h3>
             <p className='text-sm text-muted-foreground'>
               Connected to {chain?.name}

@@ -37,3 +37,9 @@ export const dateToString = (dateString: string): string => {
   const formattedDate = format(dateObj, 'MMM d, h:mm a');
   return formattedDate;
 };
+
+export const formatEthAddress = (address: string): string => {
+  return (
+    address.substring(0, 6) + '...' + address.substring(address.length - 4)
+  );
+};

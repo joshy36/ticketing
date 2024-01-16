@@ -15,6 +15,7 @@ import {
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Separator } from '@/components/ui/separator';
 import UserSignOut from './UserSignOut';
+import CopyWallet from './CopyWallet';
 
 export default async function ProfileView({
   params,
@@ -69,9 +70,11 @@ export default async function ProfileView({
           ) : (
             <div></div>
           )}
+          <div className='py-3'></div>
+          <CopyWallet userProfile={userProfile} />
         </div>
         <div className='flex flex-col items-start justify-start'>
-          <div className='flex'>
+          <div className='flex items-center'>
             {userProfile?.first_name && (
               <p className='py-4 text-5xl font-medium'>
                 {userProfile.first_name}
