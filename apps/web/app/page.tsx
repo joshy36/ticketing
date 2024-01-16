@@ -44,11 +44,11 @@ export default function Home() {
     <main>
       <div className='flex flex-row items-center justify-center'>
         <p className='z-30 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text pr-2 pt-20 text-center text-4xl font-bold tracking-tighter text-transparent md:pr-4 md:text-6xl lg:pr-8 lg:text-8xl'>
-          Discover
+          Discover new events.
         </p>
-        <p className='z-30 bg-white bg-clip-text pt-20 text-center text-4xl font-bold tracking-tighter text-transparent md:text-6xl lg:text-8xl'>
+        {/* <p className='z-30 bg-white bg-clip-text pt-20 text-center text-4xl font-bold tracking-tighter text-transparent md:text-6xl lg:text-8xl'>
           new events.
-        </p>
+        </p> */}
       </div>
 
       <div className='z-0 -mt-36 flex items-center justify-center'>
@@ -56,7 +56,7 @@ export default function Home() {
         <div className='b2 z-0 h-96 w-full'></div>
       </div>
 
-      <div className='z-30 mx-auto -mt-36 flex max-w-md flex-row items-center justify-center gap-4 rounded-full border  bg-black/20 px-4 py-4 backdrop-blur-3xl sm:px-6 sm:py-4 lg:max-w-3xl lg:px-6'>
+      <div className='z-30 mx-auto -mt-36 flex max-w-md flex-row items-center justify-center gap-2  sm:px-6 sm:py-4 lg:max-w-3xl lg:px-6'>
         <div className={cn('grid gap-2')}>
           <Popover>
             <PopoverTrigger asChild>
@@ -64,7 +64,7 @@ export default function Home() {
                 id='date'
                 variant={'outline'}
                 className={cn(
-                  'hidden h-12 w-[250px] justify-start border-none bg-black/30 text-left font-normal backdrop-blur-3xl hover:bg-black/60 lg:flex',
+                  'hidden h-12 w-[250px] justify-start rounded-md border-none bg-black/70 text-left font-normal backdrop-blur-3xl hover:bg-black/90 lg:flex',
                   !date && 'text-muted-foreground',
                 )}
               >
@@ -136,11 +136,11 @@ export default function Home() {
         </Command> */}
 
         <Input
-          className='z-30 h-12 w-80 rounded-full border-none bg-black/30 backdrop-blur-3xl hover:bg-black/60 md:w-96'
+          className='z-30 h-12 w-80 rounded-md border-none bg-black/70 backdrop-blur-3xl hover:bg-black/90 md:w-96'
           placeholder='Search events, artists, venues'
         />
 
-        <Button className='z-30 h-12 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:bg-gradient-to-r hover:from-violet-700 hover:to-indigo-700'>
+        <Button className='z-30 h-12 rounded-md bg-indigo-300/80 hover:bg-indigo-400/80'>
           Search
         </Button>
       </div>

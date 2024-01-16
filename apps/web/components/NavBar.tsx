@@ -72,36 +72,37 @@ export default function NavBar({
   ];
 
   return (
-    <div className='fixed top-0 z-40 hidden h-16 w-full items-center bg-black/40 px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
-      <NavigationMenu>
-        <NavigationMenuList>
-          {mainComponents.map((component) => (
-            <div key={component.title}>
-              {component.title === 'My Tickets' && !user ? (
-                <div key={component.title}></div>
-              ) : (
-                <NavigationMenuItem key={component.title}>
-                  <Link href={component.href} legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      {component.title}
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              )}
-            </div>
-          ))}
-          {userOrg && (
-            <NavigationMenuItem>
-              <Link href={`/dashboard/${userOrg}`} legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Admin Dashboard
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          )}
-          {/* {user ? (
+    <div className='flex flex-col'>
+      <div className='fixed top-0 z-40 hidden h-16 w-full items-center bg-black/40 px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
+        <NavigationMenu>
+          <NavigationMenuList>
+            {mainComponents.map((component) => (
+              <div key={component.title}>
+                {component.title === 'My Tickets' && !user ? (
+                  <div key={component.title}></div>
+                ) : (
+                  <NavigationMenuItem key={component.title}>
+                    <Link href={component.href} legacyBehavior passHref>
+                      <NavigationMenuLink
+                        className={navigationMenuTriggerStyle()}
+                      >
+                        {component.title}
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                )}
+              </div>
+            ))}
+            {userOrg && (
+              <NavigationMenuItem>
+                <Link href={`/dashboard/${userOrg}`} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Admin Dashboard
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            )}
+            {/* {user ? (
             <NavigationMenuItem>
               <NavigationMenuTrigger>Admin</NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -121,27 +122,47 @@ export default function NavBar({
           ) : (
             <div></div>
           )} */}
-        </NavigationMenuList>
-      </NavigationMenu>
-      <div className='flex flex-1 items-center justify-between space-x-6 md:justify-end'>
-        <div className='w-full flex-1 md:w-auto md:flex-none'>
-          <CommandMenu />
+          </NavigationMenuList>
+        </NavigationMenu>
+        <div className='flex flex-1 items-center justify-between space-x-6 md:justify-end'>
+          <div className='w-full flex-1 md:w-auto md:flex-none'>
+            <CommandMenu />
+          </div>
+          {user ? (
+            <div className='ml-auto mt-1.5 flex space-x-4'>
+              <MessageCenter />
+              <UserNav user={user} userProfile={userProfile} />
+            </div>
+          ) : (
+            <div className='ml-auto flex items-center space-x-4'>
+              <Link href='/sign-in'>
+                <Button variant='secondary'>Sign In</Button>
+              </Link>
+              <Link href='/sign-up'>
+                <Button>Sign Up</Button>
+              </Link>
+            </div>
+          )}
         </div>
-        {user ? (
-          <div className='ml-auto mt-1.5 flex space-x-4'>
-            <MessageCenter />
-            <UserNav user={user} userProfile={userProfile} />
+      </div>
+      <div className='fixed z-40 mt-16 hidden w-full flex-row items-center justify-center py-1.5 text-center text-lg  md:flex'>
+        <div className='relative'>
+          <div className='flex flex-row items-center rounded-full border bg-black/40 backdrop-blur-md'>
+            <div className='rounded-full border-r bg-zinc-900/20 py-2 backdrop-blur-xl'>
+              <span
+                className='animate-text-gradient 
+              bg-gradient-to-r from-blue-700 via-violet-700
+             to-indigo-700 bg-[200%_auto] bg-clip-text px-4 py-2 font-semibold text-transparent'
+              >
+                New Message
+              </span>
+            </div>
+            <p className='px-4 font-light text-muted-foreground'>
+              This is a test message that someone will recieve
+            </p>
           </div>
-        ) : (
-          <div className='ml-auto flex items-center space-x-4'>
-            <Link href='/sign-in'>
-              <Button variant='secondary'>Sign In</Button>
-            </Link>
-            <Link href='/sign-up'>
-              <Button>Sign Up</Button>
-            </Link>
-          </div>
-        )}
+          <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700'></span>
+        </div>
       </div>
     </div>
   );
