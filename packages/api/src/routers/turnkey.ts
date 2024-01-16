@@ -15,6 +15,14 @@ type CreateSubOrgRequest = {
   attestation: TAttestation;
 };
 
+// Default path for the first Ethereum address in a new HD wallet.
+// See https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki, paths are in the form:
+//     m / purpose' / coin_type' / account' / change / address_index
+// - Purpose is a constant set to 44' following the BIP43 recommendation.
+// - Coin type is set to 60 (ETH) -- see https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+// - Account, Change, and Address Index are set to 0
+const ETHEREUM_WALLET_DEFAULT_PATH = "m/44'/60'/0'/0/0";
+
 export const turnkeyRouter = router({
   subOrg: authedProcedure
     .input(
@@ -43,6 +51,8 @@ export const turnkeyRouter = router({
           requestFn: turnkeyClient.createSubOrganization,
         });
 
+        const walletName = `Default ETH Wallet`;
+
         const completedActivity = await activityPoller({
           type: 'ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4',
           timestampMs: String(Date.now()),
@@ -63,6 +73,17 @@ export const turnkeyRouter = router({
                 ],
               },
             ],
+            wallet: {
+              walletName: walletName,
+              accounts: [
+                {
+                  curve: 'CURVE_SECP256K1',
+                  pathFormat: 'PATH_FORMAT_BIP32',
+                  path: ETHEREUM_WALLET_DEFAULT_PATH,
+                  addressFormat: 'ADDRESS_FORMAT_ETHEREUM',
+                },
+              ],
+            },
           },
         });
 
@@ -73,7 +94,15 @@ export const turnkeyRouter = router({
 
         await supabase
           .from('user_profiles')
-          .update({ turnkey_sub_org: subOrgId })
+          .update({
+            turnkey_sub_org: subOrgId,
+            wallet_address:
+              completedActivity.result.createSubOrganizationResultV4?.wallet
+                ?.addresses[0],
+            turnkey_wallet_id:
+              completedActivity.result.createSubOrganizationResultV4?.wallet
+                ?.walletId,
+          })
           .eq('id', ctx.user?.id);
 
         return { subOrgId: subOrgId };

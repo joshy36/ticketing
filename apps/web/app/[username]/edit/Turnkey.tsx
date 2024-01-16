@@ -6,25 +6,18 @@ import {
   generateRandomBuffer,
   humanReadableDateTime,
 } from '@/utils/turnkey';
-import { getWebAuthnAttestation, TurnkeyClient } from '@turnkey/http';
+import { getWebAuthnAttestation } from '@turnkey/http';
 import { useEffect, useState } from 'react';
 import { Icons } from '@/components/ui/icons';
-import { WebauthnStamper } from '@turnkey/webauthn-stamper';
 import { trpc } from '../../_trpc/client';
 import { UserProfile } from 'supabase';
 import { revalidatePath } from 'next/cache';
 import { Fingerprint } from 'lucide-react';
 
-type TPrivateKeyState = {
-  id: string;
-  address: string;
-} | null;
-
 export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const [loading, setLoading] = useState(false);
   const [subOrgId, setSubOrgId] = useState<string | null>(null);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [walletError, setWalletError] = useState<string | null>(null);
   const [rp_id, setRpId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,14 +31,6 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     }
   }, [userProfile]);
 
-  const logObject = {
-    env: process.env.NEXT_PUBLIC_ENVIRONMENT,
-    sub_org: rp_id,
-    wallet_address: walletAddress,
-    sub_org_id: subOrgId,
-  };
-
-  console.log('Log Object:', logObject);
   const subOrg = trpc.subOrg.useMutation({
     onSettled(data, error) {
       if (error) {
@@ -57,30 +42,6 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
       }
     },
   });
-
-  const createKey = trpc.createKey.useMutation({
-    onSettled(data, error) {
-      if (!data) {
-        console.error('Error creating key:', error);
-        setWalletError('Incorrect passkey');
-      } else {
-        console.log('key created: ', data);
-        setWalletAddress(data!['address']!);
-        setWalletError(null);
-      }
-    },
-  });
-
-  const stamper = new WebauthnStamper({
-    rpId: rp_id!,
-  });
-
-  const passkeyHttpClient = new TurnkeyClient(
-    {
-      baseUrl: process.env.NEXT_PUBLIC_TURNKEY_API_BASE_URL!,
-    },
-    stamper,
-  );
 
   const createSubOrg = async () => {
     const challenge = generateRandomBuffer();
@@ -117,38 +78,8 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     });
   };
 
-  const createPrivateKey = async () => {
-    if (!subOrgId) {
-      throw new Error('sub-org id not found');
-    }
-
-    const signedRequest = await passkeyHttpClient.stampCreatePrivateKeys({
-      type: 'ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2',
-      organizationId: subOrgId,
-      timestampMs: String(Date.now()),
-      parameters: {
-        privateKeys: [
-          {
-            privateKeyName: `ETH Key ${Math.floor(Math.random() * 1000)}`,
-            curve: 'CURVE_SECP256K1',
-            addressFormats: ['ADDRESS_FORMAT_ETHEREUM'],
-            privateKeyTags: [],
-          },
-        ],
-      },
-    });
-
-    createKey.mutate(signedRequest);
-  };
-
   return (
     <div>
-      {/* {subOrgId && (
-        <div>
-          Your sub-org ID: <br />
-          <span>{subOrgId}</span>
-        </div>
-      )} */}
       {walletAddress && (
         <div>
           <p className=''>ETH address:</p>
@@ -170,26 +101,6 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
             Create a passkey
           </Button>
         )}
-        <div className='flex flex-col items-center justify-center gap-2'>
-          {subOrgId && !walletAddress && (
-            <Button
-              onClick={async () => {
-                setLoading(true);
-                await createPrivateKey();
-                setLoading(false);
-              }}
-              disabled={loading}
-            >
-              {loading && (
-                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-              )}
-              Create your wallet
-            </Button>
-          )}
-          {walletError && (
-            <div className='font-light text-red-700'>{walletError}</div>
-          )}
-        </div>
       </div>
     </div>
   );

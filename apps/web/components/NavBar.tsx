@@ -161,7 +161,7 @@ export default function NavBar({
               This is a test message that someone will recieve
             </p>
           </div>
-          <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700'></span>
+          {/* <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700'></span> */}
         </div>
       </div>
     </div>

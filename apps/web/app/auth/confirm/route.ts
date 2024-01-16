@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!error) {
-      redirectTo.pathname = `/${data.user?.user_metadata.username}`;
+      redirectTo.pathname = `/${data.user?.user_metadata.username}/passkey`;
       return NextResponse.redirect(redirectTo);
     }
   }

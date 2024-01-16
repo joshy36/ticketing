@@ -557,6 +557,7 @@ export interface Database {
           last_name: string | null
           profile_image: string | null
           turnkey_sub_org: string | null
+          turnkey_wallet_id: string | null
           updated_at: string | null
           username: string | null
           wallet_address: string | null
@@ -569,6 +570,7 @@ export interface Database {
           last_name?: string | null
           profile_image?: string | null
           turnkey_sub_org?: string | null
+          turnkey_wallet_id?: string | null
           updated_at?: string | null
           username?: string | null
           wallet_address?: string | null
@@ -581,6 +583,7 @@ export interface Database {
           last_name?: string | null
           profile_image?: string | null
           turnkey_sub_org?: string | null
+          turnkey_wallet_id?: string | null
           updated_at?: string | null
           username?: string | null
           wallet_address?: string | null
