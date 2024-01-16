@@ -136,11 +136,11 @@ export default function Home() {
         </Command> */}
 
         <Input
-          className='z-30 h-12 w-80 rounded-full border-none bg-black/30 backdrop-blur-3xl md:w-96'
+          className='z-30 h-12 w-80 rounded-full border-none bg-black/30 backdrop-blur-3xl hover:bg-black/60 md:w-96'
           placeholder='Search events, artists, venues'
         />
 
-        <Button className='z-30 h-12 bg-gradient-to-r from-violet-600 to-indigo-600 text-white'>
+        <Button className='z-30 h-12 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:bg-gradient-to-r hover:from-violet-700 hover:to-indigo-700'>
           Search
         </Button>
       </div>
