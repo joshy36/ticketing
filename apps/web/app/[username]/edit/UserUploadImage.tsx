@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Icons } from '@/components/ui/icons';
 import { useRouter } from 'next/navigation';
@@ -24,23 +24,17 @@ export default function UserUploadImage({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState(userImage);
   const { register, handleSubmit } = useForm();
-  const { toast } = useToast();
   const router = useRouter();
   const updateUserImage = trpc.updateUser.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast({
-          variant: 'destructive',
-          description: 'Error updating profile',
-        });
+        toast.error('Error updating profile');
         console.error('Error updating profile:', error);
         console.error('Error updating profile:', data);
       } else {
         setImgUrl(data.profile_image ?? '');
         router.refresh();
-        toast({
-          description: 'Profile updated successfully!',
-        });
+        toast.success('Profile updated successfully');
       }
       setIsLoading(false);
     },
@@ -54,20 +48,14 @@ export default function UserUploadImage({
     setIsLoading(true);
 
     if (data.file.length == 0) {
-      toast({
-        variant: 'destructive',
-        description: 'Must choose a file to upload!',
-      });
+      toast.error('Must choose a file to upload');
       setIsLoading(false);
       return;
     }
 
     const fileType = data.file[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
-      toast({
-        variant: 'destructive',
-        description: 'Image must be a jpeg',
-      });
+      toast.error('Image must be a jpeg');
       setIsLoading(false);
       return;
     }
@@ -80,9 +68,7 @@ export default function UserUploadImage({
     formData.append('bucket', bucket);
 
     try {
-      toast({
-        description: 'Uploading image...',
-      });
+      toast('Uploading image...');
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       const res = await fetch(baseUrl + `/api/image/upload`, {
         method: 'POST',
@@ -91,9 +77,7 @@ export default function UserUploadImage({
       });
 
       if (res.ok) {
-        toast({
-          description: 'Image uploaded successfully!',
-        });
+        toast.success('Image uploaded successfully');
         const fileName = await res.json();
 
         updateUserImage.mutate({
@@ -107,24 +91,15 @@ export default function UserUploadImage({
       } else {
         const error = await res.json();
         if (error.error.message == 'invalid signature') {
-          toast({
-            variant: 'destructive',
-            description: 'Must be signed in to upload an image!',
-          });
+          toast.error('Must be signed in to upload an image');
         } else {
-          toast({
-            variant: 'destructive',
-            description: 'Error uploading image!',
-          });
+          toast.error('Error uploading image');
         }
         console.error('Error uploading image:', error.error);
       }
       setIsLoading(false);
     } catch (error) {
-      toast({
-        variant: 'destructive',
-        description: 'Error uploading image!',
-      });
+      toast.error('Error uploading image');
       console.error('Error uploading image:', error);
       setIsLoading(false);
     }

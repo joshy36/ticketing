@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { useState } from 'react';
 import { Organization } from 'supabase';
@@ -26,7 +26,6 @@ export default function OrganizationMembers({
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<string>('');
-  const { toast } = useToast();
   const { data: members, refetch } = trpc.getOrganizationMembers.useQuery(
     {
       organization_id: organization?.id!,
@@ -39,25 +38,18 @@ export default function OrganizationMembers({
       if (error) {
         console.error(error);
         if (error.message === 'User is already in an organization') {
-          toast({
-            title: 'User already in organization.',
-            description: 'Please try a different username.',
-            variant: 'destructive',
+          toast.error('User already in organization', {
+            description: 'Please try a different username',
           });
         } else {
           console.error('Error adding user to org, user not found');
-          toast({
-            title: 'User not found.',
-            description: 'Please try a different username.',
-            variant: 'destructive',
+          toast.error('User not found', {
+            description: 'Please try a different username',
           });
         }
       } else if (data) {
         refetch();
-        toast({
-          title: 'User added to organization.',
-          description: 'User has been added to your organization.',
-        });
+        toast.success('User added to organization');
       }
       setIsLoading(false);
     },

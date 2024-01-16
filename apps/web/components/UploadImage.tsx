@@ -3,7 +3,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
-import { useToast } from './ui/use-toast';
+import { toast } from 'sonner';
 import { Input } from './ui/input';
 import { Icons } from './ui/icons';
 import Image from 'next/image';
@@ -21,15 +21,12 @@ export default function UploadImage({ params }: { params: Props }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState('');
   const { register, handleSubmit } = useForm();
-  const { toast } = useToast();
   const router = useRouter();
 
   const updateEvent = trpc.updateEvent.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast({
-          description: 'Error updating event',
-        });
+        toast.error('Error updating event');
         console.error('Error updating event:', error);
         setIsLoading(false);
       } else {
@@ -41,9 +38,7 @@ export default function UploadImage({ params }: { params: Props }) {
   const updateArtist = trpc.updateArtist.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast({
-          description: 'Error updating artist',
-        });
+        toast.error('Error updating artist');
         console.error('Error updating artist:', error);
         setIsLoading(false);
       } else {
@@ -55,9 +50,7 @@ export default function UploadImage({ params }: { params: Props }) {
   const updateVenue = trpc.updateVenue.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast({
-          description: 'Error updating venue',
-        });
+        toast.error('Error updating venue');
         console.error('Error updating venue:', error);
         setIsLoading(false);
       } else {
@@ -89,20 +82,14 @@ export default function UploadImage({ params }: { params: Props }) {
     setIsLoading(true);
 
     if (data.file.length == 0) {
-      toast({
-        variant: 'destructive',
-        description: 'Must choose a file to upload!',
-      });
+      toast.error('Must choose a file to upload');
       setIsLoading(false);
       return;
     }
 
     const fileType = data.file[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
-      toast({
-        variant: 'destructive',
-        description: 'Image must be a jpeg',
-      });
+      toast.error('Image must be a jpeg');
       setIsLoading(false);
       return;
     }
@@ -121,9 +108,8 @@ export default function UploadImage({ params }: { params: Props }) {
     formData.append('bucket', bucket);
 
     try {
-      toast({
-        description: 'Uploading image...',
-      });
+      toast('Uploading image...');
+
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       const res = await fetch(baseUrl + `/api/image/upload`, {
         method: 'POST',
@@ -132,9 +118,7 @@ export default function UploadImage({ params }: { params: Props }) {
       });
 
       if (res.ok) {
-        toast({
-          description: 'Image uploaded successfully!',
-        });
+        toast.success('Image uploaded successfully');
         const fileName = await res.json();
         const url =
           process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
@@ -145,24 +129,15 @@ export default function UploadImage({ params }: { params: Props }) {
       } else {
         const error = await res.json();
         if (error.error.message == 'invalid signature') {
-          toast({
-            variant: 'destructive',
-            description: 'Must be signed in to upload an image!',
-          });
+          toast.error('Must be signed in to upload an image');
         } else {
-          toast({
-            variant: 'destructive',
-            description: 'Error uploading image!',
-          });
+          toast.error('Error uploading image');
         }
         console.error('Error uploading image:', error.error);
       }
       setIsLoading(false);
     } catch (error) {
-      toast({
-        variant: 'destructive',
-        description: 'Error uploading image!',
-      });
+      toast.error('Error uploading image');
       console.error('Error uploading image:', error);
       setIsLoading(false);
     }

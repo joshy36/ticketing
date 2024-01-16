@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
 import { AuthResponse } from '@supabase/supabase-js';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -19,7 +19,6 @@ export function UserSignInForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { toast } = useToast();
   const router = useRouter();
 
   const supabase = createSupabaseBrowserClient();
@@ -34,10 +33,8 @@ export function UserSignInForm({ className, ...props }: UserAuthFormProps) {
     // console.log('error: ', res.error?.message);
 
     if (res.error?.message == 'Invalid login credentials') {
-      toast({
-        variant: 'destructive',
-        title: 'Invalid login credentials!',
-        description: 'Forgot your password? Do something here.',
+      toast.error('Invalid login credentials', {
+        description: 'Forgot your password? Do something here',
       });
     } else {
       router.refresh();

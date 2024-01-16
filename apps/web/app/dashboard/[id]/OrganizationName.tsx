@@ -11,7 +11,7 @@ import {
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { useState } from 'react';
 import { Organization } from 'supabase';
@@ -23,22 +23,16 @@ export default function OrganizationName({
 }) {
   const [name, setName] = useState<string>(organization?.name!);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { toast } = useToast();
 
   const updateName = trpc.updateOrganizationName.useMutation({
     onSettled(data, error) {
       if (error) {
         console.error(error);
-        toast({
-          title: 'Error updating organization name.',
-          description: 'Please try again.',
-          variant: 'destructive',
+        toast.error('Error updating organization name', {
+          description: 'Please try again',
         });
       } else if (data) {
-        toast({
-          title: 'Organization name updated.',
-          description: 'Organization name has been updated.',
-        });
+        toast.success('Organization name updated');
       }
     },
   });

@@ -18,7 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
@@ -69,16 +69,13 @@ const defaultValues: Partial<FormValues> = {
 };
 
 export default function VenueCreate() {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
   const createVenue = trpc.createVenue.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast({
-          description: 'Error creating venue',
-        });
+        toast.error('Error creating venue');
         console.error('Error creating venue:', error);
         setIsLoading(false);
       } else {

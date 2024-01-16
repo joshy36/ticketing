@@ -75,6 +75,7 @@
     "react-qr-code": "^2.0.12",
     "react-stately": "^3.28.0",
     "sharp": "^0.32.6",
+    "sonner": "^1.3.1",
     "stripe": "^14.2.0",
     "supabase": "*",
     "superjson": "1.13.1",

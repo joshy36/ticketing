@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -24,7 +24,6 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { toast } = useToast();
   // const router = useRouter();
 
   const supabase = createSupabaseBrowserClient();
@@ -48,24 +47,20 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
     console.log(res);
 
     if (res.error?.message == 'User already registered') {
-      toast({
-        variant: 'destructive',
-        title: 'User already registered!',
-        description: 'There is aleady an account under this email.',
+      toast.error('User already registered', {
+        description: 'There is aleady an account under this email',
       });
     } else if (
       res.error?.message == 'Password should be at least 6 characters'
     ) {
-      toast({
-        variant: 'destructive',
-        title: 'Password should be at least 6 characters!',
-        description: 'Please enter a more secure password.',
+      toast.error('Password should be at least 6 characters', {
+        description: 'Please enter a more secure password',
       });
     } else {
       setIsSuccessful(true);
-      toast({
-        title: 'Success! Please check your email for further instructions.',
-      });
+      toast.success(
+        'Success! Please check your email for further instructions',
+      );
     }
 
     // router.refresh();

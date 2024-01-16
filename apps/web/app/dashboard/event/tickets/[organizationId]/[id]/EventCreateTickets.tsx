@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
@@ -46,16 +46,13 @@ export default function EventCreateTickets({
   eventId: string;
   organizationId: string;
 }) {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const createTickets = trpc.createTicketsForEvent.useMutation({
     onSettled(data, error) {
       if (error) {
-        toast({
-          description: 'Error updating event',
-        });
+        toast.error('Error updating event');
         console.error('Error updating event:', error);
         setIsLoading(false);
       } else {

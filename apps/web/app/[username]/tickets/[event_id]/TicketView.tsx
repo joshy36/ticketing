@@ -3,7 +3,7 @@
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
 import { TicketOutput } from 'api';
 import { UserProfile } from 'supabase';
@@ -34,7 +34,6 @@ export function TicketView({
   userProfile: UserProfile;
   event_id: string;
 }) {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [qr, setQR] = useState<string>('');
   const [front, setFront] = useState<boolean>(true);
@@ -53,24 +52,16 @@ export function TicketView({
     onSettled(data, error) {
       if (error) {
         if (error.message === 'Ticket already activated!') {
-          toast({
-            description: 'Ticket already activated, try refreshing the page!',
-            variant: 'destructive',
-          });
+          toast.error('Ticket already activated, try refreshing the page!');
         } else {
-          toast({
-            description: 'Error activating ticket',
-            variant: 'destructive',
-          });
+          toast.error('Error activating ticket');
         }
-
         console.error('Error activating ticket:', error);
         setIsLoading(false);
       } else {
         // router.refresh();
-        toast({
-          description: 'Ticket activated!',
-        });
+        toast.success('Ticket activated!');
+
         setIsLoading(false);
         setQR(data!);
         tickets[ticketNumber].qr_code = data;

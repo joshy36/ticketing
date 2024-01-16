@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import '../../app/globals.css';
 import { cn } from './utils';
 
+// https://marquee-dev.vercel.app/
+
 export function Marquee({
   children,
   direction = 'left',

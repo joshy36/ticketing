@@ -12,12 +12,11 @@ import {
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { useState } from 'react';
 
 export default function SendMessage() {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
@@ -25,15 +24,10 @@ export default function SendMessage() {
   const sendMessage = trpc.sendMessage.useMutation({
     onSettled(data, error) {
       if (error) {
-        toast({
-          description: 'Error sending message',
-          variant: 'default',
-        });
+        toast.error('Error sending message');
         console.error('Error sending message:', error);
       } else {
-        toast({
-          description: 'Message sent!',
-        });
+        toast.success('Message sent');
       }
       setIsLoading(false);
     },

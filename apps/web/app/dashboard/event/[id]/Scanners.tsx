@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { useState } from 'react';
 import { Events } from 'supabase';
@@ -22,7 +22,6 @@ import { X } from 'lucide-react';
 export default function Scanners({ event }: { event: Events }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<string>('');
-  const { toast } = useToast();
   const { data: scanners, refetch } = trpc.getScannersForEvent.useQuery(
     {
       event_id: event?.id!,
@@ -35,24 +34,19 @@ export default function Scanners({ event }: { event: Events }) {
       if (error) {
         console.error(error);
         if (error.message === 'User is already a scanner') {
-          toast({
-            title: 'User already a scanner.',
-            description: 'Please try a different username.',
-            variant: 'destructive',
+          toast.error('User already a scanner', {
+            description: 'Please try a different username',
           });
         } else {
           console.error('Error adding user as scanner, user not found');
-          toast({
-            title: 'User not found.',
-            description: 'Please try a different username.',
-            variant: 'destructive',
+          toast.error('User not found', {
+            description: 'Please try a different username',
           });
         }
       } else if (data) {
         refetch();
-        toast({
-          title: 'User added as scanner.',
-          description: 'User can now scan tickets for this event.',
+        toast.success('User added as scanner', {
+          description: 'User can now scan tickets for this event',
         });
       }
       setIsLoading(false);
@@ -63,16 +57,13 @@ export default function Scanners({ event }: { event: Events }) {
     onSettled(data, error) {
       if (error) {
         console.error(error);
-        toast({
-          title: 'Error removing scanner.',
-          description: 'Please try again.',
-          variant: 'destructive',
+        toast.error('Error removing scanner', {
+          description: 'Please try again',
         });
       } else {
         refetch();
-        toast({
-          title: 'Scanner removed.',
-          description: 'User can no longer scan tickets for this event.',
+        toast.success('Scanner removed', {
+          description: 'User can no longer scan tickets for this event',
         });
       }
     },

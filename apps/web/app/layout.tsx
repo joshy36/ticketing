@@ -1,6 +1,6 @@
 import NavBar from '@/components/NavBar';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/sonner';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
 import createSupabaseServer from '@/utils/supabaseServer';
@@ -64,7 +64,7 @@ export default async function RootLayout({
               userOrg={userOrg}
             />
             <div className='min-h-screen'> {children}</div>
-            <Toaster />
+            <Toaster richColors />
             <SpeedInsights />
             <Analytics />
             <Footer />

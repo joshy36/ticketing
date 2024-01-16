@@ -30,7 +30,7 @@ import { cn } from '@/components/ui/utils';
 import { format } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
@@ -75,7 +75,6 @@ export default function EventCreate({
 }: {
   organizationId: string;
 }) {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -87,9 +86,7 @@ export default function EventCreate({
   const createEvent = trpc.createEvent.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast({
-          description: 'Error creating event',
-        });
+        toast.error('Error creating event');
         console.error('Error creating event:', error);
         setIsLoading(false);
       } else {
