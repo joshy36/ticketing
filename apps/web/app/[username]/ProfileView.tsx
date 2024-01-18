@@ -16,6 +16,7 @@ import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Separator } from '@/components/ui/separator';
 import UserSignOut from './UserSignOut';
 import CopyWallet from './CopyWallet';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default async function ProfileView({
   params,
@@ -45,26 +46,15 @@ export default async function ProfileView({
 
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
-      <div className='flex flex-col gap-8 md:flex-row'>
+      <div className='flex flex-col gap-4'>
         <div className='flex flex-col items-center justify-center '>
-          {userProfile?.profile_image ? (
-            <Image
-              src={userProfile?.profile_image!}
-              alt='user pfp'
-              width={250}
-              height={250}
-              className='rounded-lg'
-            />
-          ) : (
-            <Image
-              src='/fallback.jpeg'
-              alt='image'
-              width={250}
-              height={250}
-              className='rounded-lg'
-            />
-          )}
-
+          <Avatar className='h-32 w-32'>
+            {userProfile?.profile_image ? (
+              <AvatarImage src={userProfile?.profile_image} alt='pfp' />
+            ) : (
+              <AvatarFallback></AvatarFallback>
+            )}
+          </Avatar>
           {session?.user! && session?.user.id === userProfile?.id ? (
             <UserSignOut userProfile={userProfile} />
           ) : (
@@ -78,12 +68,12 @@ export default async function ProfileView({
         <div className='flex flex-col items-start justify-start'>
           <div className='flex items-center'>
             {userProfile?.first_name && (
-              <p className='py-4 text-5xl font-medium'>
+              <p className='py-4 text-2xl font-medium md:text-5xl'>
                 {userProfile.first_name}
               </p>
             )}
             {userProfile?.last_name && (
-              <p className='ml-4 py-4 text-5xl font-medium'>
+              <p className='ml-2 py-4 text-2xl font-medium md:ml-4 md:text-5xl'>
                 {userProfile.last_name}
               </p>
             )}

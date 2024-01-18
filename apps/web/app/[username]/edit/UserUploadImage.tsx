@@ -34,6 +34,7 @@ export default function UserUploadImage({
 }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState(userImage);
+  const [cancelImgUrl, setCancelImgUrl] = React.useState(userImage);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const { register } = useForm();
   const router = useRouter();
@@ -158,7 +159,13 @@ export default function UserUploadImage({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel
+              onClick={() => {
+                setImgUrl(cancelImgUrl);
+              }}
+            >
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
                 await save(selectedFile);
@@ -172,7 +179,7 @@ export default function UserUploadImage({
 
       {imgUrl != '' ? (
         <div className='flex items-center justify-start pt-4'>
-          <Avatar className='h-40 w-40'>
+          <Avatar className='h-32 w-32'>
             {imgUrl ? (
               <AvatarImage src={imgUrl} alt='pfp' />
             ) : (
