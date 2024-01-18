@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Icons } from '@/components/ui/icons';
 import { trpc } from '../../_trpc/client';
 import { UserProfile } from 'supabase';
-import { Fingerprint } from 'lucide-react';
+import { Wallet } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -89,16 +89,15 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   return (
     <div className='flex items-center justify-center pt-24'>
       <Card className='max-w-[400px] rounded-md border'>
-        <CardHeader className='text-xl font-bold'>
-          Create your Wallet
-        </CardHeader>
+        <CardHeader className='text-xl font-bold'>Wallet</CardHeader>
         <CardContent>
           <p className='font-light text-muted-foreground'>
-            We should provide some sort of description of whats going on here,
-            not sure how in detail we want to go.
+            Your wallet safeguards your digital assets, including tickets and
+            collectibles. It is secured by a passkey for an additional layer of
+            security.
           </p>
           <br />
-          <p className='font-light text-muted-foreground'>
+          {/* <p className='font-light text-muted-foreground'>
             You can find out more about how your private key is stored in a
             secure enclave{' '}
             <Link
@@ -108,7 +107,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
             >
               here.
             </Link>
-          </p>
+          </p> */}
 
           {walletAddress && (
             <div className='pt-8'>
@@ -131,8 +130,8 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
                 {loading && (
                   <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
                 )}
-                <Fingerprint className='pr-2' />
-                Create a passkey
+                <Wallet className='pr-2' />
+                Create a wallet
               </Button>
             )}
           </div>

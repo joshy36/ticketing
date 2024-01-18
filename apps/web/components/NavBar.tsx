@@ -151,8 +151,8 @@ export default function NavBar({
             <div className='rounded-full border-r bg-zinc-900/20 py-2 backdrop-blur-xl'>
               <span
                 className='animate-text-gradient 
-              bg-gradient-to-r from-blue-700 via-violet-700
-             to-indigo-700 bg-[200%_auto] bg-clip-text px-4 py-2 font-semibold text-transparent'
+              bg-gradient-to-r from-red-500 via-yellow-400
+             to-red-500 bg-[200%_auto] bg-clip-text px-4 py-2 font-semibold text-transparent'
               >
                 New Message
               </span>

@@ -8,6 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
 
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
@@ -67,6 +77,39 @@ export default function SendMessage() {
               Send
             </Button>
           </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className='w-[100px] text-muted-foreground'>
+                  User
+                </TableHead>
+                <TableHead className='text-muted-foreground'>
+                  Your Events
+                </TableHead>
+                <TableHead className='text-muted-foreground'>
+                  Total Events
+                </TableHead>
+                <TableHead className=' text-muted-foreground'>Send?</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {users?.map((user: any, index: number) => (
+                <TableRow
+                  key={user.id}
+                  className={index % 2 === 0 ? 'gap-4 bg-black' : 'bg-zinc-950'}
+                >
+                  <TableCell className='font-medium'>
+                    {`User ` + index}
+                  </TableCell>
+                  <TableCell>{1}</TableCell>
+                  <TableCell>{2}</TableCell>
+                  <TableCell className=''>
+                    <Checkbox className='rounded' />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>
