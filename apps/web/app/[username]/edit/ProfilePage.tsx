@@ -15,11 +15,11 @@ import { useRouter } from 'next/navigation';
 const sidebarNavItems = [
   {
     title: 'Profile',
-    href: '/',
+    href: '',
   },
   {
     title: 'Account',
-    href: '/events',
+    href: '',
   },
 ];
 

@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/ui/icons';
 import { trpc } from '../../_trpc/client';
@@ -88,16 +88,11 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
   const updateUser = trpc.updateUser.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast({
-          variant: 'destructive',
-          description: 'Error updating profile',
-        });
+        toast.error('Error updating profile');
         console.error('Error updating profile:', error);
       } else {
         router.refresh();
-        toast({
-          description: 'Profile updated successfully!',
-        });
+        toast.success('Profile updated successfully');
       }
       setIsLoading(false);
     },
@@ -169,32 +164,34 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name='firstname'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder='' disabled={isLoading} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='lastname'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder='' disabled={isLoading} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className='flex flex-row gap-6'>
+            <FormField
+              control={form.control}
+              name='firstname'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder='' disabled={isLoading} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='lastname'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder='' disabled={isLoading} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name='bio'

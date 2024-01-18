@@ -5,10 +5,21 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
-import { Icons } from '@/components/ui/icons';
 import { useRouter } from 'next/navigation';
 import { trpc } from '../../_trpc/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg'];
 
@@ -23,7 +34,8 @@ export default function UserUploadImage({
 }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [imgUrl, setImgUrl] = React.useState(userImage);
-  const { register, handleSubmit } = useForm();
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const { register } = useForm();
   const router = useRouter();
   const updateUserImage = trpc.updateUser.useMutation({
     onSettled(data, error) {
@@ -44,16 +56,16 @@ export default function UserUploadImage({
     setImgUrl(imgUrl ?? '');
   }, [imgUrl]);
 
-  const onSubmit = async (data: any) => {
+  const save = async (data: any) => {
     setIsLoading(true);
 
-    if (data.file.length == 0) {
+    if (data.length == 0) {
       toast.error('Must choose a file to upload');
       setIsLoading(false);
       return;
     }
 
-    const fileType = data.file[0].name.split('.')[1];
+    const fileType = data[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
       toast.error('Image must be a jpeg');
       setIsLoading(false);
@@ -62,8 +74,8 @@ export default function UserUploadImage({
 
     const bucket = 'users';
     const formData = new FormData();
-    formData.append('file', data.file[0]);
-    formData.append('fileName', data.file[0].name);
+    formData.append('file', data[0]);
+    formData.append('fileName', data[0].name);
     formData.append('location', `/${id}/profile.jpeg`);
     formData.append('bucket', bucket);
 
@@ -77,7 +89,6 @@ export default function UserUploadImage({
       });
 
       if (res.ok) {
-        toast.success('Image uploaded successfully');
         const fileName = await res.json();
 
         updateUserImage.mutate({
@@ -106,35 +117,61 @@ export default function UserUploadImage({
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='grid grid-cols-2 grid-rows-1 gap-12'>
-          <Button
-            variant='secondary'
-            type='submit'
-            disabled={isLoading}
-            className='w-full'
-          >
-            {isLoading && (
-              <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-            )}
-            {buttonText}
+    <div>
+      <AlertDialog>
+        <AlertDialogTrigger>
+          <Button type='button' variant='secondary'>
+            Update Profile Picture
           </Button>
-          <Input
-            id='picture'
-            type='file'
-            disabled={isLoading}
-            className='rounded-full'
-            {...register('file', {
-              onChange: (e) => {
-                setImgUrl(URL.createObjectURL(e.target.files[0]));
-              },
-            })}
-          />
-        </div>
-      </form>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Update Profile Picture</AlertDialogTitle>
+            <AlertDialogDescription>
+              <div className='flex flex-col'>
+                <Input
+                  id='picture'
+                  type='file'
+                  disabled={isLoading}
+                  className='my-2 rounded-full'
+                  {...register('file', {
+                    onChange: (e) => {
+                      setImgUrl(URL.createObjectURL(e.target.files[0]));
+                      setSelectedFile(e.target.files);
+                    },
+                  })}
+                />
+                {imgUrl != '' ? (
+                  <div className='flex items-center justify-center py-2'>
+                    <Avatar className='h-40 w-40'>
+                      {imgUrl ? (
+                        <AvatarImage src={imgUrl} alt='pfp' />
+                      ) : (
+                        <AvatarFallback></AvatarFallback>
+                      )}
+                    </Avatar>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                await save(selectedFile);
+              }}
+            >
+              Save
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {imgUrl != '' ? (
-        <div>
+        <div className='flex items-center justify-start pt-4'>
           <Avatar className='h-40 w-40'>
             {imgUrl ? (
               <AvatarImage src={imgUrl} alt='pfp' />
@@ -146,6 +183,6 @@ export default function UserUploadImage({
       ) : (
         <div></div>
       )}
-    </>
+    </div>
   );
 }
