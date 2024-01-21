@@ -1,5 +1,6 @@
+'use client';
+
 import { UserProfile } from 'supabase';
-import { serverClient } from '../../_trpc/serverClient';
 import Image from 'next/image';
 import {
   Tabs,
@@ -8,13 +9,14 @@ import {
   TabsTrigger,
 } from '../../../components/ui/tabs';
 import { dateToString } from '@/utils/helpers';
+import { trpc } from '@/app/_trpc/client';
 
-export default async function TicketList({
+export default function TicketList({
   userProfile,
 }: {
   userProfile: UserProfile;
 }) {
-  const upcomingEvents = await serverClient.getUpcomingEventsForUser.query({
+  const { data: upcomingEvents } = trpc.getUpcomingEventsForUser.useQuery({
     user_id: userProfile.id,
   });
 

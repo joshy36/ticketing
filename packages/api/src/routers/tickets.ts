@@ -64,6 +64,73 @@ export const ticketsRouter = router({
       return data;
     }),
 
+  getAvailableTicketsForEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: tickets } = await supabase
+        .from('tickets')
+        .select(`*, reservations (id), sections (name)`)
+        .eq('event_id', input.event_id)
+        .is('user_id', null)
+        .order('price', { ascending: true });
+
+      const noReservationTickets = tickets?.filter(
+        (x) => !x.reservations || x.reservations?.length === 0
+      );
+
+      return noReservationTickets;
+    }),
+
+  getAvailableTicketsForEventBySection: publicProcedure
+    .input(z.object({ event_id: z.string(), section_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: tickets } = await supabase
+        .from('tickets')
+        .select(`*, reservations (id)`)
+        .eq('event_id', input.event_id)
+        .eq('section_id', input.section_id)
+        .is('user_id', null)
+        .order('price', { ascending: true });
+
+      const noReservationTickets = tickets?.filter(
+        (x) => x.reservations.length === 0
+      );
+
+      return noReservationTickets;
+    }),
+
+  createReservationForTicket: authedProcedure
+    .input(z.object({ ticket_id: z.string(), user_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: reservation } = await supabase
+        .from('reservations')
+        .insert({
+          user_id: input.user_id,
+          ticket_id: input.ticket_id,
+          expiration: new Date(Date.now() + 10 * 60000).toISOString(),
+        })
+        .limit(1)
+        .single();
+
+      return reservation;
+    }),
+
+  deleteReservationForTickets: authedProcedure
+    .input(z.object({ ticket_ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      for (let i = 0; i < input.ticket_ids.length; i++) {
+        await supabase
+          .from('reservations')
+          .delete()
+          .eq('ticket_id', input.ticket_ids[i]!)
+          .select();
+      }
+    }),
+
   createTicketsForEvent: authedProcedure
     .input(
       z.object({

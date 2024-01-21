@@ -1,7 +1,18 @@
 'use client';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Separator } from '@/components/ui/separator';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RouterOutputs } from 'api';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -9,6 +20,9 @@ import EventCheckout from './EventCheckout';
 import { UserProfile } from 'supabase';
 import { ChevronLeft, ChevronRight, MinusIcon, PlusIcon } from 'lucide-react';
 import { trpc } from '@/app/_trpc/client';
+import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 // need a better way to share this type between web and mobile
 export type Section = {
@@ -19,41 +33,117 @@ export type Section = {
   seats_per_row: number | null;
   updated_at: string | null;
   venue_id: string | null;
+  price: number | undefined;
 };
 
 export default function TicketSection({
   event,
   sections,
   userProfile,
-  sectionPrices,
+  tickets,
+  refetch,
 }: {
   event: RouterOutputs['getEventById'];
-  sections: Section[];
+  sections: RouterOutputs['getSectionsForVenueWithPrices'];
   userProfile: UserProfile | null | undefined;
-  sectionPrices:
-    | {
-        section_id: string;
-        section_name: string | null;
-        price: number;
-      }[]
-    | undefined;
+  tickets: RouterOutputs['getAvailableTicketsForEvent'];
+  refetch: any;
 }) {
+  const startingSeconds = 600;
+  const [seconds, setSeconds] = useState(startingSeconds);
   const [checkout, setCheckout] = useState<boolean>(false);
-  const [clientSecret, setClientSecret] = useState('');
   const [ticketQuantities, setTicketQuantities] = useState<{
     [id: string]: {
       quantity: number;
       section: Section;
     };
   }>({});
+  const [cartInfo, setCartInfo] = useState<
+    RouterOutputs['createPaymentIntent'] | undefined
+  >(undefined);
+  const supabase = createSupabaseBrowserClient();
+  const router = useRouter();
+
+  useEffect(() => {
+    let intervalId: any;
+
+    if (checkout) {
+      setSeconds(startingSeconds);
+      intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds > 0) {
+            return prevSeconds - 1;
+          } else {
+            deleteReservations.mutate({
+              ticket_ids: cartInfo?.ticketReservations.map(
+                (ticket) => ticket.ticket_id!,
+              )!,
+            });
+
+            clearInterval(intervalId); // Stop the interval
+            return 0; // Set seconds to 0
+          }
+        });
+      }, 1000);
+    }
+
+    // Cleanup interval on component unmount or when countdown is stopped
+    return () => clearInterval(intervalId);
+  }, [checkout]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('test-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reservations',
+          filter: `event_id=eq.${event?.id}`,
+        },
+        (payload) => {
+          refetch();
+        },
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tickets',
+          filter: `event_id=eq.${event?.id}`,
+        },
+        (payload) => {
+          refetch();
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, router]);
 
   const createPaymentIntent = trpc.createPaymentIntent.useMutation({
     onSettled(data, error) {
       if (error) {
         console.error('Error fetching payment intent ticket:', error);
-        alert(`Error!`);
+        toast.error('Not enough tickets left for this tier');
       } else {
-        setClientSecret(data?.paymentIntent!);
+        setCartInfo(data);
+        setCheckout(true);
+      }
+    },
+  });
+
+  const deleteReservations = trpc.deleteReservationForTickets.useMutation({
+    onSettled(error) {
+      if (error) {
+        console.error('Error deleting reservation:', error);
+      } else {
+        setCheckout(false);
+        // refetch();
       }
     },
   });
@@ -93,13 +183,11 @@ export default function TicketSection({
 
     Object.keys(ticketQuantities).forEach((id) => {
       const quantity = ticketQuantities[id] || 0;
-      const sectionPrice = sectionPrices?.find(
-        (sectionPrice) => sectionPrice.section_id === id,
-      );
+      const sectionPrice = ticketQuantities[id]?.section.price;
 
       if (sectionPrice) {
         // @ts-ignore
-        totalPrice += quantity.quantity * sectionPrice.price;
+        totalPrice += quantity.quantity * sectionPrice;
       }
     });
 
@@ -110,20 +198,54 @@ export default function TicketSection({
     <div>
       {checkout ? (
         <div>
-          <Button
-            variant='outline'
-            className='pl-1'
-            onClick={() => setCheckout(false)}
-          >
-            <ChevronLeft />
-            Back
-          </Button>
+          <div className='flex flex-row items-center justify-between'>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button variant='outline' className='pl-1'>
+                  <ChevronLeft />
+                  Back
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Once you leave this page you will lose the tickets in your
+                    cart.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      deleteReservations.mutate({
+                        ticket_ids: cartInfo?.ticketReservations.map(
+                          (ticket) => ticket.ticket_id!,
+                        )!,
+                      });
+                    }}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <div className='flex flex-col'>
+              <h1 className='font-light text-muted-foreground'>
+                Time Remaining
+              </h1>
+              <h1 className='flex justify-end text-lg font-semibold'>
+                {String(Math.floor(seconds / 60)).padStart(2, '0')}:
+                {String(seconds % 60).padStart(2, '0')}
+              </h1>
+            </div>
+          </div>
           <EventCheckout
             event={event!}
             userProfile={userProfile!}
             cart={Object.values(ticketQuantities)}
             totalPrice={getTotalPrice()}
-            clientSecret={clientSecret}
+            cartInfo={cartInfo}
           />
         </div>
       ) : (
@@ -135,11 +257,27 @@ export default function TicketSection({
             >
               <div className='flex flex-col'>
                 <div className='text-xl text-white'>{section.name}</div>
-                <div className='text font-extralight text-gray-400'>
-                  {`$` +
-                    sectionPrices?.find(
-                      (sectionPrice) => sectionPrice.section_id === section.id,
-                    )?.price}
+                <div>
+                  {!tickets ||
+                  tickets?.filter((ticket) => ticket.section_id === section.id)
+                    .length <= 0 ? (
+                    <div className='text-red-700'>Sold out</div>
+                  ) : (
+                    <div>
+                      <div className='text font-extralight text-gray-400'>
+                        {`$` +
+                          tickets?.find(
+                            (ticket) => ticket.section_id === section.id,
+                          )?.price}
+                      </div>
+                      <div>
+                        {`Amount left: ` +
+                          tickets?.filter(
+                            (ticket) => ticket.section_id === section.id,
+                          ).length}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className='flex flex-row items-center justify-center'>
@@ -168,7 +306,11 @@ export default function TicketSection({
                     handleAddTicket(section);
                   }}
                   disabled={
-                    getTotalTicketCount() >= event?.max_tickets_per_user!
+                    getTotalTicketCount() >= event?.max_tickets_per_user! ||
+                    !tickets ||
+                    tickets?.filter(
+                      (ticket) => ticket.section_id === section.id,
+                    ).length <= 0
                   }
                 >
                   <PlusIcon />
@@ -187,7 +329,9 @@ export default function TicketSection({
           )}
           <Separator />
           <div className='py-4'>
-            <div className='text-xl text-white'>Total: ${getTotalPrice()}</div>
+            <div className='text-xl text-white'>
+              Total: ${getTotalPrice().toFixed(2)}
+            </div>
           </div>
           {userProfile ? (
             <Button
@@ -201,9 +345,6 @@ export default function TicketSection({
                     section: {
                       id: item.section.id,
                       name: item.section.name,
-                      // stripe_price_id: sectionPrices?.find(
-                      //   (price) => price.section_id === item.section.id,
-                      // )?.stripe_price_id!,
                     },
                   }),
                 );
@@ -212,8 +353,8 @@ export default function TicketSection({
                   event_id: event?.id!,
                   cart_info: filteredCartInfo,
                   price: getTotalPrice(),
+                  user_id: userProfile.id,
                 });
-                setCheckout(true);
               }}
             >
               {getTotalTicketCount() === 0 ? (

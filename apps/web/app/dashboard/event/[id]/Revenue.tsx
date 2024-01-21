@@ -21,7 +21,10 @@ import { Separator } from '@/components/ui/separator';
 
 export default function Revenue({ event }: { event: Events }) {
   const { data: sections, isLoading: sectionsLoading } =
-    trpc.getSectionsForVenue.useQuery({ id: event?.venue! });
+    trpc.getSectionsForVenueWithPrices.useQuery({
+      id: event?.venue!,
+      event_id: event?.id!,
+    });
 
   const { data: sectionPrices, isLoading: sectionPricesLoading } =
     trpc.getSectionPriceByEvent.useQuery({ event_id: event?.id! });

@@ -56,8 +56,8 @@ const Home = () => {
     );
 
   const { data: sections, isLoading: sectionsLoading } =
-    trpc.getSectionsForVenue.useQuery(
-      { id: event?.venue! },
+    trpc.getSectionsForVenueWithPrices.useQuery(
+      { id: event?.venue!, event_id: event?.id! },
       { enabled: !!event }
     );
 

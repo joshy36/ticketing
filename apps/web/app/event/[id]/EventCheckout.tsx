@@ -4,7 +4,7 @@ import { trpc } from '../../_trpc/client';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { AnimatedGradientBorderTW } from './AnimatedGradientBorderTW';
+import { RouterOutputs } from 'api';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
@@ -24,7 +25,7 @@ export default function EventCheckout({
   userProfile,
   cart,
   totalPrice,
-  clientSecret,
+  cartInfo,
 }: {
   event: Events;
   userProfile: UserProfile;
@@ -33,9 +34,16 @@ export default function EventCheckout({
     section: Section;
   }[];
   totalPrice: number;
-  clientSecret: string;
+  cartInfo: RouterOutputs['createPaymentIntent'] | undefined;
 }) {
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'usdc'>('card');
+  const [clientSecret, setClientSecret] = useState<string | null | undefined>(
+    cartInfo?.paymentIntent,
+  );
+  useEffect(() => {
+    setClientSecret(cartInfo?.paymentIntent);
+  }, [cartInfo?.paymentIntent]);
+
   const router = useRouter();
 
   const { data: sectionPrices, isLoading: priceLoading } =
@@ -94,7 +102,7 @@ export default function EventCheckout({
                 <p>Total:</p>
               </div>
               <div className='pt-2 text-lg font-semibold'>
-                <p>${totalPrice}</p>
+                <p>${totalPrice.toFixed(2)}</p>
               </div>
             </div>
             <Separator className='my-4' />

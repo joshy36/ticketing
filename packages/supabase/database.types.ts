@@ -321,6 +321,64 @@ export interface Database {
         }
         Relationships: []
       }
+      reservations: {
+        Row: {
+          created_at: string
+          event_id: string | null
+          expiration: string | null
+          id: string
+          section_id: string | null
+          ticket_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id?: string | null
+          expiration?: string | null
+          id?: string
+          section_id?: string | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string | null
+          expiration?: string | null
+          id?: string
+          section_id?: string | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_section_id_fkey"
+            columns: ["section_id"]
+            referencedRelation: "sections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_ticket_id_fkey"
+            columns: ["ticket_id"]
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       rows: {
         Row: {
           created_at: string

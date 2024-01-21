@@ -14,25 +14,24 @@ export default function EventPurchase({
   userProfile: UserProfile | null | undefined;
   event: Events | null;
 }) {
-  const { data: eventTickets, isLoading: loading } =
-    trpc.getTicketsForEvent.useQuery({
+  const {
+    data: eventTickets,
+    isLoading: loading,
+    refetch,
+  } = trpc.getAvailableTicketsForEvent.useQuery({
+    event_id: event?.id!,
+  });
+
+  const { data: sections, isLoading: sectionsLoading } =
+    trpc.getSectionsForVenueWithPrices.useQuery({
+      id: event?.venue!,
       event_id: event?.id!,
     });
 
-  const { data: sections, isLoading: sectionsLoading } =
-    trpc.getSectionsForVenue.useQuery({ id: event?.venue! });
-
-  const { data: sectionPrices, isLoading: sectionPricesLoading } =
-    trpc.getSectionPriceByEvent.useQuery({ event_id: event?.id! });
-
-  const notPurchasedEventTickets = eventTickets?.filter(
-    (x) => x.user_id === null,
-  );
+  console.log('sections', sections);
 
   const renderEventDetails = () => {
-    if (event?.tickets_remaining! <= 0) {
-      return <h1>Event sold out!</h1>;
-    } else if (!event?.etherscan_link) {
+    if (!event?.etherscan_link) {
       // Don't want to render tickets yet
     } else if (loading) {
       return (
@@ -54,12 +53,13 @@ export default function EventPurchase({
             event={event}
             sections={sections!}
             userProfile={userProfile}
-            sectionPrices={sectionPrices}
+            tickets={eventTickets!}
+            refetch={refetch}
           />
         </div>
       );
     }
   };
 
-  return <div className=''>{renderEventDetails()}</div>;
+  return <div>{renderEventDetails()}</div>;
 }

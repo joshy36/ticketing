@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
-import { TicketOutput } from 'api';
 import { UserProfile } from 'supabase';
 import QRCode from 'react-qr-code';
 import {
