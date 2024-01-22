@@ -78,7 +78,7 @@ export default function MessageCenter() {
         </SheetHeader>
         {messages?.filter((message) => message.status !== 'deleted').length ==
         0 ? (
-          <div className='pt-4'>No messages yet, check back later.</div>
+          <div className='pt-8'>No messages, check back later.</div>
         ) : (
           <div className='pt-4'>
             {messages
@@ -121,11 +121,10 @@ export default function MessageCenter() {
                           {message.message}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-                      <div className='flex flex-row justify-between gap-2'>
+                      <div className='flex flex-row items-center justify-between gap-2'>
                         <div>
                           <AlertDialogCancel
                             onClick={() => {
-                              console.log('delete');
                               deleteMessage.mutate({ message_id: message.id });
                             }}
                             className='gap-2 border-red-700 text-red-700 hover:border-red-700/40 hover:bg-red-700/40'
@@ -134,6 +133,7 @@ export default function MessageCenter() {
                             Delete
                           </AlertDialogCancel>
                         </div>
+
                         <div className='flex gap-2'>
                           <AlertDialogCancel>Close</AlertDialogCancel>
                           <AlertDialogAction

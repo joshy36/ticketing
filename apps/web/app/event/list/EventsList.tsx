@@ -1,35 +1,9 @@
 'use client';
 
-import { trpc } from '@/app/_trpc/client';
-import { Skeleton } from '@/components/ui/skeleton';
 import { dateToString } from '@/utils/helpers';
 import Image from 'next/image';
 
-export default function EventsList() {
-  const { data: events, isLoading: eventsLoading } = trpc.getEvents.useQuery();
-
-  const skeletonItems = Array.from({ length: 12 }).map((_, index) => (
-    <div key={index} className='flex flex-col gap-2'>
-      <Skeleton className='h-72 w-full' />
-      <Skeleton className='h-8 w-1/2' />
-      <Skeleton className='h-6 w-1/2' />
-      <Skeleton className='h-6 w-1/2' />
-    </div>
-  ));
-
-  if (eventsLoading) {
-    return (
-      <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
-        <h1 className='pb-8 text-4xl font-light'>Explore Upcoming Events</h1>
-        <div className='grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
-          {skeletonItems}
-        </div>
-      </div>
-    );
-  } else if (!events || events.length === 0) {
-    return <div>Error: Failed to fetch events</div>;
-  }
-
+export default function EventsList({ events }: { events: any }) {
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
       <h1 className='pb-8 text-4xl font-light'>Explore Upcoming Events</h1>

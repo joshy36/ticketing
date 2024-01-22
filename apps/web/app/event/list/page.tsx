@@ -1,9 +1,11 @@
+import { serverClient } from '@/app/_trpc/serverClient';
 import EventsList from './EventsList';
 
-export default function Home() {
+export default async function Home() {
+  const events = await serverClient.getEvents.query();
   return (
     <main>
-      <EventsList />
+      <EventsList events={events} />
     </main>
   );
 }
