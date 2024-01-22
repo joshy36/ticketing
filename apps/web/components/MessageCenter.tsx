@@ -76,7 +76,8 @@ export default function MessageCenter() {
         <SheetHeader>
           <SheetTitle>Messages</SheetTitle>
         </SheetHeader>
-        {messages?.length == 0 ? (
+        {messages?.filter((message) => message.status !== 'deleted').length ==
+        0 ? (
           <div className='pt-4'>No messages yet, check back later.</div>
         ) : (
           <div className='pt-4'>
