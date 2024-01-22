@@ -88,8 +88,11 @@ export default function MessageCenter() {
                   new Date(a.created_at).getTime(),
               )
               ?.map((message) => (
-                <div className='flex flex-row items-center gap-2'>
-                  <AlertDialog key={message.id}>
+                <div
+                  key={message.id}
+                  className='flex flex-row items-center gap-2'
+                >
+                  <AlertDialog>
                     <AlertDialogTrigger
                       onClick={() =>
                         readMessage.mutate({ message_id: message.id })
