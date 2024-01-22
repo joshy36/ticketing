@@ -14,7 +14,13 @@ export const messagesRouter = router({
   }),
 
   sendMessage: authedProcedure
-    .input(z.object({ to: z.array(z.string()), message: z.string() }))
+    .input(
+      z.object({
+        to: z.array(z.string()),
+        message: z.string(),
+        event_id: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const user = ctx.user;
@@ -37,10 +43,31 @@ export const messagesRouter = router({
           from: userOrg?.organization_id,
           to: input.to[i],
           message: input.message,
+          event_id: input.event_id,
         });
         if (error) {
           return error;
         }
       }
+    }),
+
+  setMessageRead: authedProcedure
+    .input(z.object({ message_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      await supabase
+        .from('messages')
+        .update({ status: 'read' })
+        .eq('id', input.message_id);
+    }),
+
+  deleteMessage: authedProcedure
+    .input(z.object({ message_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      await supabase
+        .from('messages')
+        .update({ status: 'deleted' })
+        .eq('id', input.message_id);
     }),
 });

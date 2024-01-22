@@ -223,6 +223,7 @@ export interface Database {
       messages: {
         Row: {
           created_at: string
+          event_id: string | null
           from: string | null
           id: string
           message: string
@@ -231,6 +232,7 @@ export interface Database {
         }
         Insert: {
           created_at?: string
+          event_id?: string | null
           from?: string | null
           id?: string
           message: string
@@ -239,6 +241,7 @@ export interface Database {
         }
         Update: {
           created_at?: string
+          event_id?: string | null
           from?: string | null
           id?: string
           message?: string
