@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { formatEthAddress } from '@/utils/helpers';
+import CopyWallet from '../CopyWallet';
 
 export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const router = useRouter();
@@ -93,8 +94,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
         <CardContent>
           <p className='font-light text-muted-foreground'>
             Your wallet safeguards your digital assets, including tickets and
-            collectibles. It is secured by a passkey for an additional layer of
-            security.
+            collectibles. It is secured by a passkey.
           </p>
           <br />
           {/* <p className='font-light text-muted-foreground'>
@@ -110,10 +110,9 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
           </p> */}
 
           {walletAddress && (
-            <div className='pt-8'>
-              <p className=''>
-                Wallet address: {formatEthAddress(walletAddress)}
-              </p>
+            <div className='flex flex-row items-center gap-2'>
+              <p className=''>Wallet address:</p>
+              <CopyWallet userProfile={userProfile} />
             </div>
           )}
           <div className='flex justify-center pt-8'>

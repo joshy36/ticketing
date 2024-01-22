@@ -28,8 +28,6 @@ export default function EventPurchase({
       event_id: event?.id!,
     });
 
-  console.log('sections', sections);
-
   const renderEventDetails = () => {
     if (!event?.etherscan_link) {
       // Don't want to render tickets yet

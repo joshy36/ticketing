@@ -54,7 +54,8 @@ export default function ProfilePage({
                 <div>
                   <h3 className='text-lg font-medium'>Wallet</h3>
                   <p className='text-sm text-muted-foreground'>
-                    Create a wallet to recieve tokens on chain.
+                    Your wallet safeguards your digital assets, including
+                    tickets and collectibles. It is secured by a passkey.
                   </p>
                 </div>
                 {/* <Separator /> */}

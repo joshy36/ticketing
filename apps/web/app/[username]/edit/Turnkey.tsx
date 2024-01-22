@@ -12,7 +12,8 @@ import { Icons } from '@/components/ui/icons';
 import { trpc } from '../../_trpc/client';
 import { UserProfile } from 'supabase';
 import { revalidatePath } from 'next/cache';
-import { Fingerprint } from 'lucide-react';
+import { Wallet } from 'lucide-react';
+import CopyWallet from '../CopyWallet';
 
 export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const [loading, setLoading] = useState(false);
@@ -81,9 +82,9 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   return (
     <div>
       {walletAddress && (
-        <div>
-          <p className=''>ETH address:</p>
-          <p className='text-muted-foreground'>{walletAddress}</p>
+        <div className='flex flex-row items-center gap-2'>
+          <p className=''>Wallet address:</p>
+          <CopyWallet userProfile={userProfile} />
         </div>
       )}
       <div className='flex items-center '>
@@ -97,8 +98,8 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
             disabled={loading}
           >
             {loading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
-            <Fingerprint className='pr-2' />
-            Create a passkey
+            <Wallet className='pr-2' />
+            Create a wallet
           </Button>
         )}
       </div>
