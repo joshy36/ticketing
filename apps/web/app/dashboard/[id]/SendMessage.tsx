@@ -26,13 +26,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { useState } from 'react';
@@ -51,6 +57,7 @@ import {
 } from '@/components/ui/command';
 import { CheckIcon, Mail } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function SendMessage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -75,6 +82,12 @@ export default function SendMessage() {
     }),
     event: z.string({
       required_error: 'Please select an event to link to.',
+    }),
+    yourFans: z.string({
+      required_error: 'Please select a group of fans to send to.',
+    }),
+    generalFans: z.string({
+      required_error: 'Please select a group of fans to send to.',
     }),
   });
 
@@ -117,7 +130,7 @@ export default function SendMessage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input placeholder='Message...' {...field} />
+                        <Textarea placeholder='Message...' {...field} />
                       </FormControl>
                       <FormDescription>
                         This is the message the will be sent out to your users.
@@ -198,6 +211,89 @@ export default function SendMessage() {
                       <FormDescription>
                         Link to an event. When a user clicks on the message they
                         will be redirected to this event.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='yourFans'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Your Fans</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select a group' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value='0'>
+                            Don't send to any of your fans.
+                          </SelectItem>
+                          <SelectItem value='25'>
+                            Send to the top 25% of your fans.
+                          </SelectItem>
+                          <SelectItem value='50'>
+                            Send to the top 50% of your fans.
+                          </SelectItem>
+                          <SelectItem value='75'>
+                            Send to the top 75% of your fans.
+                          </SelectItem>
+                          <SelectItem value='100'>
+                            Send to all of your fans.
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Send to a specific group of your fans (fans that have
+                        been to an event you have hosted).
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='generalFans'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>General Fans</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select a group' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value='0'>
+                            Don't send to any general fans.
+                          </SelectItem>
+                          <SelectItem value='25'>
+                            Send to the top 25% of all fans.
+                          </SelectItem>
+                          <SelectItem value='50'>
+                            Send to the top 50% of all fans.
+                          </SelectItem>
+                          <SelectItem value='75'>
+                            Send to the top 75% of all fans.
+                          </SelectItem>
+                          <SelectItem value='100'>
+                            Send to all fans on the platform.
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Send to a specific group of all fans on the platform.
+                        These are fans that have not been to any events you have
+                        hosted.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

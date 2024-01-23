@@ -148,14 +148,16 @@ export default function NavBar({
       <div className='fixed z-40 mt-16 hidden w-full flex-row items-center justify-center py-1.5 text-center text-lg  md:flex'>
         <div className='relative'>
           <div className='flex flex-row items-center rounded-full border bg-black/40 backdrop-blur-md'>
-            <div className='rounded-full border-r bg-zinc-900/20 py-2 backdrop-blur-xl'>
-              <span
+            <div className='rounded-full border-r bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 py-2 backdrop-blur-xl'>
+              {/* <span
                 className='animate-text-gradient 
               bg-gradient-to-r from-red-500 via-yellow-400
              to-red-500 bg-[200%_auto] bg-clip-text px-4 py-2 font-semibold text-transparent'
               >
+                
                 New Message
-              </span>
+              </span> */}
+              <span className='px-4 py-2 font-semibold'>New Message</span>
             </div>
             <p className='px-4 font-light text-muted-foreground'>
               This is a test message that someone will recieve

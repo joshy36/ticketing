@@ -49,17 +49,12 @@ export default function Home() {
   return (
     <main>
       <div className='flex flex-row items-center justify-center'>
-        <p className='z-30 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text pt-20 text-center text-4xl font-bold tracking-tighter text-transparent md:pr-4 md:text-6xl lg:pr-8 lg:text-8xl'>
+        <p className='z-30 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text py-20 text-center text-4xl font-bold tracking-tighter text-transparent md:pr-4 md:text-6xl lg:pr-8 lg:text-8xl'>
           Discover new events.
         </p>
       </div>
 
-      <div className='z-0 -mt-36 flex items-center justify-center'>
-        <div className='b z-0 h-96 w-full'></div>
-        <div className='b2 z-0 h-96 w-full'></div>
-      </div>
-
-      <div className='z-30 mx-auto -mt-36 flex max-w-md flex-row items-center justify-center gap-2  sm:px-6 sm:py-4 lg:max-w-3xl lg:px-6'>
+      <div className='z-30 mx-auto flex max-w-md flex-row items-center justify-center gap-2 sm:px-6 sm:py-4 lg:max-w-3xl lg:px-6'>
         <div className={cn('grid gap-2')}>
           <Popover>
             <PopoverTrigger asChild>
@@ -191,11 +186,11 @@ export default function Home() {
         </div>
       </div>
 
-      <div className='flex flex-row items-center justify-center'>
+      {/* <div className='flex flex-row items-center justify-center'>
         <p className='z-30 bg-gradient-to-r from-blue-600 to-blue-900 bg-clip-text pt-20 text-center text-4xl font-bold tracking-tighter text-transparent md:pr-4 md:text-6xl lg:pr-8 lg:text-8xl'>
           Build a community.
         </p>
-      </div>
+      </div> */}
     </main>
   );
 }

@@ -19,13 +19,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { Button } from './ui/button';
-import { Bell, ExternalLink, Trash } from 'lucide-react';
+import { Bell, ChevronRight, Trash } from 'lucide-react';
 import { trpc } from '@/app/_trpc/client';
 import { dateToString } from '@/utils/helpers';
 import { useState } from 'react';
@@ -102,7 +97,9 @@ export default function MessageCenter() {
                     >
                       <div className='flex flex-col gap-2'>
                         <div className='text-left text-white'>
-                          {message.message}
+                          {message.message.length < 32
+                            ? message.message
+                            : `${message.message.slice(0, 32)}...`}
                         </div>
                         <div className='text-left text-xs font-light text-muted-foreground'>
                           {dateToString(message.created_at)}
@@ -141,10 +138,10 @@ export default function MessageCenter() {
                               setSheetOpen(false);
                               router.push(`/event/${message.event_id}`);
                             }}
-                            className='items-center gap-2'
+                            className='items-center gap-2 bg-gradient-to-r from-blue-700 via-indigo-700 to-violet-700'
                           >
                             View Event
-                            <ExternalLink className='h-4 w-4' />
+                            <ChevronRight className='h-4 w-4' />
                           </AlertDialogAction>
                         </div>
                       </div>
