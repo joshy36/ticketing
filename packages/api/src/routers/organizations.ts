@@ -2,7 +2,6 @@ import { getOrganizationMembers } from './../shared/organizations';
 import { z } from 'zod';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
-import { UserProfile } from 'supabase';
 
 export const organizationsRouter = router({
   getOrganizationById: publicProcedure

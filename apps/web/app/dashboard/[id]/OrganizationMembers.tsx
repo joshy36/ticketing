@@ -76,9 +76,9 @@ export default function OrganizationMembers({
             >
               <div className='flex flex-row items-center gap-2'>
                 <Avatar>
-                  {member?.profile.profile_image ? (
+                  {member?.user_profiles?.profile_image ? (
                     <AvatarImage
-                      src={member?.profile.profile_image!}
+                      src={member?.user_profiles?.profile_image!}
                       alt='pfp'
                     />
                   ) : (
@@ -88,19 +88,19 @@ export default function OrganizationMembers({
 
                 <div>
                   <div className='flex'>
-                    {member?.profile.first_name && (
+                    {member?.user_profiles?.first_name && (
                       <p className='py-1 font-medium'>
-                        {member.profile.first_name}
+                        {member.user_profiles?.first_name}
                       </p>
                     )}
-                    {member?.profile.last_name && (
+                    {member?.user_profiles?.last_name && (
                       <p className='ml-1 py-1 font-medium'>
-                        {member.profile.last_name}
+                        {member.user_profiles?.last_name}
                       </p>
                     )}
                   </div>
                   <div className='text-sm text-muted-foreground'>
-                    {`@${member.profile.username}`}
+                    {`@${member.user_profiles?.username}`}
                   </div>
                 </div>
               </div>

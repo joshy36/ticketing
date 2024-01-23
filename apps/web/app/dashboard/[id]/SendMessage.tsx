@@ -101,9 +101,10 @@ export default function SendMessage() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     sendMessage.mutate({
-      to: users!.map((user) => user.id),
       message: values.message,
       event_id: values.event,
+      yourFans: values.yourFans,
+      generalFans: values.generalFans,
     });
   }
 
@@ -235,16 +236,16 @@ export default function SendMessage() {
                           <SelectItem value='0'>
                             Don&apos;t send to any of your fans.
                           </SelectItem>
-                          <SelectItem value='25'>
+                          <SelectItem value='.25'>
                             Send to the top 25% of your fans.
                           </SelectItem>
-                          <SelectItem value='50'>
+                          <SelectItem value='.50'>
                             Send to the top 50% of your fans.
                           </SelectItem>
-                          <SelectItem value='75'>
+                          <SelectItem value='.75'>
                             Send to the top 75% of your fans.
                           </SelectItem>
-                          <SelectItem value='100'>
+                          <SelectItem value='1'>
                             Send to all of your fans.
                           </SelectItem>
                         </SelectContent>
@@ -276,24 +277,22 @@ export default function SendMessage() {
                           <SelectItem value='0'>
                             Don&apos;t send to any general fans.
                           </SelectItem>
-                          <SelectItem value='25'>
+                          <SelectItem value='.25'>
                             Send to the top 25% of all fans.
                           </SelectItem>
-                          <SelectItem value='50'>
+                          <SelectItem value='.50'>
                             Send to the top 50% of all fans.
                           </SelectItem>
-                          <SelectItem value='75'>
+                          <SelectItem value='.75'>
                             Send to the top 75% of all fans.
                           </SelectItem>
-                          <SelectItem value='100'>
+                          <SelectItem value='1'>
                             Send to all fans on the platform.
                           </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormDescription>
                         Send to a specific group of all fans on the platform.
-                        These are fans that have not been to any events you have
-                        hosted.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -314,7 +313,7 @@ export default function SendMessage() {
               </form>
             </Form>
           </div>
-          <Table>
+          {/* <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className='w-[100px] text-muted-foreground'>
@@ -346,7 +345,7 @@ export default function SendMessage() {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </Table> */}
         </CardContent>
       </Card>
     </div>
