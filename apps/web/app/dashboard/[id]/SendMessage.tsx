@@ -233,7 +233,7 @@ export default function SendMessage() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value='0'>
-                            Don't send to any of your fans.
+                            Don&apos;t send to any of your fans.
                           </SelectItem>
                           <SelectItem value='25'>
                             Send to the top 25% of your fans.
@@ -274,7 +274,7 @@ export default function SendMessage() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value='0'>
-                            Don't send to any general fans.
+                            Don&apos;t send to any general fans.
                           </SelectItem>
                           <SelectItem value='25'>
                             Send to the top 25% of all fans.
