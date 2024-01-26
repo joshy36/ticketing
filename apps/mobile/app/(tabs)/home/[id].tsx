@@ -25,6 +25,7 @@ export type Section = {
   seats_per_row: number | null;
   updated_at: string | null;
   venue_id: string | null;
+  price: number | undefined;
 };
 
 const Home = () => {
@@ -61,11 +62,16 @@ const Home = () => {
       { enabled: !!event }
     );
 
-  const { data: sectionPrices, isLoading: sectionPricesLoading } =
-    trpc.getSectionPriceByEvent.useQuery(
-      { event_id: event?.id! },
-      { enabled: !!event }
-    );
+  const {
+    data: eventTickets,
+    isLoading: loading,
+    refetch,
+  } = trpc.getAvailableTicketsForEvent.useQuery(
+    {
+      event_id: event?.id!,
+    },
+    { enabled: !!event }
+  );
 
   return (
     <View className="flex-1 justify-center bg-black">
@@ -104,7 +110,8 @@ const Home = () => {
                       event={event!}
                       sections={sections!}
                       user={user}
-                      sectionPrices={sectionPrices}
+                      tickets={eventTickets!}
+                      refetch={refetch}
                     />
                   ) : (
                     <View></View>

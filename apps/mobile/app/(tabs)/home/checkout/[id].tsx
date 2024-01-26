@@ -1,31 +1,89 @@
-import { useLocalSearchParams } from 'expo-router';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { trpc } from '../../../../utils/trpc';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { View, Text } from 'react-native';
+import { RouterOutputs, trpc } from '../../../../utils/trpc';
 import Separator from '../../../components/Separator';
-import CheckoutScreen from '../../../components/CheckoutScreen';
-import { Section } from '../[id]';
+import CheckoutScreen from './CheckoutScreen';
+import { useCallback, useEffect, useState } from 'react';
 
 const Checkout = () => {
-  const { id, ticketQuantities, totalPrice } = useLocalSearchParams();
-  const cart: {
-    quantity: number;
-    section: Section;
-  }[] = JSON.parse(ticketQuantities! as string);
+  const { event, cartInfo, totalPrice, userId, cart } = useLocalSearchParams<{
+    event: string;
+    cartInfo: string;
+    totalPrice: string;
+    userId: string;
+    cart: string;
+  }>();
 
-  const { data: event, isLoading: eventLoading } = trpc.getEventById.useQuery({
-    id: id! as string,
+  const startingSeconds = 600;
+  const [seconds, setSeconds] = useState(startingSeconds);
+
+  const deleteReservations = trpc.deleteReservationForTickets.useMutation({
+    onSettled(error) {
+      if (error) {
+        console.error('Error deleting reservation:', error);
+      } else {
+      }
+    },
   });
 
-  const { data: sectionPrices, isLoading: sectionPricesLoading } =
-    trpc.getSectionPriceByEvent.useQuery(
-      { event_id: event?.id! },
-      { enabled: !!event }
-    );
+  const cartJson = JSON.parse(cartInfo!);
+  const paymentInfo: RouterOutputs['createPaymentIntent'] = JSON.parse(cart!);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Do something when the screen is focused
+      return async () => {
+        // Do something when the screen is unfocused
+        deleteReservations.mutate({
+          ticket_ids: paymentInfo?.ticketReservations.map(
+            (ticket) => ticket.ticket_id!
+          )!,
+        });
+      };
+    }, [])
+  );
+
+  useEffect(() => {
+    let intervalId: any;
+
+    setSeconds(startingSeconds);
+    intervalId = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds > 0) {
+          return prevSeconds - 1;
+        } else {
+          deleteReservations.mutate({
+            ticket_ids: paymentInfo?.ticketReservations.map(
+              (ticket) => ticket.ticket_id!
+            )!,
+          });
+          router.back();
+
+          clearInterval(intervalId); // Stop the interval
+          return 0; // Set seconds to 0
+        }
+      });
+    }, 1000);
+
+    // Cleanup interval on component unmount or when countdown is stopped
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <View className="flex-1 bg-black p-4">
-      <Text className="text-white font-bold text-3xl pb-4">Cart</Text>
-      {cart!.map((section: any) => (
+      <View className="flex flex-row justify-between pb-4">
+        <Text className="text-white font-bold text-3xl pb-4">Cart</Text>
+        <View className="flex flex-col">
+          <Text className="font-light text-muted-foreground">
+            Time Remaining
+          </Text>
+          <Text className="flex justify-end text-lg font-semibold text-white">
+            {String(Math.floor(seconds / 60)).padStart(2, '0')}:
+            {String(seconds % 60).padStart(2, '0')}
+          </Text>
+        </View>
+      </View>
+      {cartJson.map((section: any) => (
         <View key={section.section.id}>
           {section.quantity == 0 ? (
             <View></View>
@@ -43,11 +101,7 @@ const Checkout = () => {
               </View>
               <View>
                 <Text className="text-white text-xl">
-                  {`$` +
-                    sectionPrices?.find(
-                      (sectionPrice) =>
-                        sectionPrice.section_name === section.section.name
-                    )?.price}
+                  {`$` + section.section.price}
                 </Text>
               </View>
             </View>
@@ -62,9 +116,9 @@ const Checkout = () => {
       <Separator />
 
       <CheckoutScreen
-        event_id={id! as string}
-        cart_info={cart}
-        price={Number(totalPrice)}
+        cartInfo={cartJson}
+        paymentIntent={paymentInfo.paymentIntent!}
+        eventId={JSON.parse(event!).id!}
       />
     </View>
   );

@@ -1,36 +1,80 @@
-import { Link } from 'expo-router';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Link, router } from 'expo-router';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Separator from './Separator';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { User } from '@supabase/supabase-js';
 import { Section } from '../(tabs)/home/[id]';
 import { RouterOutputs } from 'api';
+import { trpc } from '../../utils/trpc';
+import { supabase } from '../../utils/supabaseExpo';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const TicketSection = ({
   event,
   sections,
   user,
-  sectionPrices,
+  tickets,
+  refetch,
 }: {
   event: RouterOutputs['getEventById'];
-  sections: Section[];
+  sections: RouterOutputs['getSectionsForVenueWithPrices'];
   user: User | null;
-  sectionPrices:
-    | {
-        section_id: string;
-        section_name: string | null;
-        price: number;
-        stripe_price_id: string;
-      }[]
-    | undefined;
+  tickets: RouterOutputs['getAvailableTicketsForEvent'];
+  refetch: any;
 }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [ticketQuantities, setTicketQuantities] = useState<{
     [id: string]: {
       quantity: number;
       section: Section;
     };
   }>({});
+
+  const createPaymentIntent = trpc.createPaymentIntent.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        console.error('Error fetching payment intent ticket:', error);
+        alert(`Error!`);
+      } else {
+      }
+      setIsLoading(false);
+    },
+  });
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('test-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reservations',
+          filter: `event_id=eq.${event?.id}`,
+        },
+        (payload) => {
+          refetch();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tickets',
+          filter: `event_id=eq.${event?.id}`,
+        },
+        (payload) => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, router]);
 
   const getTotalTicketCount = () => {
     return Object.values(ticketQuantities).reduce(
@@ -67,29 +111,44 @@ const TicketSection = ({
 
     Object.keys(ticketQuantities).forEach((id) => {
       const quantity = ticketQuantities[id] || 0;
-      const sectionPrice = sectionPrices?.find(
-        (sectionPrice) => sectionPrice.section_id === id
-      );
+      const sectionPrice = ticketQuantities[id]?.section.price;
 
       if (sectionPrice) {
-        totalPrice += quantity.quantity * sectionPrice.price;
+        totalPrice += quantity.quantity * sectionPrice;
       }
     });
 
     return totalPrice;
   };
+
   return (
     <View>
       {sections?.map((section) => (
         <View key={section.id} className="flex flex-row justify-between py-2">
           <View className="flex flex-col">
             <Text className="text-white text-xl">{section.name}</Text>
-            <Text className="text-gray-400 text">
-              {`$` +
-                sectionPrices?.find(
-                  (sectionPrice) => sectionPrice.section_id === section.id
-                )?.price}
-            </Text>
+            <View>
+              {!tickets ||
+              tickets?.filter((ticket) => ticket.section_id === section.id)
+                .length <= 0 ? (
+                <Text className="text-red-700">Sold out</Text>
+              ) : (
+                <View>
+                  <Text className="text font-light text-gray-400">
+                    {`$` +
+                      tickets?.find(
+                        (ticket) => ticket.section_id === section.id
+                      )?.price}
+                  </Text>
+                  {/* <Text className="text-white">
+                    {`Amount left: ` +
+                      tickets?.filter(
+                        (ticket) => ticket.section_id === section.id
+                      ).length}
+                  </Text> */}
+                </View>
+              )}
+            </View>
           </View>
           <View className="flex flex-row items-center justify-center">
             <TouchableOpacity
@@ -99,6 +158,12 @@ const TicketSection = ({
               disabled={
                 !ticketQuantities[section.id!] ||
                 ticketQuantities[section.id!]?.quantity! <= 0
+              }
+              style={
+                !ticketQuantities[section.id!] ||
+                ticketQuantities[section.id!]?.quantity! <= 0
+                  ? { opacity: 0.5 } // Set the desired opacity for the disabled state
+                  : {} // Default styles when not disabled
               }
             >
               <Ionicons name="remove-circle" size={50} color="white" />
@@ -110,7 +175,20 @@ const TicketSection = ({
               onPress={() => {
                 handleAddTicket(section);
               }}
-              disabled={getTotalTicketCount() >= event?.max_tickets_per_user!}
+              disabled={
+                getTotalTicketCount() >= event?.max_tickets_per_user! ||
+                !tickets ||
+                tickets?.filter((ticket) => ticket.section_id === section.id)
+                  .length <= 0
+              }
+              style={
+                getTotalTicketCount() >= event?.max_tickets_per_user! ||
+                !tickets ||
+                tickets?.filter((ticket) => ticket.section_id === section.id)
+                  .length <= 0
+                  ? { opacity: 0.5 } // Set the desired opacity for the disabled state
+                  : {} // Default styles when not disabled
+              }
             >
               <Ionicons name="add-circle" size={50} color="white" />
             </TouchableOpacity>
@@ -128,19 +206,12 @@ const TicketSection = ({
       )}
       <Separator />
       <View className="py-4">
-        <Text className="text-white text-xl">Total: ${getTotalPrice()}</Text>
+        <Text className="text-white text-xl font-bold">
+          Total: ${getTotalPrice().toFixed(2)}
+        </Text>
       </View>
       {user ? (
-        <Link
-          href={{
-            pathname: `/home/checkout/${event?.id}`,
-            params: {
-              ticketQuantities: JSON.stringify(Object.values(ticketQuantities)),
-              totalPrice: getTotalPrice(),
-            },
-          }}
-          asChild
-        >
+        <View>
           {getTotalTicketCount() === 0 ? (
             <TouchableOpacity
               className="bg-white opacity-50 py-3 rounded-full flex"
@@ -154,13 +225,48 @@ const TicketSection = ({
             <TouchableOpacity
               className="bg-white py-3 rounded-full flex"
               disabled={getTotalTicketCount() == 0}
+              onPress={async () => {
+                setIsLoading(true);
+                const cart = await createPaymentIntent.mutateAsync({
+                  event_id: event?.id!,
+                  cart_info: Object.values(ticketQuantities).map((item) => ({
+                    quantity: item.quantity,
+                    section: {
+                      ...item.section,
+                    },
+                  })),
+                  price: getTotalPrice(),
+                  user_id: user?.id,
+                });
+
+                router.push({
+                  pathname: `/home/checkout/${event?.id}`,
+                  params: {
+                    cart: JSON.stringify(cart),
+                    cartInfo: JSON.stringify(
+                      Object.values(ticketQuantities).map((item) => ({
+                        quantity: item.quantity,
+                        section: {
+                          ...item.section,
+                        },
+                      }))
+                    ),
+                    totalPrice: getTotalPrice(),
+                    userId: user?.id,
+                    event: JSON.stringify(event),
+                  },
+                });
+              }}
             >
-              <Text className="text-black text-center font-bold">
-                Proceed to Checkout
-              </Text>
+              <View className="flex flex-row items-center justify-center">
+                {isLoading && <ActivityIndicator className="pr-2" />}
+                <Text className="text-black text-center font-bold">
+                  Proceed to Checkout
+                </Text>
+              </View>
             </TouchableOpacity>
           )}
-        </Link>
+        </View>
       ) : (
         <Link href={`/profile`} asChild>
           <TouchableOpacity className="bg-white py-3 rounded-full flex">

@@ -46,9 +46,6 @@ export default function EventCheckout({
 
   const router = useRouter();
 
-  const { data: sectionPrices, isLoading: priceLoading } =
-    trpc.getSectionPriceByEvent.useQuery({ event_id: event.id });
-
   const appearance = {
     theme: 'stripe',
     variables: {
@@ -84,12 +81,7 @@ export default function EventCheckout({
                     </div>
                     <div>
                       <p className='ml-2 text-lg font-extralight'>
-                        {`$` +
-                          sectionPrices?.find(
-                            (sectionPrice) =>
-                              sectionPrice.section_name ===
-                              section.section.name,
-                          )?.price}
+                        {`$` + section.section.price}
                       </p>
                     </div>
                   </div>

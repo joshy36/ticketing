@@ -16,7 +16,7 @@ const Layout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          headerTitle: 'Ticket',
+          headerTitle: 'Tickets',
           headerBackTitleVisible: false,
         }}
       />

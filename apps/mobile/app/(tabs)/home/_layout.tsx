@@ -24,14 +24,14 @@ const Layout = () => {
       <Stack.Screen
         name="scan/[id]"
         options={{
-          headerTitle: 'Scan Ticket',
+          headerTitle: 'Scan Tickets',
           headerBackTitleVisible: false,
         }}
       />
       <Stack.Screen
         name="checkout/[id]"
         options={{
-          headerTitle: 'Purchase Ticket',
+          headerTitle: 'Checkout',
           headerBackTitleVisible: false,
         }}
       />
