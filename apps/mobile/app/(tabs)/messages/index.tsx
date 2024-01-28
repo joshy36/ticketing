@@ -3,6 +3,7 @@ import { trpc } from '../../../utils/trpc';
 import { useCallback, useContext, useState } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import MessagePage from './MessagePage';
+import { useFocusEffect } from 'expo-router';
 
 const Tickets = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -22,16 +23,18 @@ const Tickets = () => {
     refetch,
   } = trpc.getMessagesForUser.useQuery();
 
-  const deleteMessage = trpc.deleteMessage.useMutation({
-    onSettled() {
-      refetch();
-    },
-  });
-
-  messages?.sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     // Do something when the screen is focused
+  //     console.log('focused');
+  //     refetch();
+  //     console.log('refetched');
+  //     return async () => {
+  //       // Do something when the screen is unfocused
+  //       refetch();
+  //     };
+  //   }, [])
+  // );
 
   return (
     <View className="flex-1 bg-black">
