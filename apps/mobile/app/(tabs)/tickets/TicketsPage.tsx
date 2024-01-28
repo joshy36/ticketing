@@ -5,7 +5,7 @@ import {
   blurhash,
   dateToString,
   replaceLocalhostWithIP,
-} from '../../utils/helpers';
+} from '../../../utils/helpers';
 
 const TicketsPage = ({
   upcomingEvents,

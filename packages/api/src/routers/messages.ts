@@ -18,6 +18,23 @@ export const messagesRouter = router({
     return data;
   }),
 
+  getMessageById: authedProcedure
+    .input(z.object({ message_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      console.log('hit');
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('messages')
+        .select()
+        .eq('id', input.message_id)
+        .limit(1)
+        .single();
+
+      console.log(data);
+
+      return data;
+    }),
+
   sendMessage: authedProcedure
     .input(
       z.object({

@@ -2,7 +2,7 @@ import { View, ScrollView, RefreshControl, Text } from 'react-native';
 import { trpc } from '../../../utils/trpc';
 import { useCallback, useContext, useState } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
-import TicketsPage from './TicketsPage';
+import MessagePage from './MessagePage';
 
 const Tickets = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -17,12 +17,21 @@ const Tickets = () => {
   const { session, user } = supabaseContext;
 
   const {
-    data: upcomingEvents,
-    isLoading: upcomingEventsLoading,
+    data: messages,
+    isLoading: messagesLoading,
     refetch,
-  } = trpc.getUpcomingEventsForUser.useQuery({
-    user_id: user?.id!,
+  } = trpc.getMessagesForUser.useQuery();
+
+  const deleteMessage = trpc.deleteMessage.useMutation({
+    onSettled() {
+      refetch();
+    },
   });
+
+  messages?.sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
 
   return (
     <View className="flex-1 bg-black">
@@ -36,15 +45,12 @@ const Tickets = () => {
             />
           }
         >
-          <TicketsPage
-            upcomingEvents={upcomingEvents}
-            upcomingEventsLoading={upcomingEventsLoading}
-          />
+          <MessagePage messages={messages!} refetch={refetch} />
         </ScrollView>
       ) : (
         <View className="flex-1 items-center justify-center bg-black px-4">
           <Text className="text-white font-bold text-3xl pb-6">
-            Sign In to View Tickets
+            Sign In to View Messages
           </Text>
         </View>
       )}
