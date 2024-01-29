@@ -77,39 +77,29 @@
   }
 }
 
-.ant-tabs-tab {
-  color: grey !important;
-
-  font-size: 16px !important;
+:root {
+  --stars: rgba(255, 255, 255, 1);
 }
 
-.ant-tabs-ink-bar {
-  background-color: white !important;
+/* --- Star Background ------------------------------------------------ */
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
 }
 
-.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: white !important;
-}
-
-.box {
-  height: 400px;
-  width: 400px;
-}
-
-.b {
-  background-image: conic-gradient(
-    from 90deg,
-    rgb(76, 0, 217),
-    transparent,
-    transparent
-  );
-}
-
-.b2 {
-  background-image: conic-gradient(
-    from 270deg,
-    transparent,
-    transparent,
-    rgb(76, 0, 217)
-  );
+.star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background-color: white;
+  box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.35) !important;
+  opacity: 0;
+  transition: opacity 1s;
+  z-index: -1;
 }

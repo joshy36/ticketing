@@ -12,7 +12,6 @@ import { MobileNav } from '@/components/MobileNav';
 import { Metadata } from 'next';
 
 import './globals.css';
-
 export const revalidate = 0; //disable cache
 
 export const metadata: Metadata = {
@@ -63,7 +62,7 @@ export default async function RootLayout({
               userProfile={userProfile!}
               userOrg={userOrg}
             />
-            <div className='min-h-screen'> {children}</div>
+            <div className='min-h-screen'>{children}</div>
             <Toaster richColors />
             <SpeedInsights />
             <Analytics />

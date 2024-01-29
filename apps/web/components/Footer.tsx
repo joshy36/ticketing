@@ -13,8 +13,8 @@ export default async function Footer() {
                   className="h-8 mr-3"
                   alt="FlowBite Logo"
                 /> */}
-              <span className='self-center whitespace-nowrap text-2xl font-semibold dark:text-white'>
-                Logo Here
+              <span className='self-center whitespace-nowrap text-2xl font-semibold text-yellow-700'>
+                Jupiter
               </span>
             </a>
           </div>
