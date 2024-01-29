@@ -32,9 +32,9 @@ const ProfilePage = () => {
           </View>
 
           <View className="flex flex-col gap-2">
-            <View className="justify-center">
+            <View>
               <Image
-                className="h-20 w-20 rounded-2xl flex justify-center items-center"
+                className="h-20 w-20 rounded-full flex justify-center items-center"
                 source={{ uri: replaceLocalhostWithIP(profile).profile_image }}
                 placeholder={blurhash}
                 contentFit="cover"

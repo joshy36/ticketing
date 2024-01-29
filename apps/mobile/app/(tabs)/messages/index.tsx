@@ -23,18 +23,18 @@ const Tickets = () => {
     refetch,
   } = trpc.getMessagesForUser.useQuery();
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     // Do something when the screen is focused
-  //     console.log('focused');
-  //     refetch();
-  //     console.log('refetched');
-  //     return async () => {
-  //       // Do something when the screen is unfocused
-  //       refetch();
-  //     };
-  //   }, [])
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      // Do something when the screen is focused
+      console.log('focused');
+      refetch();
+      console.log('refetched');
+      return async () => {
+        // Do something when the screen is unfocused
+        refetch();
+      };
+    }, [messages])
+  );
 
   return (
     <View className="flex-1 bg-black">

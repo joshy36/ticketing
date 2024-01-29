@@ -2,6 +2,8 @@ import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Foundation } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { blurhash } from '../../utils/helpers';
 
 export default function TabsLayout() {
   return (
@@ -66,13 +68,23 @@ export default function TabsLayout() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarActiveTintColor: 'white',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'notifications' : 'notifications-outline'}
-              size={30}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, size, focused }) => {
+            return (
+              <Image
+                source={require('../../assets/IMG_8615.png')}
+                placeholder={blurhash}
+                contentFit="cover"
+                style={{ borderRadius: 16 }}
+                className="h-8 w-8"
+                transition={1000}
+              />
+            );
+          },
+          // <Ionicons
+          //   name={focused ? 'notifications' : 'notifications-outline'}
+          //   size={30}
+          //   color={color}
+          // />
         }}
       />
       <Tabs.Screen

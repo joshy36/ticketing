@@ -39,7 +39,7 @@ const MessagePage = ({
                   href={`/messages/${message.id}`}
                   onPress={() => readMessage.mutate({ message_id: message.id })}
                 >
-                  <View className="flex flex-row items-center justify-between gap-2 w-full">
+                  <View className="flex flex-row items-center justify-between gap-2 w-full pb-2">
                     <View className="flex flex-col">
                       <Text className="text-white text-xl">
                         {message.message.length < 32
