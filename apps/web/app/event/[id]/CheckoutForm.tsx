@@ -118,6 +118,8 @@ export default function CheckoutForm({
       redirect: 'if_required',
     });
 
+    console.log('paymentIntent', paymentIntent);
+
     if (paymentIntent) {
       console.log('PaymentIntent', paymentIntent);
       fireConfetti();

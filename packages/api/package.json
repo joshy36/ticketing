@@ -21,6 +21,7 @@
     "@turnkey/http": "^2.4.2",
     "@turnkey/viem": "^0.4.2",
     "dotenv": "^16.3.1",
+    "openai": "^4.26.0",
     "stripe": "^14.2.0",
     "supabase": "*",
     "superjson": "1.13.1",

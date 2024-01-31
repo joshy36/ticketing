@@ -42,7 +42,7 @@ export default function EventTable({ events }: { events: any }) {
         </Card>
         <Card className='border border-zinc-800 bg-zinc-950'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Subscriptions</CardTitle>
+            <CardTitle className='text-sm font-medium'>Fans</CardTitle>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 24 24'
@@ -91,7 +91,9 @@ export default function EventTable({ events }: { events: any }) {
         </Card>
         <Card className='border border-zinc-800 bg-zinc-950'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Active Now</CardTitle>
+            <CardTitle className='text-sm font-medium'>
+              Active This Month
+            </CardTitle>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 24 24'
@@ -108,7 +110,7 @@ export default function EventTable({ events }: { events: any }) {
           <CardContent>
             <div className='text-2xl font-bold'>+573</div>
             <p className='text-xs text-muted-foreground'>
-              +201 since last hour
+              +201 since last month
             </p>
           </CardContent>
         </Card>

@@ -67,7 +67,7 @@ export default function MessageCenter() {
         <SheetHeader>
           <SheetTitle>Messages</SheetTitle>
         </SheetHeader>
-        <ScrollArea className='my-4 h-[calc(100vh-8rem)] pb-10'>
+        <ScrollArea className='my-4 h-[calc(100vh-8rem)]'>
           {messages?.filter((message) => message.status !== 'deleted').length ==
           0 ? (
             <div className='pt-8'>No messages, check back later.</div>

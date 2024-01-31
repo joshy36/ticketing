@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 import { Queue } from './queue';
 import { Payload } from '../routers/queue';
 
-export const c = new Client({
+export const qstashClient = new Client({
   token: process.env.QSTASH_TOKEN!,
 });
 
@@ -32,5 +32,16 @@ export const convertToJSONString = <T>(
 export const delay = (duration: number): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(resolve, duration);
+  });
+};
+
+export const executeJob = async () => {
+  await queue.executeJobFromQueue<Payload>(async (job) => {
+    console.log('Processing job:', job.body);
+    const res = await qstashClient.publishJSON({
+      url: job.url,
+      // callback: `${process.env.UPSTASH_URL}/qstash-callback`,
+      body: job.body,
+    });
   });
 };

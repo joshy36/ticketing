@@ -15,6 +15,8 @@ async function handler(req: NextRequest) {
         user_id: body.params.user_id,
       });
       console.log('qstash-endpoint ticket: ', ticket);
+      // i got confused here before so im going to make an extra note
+      // this is to trigger the next job in the queue (if there is one)
       console.log('EXECUTING NEXT JOB');
       await serverClient.executeJobFromQueue.mutate();
     } catch (err) {

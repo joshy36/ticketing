@@ -89,7 +89,7 @@ export default function NavBar({
                       {component.image ? (
                         <NavigationMenuLink>
                           <Image
-                            className='px-4 pt-3'
+                            className='pr-4 pt-3'
                             src={component.image}
                             alt='image'
                             width={100}

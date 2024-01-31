@@ -1,4 +1,4 @@
-import { c, queue } from './../job-queue/utils';
+import { executeJob, qstashClient, queue } from './../job-queue/utils';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
@@ -38,26 +38,12 @@ export const queueRouter = router({
       console.log('Adding job to queue :', payload);
       const jobId = await queue.add(payload);
       console.log(`Added job with jobId: ${jobId}`);
-      await queue.executeJobFromQueue<Payload>(async (job) => {
-        console.log('Processing job:', job.body);
-        const res = await c.publishJSON({
-          url: job.url,
-          // callback: `${process.env.UPSTASH_URL}/qstash-callback`,
-          body: job.body,
-        });
-        console.log('res:', res);
-      });
+      // try and run the job immediately, if there is other stuff in the queue, it will run after
+      await executeJob();
       return jobId;
     }),
 
   executeJobFromQueue: publicProcedure.mutation(async ({ ctx, input }) => {
-    await queue.executeJobFromQueue<Payload>(async (job) => {
-      console.log('Processing job:', job.body);
-      const res = await c.publishJSON({
-        url: job.url,
-        // callback: `${process.env.UPSTASH_URL}/qstash-callback`,
-        body: job.body,
-      });
-    });
+    await executeJob();
   }),
 });
