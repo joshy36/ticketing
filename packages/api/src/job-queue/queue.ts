@@ -63,7 +63,7 @@ export class Queue extends EventEmitter {
     return jobId;
   }
 
-  async activateJob() {
+  async activateJob(): Promise<string | null> {
     console.log('QUEUE::activateJob');
     try {
       // Check if "active" queue is empty
@@ -75,7 +75,7 @@ export class Queue extends EventEmitter {
       );
       if (waitingQueueLength === 0) {
         console.log('QUEUE::waiting queue is empty');
-        return;
+        return null;
       }
       if (activeQueueLength === 0) {
         const jobId = await this.config.redis.brpoplpush(
@@ -87,6 +87,7 @@ export class Queue extends EventEmitter {
         return jobId;
       } else {
         console.log('QUEUE::only 1 active job allowed');
+        return null;
       }
     } catch (error) {
       console.error('Error fetching the next job:', error);
@@ -96,52 +97,58 @@ export class Queue extends EventEmitter {
 
   async executeJobFromQueue<TJobPayload>(
     worker: (job: TJobPayload) => void
-  ): Promise<void> {
+  ): Promise<Job<unknown> | undefined> {
     console.log('QUEUE::executeJobFromQueue');
+    let activeQueueLength = await this.config.redis.llen(
+      this.createQueueKey('active')
+    );
+    while (activeQueueLength > 0) {
+      console.log('QUEUE::currently running a job');
+      activeQueueLength = await this.config.redis.llen(
+        this.createQueueKey('active')
+      );
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     await this.activateJob();
     this.worker = worker;
     const jobId = await this.config.redis.lindex(
       this.createQueueKey('active'),
       0
     );
-    if (jobId !== null) {
-      console.log('First item:', jobId);
-    } else {
+    if (jobId === null) {
       console.log('List is empty');
       return;
     }
 
     const jobCreatedById = await new Job(this.config, null).fromId(jobId);
     if (jobCreatedById) {
-      await this.executeJob(jobCreatedById);
+      let hasError = false;
+      try {
+        await this.worker(jobCreatedById.data);
+      } catch (error) {
+        hasError = true;
+        console.log('Error processing job:', error);
+      } finally {
+        return jobCreatedById;
+      }
     } else {
       console.error(`Job not found with ID: ${jobId}`);
     }
   }
 
-  private async executeJob<TJobPayload>(jobCreatedById: Job<TJobPayload>) {
-    let hasError = false;
-    try {
-      await this.worker(jobCreatedById.data);
-      this.running -= 1;
-    } catch (error) {
-      hasError = true;
-      console.log('Error processing job:', error);
-    } finally {
-      const [jobStatus, job] = await this.finishJob<TJobPayload>(
-        jobCreatedById,
-        hasError
-      );
-      this.emit(jobStatus, job.id);
+  async finishJob<TJobPayload>(
+    // job: Job<TJobPayload>,
+    jobId: string,
+    hasFailed?: boolean
+  ): Promise<[JobStatuses, Job<unknown>] | void> {
+    console.log('QUEUE::finishJob');
+    const multi = this.config.redis.multi();
+
+    const job = await new Job(this.config, null).fromId(jobId);
+
+    if (!job) {
       return;
     }
-  }
-
-  private async finishJob<TJobPayload>(
-    job: Job<TJobPayload>,
-    hasFailed?: boolean
-  ): Promise<[JobStatuses, Job<TJobPayload>]> {
-    const multi = this.config.redis.multi();
 
     multi.lrem(this.createQueueKey('active'), 0, job.id);
 
@@ -173,6 +180,26 @@ export class Queue extends EventEmitter {
 
     await multi.exec();
     return [job.status, job];
+  }
+
+  async getNextJobById(): Promise<string | null> {
+    const waitingQueueLength = await this.config.redis.llen(
+      this.createQueueKey('waiting')
+    );
+    if (waitingQueueLength === 0) {
+      console.log('QUEUE::waiting queue is empty');
+      return null;
+    } else {
+      const lastJobId = await this.config.redis.lrange(
+        this.createQueueKey('waiting'),
+        -1,
+        -1
+      );
+      const nextJobId = lastJobId[0];
+      console.log('QUEUE::waiting queue is not empty, jobId:', nextJobId);
+
+      return nextJobId!;
+    }
   }
 
   // async removeJob(jobId: string) {

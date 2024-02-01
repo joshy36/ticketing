@@ -178,8 +178,10 @@ const TicketSection = ({
               disabled={
                 getTotalTicketCount() >= event?.max_tickets_per_user! ||
                 !tickets ||
-                tickets?.filter((ticket) => ticket.section_id === section.id)
-                  .length <= 0
+                (tickets?.filter((ticket) => ticket.section_id === section.id)
+                  .length || 0) -
+                  (ticketQuantities[section.id!]?.quantity || 0) <=
+                  0
               }
               style={
                 getTotalTicketCount() >= event?.max_tickets_per_user! ||

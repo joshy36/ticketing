@@ -56,14 +56,7 @@ export async function POST(req: NextRequest) {
           field_name: 'tickets_remaining',
         });
 
-        console.log(
-          'Adding job to queue :',
-          metadata?.event_id!,
-          ticket?.id!,
-          metadata?.user_id!,
-        );
-
-        const jobId = await serverClient.addJobToQueue.mutate({
+        await serverClient.addJobToQueue.mutate({
           method: 'transferTicket',
           params: {
             event_id: metadata?.event_id!,
@@ -71,9 +64,12 @@ export async function POST(req: NextRequest) {
             user_id: metadata?.user_id!,
           },
         });
-        console.log('Done adding jobId: ', jobId);
+        console.log('stripe-webhook job added');
       }
     }
+    const nextJobId = await serverClient.getNextJobById.query();
+    console.log('stripe-webhook nextJobId: ', nextJobId);
+    serverClient.executeJobFromQueue.mutate({ jobId: nextJobId! });
   }
 
   return NextResponse.json({ status: 200 });

@@ -1,5 +1,5 @@
 import { Client } from '@upstash/qstash';
-import { JobStatuses } from './job';
+import { Job, JobStatuses } from './job';
 import Redis from 'ioredis';
 import { Queue } from './queue';
 import { Payload } from '../routers/queue';
@@ -35,13 +35,16 @@ export const delay = (duration: number): Promise<void> => {
   });
 };
 
-export const executeJob = async () => {
-  await queue.executeJobFromQueue<Payload>(async (job) => {
+export const executeJob = async (
+  jobId: string
+): Promise<Job<unknown> | void> => {
+  const job = await queue.executeJobFromQueue<Payload>(async (job) => {
     console.log('Processing job:', job.body);
     const res = await qstashClient.publishJSON({
       url: job.url,
-      // callback: `${process.env.UPSTASH_URL}/qstash-callback`,
-      body: job.body,
+      callback: `${process.env.UPSTASH_CALLBACK}`,
+      body: { job: job.body, jobId: jobId },
     });
   });
+  return job;
 };

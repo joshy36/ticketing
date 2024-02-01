@@ -35,15 +35,32 @@ export const queueRouter = router({
           params: input.params,
         },
       };
-      console.log('Adding job to queue :', payload);
+      console.log('Adding job to queue');
       const jobId = await queue.add(payload);
       console.log(`Added job with jobId: ${jobId}`);
-      // try and run the job immediately, if there is other stuff in the queue, it will run after
-      await executeJob();
+      // // try and run the job immediately, if there is other stuff in the queue, it will run after
+      // executeJob(jobId!);
       return jobId;
     }),
 
-  executeJobFromQueue: publicProcedure.mutation(async ({ ctx, input }) => {
-    await executeJob();
+  getNextJobById: publicProcedure.query(async ({ ctx }) => {
+    console.log('Getting next job');
+    const job = await queue.getNextJobById();
+    console.log('Next job:', job);
+    return job;
   }),
+
+  executeJobFromQueue: publicProcedure
+    .input(z.object({ jobId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const job = await executeJob(input.jobId);
+      return job;
+    }),
+
+  finishJob: publicProcedure
+    .input(z.object({ job: z.string(), hasFailed: z.boolean().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      const job = await queue.finishJob(input.job, input.hasFailed);
+      return job;
+    }),
 });

@@ -271,10 +271,12 @@ export default function TicketSection({
                           )?.price}
                       </div>
                       <div>
-                        {`Amount left: ` +
-                          tickets?.filter(
+                        {`Amount left: ${
+                          (tickets?.filter(
                             (ticket) => ticket.section_id === section.id,
-                          ).length}
+                          ).length || 0) -
+                          (ticketQuantities[section.id!]?.quantity || 0)
+                        }`}
                       </div>
                     </div>
                   )}
@@ -308,9 +310,11 @@ export default function TicketSection({
                   disabled={
                     getTotalTicketCount() >= event?.max_tickets_per_user! ||
                     !tickets ||
-                    tickets?.filter(
+                    (tickets?.filter(
                       (ticket) => ticket.section_id === section.id,
-                    ).length <= 0
+                    ).length || 0) -
+                      (ticketQuantities[section.id!]?.quantity || 0) <=
+                      0
                   }
                 >
                   <PlusIcon />

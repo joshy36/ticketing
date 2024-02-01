@@ -63,7 +63,7 @@ export const paymentsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: input.price * 100,
+        amount: Number((input.price * 100).toFixed(2)),
         currency: 'usd',
         automatic_payment_methods: {
           enabled: true,
@@ -127,7 +127,6 @@ export const paymentsRouter = router({
             .limit(1)
             .single();
 
-          console.log('Reservation', reservation?.id);
           ticketReservations.push(reservation!);
         }
       }
