@@ -13,6 +13,7 @@ const handler = (req: NextRequest) =>
       return {
         headers: {
           'Access-Control-Allow-Origin': '*',
+          'Access-Control-Request-Method': '*',
           'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
           'Access-Control-Allow-Headers': '*',
         },
