@@ -22,7 +22,7 @@ import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../_trpc/client';
+import { trpc } from '../../../_trpc/client';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -33,19 +33,26 @@ const formSchema = z.object({
   }),
 });
 
-export default function ArtistCreate() {
+export default function ArtistCreate({
+  organization,
+}: {
+  organization: string;
+}) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
   const createArtist = trpc.createArtist.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast.error('Error creating artist');
+        toast.error('Error creating artist', {
+          description: error?.message,
+        });
         console.error('Error creating artist:', error);
         setIsLoading(false);
       } else {
+        console.log('data', data);
         router.refresh();
-        router.push(`/artist/create/image/${data.id}`);
+        router.push(`/dashboard/artist/create/image/${data.id}`);
       }
     },
   });
@@ -60,9 +67,12 @@ export default function ArtistCreate() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
+    console.log('values', values);
+
     createArtist.mutate({
       name: values.name,
       description: values.description,
+      organization_id: organization,
     });
   }
 

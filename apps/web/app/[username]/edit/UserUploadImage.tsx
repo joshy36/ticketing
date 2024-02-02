@@ -21,7 +21,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-const ACCEPTED_IMAGE_TYPES = ['jpeg'];
+const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png'];
 
 export default function UserUploadImage({
   id,
@@ -68,7 +68,7 @@ export default function UserUploadImage({
 
     const fileType = data[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
-      toast.error('Image must be a jpeg');
+      toast.error('Image must be a jpeg, jpg, or png');
       setIsLoading(false);
       return;
     }
@@ -77,8 +77,9 @@ export default function UserUploadImage({
     const formData = new FormData();
     formData.append('file', data[0]);
     formData.append('fileName', data[0].name);
-    formData.append('location', `/${id}/profile.jpeg`);
+    formData.append('location', `/${id}/profile.${fileType}`);
     formData.append('bucket', bucket);
+    formData.append('id', id);
 
     try {
       toast('Uploading image...');

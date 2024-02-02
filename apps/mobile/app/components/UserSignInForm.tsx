@@ -56,7 +56,7 @@ const UserSignInForm = () => {
       </View>
       <Text className="text-muted-foreground pt-4">Don't have an account?</Text>
       <Link
-        href="https://jupiter-tickets.vercel.app/sign-up"
+        href="https://jupiter-tickets.com/sign-up"
         className=" text-muted-foreground underline underline-offset-4 hover:text-primary"
       >
         Sign up.

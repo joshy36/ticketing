@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
@@ -70,20 +71,29 @@ export const venuesRouter = router({
         sections: z.array(z.object({ value: z.string() })),
         rows: z.array(z.object({ value: z.number() })),
         seats_per_row: z.array(z.object({ value: z.number() })),
+        organization_id: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
-      const { data: venue } = await supabase
+      const { data: venue, error: venueCreateError } = await supabase
         .from('venues')
         .insert({
           created_by: ctx.user?.id,
           name: input.name,
           description: input.description,
+          organization_id: input.organization_id,
         })
         .select()
         .limit(1)
         .single();
+
+      if (venueCreateError?.code === '23505') {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Venue name already exists, please choose another name.',
+        });
+      }
 
       for (let i = 0; i < input.sections.length; i++) {
         const seats =

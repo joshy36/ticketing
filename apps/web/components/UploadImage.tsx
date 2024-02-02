@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { trpc } from '../../../apps/web/app/_trpc/client';
 
-const ACCEPTED_IMAGE_TYPES = ['jpeg'];
+const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png'];
 
 type Props = {
   id: string;
@@ -89,7 +89,7 @@ export default function UploadImage({ params }: { params: Props }) {
 
     const fileType = data.file[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
-      toast.error('Image must be a jpeg');
+      toast.error('Image must be a jpeg, jpg, or png');
       setIsLoading(false);
       return;
     }
@@ -98,14 +98,15 @@ export default function UploadImage({ params }: { params: Props }) {
     formData.append('file', data.file[0]);
     formData.append('fileName', data.file[0].name);
     if (bucket === 'events') {
-      formData.append('location', `/${params.id}/event_photo.jpeg`);
+      formData.append('location', `/${params.id}/event_photo.${fileType}`);
     } else if (bucket === 'artists') {
-      formData.append('location', `/${params.id}/profile.jpeg`);
+      formData.append('location', `/${params.id}/profile.${fileType}`);
     } else if (bucket === 'venues') {
-      formData.append('location', `/${params.id}/profile.jpeg`);
+      formData.append('location', `/${params.id}/profile.${fileType}`);
     }
 
     formData.append('bucket', bucket);
+    formData.append('id', params.id);
 
     try {
       toast('Uploading image...');

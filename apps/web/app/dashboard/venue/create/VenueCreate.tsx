@@ -68,19 +68,25 @@ const defaultValues: Partial<FormValues> = {
   sections: [{ value: 'GA' }],
 };
 
-export default function VenueCreate() {
+export default function VenueCreate({
+  organization,
+}: {
+  organization: string;
+}) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
   const createVenue = trpc.createVenue.useMutation({
     onSettled(data, error) {
       if (!data) {
-        toast.error('Error creating venue');
+        toast.error('Error creating venue', {
+          description: error?.message,
+        });
         console.error('Error creating venue:', error);
         setIsLoading(false);
       } else {
         router.refresh();
-        router.push(`/venue/create/image/${data.id}`);
+        router.push(`/dashboard/venue/create/image/${data.id}`);
       }
     },
   });
@@ -102,6 +108,7 @@ export default function VenueCreate() {
       sections: values.sections,
       rows: values.rows,
       seats_per_row: values.seats_per_row,
+      organization_id: organization,
     });
   }
 

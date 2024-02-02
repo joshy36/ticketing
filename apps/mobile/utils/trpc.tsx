@@ -32,14 +32,14 @@ export const getBaseUrl = () => {
   const localhost = debuggerHost?.split(':')[0];
 
   if (!localhost) {
-    // return 'https://jupiter-tickets.vercel.app';
+    // return 'https://jupiter-tickets.com';
     // return "https://turbo.t3.gg";
     throw new Error(
       'Failed to get localhost. Please point to your production server.'
     );
   }
   if (process.env.EXPO_PUBLIC_ENV === 'prod') {
-    return 'https://jupiter-tickets.vercel.app';
+    return 'https://jupiter-tickets.com';
   }
 
   return `http://${localhost}:3000`;

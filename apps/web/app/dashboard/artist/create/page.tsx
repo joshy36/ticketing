@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <main>
-      <ArtistCreate />
+      <ArtistCreate organization={isInOrganization!} />
     </main>
   );
 }

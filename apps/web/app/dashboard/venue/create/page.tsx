@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <main>
-      <VenueCreate />
+      <VenueCreate organization={isInOrganization!} />
     </main>
   );
 }

@@ -60,7 +60,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className='z-30 mx-auto flex max-w-md flex-row items-center justify-center gap-2 sm:px-6 sm:py-4 lg:max-w-3xl lg:px-6'>
+            <div className='z-30 mx-auto flex max-w-md flex-col items-center justify-center gap-2 sm:px-6 sm:py-4 lg:max-w-3xl lg:flex-row lg:px-6'>
               <div className={cn('grid gap-2')}>
                 <Popover>
                   <PopoverTrigger asChild>

@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
@@ -22,19 +23,33 @@ export const artistsRouter = router({
     }),
 
   createArtist: authedProcedure
-    .input(z.object({ name: z.string(), description: z.string() }))
+    .input(
+      z.object({
+        name: z.string(),
+        description: z.string(),
+        organization_id: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('artists')
         .insert({
           created_by: ctx.user?.id,
           name: input.name,
           description: input.description,
+          organization_id: input.organization_id,
         })
         .select()
         .limit(1)
         .single();
+
+      if (error?.code === '23505') {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Artist name already exists, please choose another name.',
+        });
+      }
 
       return data;
     }),

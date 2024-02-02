@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
   const fileName = formData.get('fileName');
   const location = formData.get('location') + '?v=' + randomNumber;
   const bucket = String(formData.get('bucket'));
+  const id = formData.get('id');
 
   const fileType = String(fileName).split('.')[1];
 
@@ -20,6 +21,11 @@ export async function POST(req: NextRequest) {
   console.log('filename', fileName);
   console.log('location', location);
   console.log('filetype', fileType);
+  console.log('id', id);
+
+  await supabase.storage
+    .from(bucket)
+    .remove([`${id}/profile.jpeg`, `${id}/profile.jpg`, `${id}/profile.png`]);
 
   const { data, error } = await supabase.storage
     .from(bucket)
