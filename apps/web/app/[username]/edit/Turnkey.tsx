@@ -28,7 +28,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
       setRpId('localhost');
     } else {
       // setRpId(process.env.NEXT_PUBLIC_BASE_URL!);
-      setRpId('jupiter-tickets.com');
+      setRpId('www.jupiter-tickets.com');
     }
   }, [userProfile]);
 

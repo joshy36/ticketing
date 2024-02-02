@@ -11,7 +11,7 @@ function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'local') {
     return `http://localhost:3000`;
   }
-  return `http://jupiter-tickets.com`;
+  return `http://www.jupiter-tickets.com`;
 }
 
 export function getUrl() {
