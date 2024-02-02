@@ -27,10 +27,9 @@ async function handler(req: NextRequest) {
     .then((response) => response.blob())
     .then(async (blob) => {
       console.log('fetch');
-      const file = new File([blob], 'filename.png', { type: blob.type });
-      console.log('file: ', file);
-      formData.append('file', file);
-      formData.append('fileName', file.name);
+      console.log('file: ', blob);
+      formData.append('file', blob);
+      formData.append('fileName', blob.name);
       formData.append('location', `/${id}/profile.png`);
       formData.append('bucket', bucket);
       formData.append('id', id);
