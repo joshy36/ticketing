@@ -29,7 +29,7 @@ async function handler(req: NextRequest) {
       console.log('fetch');
       console.log('file: ', blob);
       formData.append('file', blob);
-      formData.append('fileName', blob.name);
+      formData.append('fileName', 'profile.png');
       formData.append('location', `/${id}/profile.png`);
       formData.append('bucket', bucket);
       formData.append('id', id);
