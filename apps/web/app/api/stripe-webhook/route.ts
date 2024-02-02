@@ -69,6 +69,8 @@ export async function POST(req: NextRequest) {
     }
     const nextJobId = await serverClient.getNextJobById.query();
     console.log('stripe-webhook nextJobId: ', nextJobId);
+    // also add jobs to queue to speed this thing up
+    // instead of get next job and then execute should be a executeNextJOb for concurency
     serverClient.executeJobFromQueue.mutate({ jobId: nextJobId! });
   }
 

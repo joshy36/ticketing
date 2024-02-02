@@ -33,7 +33,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
       setRpId('localhost');
     } else {
       // setRpId(process.env.NEXT_PUBLIC_BASE_URL!);
-      setRpId('ticketing-lemon.vercel.app');
+      setRpId('jupiter-tickets.vercel.app');
     }
   }, [userProfile]);
 

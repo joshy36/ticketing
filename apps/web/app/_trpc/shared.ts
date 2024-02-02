@@ -11,7 +11,7 @@ function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'local') {
     return `http://localhost:3000`;
   }
-  return `http://ticketing-lemon.vercel.app`;
+  return `http://jupiter-tickets.vercel.app`;
 }
 
 export function getUrl() {

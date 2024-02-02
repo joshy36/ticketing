@@ -10,6 +10,7 @@ export const qstashClient = new Client({
 
 export const queue = new Queue({
   redis: new Redis(process.env.UPSTASH_REDIS_URL!),
+  // seperate into local and prod
   queueName: 'test',
 });
 
