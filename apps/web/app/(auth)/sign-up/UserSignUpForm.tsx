@@ -16,6 +16,7 @@ import {
   colors,
   animals,
 } from 'unique-names-generator';
+import { trpc } from '@/app/_trpc/client';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -27,6 +28,14 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
   // const router = useRouter();
 
   const supabase = createSupabaseBrowserClient();
+
+  const generatePfp = trpc.generatePfpForUser.useMutation({
+    onSettled(error) {
+      if (error) {
+        console.error('Error deleting reservation:', error);
+      }
+    },
+  });
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -61,6 +70,13 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
       toast.success(
         'Success! Please check your email for further instructions',
       );
+
+      if (id) {
+        generatePfp.mutate({
+          id: id,
+          prompt: randomName,
+        });
+      }
     }
 
     // router.refresh();

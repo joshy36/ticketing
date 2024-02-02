@@ -1,63 +1,30 @@
 import { serverClient } from '@/app/_trpc/serverClient';
 import { authedProcedure, publicProcedure, router } from '../trpc';
-import OpenAI from 'openai';
+import { z } from 'zod';
+import { qstashClient } from '../job-queue/utils';
 
 export const openAiRouter = router({
-  generateImage: publicProcedure.mutation(async ({ ctx, input }) => {
-    // const supabase = ctx.supabase;
-    const openai = new OpenAI({
-      apiKey: process.env.OPEN_AI_API_KEY,
-    });
+  generatePfpForUser: publicProcedure
+    .input(z.object({ id: z.string(), prompt: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const prompt =
+        input.prompt.replace(/_/g, ' ') +
+        ' in space retro theme profile picture';
+      const openaiApiKey = process.env.OPEN_AI_API_KEY;
 
-    console.log('hit');
-    const res = await openai.images.generate({
-      model: 'dall-e-3',
-      prompt: 'imperial apricot wren in space retro theme',
-      n: 1,
-      size: '1024x1024',
-    });
-
-    const image_url = res.data[0]?.url;
-    console.log('img:', image_url);
-    const bucket = 'users';
-    const formData = new FormData();
-
-    fetch(image_url!)
-      .then((response) => response.blob())
-      .then(async (blob) => {
-        const file = new File([blob], 'filename.png', { type: blob.type });
-        console.log(file);
-        formData.append('file', file);
-        formData.append('fileName', file.name);
-        formData.append(
-          'location',
-          `/699d0320-769b-4999-a232-3f7517c8ff2a/profile.png`
-        );
-        formData.append('bucket', bucket);
-        formData.append('id', '699d0320-769b-4999-a232-3f7517c8ff2a');
-
-        console.log('formData:', formData);
-
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-        const resImage = await fetch(baseUrl + `/api/image/upload`, {
-          method: 'POST',
-          body: formData,
-          cache: 'no-store',
-        });
-
-        const fileName = await resImage.json();
-
-        await serverClient.updateUser.mutate({
-          id: '699d0320-769b-4999-a232-3f7517c8ff2a',
-          profile_image:
-            process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
-            '/' +
-            bucket +
-            fileName.location,
-        });
-      })
-      .catch((error) => console.error('Error:', error));
-
-    return image_url;
-  }),
+      console.log('generating image from openai');
+      const res = await qstashClient.publishJSON({
+        url: 'https://api.openai.com/v1/images/generations',
+        callback: `${process.env.UPSTASH_URL}/api/qstash-callback-dalle?id=${input.id}`,
+        headers: {
+          'upstash-forward-Authorization': `Bearer ${openaiApiKey}`,
+        },
+        body: {
+          model: 'dall-e-3',
+          prompt: prompt,
+          n: 1,
+          size: '1024x1024',
+        },
+      });
+    }),
 });

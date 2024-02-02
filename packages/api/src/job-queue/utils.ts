@@ -43,7 +43,7 @@ export const executeJob = async (
     console.log('Processing job:', job.body);
     const res = await qstashClient.publishJSON({
       url: job.url,
-      callback: `${process.env.UPSTASH_CALLBACK}`,
+      callback: `${process.env.UPSTASH_URL}/api/qstash-callback`,
       body: { job: job.body, jobId: jobId },
     });
   });
