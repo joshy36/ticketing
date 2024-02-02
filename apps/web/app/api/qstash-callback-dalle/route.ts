@@ -17,6 +17,7 @@ async function handler(req: NextRequest) {
   }
 
   const decodedBody = JSON.parse(atob(body.body));
+  console.log('decodedBody: ', decodedBody);
   const image_url = decodedBody.data[0].url;
   const bucket = 'users';
   const formData = new FormData();
