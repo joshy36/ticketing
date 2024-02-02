@@ -21,12 +21,14 @@ async function handler(req: NextRequest) {
   const image_url = decodedBody.data[0].url;
   const bucket = 'users';
   const formData = new FormData();
+  console.log('starting fetch');
 
-  fetch(image_url!)
+  await fetch(image_url!)
     .then((response) => response.blob())
     .then(async (blob) => {
+      console.log('fetch');
       const file = new File([blob], 'filename.png', { type: blob.type });
-      console.log(file);
+      console.log('file: ', file);
       formData.append('file', file);
       formData.append('fileName', file.name);
       formData.append('location', `/${id}/profile.png`);
