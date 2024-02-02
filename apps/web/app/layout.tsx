@@ -40,9 +40,11 @@ export default async function RootLayout({
       id: session.user?.id,
     });
 
-    userOrg = await serverClient.getUserOrganization.query({
-      user_id: userProfile?.id!,
-    });
+    if (userProfile) {
+      userOrg = await serverClient.getUserOrganization.query({
+        user_id: userProfile?.id,
+      });
+    }
   }
 
   return (
