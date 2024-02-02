@@ -24,6 +24,16 @@ export const serverClient = createTRPCProxyClient<AppRouter>({
         const heads = new Map();
         heads.set('cookie', cookies().toString());
         heads.set('x-trpc-source', 'rsc');
+        heads.set('Access-Control-Allow-Credentials', 'true');
+        heads.set('Access-Control-Allow-Origin', '*');
+        heads.set(
+          'Access-Control-Allow-Methods',
+          'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+        );
+        heads.set(
+          'Access-Control-Allow-Headers',
+          'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+        );
         return Object.fromEntries(heads);
       },
     }),
