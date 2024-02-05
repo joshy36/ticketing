@@ -44,7 +44,7 @@ export function MobileNav({
   ];
 
   return (
-    <div className='fixed top-0 z-40 flex w-full items-center bg-black/80 p-2 backdrop-blur transition-colors duration-500 md:hidden'>
+    <div className='fixed top-0 z-40 flex w-full items-center bg-black/40 p-2 backdrop-blur-md transition-colors duration-500 md:hidden'>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
