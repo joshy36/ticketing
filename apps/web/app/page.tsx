@@ -48,7 +48,7 @@ export default function Home() {
   const { data: events } = trpc.getEvents.useQuery();
 
   return (
-    <main className="-my-16 mb-20 h-screen bg-opacity-20 bg-[url('/opaque-70.png')] bg-cover bg-center">
+    <main className="-my-16 mb-20 h-screen w-screen bg-opacity-20 bg-[url('/opaque-70.png')] bg-cover bg-center">
       <div className='mx-auto max-w-2xl bg-local px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
         <div className='flex flex-col justify-center'>
           {/* <div className='rounded-3xl border border-zinc-800 bg-black/40 py-4 backdrop-blur-sm'> */}
