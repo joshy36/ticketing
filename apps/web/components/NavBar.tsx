@@ -62,7 +62,7 @@ export default function NavBar({
     {
       title: 'Home',
       href: '/',
-      image: '/example2.png',
+      image: '/no-bg.png',
     },
     {
       title: 'Explore Events',
@@ -89,11 +89,11 @@ export default function NavBar({
                       {component.image ? (
                         <NavigationMenuLink>
                           <Image
-                            className='pr-4 pt-3'
+                            className='pr-4 pt-2'
                             src={component.image}
                             alt='image'
-                            width={100}
-                            height={100}
+                            width={75}
+                            height={75}
                           />
                         </NavigationMenuLink>
                       ) : (
