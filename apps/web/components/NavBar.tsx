@@ -149,12 +149,12 @@ export default function NavBar({
               <UserNav user={user} userProfile={userProfile} />
             </div>
           ) : (
-            <div className='ml-auto flex items-center space-x-4'>
+            <div className='ml-auto flex items-center space-x-4 '>
               <Link href='/sign-in'>
                 <Button variant='secondary'>Sign In</Button>
               </Link>
               <Link href='/sign-up'>
-                <Button>Sign Up</Button>
+                <Button className='bg-white/70'>Sign Up</Button>
               </Link>
             </div>
           )}
