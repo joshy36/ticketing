@@ -55,7 +55,7 @@ export default function MessageCenter() {
           <Button
             variant='outline'
             size='icon'
-            className='bg-black/25 '
+            className='border-none bg-black/25'
             onClick={() => setSheetOpen(true)}
           >
             <Bell className='h-4 w-4' />
