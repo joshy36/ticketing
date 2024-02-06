@@ -48,9 +48,9 @@ export default function Home() {
   const { data: events } = trpc.getEvents.useQuery();
 
   return (
-    <main className="-my-16 mb-20 h-screen w-screen bg-opacity-20 bg-[url('/opaque-70.png')] bg-cover bg-center">
-      <div className='mx-auto max-w-2xl bg-local px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
-        <div className='flex flex-col justify-center'>
+    <main className="-my-16 mb-20 flex h-screen w-screen items-center bg-opacity-20 bg-[url('/opaque-70.png')] bg-cover bg-center">
+      <div className='mx-auto max-w-2xl items-center bg-local px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+        <div className='mb-20 flex flex-col justify-center'>
           {/* <div className='rounded-3xl border border-zinc-800 bg-black/40 py-4 backdrop-blur-sm'> */}
           <div className='flex flex-row items-center justify-center'>
             <p className='z-30 bg-stone-300 bg-clip-text py-20 text-center text-4xl font-bold tracking-tighter text-transparent md:pr-4 md:text-6xl lg:pr-8 lg:text-8xl'>
@@ -66,7 +66,7 @@ export default function Home() {
                     id='date'
                     variant={'outline'}
                     className={cn(
-                      'hidden h-12 w-[250px] justify-start rounded-full border-none bg-black/70 text-left font-normal backdrop-blur-3xl hover:bg-black/90 lg:flex',
+                      'hidden h-14 w-[250px] justify-start rounded-full border-none bg-black/70 text-left font-normal backdrop-blur-3xl hover:bg-black/90 lg:flex',
                       !date && 'text-muted-foreground',
                     )}
                   >
@@ -99,11 +99,11 @@ export default function Home() {
             </div>
 
             <Input
-              className='z-30 h-12 w-80 rounded-full border-none bg-black/70 backdrop-blur-3xl hover:bg-black/90 md:w-96'
+              className='z-30 h-12 w-80 rounded-full border-none bg-black/70 backdrop-blur-3xl hover:bg-black/90 md:w-96 lg:h-14'
               placeholder='Search events, artists, venues'
             />
 
-            <Button className='z-30 h-12 rounded-full border border-muted-foreground bg-white/50'>
+            <Button className='z-30 h-12 w-full rounded-full border border-muted-foreground bg-white/70 lg:flex lg:h-14 lg:w-36'>
               Search
             </Button>
           </div>
