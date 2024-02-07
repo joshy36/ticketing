@@ -76,7 +76,7 @@ export function CommandMenu({ ...props }: DialogProps) {
     <div className=''>
       <Button
         className={cn(
-          'relative w-full justify-start bg-zinc-900/50 text-sm text-muted-foreground hover:bg-transparent hover:bg-zinc-800 sm:pr-12 md:w-40 lg:w-64',
+          'relative w-full justify-start bg-zinc-700/50 text-sm text-muted-foreground hover:bg-transparent hover:bg-zinc-800 sm:pr-12 md:w-40 lg:w-64',
         )}
         onClick={() => setOpen(true)}
         {...props}

@@ -154,7 +154,7 @@ export default function NavBar({
                 <Button variant='secondary'>Sign In</Button>
               </Link>
               <Link href='/sign-up'>
-                <Button className='bg-white/70'>Sign Up</Button>
+                <Button className='bg-white'>Sign Up</Button>
               </Link>
             </div>
           )}

@@ -61,6 +61,13 @@ export default async function EventView({
           </div>
           <div>
             <div>
+              <p className='text-2xl font-semibold'>Description</p>
+              <div className='space-y-6'>
+                <p className='pt-3 text-base font-light text-muted-foreground'>
+                  {event.description}
+                </p>
+              </div>
+              <Separator className='my-6' />
               <p className='text-2xl font-semibold'>Artist</p>
               <div className='flex items-center pt-4'>
                 <Avatar className='h-14 w-14'>
@@ -86,13 +93,6 @@ export default async function EventView({
               <Link className='ml-auto' href={`/venue/${venue?.id}`}>
                 <Button variant='outline'>View Venue</Button>
               </Link>
-            </div>
-            <Separator className='my-6' />
-            <p className='text-2xl font-semibold'>Description</p>
-            <div className='space-y-6'>
-              <p className='pt-3 text-base font-light text-muted-foreground'>
-                {event.description}
-              </p>
             </div>
             <Separator className='my-6' />
             {event.image ? (
