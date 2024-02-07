@@ -80,26 +80,18 @@ export const paymentsRouter = router({
       for (let i = 0; i < input.cart_info.length; i++) {
         const { data: tickets } = await supabase
           .from('tickets')
-          .select()
+          .select(`*, reservations (id), sections (name)`)
           .eq('event_id', input.event_id)
-          .eq('section_id', input.cart_info[i]?.section.id!);
+          .is('user_id', null)
+          .order('price', { ascending: true });
 
-        const { data: reservations } = await supabase
-          .from('reservations')
-          .select()
-          .eq('event_id', input.event_id)
-          .eq('section_id', input.cart_info[i]?.section.id!);
-
-        const ticketsWithoutReservations = tickets?.filter((ticket) => {
-          // Check if there is no reservation associated with the ticket
-          return !reservations?.some(
-            (reservation) => reservation.ticket_id === ticket.id
-          );
-        });
+        const noReservationTickets = tickets?.filter(
+          (ticket) => ticket.reservations === null
+        );
 
         if (
-          !ticketsWithoutReservations ||
-          ticketsWithoutReservations.length < input.cart_info[i]!.quantity
+          !noReservationTickets ||
+          noReservationTickets.length < input.cart_info[i]!.quantity
         ) {
           throw new TRPCError({
             code: 'INTERNAL_SERVER_ERROR',
@@ -118,7 +110,7 @@ export const paymentsRouter = router({
             .from('reservations')
             .insert({
               user_id: input.user_id,
-              ticket_id: ticketsWithoutReservations[j]!.id,
+              ticket_id: noReservationTickets[j]!.id,
               event_id: input.event_id,
               section_id: input.cart_info[i]?.section.id,
               expiration: new Date(Date.now() + 10 * 60000).toISOString(),
