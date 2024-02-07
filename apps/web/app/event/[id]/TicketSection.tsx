@@ -194,8 +194,6 @@ export default function TicketSection({
     return totalPrice;
   };
 
-  console.log('noReservationTickets ', tickets?.length);
-
   return (
     <div>
       {checkout ? (
