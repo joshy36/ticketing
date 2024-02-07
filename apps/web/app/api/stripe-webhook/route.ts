@@ -49,13 +49,6 @@ export async function POST(req: NextRequest) {
           .select()
           .single();
 
-        await supabase.rpc('increment', {
-          table_name: 'events',
-          row_id: metadata?.event_id!,
-          x: -1,
-          field_name: 'tickets_remaining',
-        });
-
         await serverClient.addJobToQueue.mutate({
           method: 'transferTicket',
           params: {

@@ -151,7 +151,6 @@ export interface Database {
           name: string
           organization_id: string | null
           stripe_product_id: string | null
-          tickets_remaining: number | null
           updated_at: string
           venue: string
         }
@@ -170,7 +169,6 @@ export interface Database {
           name: string
           organization_id?: string | null
           stripe_product_id?: string | null
-          tickets_remaining?: number | null
           updated_at?: string
           venue: string
         }
@@ -189,7 +187,6 @@ export interface Database {
           name?: string
           organization_id?: string | null
           stripe_product_id?: string | null
-          tickets_remaining?: number | null
           updated_at?: string
           venue?: string
         }

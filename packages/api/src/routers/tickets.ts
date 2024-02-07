@@ -76,26 +76,7 @@ export const ticketsRouter = router({
         .order('price', { ascending: true });
 
       const noReservationTickets = tickets?.filter(
-        (x) => !x.reservations || x.reservations?.length === 0
-      );
-
-      return noReservationTickets;
-    }),
-
-  getAvailableTicketsForEventBySection: publicProcedure
-    .input(z.object({ event_id: z.string(), section_id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const supabase = ctx.supabase;
-      const { data: tickets } = await supabase
-        .from('tickets')
-        .select(`*, reservations (id)`)
-        .eq('event_id', input.event_id)
-        .eq('section_id', input.section_id)
-        .is('user_id', null)
-        .order('price', { ascending: true });
-
-      const noReservationTickets = tickets?.filter(
-        (x) => x.reservations.length === 0
+        (ticket) => ticket.reservations === null
       );
 
       return noReservationTickets;
@@ -215,11 +196,6 @@ export const ticketsRouter = router({
         }
         count++;
       }
-
-      await supabase
-        .from('events')
-        .update({ tickets_remaining: tickets_rem })
-        .eq('id', input.event_id);
 
       const { data: ticketData, error: ticketError } = await supabase
         .from('tickets')
