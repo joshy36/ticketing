@@ -79,6 +79,8 @@ export const ticketsRouter = router({
         (ticket) => ticket.reservations === null
       );
 
+      console.log('noReservationTickets', noReservationTickets?.length);
+
       return noReservationTickets;
     }),
 

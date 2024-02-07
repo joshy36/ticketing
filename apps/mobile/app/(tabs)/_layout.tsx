@@ -68,23 +68,24 @@ export default function TabsLayout() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarActiveTintColor: 'white',
-          tabBarIcon: ({ color, size, focused }) => {
-            return (
-              <Image
-                source={require('../../assets/IMG_8615.png')}
-                placeholder={blurhash}
-                contentFit="cover"
-                style={{ borderRadius: 16 }}
-                className="h-8 w-8"
-                transition={1000}
-              />
-            );
-          },
-          // <Ionicons
-          //   name={focused ? 'notifications' : 'notifications-outline'}
-          //   size={30}
-          //   color={color}
-          // />
+          tabBarIcon: ({ color, size, focused }) => (
+            // return (
+            //   <Image
+            //     source={require('../../assets/IMG_8615.png')}
+            //     placeholder={blurhash}
+            //     contentFit="cover"
+            //     style={{ borderRadius: 16 }}
+            //     className="h-8 w-8"
+            //     transition={1000}
+            //   />
+            // );
+
+            <Ionicons
+              name={focused ? 'notifications' : 'notifications-outline'}
+              size={30}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen

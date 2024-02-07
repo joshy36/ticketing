@@ -23,20 +23,26 @@ const Search = () => {
   const handleSearch = (text: any) => {
     setSearchQuery(text);
 
-    const filteredEvents = events?.filter((event) =>
-      event.name.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredEvents(filteredEvents);
+    if (text.length !== 0) {
+      const filteredEvents = events?.filter((event) =>
+        event.name.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredEvents(filteredEvents);
 
-    const filteredArtists = artists?.filter((artist) =>
-      artist.name.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredArtists(filteredArtists);
+      const filteredArtists = artists?.filter((artist) =>
+        artist.name.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredArtists(filteredArtists);
 
-    const filteredVenues = venues?.filter((venue) =>
-      venue.name.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredVenues(filteredVenues);
+      const filteredVenues = venues?.filter((venue) =>
+        venue.name.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredVenues(filteredVenues);
+    } else {
+      setFilteredEvents([]);
+      setFilteredArtists([]);
+      setFilteredVenues([]);
+    }
   };
 
   return (
@@ -58,46 +64,90 @@ const Search = () => {
           </Text>
         ) : null}
 
-        {filteredEvents?.length === 0 ? null : (
-          <Text className="text-white text-xl font-bold">Events</Text>
-        )}
-        {filteredEvents?.map((event) => (
-          <View className="" key={event.id}>
-            <Link href={`/home/${event.id}`}>
-              <View className="flex flex-row items-center py-3 ">
-                <View>
-                  <Image
-                    style={{ borderRadius: 16 }}
-                    className="h-20 w-20"
-                    source={{ uri: replaceLocalhostWithIP(event).image }}
-                    placeholder={blurhash}
-                    contentFit="cover"
-                    transition={1000}
-                  />
-                </View>
-                <View className="flex flex-col">
-                  <View>
-                    <Text className="text-white pl-2 text-2xl text-bold">
-                      {event.name}
-                    </Text>
+        {filteredEvents?.length !== 0 && (
+          <View>
+            <Text className="text-white text-xl font-bold">Events</Text>
+            {filteredEvents?.map((event) => (
+              <View className="" key={event.id}>
+                <Link href={`/home/${event.id}`}>
+                  <View className="flex flex-row items-center py-3 ">
+                    <View>
+                      <Image
+                        style={{ borderRadius: 16 }}
+                        className="h-20 w-20"
+                        source={{ uri: replaceLocalhostWithIP(event).image }}
+                        placeholder={blurhash}
+                        contentFit="cover"
+                        transition={1000}
+                      />
+                    </View>
+                    <View className="flex flex-col">
+                      <View>
+                        <Text className="text-white pl-2 text-2xl text-bold">
+                          {event.name}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text className="text-muted-foreground pl-2">
+                          {dateToString(event.date)}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text className="text-muted-foreground pl-2">
+                          {event.venues?.name}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                  <View>
-                    <Text className="text-muted-foreground pl-2">
-                      {dateToString(event.date)}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text className="text-muted-foreground pl-2">
-                      {event.venues?.name}
-                    </Text>
-                  </View>
-                </View>
+                </Link>
               </View>
-            </Link>
+            ))}
           </View>
-        ))}
+        )}
+        {searchQuery.length === 0 && (
+          <View>
+            <Text className="text-white text-xl font-bold">
+              Recommended Events
+            </Text>
+            {events?.map((event) => (
+              <View className="" key={event.id}>
+                <Link href={`/home/${event.id}`}>
+                  <View className="flex flex-row items-center py-3 ">
+                    <View>
+                      <Image
+                        style={{ borderRadius: 16 }}
+                        className="h-20 w-20"
+                        source={{ uri: replaceLocalhostWithIP(event).image }}
+                        placeholder={blurhash}
+                        contentFit="cover"
+                        transition={1000}
+                      />
+                    </View>
+                    <View className="flex flex-col">
+                      <View>
+                        <Text className="text-white pl-2 text-2xl text-bold">
+                          {event.name}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text className="text-muted-foreground pl-2">
+                          {dateToString(event.date)}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text className="text-muted-foreground pl-2">
+                          {event.venues?.name}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </Link>
+              </View>
+            ))}
+          </View>
+        )}
 
-        {filteredArtists?.length === 0 ? null : (
+        {filteredArtists?.length !== 0 && (
           <Text className="text-white text-xl font-bold">Artists</Text>
         )}
         {filteredArtists?.map((artist) => (
@@ -126,7 +176,7 @@ const Search = () => {
           </Text>
         ))}
 
-        {filteredVenues?.length === 0 ? null : (
+        {filteredVenues?.length !== 0 && (
           <Text className="text-white text-xl font-bold">Venues</Text>
         )}
         {filteredVenues?.map((venue) => (

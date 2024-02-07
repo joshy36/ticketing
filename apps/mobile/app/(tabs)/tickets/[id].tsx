@@ -70,124 +70,126 @@ const Home = () => {
         <Text className="text-white text-2xl">Loading...</Text>
       ) : (
         <View className="flex flex-row justify-center">
-          <View
-            key={tickets![ticketNumber]?.id}
-            className="flex snap-center flex-col items-center justify-center"
-          >
-            <View className="flex flex-row items-center justify-between gap-16 pb-4">
-              {ticketNumber !== 0 ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    setTicketNumber(ticketNumber - 1);
-                    setQR(tickets![ticketNumber - 1].qr_code!);
-                  }}
-                  className="rounded-md"
-                >
-                  <Ionicons
-                    name="chevron-back-outline"
-                    size={50}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity className="invisible rounded-md">
-                  <Ionicons
-                    name="chevron-back-outline"
-                    size={50}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity
-                className="rounded-full bg-white p-4"
-                onPress={() => setFront(!front)}
-              >
-                <Text className="text-black text-center font-bold">Flip</Text>
-              </TouchableOpacity>
-              {ticketNumber < tickets!.length - 1 ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    setTicketNumber(ticketNumber + 1);
-                    setQR(tickets![ticketNumber + 1].qr_code!);
-                  }}
-                  className="rounded-md"
-                >
-                  <Ionicons
-                    name="chevron-forward-outline"
-                    size={50}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity className="invisible rounded-md">
-                  <Ionicons
-                    name="chevron-forward-outline"
-                    size={50}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
-            <Text className="pb-2 font-light text-muted-foreground">
-              Ticket {ticketNumber + 1} of {tickets!.length}
-            </Text>
-            {front ? (
-              <View className="border border-zinc-800 rounded-xl p-4 bg-zinc-950 w-full">
-                <Text className="text-white font-bold text-2xl">
-                  {tickets![ticketNumber]?.events?.name}
-                </Text>
-                <Text className="text-muted-foreground pb-4">
-                  {`Seat: ${tickets![ticketNumber]!.seat}`}
-                </Text>
-
-                {/* <View className="py-4">
-                  <Image
-                    source={tickets![ticketNumber]!.events?.image}
-                    alt="Ticket Image"
-                    className="h-20 w-20"
-                    placeholder={blurhash}
-                  />
-                </View> */}
-
-                {qr ? (
-                  <View className="flex items-center justify-center bg-white p-4">
-                    <QRCode value={qr} />
-                  </View>
+          <ScrollView className="px-4">
+            <View
+              key={tickets![ticketNumber]?.id}
+              className="flex snap-center flex-col items-center justify-center"
+            >
+              <View className="flex flex-row items-center justify-between gap-16 pb-4">
+                {ticketNumber !== 0 ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setTicketNumber(ticketNumber - 1);
+                      setQR(tickets![ticketNumber - 1].qr_code!);
+                    }}
+                    className="rounded-md"
+                  >
+                    <Ionicons
+                      name="chevron-back-outline"
+                      size={50}
+                      color="white"
+                    />
+                  </TouchableOpacity>
                 ) : (
-                  <View className="pt-4">
-                    <TouchableOpacity
-                      disabled={isLoading}
-                      className="w-full bg-white rounded-full p-2"
-                      onPress={() => {
-                        setIsLoading(true);
-
-                        activateTicket.mutate({
-                          user_id: user!.id,
-                          ticket_id: tickets![ticketNumber]!.id,
-                        });
-                      }}
-                    >
-                      <Text className="text-black text-center font-bold">
-                        Activate
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity className="invisible rounded-md">
+                    <Ionicons
+                      name="chevron-back-outline"
+                      size={50}
+                      color="white"
+                    />
+                  </TouchableOpacity>
                 )}
-
-                <Text className="text-sm font-light text-muted-foreground pt-4">
-                  {dateToString(tickets![ticketNumber]?.events?.date!)}
-                </Text>
+                <TouchableOpacity
+                  className="rounded-full bg-white p-4"
+                  onPress={() => setFront(!front)}
+                >
+                  <Text className="text-black text-center font-bold">Flip</Text>
+                </TouchableOpacity>
+                {ticketNumber < tickets!.length - 1 ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setTicketNumber(ticketNumber + 1);
+                      setQR(tickets![ticketNumber + 1].qr_code!);
+                    }}
+                    className="rounded-md"
+                  >
+                    <Ionicons
+                      name="chevron-forward-outline"
+                      size={50}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity className="invisible rounded-md">
+                    <Ionicons
+                      name="chevron-forward-outline"
+                      size={50}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
-            ) : (
-              <View className="border border-zinc-800 rounded-xl p-4 bg-zinc-950 w-full">
-                <Text className="text-white font-bold text-2xl">
-                  {tickets![ticketNumber]?.events?.name}
-                </Text>
-                <Text className="text-muted-foreground pb-4">{`Seat: ${
-                  tickets![ticketNumber]!.seat
-                }`}</Text>
-                <View className="bg-zinc-950 p-2 ">
-                  {/* <View>
+              <Text className="pb-2 font-light text-muted-foreground">
+                Ticket {ticketNumber + 1} of {tickets!.length}
+              </Text>
+
+              {front ? (
+                <View className="border border-zinc-800 rounded-xl p-4 bg-zinc-950 w-full">
+                  <Text className="text-white font-bold text-2xl">
+                    {tickets![ticketNumber]?.events?.name}
+                  </Text>
+                  <Text className="text-muted-foreground pb-4">
+                    {`Seat: ${tickets![ticketNumber]!.seat}`}
+                  </Text>
+
+                  <View className="py-4 flex items-center justify-center">
+                    <Image
+                      source={tickets![ticketNumber]!.events?.image}
+                      alt="Ticket Image"
+                      className="w-full h-64"
+                      placeholder={blurhash}
+                    />
+                  </View>
+
+                  {qr ? (
+                    <View className="flex items-center justify-center bg-white p-4">
+                      <QRCode value={qr} />
+                    </View>
+                  ) : (
+                    <View className="pt-4">
+                      <TouchableOpacity
+                        disabled={isLoading}
+                        className="w-full bg-white rounded-full p-2"
+                        onPress={() => {
+                          setIsLoading(true);
+
+                          activateTicket.mutate({
+                            user_id: user!.id,
+                            ticket_id: tickets![ticketNumber]!.id,
+                          });
+                        }}
+                      >
+                        <Text className="text-black text-center font-bold">
+                          Activate
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+
+                  <Text className="text-sm font-light text-muted-foreground pt-4">
+                    {dateToString(tickets![ticketNumber]?.events?.date!)}
+                  </Text>
+                </View>
+              ) : (
+                <View className="border border-zinc-800 rounded-xl p-4 bg-zinc-950 w-full">
+                  <Text className="text-white font-bold text-2xl">
+                    {tickets![ticketNumber]?.events?.name}
+                  </Text>
+                  <Text className="text-muted-foreground pb-4">{`Seat: ${
+                    tickets![ticketNumber]!.seat
+                  }`}</Text>
+                  <View className="bg-zinc-950 p-2 ">
+                    {/* <View>
               <p className="pb-4 text-2xl">Artist</p>
 
               <View className="flex flex-row items-center justify-start">
@@ -201,17 +203,18 @@ const Home = () => {
                 <p className="pl-4 text-muted-foreground">{artist?.name}</p>
               </View>
             </View> */}
-                  {/* <Separator className="my-6" /> */}
-                  <Text className="pb-4 text-2xl">Venue</Text>
+                    {/* <Separator className="my-6" /> */}
+                    <Text className="pb-4 text-2xl">Venue</Text>
 
-                  <Text className="text-muted-foreground">{venue?.name}</Text>
+                    <Text className="text-muted-foreground">{venue?.name}</Text>
+                  </View>
+                  <Text className="text-sm font-light text-muted-foreground pt-4">
+                    {dateToString(tickets![ticketNumber]?.events?.date!)}
+                  </Text>
                 </View>
-                <Text className="text-sm font-light text-muted-foreground pt-4">
-                  {dateToString(tickets![ticketNumber]?.events?.date!)}
-                </Text>
-              </View>
-            )}
-          </View>
+              )}
+            </View>
+          </ScrollView>
         </View>
       )}
     </View>
