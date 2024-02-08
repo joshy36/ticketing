@@ -49,8 +49,11 @@ export const delay = (duration: number): Promise<void> => {
 export const executeJob = async (
   jobId: string
 ): Promise<Job<unknown> | void> => {
+  console.log('QUEUE::executeJob');
   const redis = createRedis();
+  console.log('QUEUE::executeJob redis', redis);
   const queue = createQueue(redis);
+  console.log('QUEUE::executeJob queue', queue);
   const job = await queue.executeJobFromQueue<Payload>(async (job) => {
     console.log('Processing job:', job.body);
     const res = await qstashClient.publishJSON({

@@ -59,7 +59,9 @@ export const queueRouter = router({
   executeJobFromQueue: publicProcedure
     .input(z.object({ jobId: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      console.log('Executing job from queue');
       const job = await executeJob(input.jobId);
+      console.log('Executed job:', job);
       return job;
     }),
 
