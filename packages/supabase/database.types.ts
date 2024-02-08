@@ -554,6 +554,7 @@ export interface Database {
           section_id: string | null
           stripe_price_id: string | null
           token_id: number | null
+          transaction_id: string | null
           updated_at: string | null
           user_id: string | null
         }
@@ -568,6 +569,7 @@ export interface Database {
           section_id?: string | null
           stripe_price_id?: string | null
           token_id?: number | null
+          transaction_id?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -582,6 +584,7 @@ export interface Database {
           section_id?: string | null
           stripe_price_id?: string | null
           token_id?: number | null
+          transaction_id?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -599,7 +602,53 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tickets_transaction_id_fkey"
+            columns: ["transaction_id"]
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "tickets_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          event_id: string | null
+          id: string
+          stripe_payment_intent: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          stripe_payment_intent: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          stripe_payment_intent?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_user_id_fkey"
             columns: ["user_id"]
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]

@@ -15,6 +15,7 @@ import { turnkeyRouter } from './turnkey';
 import { organizationsRouter } from './organizations';
 import { messagesRouter } from './messages';
 import { openAiRouter } from './openai';
+import { transactionsRouter } from './transactions';
 
 export const appRouter = mergeRouters(
   eventsRouter,
@@ -29,7 +30,8 @@ export const appRouter = mergeRouters(
   turnkeyRouter,
   organizationsRouter,
   messagesRouter,
-  openAiRouter
+  openAiRouter,
+  transactionsRouter
 );
 
 export type AppRouter = typeof appRouter;

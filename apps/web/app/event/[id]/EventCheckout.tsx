@@ -162,7 +162,10 @@ export default function EventCheckout({
                   {clientSecret && (
                     // @ts-ignore
                     <Elements options={options} stripe={stripePromise}>
-                      <CheckoutForm event={event} userProfile={userProfile} />
+                      <CheckoutForm
+                        userProfile={userProfile}
+                        totalPrice={totalPrice}
+                      />
                     </Elements>
                   )}
                 </div>

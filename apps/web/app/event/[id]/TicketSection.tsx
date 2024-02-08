@@ -349,6 +349,7 @@ export default function TicketSection({
                     section: {
                       id: item.section.id,
                       name: item.section.name,
+                      price: item.section.price,
                     },
                   }),
                 );

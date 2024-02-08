@@ -27,6 +27,19 @@ export async function POST(req: NextRequest) {
     }[] = JSON.parse(metadata.cart_info);
     console.log('🔔 cartInfo: ', cartInfo);
     const supabase = createRouteClient();
+
+    const { data: transaction } = await supabase
+      .from('transactions')
+      .insert({
+        user_id: metadata.user_id!,
+        event_id: metadata.event_id!,
+        amount: event.data.object.amount,
+        stripe_payment_intent: event.data.object.id,
+      })
+      .select()
+      .limit(1)
+      .single();
+
     for (let i = 0; i < cartInfo.length; i++) {
       for (let j = 0; j < cartInfo[i]!.quantity; j++) {
         const { data: ticket, error: ticketError } = await supabase
@@ -44,7 +57,10 @@ export async function POST(req: NextRequest) {
 
         await supabase
           .from('tickets')
-          .update({ user_id: metadata?.user_id })
+          .update({
+            user_id: metadata?.user_id,
+            transaction_id: transaction?.id,
+          })
           .eq('id', ticket?.id!)
           .select()
           .single();

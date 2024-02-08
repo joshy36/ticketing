@@ -52,7 +52,11 @@ export const paymentsRouter = router({
         event_id: z.string(),
         cart_info: z.array(
           z.object({
-            section: z.object({ id: z.string(), name: z.string().nullable() }),
+            section: z.object({
+              id: z.string(),
+              name: z.string().nullable(),
+              price: z.number().optional(),
+            }),
             quantity: z.number(),
           })
         ),

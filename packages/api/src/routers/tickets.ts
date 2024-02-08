@@ -4,7 +4,6 @@ import { TRPCError } from '@trpc/server';
 import { createStripePrice } from '../services/stripe';
 import { ethers } from 'ethers';
 import contractAbi from '../../../../packages/chain/deployments/base-goerli/Event.json';
-const retry = require('async-retry');
 
 export const ticketsRouter = router({
   // probably need to seperate into public and authed procedure for available and owned tickets
