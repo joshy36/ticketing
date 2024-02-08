@@ -8,11 +8,21 @@ export const qstashClient = new Client({
   token: process.env.QSTASH_TOKEN!,
 });
 
-export const queue = new Queue({
-  redis: new Redis(process.env.UPSTASH_REDIS_URL!),
-  // seperate into local and prod
-  queueName: 'test',
-});
+export const createRedis = () => {
+  return new Redis(process.env.UPSTASH_REDIS_URL!);
+};
+
+export const createQueue = (redis: Redis) => {
+  let queueName = 'prod';
+  if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'local') {
+    queueName = 'test';
+  }
+
+  return new Queue({
+    redis: redis,
+    queueName: queueName,
+  });
+};
 
 const MQ_PREFIX = 'JobQueue';
 
@@ -39,6 +49,8 @@ export const delay = (duration: number): Promise<void> => {
 export const executeJob = async (
   jobId: string
 ): Promise<Job<unknown> | void> => {
+  const redis = createRedis();
+  const queue = createQueue(redis);
   const job = await queue.executeJobFromQueue<Payload>(async (job) => {
     console.log('Processing job:', job.body);
     const res = await qstashClient.publishJSON({
@@ -47,5 +59,6 @@ export const executeJob = async (
       body: { job: job.body, jobId: jobId },
     });
   });
+  await redis.quit();
   return job;
 };

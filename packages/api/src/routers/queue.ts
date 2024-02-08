@@ -1,4 +1,4 @@
-import { executeJob, qstashClient, queue } from './../job-queue/utils';
+import { executeJob, createQueue, createRedis } from './../job-queue/utils';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
 
@@ -28,6 +28,8 @@ export const queueRouter = router({
     // probably need to narrow params down to a type
     .input(z.object({ method: z.string(), params: z.any() }))
     .mutation(async ({ ctx, input }) => {
+      const redis = createRedis();
+      const queue = createQueue(redis);
       const payload = {
         url: `${process.env.UPSTASH_URL}/api/qstash-endpoint`,
         body: {
@@ -37,6 +39,7 @@ export const queueRouter = router({
       };
       console.log('Adding job to queue');
       const jobId = await queue.add(payload);
+      await redis.quit();
       console.log(`Added job with jobId: ${jobId}`);
       // // try and run the job immediately, if there is other stuff in the queue, it will run after
       // executeJob(jobId!);
@@ -45,7 +48,10 @@ export const queueRouter = router({
 
   getNextJobById: publicProcedure.query(async ({ ctx }) => {
     console.log('Getting next job');
+    const redis = createRedis();
+    const queue = createQueue(redis);
     const job = await queue.getNextJobById();
+    await redis.quit();
     console.log('Next job:', job);
     return job;
   }),
@@ -60,7 +66,10 @@ export const queueRouter = router({
   finishJob: publicProcedure
     .input(z.object({ job: z.string(), hasFailed: z.boolean().optional() }))
     .mutation(async ({ ctx, input }) => {
+      const redis = createRedis();
+      const queue = createQueue(redis);
       const job = await queue.finishJob(input.job, input.hasFailed);
+      await redis.quit();
       return job;
     }),
 });
