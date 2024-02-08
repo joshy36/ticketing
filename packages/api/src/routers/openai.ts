@@ -1,4 +1,3 @@
-import { serverClient } from '@/app/_trpc/serverClient';
 import { authedProcedure, publicProcedure, router } from '../trpc';
 import { z } from 'zod';
 import { qstashClient } from '../job-queue/utils';

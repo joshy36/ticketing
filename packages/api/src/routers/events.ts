@@ -1,6 +1,6 @@
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
-import { createStripeProduct } from '../services/stripe';
+import { createStripeProduct, stripe } from '../services/stripe';
 import { getOrganizationMembers } from '../shared/organizations';
 import { TRPCError } from '@trpc/server';
 
@@ -270,5 +270,61 @@ export const eventsRouter = router({
           message: 'Error removing scanner: ' + error,
         });
       }
+    }),
+
+  getRevenueForEvent: authedProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: event } = await supabase
+        .from('events')
+        .select()
+        .eq('id', input.event_id)
+        .limit(1)
+        .single();
+
+      const { data: userOrg } = await supabase
+        .from('organization_members')
+        .select()
+        .eq('user_id', ctx.user?.id!)
+        .limit(1)
+        .single();
+
+      if (userOrg?.organization_id !== event?.organization_id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User is not in the organization',
+        });
+      }
+
+      const { data: transactions } = await supabase
+        .from('transactions')
+        .select()
+        .eq('event_id', input.event_id);
+
+      const totalAmount = transactions?.reduce(
+        (sum, transaction) => sum + transaction.amount,
+        0
+      );
+
+      let stripeFees = 0;
+      for (let i = 0; i < transactions!.length; i++) {
+        stripeFees += 30;
+        stripeFees += transactions![i].amount * 0.029;
+      }
+
+      let ourFees = 0;
+      for (let i = 0; i < transactions!.length; i++) {
+        ourFees += transactions![i].amount * 0.1;
+      }
+
+      const profit = totalAmount! - stripeFees - ourFees;
+
+      return {
+        revenue: totalAmount,
+        stripeFees: stripeFees,
+        ourFees: ourFees,
+        profit: profit,
+      };
     }),
 });

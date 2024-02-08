@@ -83,7 +83,7 @@ export default function Scanners({ event }: { event: Events }) {
           {scanners?.map((scanner) => (
             <div
               key={scanner.id}
-              className='flex flex-row items-center justify-between gap-4 border-b border-t py-3'
+              className='flex flex-row items-center justify-between gap-4 border-b py-3'
             >
               <div className='flex flex-row items-center gap-2'>
                 <Avatar>
