@@ -307,15 +307,26 @@ export const eventsRouter = router({
         0
       );
 
+      if (transactions?.length === 0 || !transactions) {
+        return {
+          revenue: 0,
+          stripeFees: 0,
+          ourFees: 0,
+          profit: 0,
+        };
+      }
+
       let stripeFees = 0;
-      for (let i = 0; i < transactions!.length; i++) {
+      for (let i = 0; i < transactions.length; i++) {
         stripeFees += 30;
-        stripeFees += transactions![i].amount * 0.029;
+        // @ts-ignore
+        stripeFees += transactions[i].amount * 0.029;
       }
 
       let ourFees = 0;
-      for (let i = 0; i < transactions!.length; i++) {
-        ourFees += transactions![i].amount * 0.1;
+      for (let i = 0; i < transactions.length; i++) {
+        // @ts-ignore
+        ourFees += transactions[i].amount * 0.1;
       }
 
       const profit = totalAmount! - stripeFees - ourFees;
