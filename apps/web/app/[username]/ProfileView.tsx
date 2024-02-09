@@ -17,6 +17,7 @@ import { Separator } from '@/components/ui/separator';
 import UserSignOut from './UserSignOut';
 import CopyWallet from './CopyWallet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { notFound } from 'next/navigation';
 
 export default async function ProfileView({
   params,
@@ -28,6 +29,10 @@ export default async function ProfileView({
   const userProfile = await serverClient.getUserProfile.query({
     username: params.username,
   });
+
+  if (!userProfile) {
+    notFound();
+  }
 
   const sbts = await serverClient.getSbtsForUser.query({
     user_id: userProfile?.id!,
