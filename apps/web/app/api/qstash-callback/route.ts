@@ -3,15 +3,13 @@ import {
   VerifySignatureConfig,
   verifySignatureAppRouter,
 } from '@upstash/qstash/dist/nextjs';
-import { serverClient } from '@/app/_trpc/serverClient';
+import { executeNextJob } from 'api/src/job-queue/utils';
 
 async function handler(req: NextRequest) {
   console.log('qstash-callback Received message');
-  const jobId = await serverClient.getNextJobById.query();
-  console.log('qstash-callback jobId: ', jobId);
-  if (jobId) {
-    serverClient.executeJobFromQueue.mutate({ jobId: jobId });
-  }
+  // instead of get next job and then execute should be a executeNextJOb for concurency
+
+  executeNextJob();
 
   return NextResponse.json({ body: 'Success' }, { status: 200 });
 }

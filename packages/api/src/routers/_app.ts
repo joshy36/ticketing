@@ -10,7 +10,6 @@ import { venuesRouter } from './venues';
 import { paymentsRouter } from './payments';
 import { sbtsRouter } from './sbts';
 import { collectiblesRouter } from './collectibles';
-import { queueRouter } from './queue';
 import { turnkeyRouter } from './turnkey';
 import { organizationsRouter } from './organizations';
 import { messagesRouter } from './messages';
@@ -26,7 +25,6 @@ export const appRouter = mergeRouters(
   paymentsRouter,
   sbtsRouter,
   collectiblesRouter,
-  queueRouter,
   turnkeyRouter,
   organizationsRouter,
   messagesRouter,

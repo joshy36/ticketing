@@ -4,6 +4,7 @@ import {
   verifySignatureAppRouter,
 } from '@upstash/qstash/dist/nextjs';
 import { serverClient } from '@/app/_trpc/serverClient';
+import { finishJob } from 'api/src/job-queue/utils';
 
 async function handler(req: NextRequest) {
   const body = await req.json();
@@ -17,16 +18,11 @@ async function handler(req: NextRequest) {
         user_id: body.job.params.user_id,
       });
 
-      await serverClient.finishJob.mutate({
-        job: body.jobId,
-        hasFailed: false,
-      });
+      await finishJob(body.jobId, false);
     } catch (err) {
       console.log('qstash-endpoint error: ', err);
-      await serverClient.finishJob.mutate({
-        job: body.jobId,
-        hasFailed: true,
-      });
+      // handle better
+      await finishJob(body.jobId, true);
       return NextResponse.json({ error: err }, { status: 500 });
     }
   }
