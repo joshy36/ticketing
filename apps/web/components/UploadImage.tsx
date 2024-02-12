@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { trpc } from '../../../apps/web/app/_trpc/client';
 
-const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png'];
+const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp', 'heic'];
 
 type Props = {
   id: string;
@@ -89,7 +89,7 @@ export default function UploadImage({ params }: { params: Props }) {
 
     const fileType = data.file[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
-      toast.error('Image must be a jpeg, jpg, or png');
+      toast.error('Image must be a jpeg, jpg, png, webp, or heic');
       setIsLoading(false);
       return;
     }

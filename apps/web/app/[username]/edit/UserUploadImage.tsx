@@ -21,7 +21,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png'];
+const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp', 'heic'];
 
 export default function UserUploadImage({
   id,
@@ -68,7 +68,7 @@ export default function UserUploadImage({
 
     const fileType = data[0].name.split('.')[1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
-      toast.error('Image must be a jpeg, jpg, or png');
+      toast.error('Image must be a jpeg, jpg, png, webp, or heic');
       setIsLoading(false);
       return;
     }

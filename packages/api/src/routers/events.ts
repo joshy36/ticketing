@@ -7,7 +7,9 @@ import { TRPCError } from '@trpc/server';
 export const eventsRouter = router({
   getEvents: publicProcedure.query(async ({ ctx }) => {
     const supabase = ctx.supabase;
-    const { data } = await supabase.from('events').select(`*, venues (name)`);
+    const { data } = await supabase
+      .from('events')
+      .select(`*, venues (name), artists (name)`);
     return data;
   }),
 
@@ -326,7 +328,7 @@ export const eventsRouter = router({
       let ourFees = 0;
       for (let i = 0; i < transactions.length; i++) {
         // @ts-ignore
-        ourFees += transactions[i].amount * 0.1;
+        ourFees += transactions[i].amount * 0.05;
       }
 
       const profit = totalAmount! - stripeFees - ourFees;

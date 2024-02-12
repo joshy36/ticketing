@@ -46,7 +46,7 @@ export default function Revenue({ event }: { event: Events }) {
             </div>
 
             <div className='flex flex-row justify-between'>
-              <p>Our Fees (10%)</p>
+              <p>Our Fees (5%)</p>
               <div>
                 <Skeleton className='h-full w-12' />
               </div>
@@ -68,12 +68,12 @@ export default function Revenue({ event }: { event: Events }) {
 
             <div className='flex flex-row justify-between'>
               <p>Stripe Fees (2.9% + 30 &cent;)</p>
-              <div>${(revenue.data?.stripeFees! / 100).toFixed(2)}</div>
+              <div>- ${(revenue.data?.stripeFees! / 100).toFixed(2)}</div>
             </div>
 
             <div className='flex flex-row justify-between'>
-              <p>Our Fees (10%)</p>
-              <div>${(revenue.data?.ourFees! / 100).toFixed(2)}</div>
+              <p>Our Fees (5%)</p>
+              <div>- ${(revenue.data?.ourFees! / 100).toFixed(2)}</div>
             </div>
             <Separator />
             <div className='flex flex-row justify-between'>
