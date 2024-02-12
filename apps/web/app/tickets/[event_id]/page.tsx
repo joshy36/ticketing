@@ -29,6 +29,10 @@ export default async function Home({
     notFound();
   }
 
+  if (!tickets) {
+    notFound();
+  }
+
   const userProfile = await serverClient.getUserProfile.query({
     id: session.user.id,
   });
