@@ -102,6 +102,8 @@ export class Queue extends EventEmitter {
     let activeQueueLength = await this.config.redis.llen(
       this.createQueueKey('active')
     );
+
+    // why wait?
     while (activeQueueLength > 0) {
       console.log('QUEUE::currently running a job');
       activeQueueLength = await this.config.redis.llen(
