@@ -29,7 +29,7 @@ export default async function Home({
     notFound();
   }
 
-  if (!tickets) {
+  if (!tickets || tickets.length === 0) {
     notFound();
   }
 
