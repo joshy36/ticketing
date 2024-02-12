@@ -70,7 +70,7 @@ export default function NavBar({
     },
     {
       title: 'My Tickets',
-      href: `/${userProfile?.username}/tickets`,
+      href: '/tickets',
     },
   ];
 

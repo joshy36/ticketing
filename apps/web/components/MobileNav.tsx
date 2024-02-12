@@ -39,7 +39,7 @@ export function MobileNav({
     },
     {
       title: 'My Tickets',
-      href: `/${userProfile?.username}/tickets`,
+      href: '/tickets',
     },
   ];
 

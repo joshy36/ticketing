@@ -126,7 +126,7 @@ export default function ConfirmPage({ username }: { username: string }) {
                 </div>
 
                 <div className='flex justify-center'>
-                  <Link href={`/${username}/tickets`}>
+                  <Link href={`/tickets`}>
                     <Button variant='outline' className='mt-8 px-8'>
                       View Tickets
                       <ChevronRightIcon />

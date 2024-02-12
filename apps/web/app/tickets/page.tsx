@@ -11,7 +11,7 @@ export default async function Home() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect('/unauthorized');
+    redirect('/unauthenticated');
   }
 
   const userProfile = await serverClient.getUserProfile.query({

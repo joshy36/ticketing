@@ -7,7 +7,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '../../../components/ui/tabs';
+} from '../../components/ui/tabs';
 import { dateToString } from '@/utils/helpers';
 import { trpc } from '@/app/_trpc/client';
 
