@@ -10,9 +10,11 @@ export default function EventsList({
   events: RouterOutputs['getEvents'];
 }) {
   return (
-    <div className="bg-[url('/img5-70.png')] bg-cover bg-center">
+    <div className="-mt-16 min-h-screen bg-[url('/img5-70.png')] bg-cover bg-center">
       <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 '>
-        <h1 className='pb-8 text-4xl font-light'>Explore Upcoming Events</h1>
+        <h1 className='pb-8 pt-16 text-4xl font-light'>
+          Explore Upcoming Events
+        </h1>
         <div className='grid grid-cols-1 gap-y-2'>
           {events?.map((event: any) => (
             <a
