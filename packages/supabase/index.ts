@@ -9,5 +9,6 @@ export type Artist = DB['public']['Tables']['artists']['Row'];
 export type Venue = DB['public']['Tables']['venues']['Row'];
 export type Organization = DB['public']['Tables']['organizations']['Row'];
 export type Reservation = DB['public']['Tables']['reservations']['Row'];
+export type Message = DB['public']['Tables']['chat_messages']['Row'];
 
 export { createRouteClient };

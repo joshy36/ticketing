@@ -7,7 +7,6 @@ import createSupabaseServer from '@/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font';
-import Footer from '@/components/Footer';
 import { MobileNav } from '@/components/MobileNav';
 import { Metadata } from 'next';
 
@@ -68,7 +67,6 @@ export default async function RootLayout({
             <Toaster richColors />
             <SpeedInsights />
             <Analytics />
-            <Footer />
           </ThemeProvider>
         </Provider>
       </body>

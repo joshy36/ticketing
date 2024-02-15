@@ -80,6 +80,104 @@ export interface Database {
           }
         ]
       }
+      chat_members: {
+        Row: {
+          chat_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          chat_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_members_chat_id_fkey"
+            columns: ["chat_id"]
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_members_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      chat_messages: {
+        Row: {
+          chat_id: string
+          content: string | null
+          created_at: string
+          from: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          chat_id: string
+          content?: string | null
+          created_at?: string
+          from?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          chat_id?: string
+          content?: string | null
+          created_at?: string
+          from?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_chat_id_fkey"
+            columns: ["chat_id"]
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_from_fkey"
+            columns: ["from"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      chats: {
+        Row: {
+          chat_type: Database["public"]["Enums"]["chat_type"]
+          created_at: string
+          id: string
+          name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          chat_type: Database["public"]["Enums"]["chat_type"]
+          created_at?: string
+          id?: string
+          name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          chat_type?: Database["public"]["Enums"]["chat_type"]
+          created_at?: string
+          id?: string
+          name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       collectibles: {
         Row: {
           base_url: string | null
@@ -766,6 +864,8 @@ export interface Database {
       }
     }
     Enums: {
+      chat_type: "group" | "dm"
+      group_type: "group" | "dm"
       message_status: "read" | "unread" | "deleted"
       role: "owner" | "admin"
     }
@@ -784,6 +884,7 @@ export interface Database {
           id: string
           name: string
           owner: string | null
+          owner_id: string | null
           public: boolean | null
           updated_at: string | null
         }
@@ -795,6 +896,7 @@ export interface Database {
           id: string
           name: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
@@ -806,17 +908,11 @@ export interface Database {
           id?: string
           name?: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "buckets_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       migrations: {
         Row: {
@@ -848,6 +944,7 @@ export interface Database {
           metadata: Json | null
           name: string | null
           owner: string | null
+          owner_id: string | null
           path_tokens: string[] | null
           updated_at: string | null
           version: string | null
@@ -860,6 +957,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -872,6 +970,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
