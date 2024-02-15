@@ -62,6 +62,7 @@ export default function TicketList({
       chat_id: currentChat,
       content: message,
     });
+    setMessage('');
   };
 
   return (
@@ -69,7 +70,7 @@ export default function TicketList({
       <div className='flex h-screen border-x'>
         <div className='border-r'>
           <h1 className='px-24 pb-8 pt-28 text-2xl font-semibold'>Messages</h1>
-          <div className='flex justify-center '>
+          <div className='flex justify-center'>
             <Dialog>
               <DialogTrigger asChild>
                 <Button className='w-11/12 '>
@@ -92,7 +93,7 @@ export default function TicketList({
             return (
               <button
                 key={chat.id}
-                className='flex w-full justify-center border-b py-4'
+                className='flex w-full border-b py-4 pl-4'
                 onClick={() => {
                   setCurrentChat(chat.id);
                   router.push(`/messages/?chat=${chat.id}`);
@@ -137,26 +138,34 @@ export default function TicketList({
           })}
           {chats?.length === 0 && <p>No messages</p>}
         </div>
-        <div className='flex flex-auto flex-col pl-4'>
-          <div className='flex h-full flex-col'>
+        <div className='flex max-h-screen w-full flex-col justify-between pt-20'>
+          <div className='border-b py-2 text-center font-bold'>Name</div>
+          <div className='flex h-screen flex-col overflow-hidden'>
             <MessageView userProfile={userProfile} currentChat={currentChat} />
           </div>
-          <div className='flex flex-row gap-2'>
+          <form
+            className='flex flex-row gap-2 border-t px-4 pt-4'
+            onSubmit={(e) => {
+              e.preventDefault(); // Prevent page reload
+              sendMessage();
+            }}
+          >
             <Input
               className='mb-4 w-full rounded-full'
               placeholder='Message...'
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
+              value={message}
             />
             <Button
               type='submit'
               disabled={message.length === 0}
-              onClick={sendMessage}
+              // onClick={sendMessage}
             >
               Send
             </Button>
-          </div>
+          </form>
         </div>
       </div>
     </div>

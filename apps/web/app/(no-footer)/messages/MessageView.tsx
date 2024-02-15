@@ -71,7 +71,7 @@ export default function MessageView({
 
   return (
     <div className='scroller'>
-      <div className='pr-4'>
+      <div className='px-4'>
         {messages?.map((message, index) => {
           return (
             <div key={message.id} className='py-0.5'>
