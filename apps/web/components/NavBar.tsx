@@ -72,10 +72,6 @@ export default function NavBar({
       title: 'My Tickets',
       href: '/tickets',
     },
-    {
-      title: 'Messages',
-      href: '/messages',
-    },
   ];
 
   return (
@@ -112,6 +108,15 @@ export default function NavBar({
                 )}
               </div>
             ))}
+            {user && (
+              <NavigationMenuItem>
+                <Link href={`/messages`} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Messages
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            )}
             {userOrg && (
               <NavigationMenuItem>
                 <Link href={`/dashboard/${userOrg}`} legacyBehavior passHref>

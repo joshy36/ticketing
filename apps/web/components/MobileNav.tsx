@@ -42,10 +42,6 @@ export function MobileNav({
       title: 'My Tickets',
       href: '/tickets',
     },
-    {
-      title: 'Messages',
-      href: '/messages',
-    },
   ];
 
   return (
@@ -87,6 +83,12 @@ export function MobileNav({
                 </div>
               ))}
             </div>
+            {user && (
+              <MobileLink href={`/messages`} onOpenChange={setOpen}>
+                Messages
+              </MobileLink>
+            )}
+            <div className='py-1.5'></div>
             {userOrg && (
               <MobileLink href={`/dashboard/${userOrg}`} onOpenChange={setOpen}>
                 Admin Dashboard
@@ -157,7 +159,6 @@ export function MobileNav({
                 <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700'></span>
               </div>
             </MobileLink>
-
             <UserNav user={user} userProfile={userProfile} />
           </div>
         ) : (
