@@ -64,7 +64,7 @@ export default function RenderChats({
                       </p>
                     )}
                   </div>
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-xs text-muted-foreground'>
                     {`@${getRandomUserFromChat(index)?.username}`}
                   </div>
                 </div>

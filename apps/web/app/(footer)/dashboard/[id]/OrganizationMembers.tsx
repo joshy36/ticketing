@@ -99,7 +99,7 @@ export default function OrganizationMembers({
                       </p>
                     )}
                   </div>
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-xs text-muted-foreground'>
                     {`@${member.user_profiles?.username}`}
                   </div>
                 </div>

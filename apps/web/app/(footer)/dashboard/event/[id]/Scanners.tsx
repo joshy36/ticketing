@@ -110,7 +110,7 @@ export default function Scanners({ event }: { event: Events }) {
                       </p>
                     )}
                   </div>
-                  <div className='text-sm text-muted-foreground'>
+                  <div className='text-xs text-muted-foreground'>
                     {`@${scanner.user_profiles?.username}`}
                   </div>
                 </div>
