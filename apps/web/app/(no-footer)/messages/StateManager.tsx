@@ -23,7 +23,7 @@ export default function StateManager({
     chat_id: currentChat,
   });
 
-  const { data: chats } = trpc.getUserChats.useQuery({
+  const { data: chats, isLoading: chatsLoading } = trpc.getUserChats.useQuery({
     user_id: userProfile.id,
   });
 
@@ -86,16 +86,20 @@ export default function StateManager({
 
   return (
     <div>
-      <Messages
-        userProfile={userProfile!}
-        message={message}
-        messages={messages}
-        chats={chats!}
-        router={router}
-        sendMessage={sendMessage}
-        setMessage={setMessage}
-        setCurrentChat={setCurrentChat}
-      />
+      <div className='hidden lg:block'>
+        <Messages
+          userProfile={userProfile!}
+          message={message}
+          messages={messages}
+          chats={chats!}
+          chatsLoading={chatsLoading}
+          router={router}
+          sendMessage={sendMessage}
+          setMessage={setMessage}
+          setCurrentChat={setCurrentChat}
+        />
+      </div>
+      <div className='lg:hidden'>Small</div>
     </div>
   );
 }

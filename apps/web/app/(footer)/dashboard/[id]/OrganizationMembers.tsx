@@ -72,7 +72,7 @@ export default function OrganizationMembers({
           {members?.map((member) => (
             <div
               key={member.id}
-              className='flex flex-row items-center justify-between gap-4 border-b border-t py-3'
+              className='flex flex-row items-center justify-between gap-4 border-b py-3'
             >
               <div className='flex flex-row items-center gap-2'>
                 <Avatar>
@@ -86,15 +86,15 @@ export default function OrganizationMembers({
                   )}
                 </Avatar>
 
-                <div>
+                <div className='flex flex-col justify-between'>
                   <div className='flex'>
                     {member?.user_profiles?.first_name && (
-                      <p className='py-1 font-medium'>
+                      <p className='font-medium'>
                         {member.user_profiles?.first_name}
                       </p>
                     )}
                     {member?.user_profiles?.last_name && (
-                      <p className='ml-1 py-1 font-medium'>
+                      <p className='ml-1 font-medium'>
                         {member.user_profiles?.last_name}
                       </p>
                     )}

@@ -97,15 +97,15 @@ export default function Scanners({ event }: { event: Events }) {
                   )}
                 </Avatar>
 
-                <div>
+                <div className='flex flex-col justify-between'>
                   <div className='flex'>
                     {scanner?.user_profiles?.first_name && (
-                      <p className='py-1 font-medium'>
+                      <p className='font-medium'>
                         {scanner.user_profiles?.first_name}
                       </p>
                     )}
                     {scanner?.user_profiles?.last_name && (
-                      <p className='ml-1 py-1 font-medium'>
+                      <p className='ml-1 font-medium'>
                         {scanner.user_profiles?.last_name}
                       </p>
                     )}

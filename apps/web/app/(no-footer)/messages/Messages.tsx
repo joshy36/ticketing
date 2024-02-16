@@ -3,7 +3,6 @@
 import { Input } from '@/components/ui/input';
 import { UserProfile } from 'supabase';
 import { RouterOutputs } from '../../_trpc/client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
 import { SendHorizonal } from 'lucide-react';
@@ -18,12 +17,14 @@ import {
 } from '@/components/ui/dialog';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import RenderMessages from './RenderMessages';
+import RenderChats from './RenderChats';
 
 export default function TicketList({
   userProfile,
   message,
   messages,
   chats,
+  chatsLoading,
   router,
   sendMessage,
   setMessage,
@@ -33,17 +34,12 @@ export default function TicketList({
   message: string;
   messages: RouterOutputs['getMessagesByChat'];
   chats: RouterOutputs['getUserChats'];
+  chatsLoading: boolean;
   router: AppRouterInstance;
   sendMessage: () => void;
   setMessage: Dispatch<SetStateAction<string>>;
   setCurrentChat: Dispatch<SetStateAction<string>>;
 }) {
-  const getRandomUserFromChat = (index: number) => {
-    return chats![index]!.chat_members.find(
-      (user) => user.user_id != userProfile.id,
-    )?.user_profiles;
-  };
-
   return (
     <div className='mx-auto -mt-16 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8'>
       <div className='flex h-screen border-x'>
@@ -68,54 +64,13 @@ export default function TicketList({
               </DialogContent>
             </Dialog>
           </div>
-          {chats?.map((chat, index) => {
-            return (
-              <button
-                key={chat.id}
-                className='flex w-full border-b py-4 pl-4'
-                onClick={() => {
-                  setCurrentChat(chat.id);
-                  router.push(`/messages/?chat=${chat.id}`);
-                }}
-              >
-                {chat.chat_type === 'dm' ? (
-                  <div className='flex flex-row items-center gap-2'>
-                    <Avatar>
-                      {getRandomUserFromChat(index)?.profile_image ? (
-                        <AvatarImage
-                          src={getRandomUserFromChat(index)?.profile_image!}
-                          alt='pfp'
-                        />
-                      ) : (
-                        <AvatarFallback></AvatarFallback>
-                      )}
-                    </Avatar>
-
-                    <div>
-                      <div className='flex'>
-                        {getRandomUserFromChat(index)?.first_name && (
-                          <p className='py-1 font-medium'>
-                            {getRandomUserFromChat(index)?.first_name}
-                          </p>
-                        )}
-                        {getRandomUserFromChat(index)?.last_name && (
-                          <p className='ml-1 py-1 font-medium'>
-                            {getRandomUserFromChat(index)?.last_name}
-                          </p>
-                        )}
-                      </div>
-                      <div className='text-sm text-muted-foreground'>
-                        {`@${getRandomUserFromChat(index)?.username}`}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div>Group Message</div>
-                )}
-              </button>
-            );
-          })}
-          {chats?.length === 0 && <p>No messages</p>}
+          <RenderChats
+            userProfile={userProfile}
+            chats={chats}
+            chatsLoading={chatsLoading}
+            router={router}
+            setCurrentChat={setCurrentChat}
+          />
         </div>
         <div className='flex max-h-screen w-full flex-col justify-between pt-20'>
           <div className='border-b py-2 text-center font-bold'>Name</div>
