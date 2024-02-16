@@ -13,6 +13,7 @@ import { User } from '@supabase/supabase-js';
 import { UserProfile } from 'supabase';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MessageCenter from './MessageCenter';
+import { MessageCircle } from 'lucide-react';
 
 export function MobileNav({
   user,
@@ -40,6 +41,10 @@ export function MobileNav({
     {
       title: 'My Tickets',
       href: '/tickets',
+    },
+    {
+      title: 'Messages',
+      href: '/messages',
     },
   ];
 
@@ -139,7 +144,20 @@ export function MobileNav({
         </div>
         {user ? (
           <div className='ml-auto mt-1.5 flex space-x-4'>
-            <MessageCenter />
+            {/* <MessageCenter /> */}
+            <MobileLink href='/messages' onOpenChange={setOpen}>
+              <div className='relative'>
+                <Button
+                  variant='outline'
+                  size='icon'
+                  className='border-none bg-zinc-700/50'
+                >
+                  <MessageCircle className='h-4 w-4' />
+                </Button>
+                <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700'></span>
+              </div>
+            </MobileLink>
+
             <UserNav user={user} userProfile={userProfile} />
           </div>
         ) : (

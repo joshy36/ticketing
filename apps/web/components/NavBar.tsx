@@ -72,6 +72,10 @@ export default function NavBar({
       title: 'My Tickets',
       href: '/tickets',
     },
+    {
+      title: 'Messages',
+      href: '/messages',
+    },
   ];
 
   return (
@@ -145,7 +149,7 @@ export default function NavBar({
           </div>
           {user ? (
             <div className='ml-auto mt-1.5 flex space-x-4'>
-              <MessageCenter />
+              {/* <MessageCenter /> */}
               <UserNav user={user} userProfile={userProfile} />
             </div>
           ) : (

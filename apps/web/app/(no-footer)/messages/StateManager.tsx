@@ -6,6 +6,11 @@ import { useEffect, useState } from 'react';
 import { RouterOutputs, trpc } from '@/app/_trpc/client';
 import { useRouter } from 'next/navigation';
 import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
+import RenderChats from './RenderChats';
+import RenderMessages from './RenderMessages';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft } from 'lucide-react';
 
 export default function StateManager({
   userProfile,
@@ -99,7 +104,58 @@ export default function StateManager({
           setCurrentChat={setCurrentChat}
         />
       </div>
-      <div className='lg:hidden'>Small</div>
+      <div className='lg:hidden'>
+        {!currentChat ? (
+          <RenderChats
+            userProfile={userProfile}
+            chats={chats!}
+            chatsLoading={chatsLoading}
+            router={router}
+            setCurrentChat={setCurrentChat}
+          />
+        ) : (
+          <div className='flex max-h-screen w-full flex-col justify-between'>
+            <div className='fixed top-16 z-40 w-full bg-black py-2 text-center font-bold'>
+              <div className='flex flex-row items-center justify-between px-4'>
+                <Button
+                  variant='ghost'
+                  onClick={() => {
+                    setCurrentChat('');
+                    router.push(`/messages`);
+                  }}
+                >
+                  <ChevronLeft className='-ml-1' />
+                  Back
+                </Button>
+                <div>Chat Name</div>
+                <div>Options</div>
+              </div>
+            </div>
+            <div className='flex h-screen flex-col overflow-hidden pb-20 pt-16'>
+              <RenderMessages userProfile={userProfile} messages={messages} />
+            </div>
+            <form
+              className='fixed bottom-0 flex w-full flex-row gap-2 border-t bg-black/50 px-4 pt-4 backdrop-blur-md'
+              onSubmit={(e) => {
+                e.preventDefault(); // Prevent page reload
+                sendMessage();
+              }}
+            >
+              <Input
+                className='mb-4 w-full rounded-full'
+                placeholder='Message...'
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                }}
+                value={message}
+              />
+              <Button type='submit' disabled={message.length === 0}>
+                Send
+              </Button>
+            </form>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

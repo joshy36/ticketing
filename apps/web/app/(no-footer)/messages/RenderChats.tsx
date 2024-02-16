@@ -3,6 +3,17 @@ import { UserProfile } from 'supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dispatch, SetStateAction } from 'react';
+import { SendHorizonal } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export default function RenderChats({
   userProfile,
@@ -25,6 +36,28 @@ export default function RenderChats({
 
   return (
     <div>
+      <div className='flex flex-row justify-between px-4 pt-12 lg:flex-col lg:pt-20'>
+        <h1 className='pb-4 text-2xl font-semibold'>Messages</h1>
+        <div className='flex justify-center'>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                New Message
+                <SendHorizonal className='ml-2 h-4 w-4' />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>New Message</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
       {chats?.length === 0 && (
         <p className='pt-8 text-center'>No messages yet.</p>
       )}
@@ -32,7 +65,7 @@ export default function RenderChats({
         return (
           <button
             key={chat.id}
-            className='flex w-full border-b py-4 pl-4'
+            className='flex w-full border-b px-4 py-4'
             onClick={() => {
               setCurrentChat(chat.id);
               router.push(`/messages/?chat=${chat.id}`);
