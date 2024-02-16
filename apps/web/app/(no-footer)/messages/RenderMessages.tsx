@@ -1,74 +1,15 @@
-import { Message, UserProfile } from 'supabase';
-import { trpc } from '../../_trpc/client';
+import { UserProfile } from 'supabase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { dateToString } from '@/utils/helpers';
-import { useState, useEffect } from 'react';
 import { RouterOutputs } from 'api';
-import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
 
-export default function MessageView({
+export default function RenderMessages({
   userProfile,
-  currentChat,
+  messages,
 }: {
   userProfile: UserProfile;
-  currentChat: string;
+  messages: RouterOutputs['getMessagesByChat'];
 }) {
-  const [messages, setMessages] =
-    useState<RouterOutputs['getMessagesByChat']>(null);
-  const supabase = createSupabaseBrowserClient();
-
-  const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
-    chat_id: currentChat,
-  });
-
-  // let scrollerContent = document.getElementById('scrollerContent');
-
-  // document.getElementById('addItems').addEventListener('click', function () {
-  //   let newChild = scrollerContent.lastElementChild.cloneNode(true);
-  //   newChild.innerHTML = 'Item ' + (scrollerContent.children.length + 1);
-  //   scrollerContent.appendChild(newChild);
-  // });
-
-  useEffect(() => {
-    console.log('useEffect');
-    if (messagesInCurrentChat) {
-      setMessages(messagesInCurrentChat);
-    }
-  }, [messagesInCurrentChat]);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel('chat-channel')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat_messages',
-          // filter: `chat_id=eq.${currentChat}`,
-        },
-        async (payload) => {
-          const message = payload.new as Message;
-          const { data: newMessage } = await supabase
-            .from('chat_messages')
-            .select(`*, user_profiles(*)`)
-            .eq('id', message.id)
-            .eq('chat_id', currentChat)
-            .limit(1)
-            .single();
-          console.log('newMessage: ', newMessage);
-          setMessages((prevMessages) => [...prevMessages!, newMessage!]);
-          console.log('done');
-          console.log('messages: ', messages);
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, messages, setMessages]);
-
   return (
     <div className='scroller'>
       <div className='px-4'>
@@ -140,23 +81,6 @@ export default function MessageView({
           );
         })}
       </div>
-      {/* <div className='scroller'>
-        <div className='scroller-content' id='scrollerContent'>
-          <div className='item'>Item 1</div>
-          <div className='item'>Item 2</div>
-          <div className='item'>Item 3</div>
-          <div className='item'>Item 4</div>
-          <div className='item'>Item 5</div>
-          <div className='item'>Item 6</div>
-          <div className='item'>Item 7</div>
-          <div className='item'>Item 8</div>
-          <div className='item'>Item 9</div>
-          <div className='item'>Item 10</div>
-        </div>
-      </div>
-      <br />
-      <br />
-      <button id='addItems'>Add more items</button> */}
     </div>
   );
 }

@@ -2,11 +2,9 @@
 
 import { Input } from '@/components/ui/input';
 import { UserProfile } from 'supabase';
-import { trpc } from '../../_trpc/client';
+import { RouterOutputs } from '../../_trpc/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import MessageView from './MessageView';
+import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
 import { SendHorizonal } from 'lucide-react';
 import {
@@ -18,51 +16,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import RenderMessages from './RenderMessages';
 
 export default function TicketList({
   userProfile,
+  message,
+  messages,
+  chats,
+  router,
+  sendMessage,
+  setMessage,
+  setCurrentChat,
 }: {
   userProfile: UserProfile;
+  message: string;
+  messages: RouterOutputs['getMessagesByChat'];
+  chats: RouterOutputs['getUserChats'];
+  router: AppRouterInstance;
+  sendMessage: () => void;
+  setMessage: Dispatch<SetStateAction<string>>;
+  setCurrentChat: Dispatch<SetStateAction<string>>;
 }) {
-  const router = useRouter();
-  const [currentChat, setCurrentChat] = useState('');
-  const [message, setMessage] = useState('');
-  const { data: chats, refetch: refetchChats } = trpc.getUserChats.useQuery({
-    user_id: userProfile.id,
-  });
-
-  const sendChatMessage = trpc.sendChatMessage.useMutation({
-    onSettled(data, error) {
-      if (error) {
-        console.error('Error sending message:', error);
-      } else if (data) {
-        console.log('Message sent:', data);
-      }
-      // if (!data) {
-      //   toast.error('Error creating venue', {
-      //     description: error?.message,
-      //   });
-      //   console.error('Error creating venue:', error);
-      //   setIsLoading(false);
-      // } else {
-      //   router.refresh();
-      //   router.push(`/dashboard/venue/create/image/${data.id}`);
-      // }
-    },
-  });
-
   const getRandomUserFromChat = (index: number) => {
     return chats![index]!.chat_members.find(
       (user) => user.user_id != userProfile.id,
     )?.user_profiles;
-  };
-
-  const sendMessage = async () => {
-    sendChatMessage.mutate({
-      chat_id: currentChat,
-      content: message,
-    });
-    setMessage('');
   };
 
   return (
@@ -141,7 +120,7 @@ export default function TicketList({
         <div className='flex max-h-screen w-full flex-col justify-between pt-20'>
           <div className='border-b py-2 text-center font-bold'>Name</div>
           <div className='flex h-screen flex-col overflow-hidden'>
-            <MessageView userProfile={userProfile} currentChat={currentChat} />
+            <RenderMessages userProfile={userProfile} messages={messages} />
           </div>
           <form
             className='flex flex-row gap-2 border-t px-4 pt-4'
@@ -158,11 +137,7 @@ export default function TicketList({
               }}
               value={message}
             />
-            <Button
-              type='submit'
-              disabled={message.length === 0}
-              // onClick={sendMessage}
-            >
+            <Button type='submit' disabled={message.length === 0}>
               Send
             </Button>
           </form>

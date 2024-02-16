@@ -2,6 +2,7 @@ import { serverClient } from '@/app/_trpc/serverClient';
 import Messages from './Messages';
 import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
+import StateManager from './StateManager';
 
 export default async function Home() {
   const supabase = createSupabaseServer();
@@ -20,7 +21,7 @@ export default async function Home() {
 
   return (
     <main>
-      <Messages userProfile={userProfile!} />
+      <StateManager userProfile={userProfile!} />
     </main>
   );
 }
