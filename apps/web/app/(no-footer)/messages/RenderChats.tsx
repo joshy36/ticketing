@@ -36,7 +36,7 @@ export default function RenderChats({
 
   return (
     <div>
-      <div className='flex flex-row items-center justify-between px-4 pb-4 pt-12 lg:pt-20'>
+      <div className='flex flex-row items-center justify-between gap-8 px-4 pb-4 pt-12 lg:pt-20'>
         <h1 className='text-2xl font-semibold'>Messages</h1>
         <div className='flex justify-center'>
           <Dialog>
