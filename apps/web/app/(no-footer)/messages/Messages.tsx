@@ -32,6 +32,10 @@ export default function TicketList({
 }) {
   return (
     <div className='mx-auto -mt-16 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8'>
+      <meta
+        name='viewport'
+        content='width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover'
+      ></meta>
       <div className='flex h-screen border-x'>
         <div className='border-r'>
           <RenderChats
