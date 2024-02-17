@@ -2,7 +2,7 @@ import { RouterOutputs } from 'api';
 import { UserProfile } from 'supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { SendHorizonal } from 'lucide-react';
 import {
   Dialog,
@@ -14,6 +14,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Icons } from '@/components/ui/icons';
+import { trpc } from '@/app/_trpc/client';
+import { toast } from 'sonner';
 
 export default function RenderChats({
   userProfile,
@@ -28,6 +32,33 @@ export default function RenderChats({
   router: AppRouterInstance;
   setCurrentChat: Dispatch<SetStateAction<string>>;
 }) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<string>('');
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const createChat = trpc.createChat.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        console.error(error);
+        if (error.message === 'User is already in an organization') {
+          toast.error('User already in organization', {
+            description: 'Please try a different username',
+          });
+        } else {
+          toast.error('Error', {
+            description: error.message,
+          });
+        }
+      } else if (data) {
+        console.log(data);
+        setCurrentChat(data);
+        router.push(`/messages/?chat=${data}`);
+        setDialogOpen(false);
+      }
+      setIsLoading(false);
+    },
+  });
+
   const getRandomUserFromChat = (index: number) => {
     return chats![index]!.chat_members.find(
       (user) => user.user_id != userProfile.id,
@@ -39,7 +70,7 @@ export default function RenderChats({
       <div className='flex flex-row items-center justify-between gap-8 px-4 pb-4 pt-12 lg:pt-20'>
         <h1 className='text-2xl font-semibold'>Messages</h1>
         <div className='flex justify-center'>
-          <Dialog>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <SendHorizonal className='-m-1 h-4 w-4' />
@@ -49,8 +80,30 @@ export default function RenderChats({
               <DialogHeader>
                 <DialogTitle>New Message</DialogTitle>
                 <DialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  Select a user to start a new chat with.
+                  <div className='flex w-full max-w-sm items-center space-x-2 pt-4'>
+                    <Input
+                      type='text'
+                      placeholder='username'
+                      className='text-muted-foreground'
+                      onChange={(e) => setUser(e.target.value)}
+                    />
+                    <Button
+                      disabled={isLoading}
+                      className='w-32 rounded-md'
+                      onClick={() => {
+                        setIsLoading(true);
+                        createChat.mutate({
+                          usernames: [user],
+                        });
+                      }}
+                    >
+                      {isLoading && (
+                        <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                      )}
+                      Chat
+                    </Button>
+                  </div>
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>
