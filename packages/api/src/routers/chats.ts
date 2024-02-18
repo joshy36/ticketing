@@ -20,11 +20,11 @@ export const chatsRouter = router({
         .select(`*, chat_members(*, user_profiles(*))`);
 
       // get only chats for user
-      chats?.filter((chat) =>
+      const filteredChats = chats?.filter((chat) =>
         chat.chat_members.find((chatUser) => chatUser.user_id === user?.id)
       );
 
-      return chats;
+      return filteredChats;
     }),
 
   getMessagesByChat: authedProcedure
