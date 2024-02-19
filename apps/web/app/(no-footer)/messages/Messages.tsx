@@ -8,28 +8,37 @@ import { Button } from '@/components/ui/button';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import RenderMessages from './RenderMessages';
 import RenderChats from './RenderChats';
+import ProfileCard from '@/components/ProfileCard';
+import { Info } from 'lucide-react';
 
-export default function TicketList({
+export default function Messages({
   userProfile,
   message,
   messages,
   chats,
   chatsLoading,
+  currentChat,
   router,
   sendMessage,
   setMessage,
-  setCurrentChat,
 }: {
   userProfile: UserProfile;
   message: string;
   messages: RouterOutputs['getMessagesByChat'];
   chats: RouterOutputs['getUserChats'];
+  currentChat: string | null;
   chatsLoading: boolean;
   router: AppRouterInstance;
   sendMessage: () => void;
   setMessage: Dispatch<SetStateAction<string>>;
-  setCurrentChat: Dispatch<SetStateAction<string>>;
 }) {
+  const getRandomUserFromChat = (chatId: string | null) => {
+    return chats
+      ?.find((chat) => chat.id === chatId)
+      ?.chat_members.find((user) => user.user_id != userProfile.id)
+      ?.user_profiles;
+  };
+
   return (
     <div className='mx-auto -mt-16 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8'>
       <meta
@@ -43,11 +52,15 @@ export default function TicketList({
             chats={chats}
             chatsLoading={chatsLoading}
             router={router}
-            setCurrentChat={setCurrentChat}
           />
         </div>
         <div className='flex max-h-screen w-full flex-col justify-between pt-20'>
-          <div className='border-b py-2 text-center font-bold'>Name</div>
+          <div className='flex items-center justify-between border-b px-4 py-2'>
+            <div></div>
+            <ProfileCard userProfile={getRandomUserFromChat(currentChat)!} />
+            <Info />
+          </div>
+
           <div className='flex h-screen flex-col overflow-hidden'>
             <RenderMessages userProfile={userProfile} messages={messages} />
           </div>

@@ -28,10 +28,14 @@ export const chatsRouter = router({
     }),
 
   getMessagesByChat: authedProcedure
-    .input(z.object({ chat_id: z.string() }))
+    .input(z.object({ chat_id: z.string().nullable() }))
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const user = ctx.user;
+
+      if (!input.chat_id) {
+        return [];
+      }
 
       const { data: chat } = await supabase
         .from('chats')

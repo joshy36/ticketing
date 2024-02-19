@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { Organization } from 'supabase';
 import { Badge } from '@/components/ui/badge';
 import { X } from 'lucide-react';
+import ProfileCard from '@/components/ProfileCard';
 
 export default function OrganizationMembers({
   organization,
@@ -74,37 +75,7 @@ export default function OrganizationMembers({
               key={member.id}
               className='flex flex-row items-center justify-between gap-4 border-b py-3'
             >
-              <div className='flex flex-row items-center gap-2'>
-                <Avatar>
-                  {member?.user_profiles?.profile_image ? (
-                    <AvatarImage
-                      src={member?.user_profiles?.profile_image!}
-                      alt='pfp'
-                    />
-                  ) : (
-                    <AvatarFallback></AvatarFallback>
-                  )}
-                </Avatar>
-
-                <div className='flex flex-col justify-between'>
-                  <div className='flex'>
-                    {member?.user_profiles?.first_name && (
-                      <p className='font-medium'>
-                        {member.user_profiles?.first_name}
-                      </p>
-                    )}
-                    {member?.user_profiles?.last_name && (
-                      <p className='ml-1 font-medium'>
-                        {member.user_profiles?.last_name}
-                      </p>
-                    )}
-                  </div>
-                  <div className='text-xs text-muted-foreground'>
-                    {`@${member.user_profiles?.username}`}
-                  </div>
-                </div>
-              </div>
-
+              <ProfileCard userProfile={member.user_profiles!} />
               {member.role === 'owner' ? (
                 <Badge variant='secondary'>Owner</Badge>
               ) : (

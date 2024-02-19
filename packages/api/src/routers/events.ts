@@ -162,9 +162,7 @@ export const eventsRouter = router({
       const supabase = ctx.supabase;
       const { data } = await supabase
         .from('scanners')
-        .select(
-          `*, user_profiles (first_name, last_name, profile_image, username)`
-        )
+        .select(`*, user_profiles (*)`)
         .eq('event_id', input.event_id);
       return data;
     }),

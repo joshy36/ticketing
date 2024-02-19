@@ -1,8 +1,7 @@
 import { RouterOutputs } from 'api';
 import { UserProfile } from 'supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { SendHorizonal } from 'lucide-react';
 import {
   Dialog,
@@ -18,19 +17,18 @@ import { Input } from '@/components/ui/input';
 import { Icons } from '@/components/ui/icons';
 import { trpc } from '@/app/_trpc/client';
 import { toast } from 'sonner';
+import ProfileCard from '@/components/ProfileCard';
 
 export default function RenderChats({
   userProfile,
   chats,
   chatsLoading,
   router,
-  setCurrentChat,
 }: {
   userProfile: UserProfile;
   chats: RouterOutputs['getUserChats'];
   chatsLoading: boolean;
   router: AppRouterInstance;
-  setCurrentChat: Dispatch<SetStateAction<string>>;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<string>('');
@@ -51,7 +49,7 @@ export default function RenderChats({
         }
       } else if (data) {
         console.log(data);
-        setCurrentChat(data);
+
         router.push(`/messages/?chat=${data}`);
         setDialogOpen(false);
       }
@@ -119,41 +117,11 @@ export default function RenderChats({
             key={chat.id}
             className='flex w-full border-b px-4 py-4'
             onClick={() => {
-              setCurrentChat(chat.id);
               router.push(`/messages/?chat=${chat.id}`);
             }}
           >
             {chat.chat_type === 'dm' ? (
-              <div className='flex flex-row items-center gap-2'>
-                <Avatar>
-                  {getRandomUserFromChat(index)?.profile_image ? (
-                    <AvatarImage
-                      src={getRandomUserFromChat(index)?.profile_image!}
-                      alt='pfp'
-                    />
-                  ) : (
-                    <AvatarFallback></AvatarFallback>
-                  )}
-                </Avatar>
-
-                <div className='flex flex-col justify-between'>
-                  <div className='flex'>
-                    {getRandomUserFromChat(index)?.first_name && (
-                      <p className='font-medium'>
-                        {getRandomUserFromChat(index)?.first_name}
-                      </p>
-                    )}
-                    {getRandomUserFromChat(index)?.last_name && (
-                      <p className='ml-1 font-medium'>
-                        {getRandomUserFromChat(index)?.last_name}
-                      </p>
-                    )}
-                  </div>
-                  <div className='text-xs text-muted-foreground'>
-                    {`@${getRandomUserFromChat(index)?.username}`}
-                  </div>
-                </div>
-              </div>
+              <ProfileCard userProfile={getRandomUserFromChat(index)!} />
             ) : (
               <div>Group Message</div>
             )}

@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,8 +15,8 @@ import { toast } from 'sonner';
 import { Icons } from '@/components/ui/icons';
 import { useState } from 'react';
 import { Events } from 'supabase';
-import { Badge } from '@/components/ui/badge';
 import { X } from 'lucide-react';
+import ProfileCard from '@/components/ProfileCard';
 
 export default function Scanners({ event }: { event: Events }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -85,37 +84,7 @@ export default function Scanners({ event }: { event: Events }) {
               key={scanner.id}
               className='flex flex-row items-center justify-between gap-4 border-b py-3'
             >
-              <div className='flex flex-row items-center gap-2'>
-                <Avatar>
-                  {scanner?.user_profiles?.profile_image ? (
-                    <AvatarImage
-                      src={scanner?.user_profiles?.profile_image!}
-                      alt='pfp'
-                    />
-                  ) : (
-                    <AvatarFallback></AvatarFallback>
-                  )}
-                </Avatar>
-
-                <div className='flex flex-col justify-between'>
-                  <div className='flex'>
-                    {scanner?.user_profiles?.first_name && (
-                      <p className='font-medium'>
-                        {scanner.user_profiles?.first_name}
-                      </p>
-                    )}
-                    {scanner?.user_profiles?.last_name && (
-                      <p className='ml-1 font-medium'>
-                        {scanner.user_profiles?.last_name}
-                      </p>
-                    )}
-                  </div>
-                  <div className='text-xs text-muted-foreground'>
-                    {`@${scanner.user_profiles?.username}`}
-                  </div>
-                </div>
-              </div>
-
+              <ProfileCard userProfile={scanner.user_profiles!} />
               <Button
                 variant='outline'
                 className='rounded-md border-red-900 text-red-900 hover:bg-red-900'
