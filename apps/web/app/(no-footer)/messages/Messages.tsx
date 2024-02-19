@@ -54,35 +54,50 @@ export default function Messages({
             router={router}
           />
         </div>
-        <div className='flex max-h-screen w-full flex-col justify-between pt-20'>
-          <div className='flex items-center justify-between border-b px-4 py-2'>
-            <div></div>
-            <ProfileCard userProfile={getRandomUserFromChat(currentChat)!} />
-            <Info />
-          </div>
+        <div className='flex w-full justify-center'>
+          {currentChat ? (
+            <div className='flex max-h-screen w-full flex-col justify-between pt-20'>
+              <div className='flex items-center justify-between border-b px-4 py-2'>
+                <div></div>
+                <ProfileCard
+                  userProfile={getRandomUserFromChat(currentChat)!}
+                />
+                <Info />
+              </div>
 
-          <div className='flex h-screen flex-col overflow-hidden'>
-            <RenderMessages userProfile={userProfile} messages={messages} />
-          </div>
-          <form
-            className='flex flex-row gap-2 border-t px-4 pt-4'
-            onSubmit={(e) => {
-              e.preventDefault(); // Prevent page reload
-              sendMessage();
-            }}
-          >
-            <Input
-              className='mb-4 w-full rounded-full'
-              placeholder='Message...'
-              onChange={(e) => {
-                setMessage(e.target.value);
-              }}
-              value={message}
-            />
-            <Button type='submit' disabled={message.length === 0}>
-              Send
-            </Button>
-          </form>
+              <div className='flex h-screen flex-col overflow-hidden'>
+                <RenderMessages userProfile={userProfile} messages={messages} />
+              </div>
+              <form
+                className='flex flex-row gap-2 border-t px-4 pt-4'
+                onSubmit={(e) => {
+                  e.preventDefault(); // Prevent page reload
+                  sendMessage();
+                }}
+              >
+                <Input
+                  className='mb-4 w-full rounded-full'
+                  placeholder='Message...'
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                  }}
+                  value={message}
+                />
+                <Button type='submit' disabled={message.length === 0}>
+                  Send
+                </Button>
+              </form>
+            </div>
+          ) : (
+            <div className='flex items-center justify-center'>
+              <div className='flex flex-col'>
+                <h1 className='text-4xl font-bold'>Select a message</h1>
+                <p className='font-light text-muted-foreground'>
+                  Choose an existing conversation to view or start a new one.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
