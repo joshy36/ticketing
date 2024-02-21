@@ -133,18 +133,19 @@ export default function RenderChats({
                     {users
                       ?.filter(
                         (user) =>
-                          user?.username
+                          user?.id !== userProfile.id && // Exclude currently signed-in user
+                          (user?.username
                             ?.toLowerCase()
                             .includes(userSearch.toLowerCase()) ||
-                          user?.first_name
-                            ?.toLowerCase()
-                            .includes(userSearch.toLowerCase()) ||
-                          user?.last_name
-                            ?.toLowerCase()
-                            .includes(userSearch.toLowerCase()) ||
-                          `${user.first_name} ${user.last_name}`
-                            .toLowerCase()
-                            .includes(userSearch.toLowerCase()),
+                            user?.first_name
+                              ?.toLowerCase()
+                              .includes(userSearch.toLowerCase()) ||
+                            user?.last_name
+                              ?.toLowerCase()
+                              .includes(userSearch.toLowerCase()) ||
+                            `${user.first_name} ${user.last_name}`
+                              .toLowerCase()
+                              .includes(userSearch.toLowerCase())),
                       )
                       .slice(0, 10)
                       .map((user) => {
