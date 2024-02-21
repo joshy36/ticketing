@@ -19,10 +19,12 @@ export default function ProfileCard({
       <div className='flex flex-col justify-between'>
         <div className='flex'>
           {userProfile?.first_name && (
-            <p className='font-medium'>{userProfile?.first_name}</p>
+            <p className='font-medium text-white'>{userProfile?.first_name}</p>
           )}
           {userProfile?.last_name && (
-            <p className='ml-1 font-medium'>{userProfile?.last_name}</p>
+            <p className='ml-1 font-medium text-white'>
+              {userProfile?.last_name}
+            </p>
           )}
         </div>
         <div className='text-xs text-muted-foreground'>

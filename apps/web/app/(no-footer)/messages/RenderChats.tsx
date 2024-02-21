@@ -2,7 +2,7 @@ import { RouterOutputs } from 'api';
 import { UserProfile } from 'supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useState } from 'react';
-import { SendHorizonal } from 'lucide-react';
+import { Check, SendHorizonal } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,7 @@ import { Icons } from '@/components/ui/icons';
 import { trpc } from '@/app/_trpc/client';
 import { toast } from 'sonner';
 import ProfileCard from '@/components/ProfileCard';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function RenderChats({
   userProfile,
@@ -28,11 +29,17 @@ export default function RenderChats({
   userProfile: UserProfile;
   chats: RouterOutputs['getUserChats'];
   chatsLoading: boolean;
+
   router: AppRouterInstance;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<string>('');
+  const [userSearch, setUserSearch] = useState<string>('');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
+    null,
+  );
+
+  const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
 
   const createChat = trpc.createChat.useMutation({
     onSettled(data, error) {
@@ -52,6 +59,8 @@ export default function RenderChats({
 
         router.push(`/messages/?chat=${data}`);
         setDialogOpen(false);
+        setSelectedUsers(null);
+        setUserSearch('');
       }
       setIsLoading(false);
     },
@@ -79,31 +88,96 @@ export default function RenderChats({
                 <DialogTitle>New Message</DialogTitle>
                 <DialogDescription>
                   Select a user to start a new chat with.
-                  <div className='flex w-full max-w-sm items-center space-x-2 pt-4'>
-                    <Input
-                      type='text'
-                      placeholder='username'
-                      className='text-muted-foreground'
-                      onChange={(e) => setUser(e.target.value)}
-                    />
-                    <Button
-                      disabled={isLoading}
-                      className='w-32 rounded-md'
-                      onClick={() => {
-                        setIsLoading(true);
-                        createChat.mutate({
-                          usernames: [user],
-                        });
-                      }}
-                    >
-                      {isLoading && (
-                        <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-                      )}
-                      Chat
-                    </Button>
-                  </div>
                 </DialogDescription>
               </DialogHeader>
+              <div className='flex flex-col flex-wrap'>
+                {selectedUsers?.map((user) => {
+                  return (
+                    <div className='mx-2 my-1 rounded-full border p-2'>
+                      <ProfileCard userProfile={user} />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className='flex w-full flex-row space-x-2 pt-4'>
+                <Input
+                  type='text'
+                  placeholder='username'
+                  className='text-muted-foreground'
+                  onChange={(e) => setUserSearch(e.target.value)}
+                />
+                <Button
+                  disabled={isLoading || !selectedUsers?.length}
+                  className='w-48 rounded-md'
+                  onClick={() => {
+                    setIsLoading(true);
+                    createChat.mutate({
+                      usernames: selectedUsers?.map((user) => user.username!)!,
+                    });
+                  }}
+                >
+                  {isLoading && (
+                    <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                  )}
+                  Start Chat
+                </Button>
+              </div>
+              <div>
+                {usersLoading ? (
+                  <div>Loading...</div>
+                ) : (
+                  <ScrollArea className='h-[200px] w-full'>
+                    {users
+                      ?.filter(
+                        (user) =>
+                          user?.username
+                            ?.toLowerCase()
+                            .includes(userSearch.toLowerCase()) ||
+                          user?.first_name
+                            ?.toLowerCase()
+                            .includes(userSearch.toLowerCase()) ||
+                          user?.last_name
+                            ?.toLowerCase()
+                            .includes(userSearch.toLowerCase()) ||
+                          `${user.first_name} ${user.last_name}`
+                            .toLowerCase()
+                            .includes(userSearch.toLowerCase()),
+                      )
+                      .slice(0, 10)
+                      .map((user) => {
+                        return (
+                          <Button
+                            key={user.id}
+                            className='flex h-full w-full justify-between rounded-none border-b bg-black hover:bg-secondary'
+                            onClick={() => {
+                              // if user is not selected add them
+                              if (
+                                !selectedUsers?.find((u) => u.id === user.id)
+                              ) {
+                                setSelectedUsers([
+                                  ...(selectedUsers || []),
+                                  user,
+                                ]);
+                              } else {
+                                // if user is selected remove them
+                                setSelectedUsers(
+                                  selectedUsers?.filter(
+                                    (u) => u.id !== user.id,
+                                  ),
+                                );
+                              }
+                            }}
+                          >
+                            <ProfileCard userProfile={user} />
+                            {selectedUsers?.find((u) => u.id === user.id) && (
+                              <Check className='text-white' />
+                            )}
+                          </Button>
+                        );
+                      })}
+                  </ScrollArea>
+                )}
+              </div>
             </DialogContent>
           </Dialog>
         </div>

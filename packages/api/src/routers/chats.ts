@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
+import { Chat } from 'supabase';
 
 export const chatsRouter = router({
   getUserChats: authedProcedure
@@ -142,13 +143,27 @@ export const chatsRouter = router({
         }
       }
 
-      const { data: newChat } = await supabase
-        .from('chats')
-        .insert({
-          chat_type: 'dm', // need to add group later
-        })
-        .select()
-        .single();
+      let newChat: Chat | null;
+
+      if (chatMemberIds.length === 1) {
+        const { data: chat } = await supabase
+          .from('chats')
+          .insert({
+            chat_type: 'dm',
+          })
+          .select()
+          .single();
+        newChat = chat;
+      } else {
+        const { data: chat } = await supabase
+          .from('chats')
+          .insert({
+            chat_type: 'group',
+          })
+          .select()
+          .single();
+        newChat = chat;
+      }
 
       for (let i = 0; i < chatMemberIds.length; i++) {
         await supabase.from('chat_members').insert({

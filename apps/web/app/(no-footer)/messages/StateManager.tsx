@@ -30,7 +30,11 @@ export default function StateManager({
     chat_id: currentChat,
   });
 
-  const { data: chats, isLoading: chatsLoading } = trpc.getUserChats.useQuery({
+  const {
+    data: chats,
+    isLoading: chatsLoading,
+    refetch,
+  } = trpc.getUserChats.useQuery({
     user_id: userProfile.id,
   });
 
@@ -62,6 +66,17 @@ export default function StateManager({
             .single();
 
           setMessages((prevMessages) => [...prevMessages!, newMessage!]);
+        },
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chats',
+        },
+        (payload) => {
+          refetch();
         },
       )
       .subscribe();
@@ -115,7 +130,7 @@ export default function StateManager({
         {!currentChat ? (
           <RenderChats
             userProfile={userProfile}
-            chats={chats!}
+            chats={chats}
             chatsLoading={chatsLoading}
             router={router}
           />
