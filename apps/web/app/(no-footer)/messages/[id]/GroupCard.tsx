@@ -17,7 +17,7 @@ export default function GroupCard({
     .map((member) => `${member.first_name} ${member.last_name}`)
     .join(', ');
 
-  const truncatedNames = allMembersNames.substring(0, 25) + '...';
+  // const truncatedNames = allMembersNames.substring(0, 25) + '...';
 
   return (
     <div className='flex w-full items-center gap-2'>
@@ -36,7 +36,9 @@ export default function GroupCard({
 
       <div className='flex flex-col justify-between'>
         <div className='flex'>
-          <p className='ml-1 font-medium text-white'>{truncatedNames}</p>
+          <p className='ml-1 truncate font-medium text-white'>
+            {allMembersNames}...
+          </p>
         </div>
       </div>
     </div>
