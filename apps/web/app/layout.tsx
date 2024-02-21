@@ -63,7 +63,7 @@ export default async function RootLayout({
               userProfile={userProfile!}
               userOrg={userOrg}
             />
-            <div className='min-h-screen'>{children}</div>
+            <div>{children}</div>
             <Toaster richColors />
             <SpeedInsights />
             <Analytics />
