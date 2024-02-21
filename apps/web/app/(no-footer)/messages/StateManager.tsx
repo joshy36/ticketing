@@ -135,6 +135,7 @@ export default function StateManager({
             userProfile={userProfile}
             chats={chats}
             chatsLoading={chatsLoading}
+            currentChat={currentChat}
             router={router}
           />
         ) : (

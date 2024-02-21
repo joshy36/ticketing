@@ -25,12 +25,13 @@ export default function RenderChats({
   userProfile,
   chats,
   chatsLoading,
+  currentChat,
   router,
 }: {
   userProfile: UserProfile;
   chats: RouterOutputs['getUserChats'];
   chatsLoading: boolean;
-
+  currentChat: string | null;
   router: AppRouterInstance;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -200,7 +201,9 @@ export default function RenderChats({
         return (
           <button
             key={chat.id}
-            className='flex w-full border-b px-4 py-4'
+            className={`flex w-full border-b px-4 py-4 ${
+              chat.id === currentChat ? 'bg-secondary' : '' // Apply grey background to the current chat
+            }`}
             onClick={() => {
               router.push(`/messages/?chat=${chat.id}`);
             }}

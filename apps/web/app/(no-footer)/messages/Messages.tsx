@@ -53,6 +53,7 @@ export default function Messages({
             userProfile={userProfile}
             chats={chats}
             chatsLoading={chatsLoading}
+            currentChat={currentChat}
             router={router}
           />
         </div>
