@@ -100,6 +100,10 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
             <Label className='sr-only' htmlFor='email'>
               Email
             </Label>
+            <meta
+              name='viewport'
+              content='width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover'
+            ></meta>
             <Input
               id='email'
               placeholder='name@example.com'
@@ -115,6 +119,10 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
             <Label className='sr-only' htmlFor='password'>
               Password
             </Label>
+            <meta
+              name='viewport'
+              content='width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover'
+            ></meta>
             <Input
               id='password'
               type='password'
