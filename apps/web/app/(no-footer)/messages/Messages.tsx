@@ -64,7 +64,7 @@ export default function Messages({
                   <ProfileCard userProfile={getRandomUserFromChat()} />
                 ) : (
                   <GroupCard
-                    userProfile={getRandomUserFromChat()}
+                    userProfile={userProfile}
                     chatMembers={
                       currentChatDetails?.chat_members.map(
                         (member) => member.user_profiles!,

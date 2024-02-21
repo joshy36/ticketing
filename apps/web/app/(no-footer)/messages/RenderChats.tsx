@@ -159,7 +159,7 @@ export default function RenderChats({
                               if (
                                 !selectedUsers?.find((u) => u.id === user.id)
                               ) {
-                                if (selectedUsers?.length === 6) {
+                                if (selectedUsers?.length === 5) {
                                   toast.error('Maximum users reached', {
                                     description: 'Maximum of 6 users per chat',
                                   });
@@ -209,7 +209,7 @@ export default function RenderChats({
               <ProfileCard userProfile={getRandomUserFromChat(index)!} />
             ) : (
               <GroupCard
-                userProfile={getRandomUserFromChat(index)!}
+                userProfile={userProfile}
                 chatMembers={chat.chat_members.map(
                   (member) => member.user_profiles!,
                 )}

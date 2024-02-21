@@ -8,7 +8,15 @@ export default function GroupCard({
   userProfile: UserProfile;
   chatMembers: UserProfile[];
 }) {
-  const allMembersNames = chatMembers
+  console.log('userProfile', userProfile);
+  console.log('chatMembers', chatMembers);
+  // Exclude the user with the same id as userProfile
+  const otherMembers = chatMembers.filter(
+    (member) => member.id !== userProfile.id,
+  );
+  console.log('otherMembers', otherMembers);
+
+  const allMembersNames = otherMembers
     .map((member) => `${member.first_name} ${member.last_name}`)
     .join(', ');
 
@@ -19,7 +27,7 @@ export default function GroupCard({
       <div className='flex items-center -space-x-4 rtl:space-x-reverse'>
         <Avatar className='z-40'>
           {userProfile?.profile_image ? (
-            <AvatarImage src={userProfile?.profile_image!} alt='pfp' />
+            <AvatarImage src={otherMembers[0]?.profile_image!} alt='pfp' />
           ) : (
             <AvatarFallback></AvatarFallback>
           )}

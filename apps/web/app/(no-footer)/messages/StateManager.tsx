@@ -156,7 +156,7 @@ export default function StateManager({
                   />
                 ) : (
                   <GroupCard
-                    userProfile={getRandomUserFromChat(currentChat)}
+                    userProfile={userProfile}
                     chatMembers={
                       currentChatDetails?.chat_members.map(
                         (member) => member.user_profiles!,
