@@ -42,6 +42,10 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
     const randomName = uniqueNamesGenerator({
       dictionaries: [adjectives, colors, animals],
     });
+    const [adjective, color, animal] = randomName.split('_');
+    const capitalizedColor = color!.charAt(0).toUpperCase() + color?.slice(1);
+    const capitalizedAnimal =
+      animal!.charAt(0).toUpperCase() + animal?.slice(1);
     // maybe need to check if username is taken?
     const res = await supabase.auth.signUp({
       email: email,
@@ -50,6 +54,8 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
         emailRedirectTo: `${location.origin}/auth/confirm`,
         data: {
           username: randomName,
+          first_name: capitalizedColor,
+          last_name: capitalizedAnimal,
         },
       },
     });

@@ -37,6 +37,9 @@ const profileFormSchema = z.object({
     }),
   firstname: z
     .string()
+    .min(2, {
+      message: 'First name must be at least 2 characters.',
+    })
     .max(30, {
       message: 'First name must not be longer than 30 characters.',
     })
@@ -46,6 +49,9 @@ const profileFormSchema = z.object({
     .optional(),
   lastname: z
     .string()
+    .min(2, {
+      message: 'Last name must be at least 2 characters.',
+    })
     .max(30, {
       message: 'Last name must not be longer than 30 characters.',
     })
