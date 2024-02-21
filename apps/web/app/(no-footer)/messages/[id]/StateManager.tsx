@@ -149,8 +149,7 @@ export default function StateManager({
                     router.push(`/messages`);
                   }}
                 >
-                  <ChevronLeft className='-ml-1' />
-                  Back
+                  <ChevronLeft />
                 </Button>
                 {currentChatDetails?.chat_type === 'dm' ? (
                   <ProfileCard
