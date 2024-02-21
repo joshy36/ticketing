@@ -773,7 +773,7 @@ export type Database = {
           turnkey_sub_org: string | null
           turnkey_wallet_id: string | null
           updated_at: string | null
-          username: string
+          username: string | null
           wallet_address: string | null
         }
         Insert: {
@@ -786,7 +786,7 @@ export type Database = {
           turnkey_sub_org?: string | null
           turnkey_wallet_id?: string | null
           updated_at?: string | null
-          username: string
+          username?: string | null
           wallet_address?: string | null
         }
         Update: {
@@ -799,7 +799,7 @@ export type Database = {
           turnkey_sub_org?: string | null
           turnkey_wallet_id?: string | null
           updated_at?: string | null
-          username?: string
+          username?: string | null
           wallet_address?: string | null
         }
         Relationships: [
