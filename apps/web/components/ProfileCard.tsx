@@ -27,7 +27,7 @@ export default function ProfileCard({
             </p>
           )}
         </div>
-        <div className='text-xs text-muted-foreground'>
+        <div className='justify-start text-xs text-muted-foreground'>
           {`@${userProfile?.username}`}
         </div>
       </div>
