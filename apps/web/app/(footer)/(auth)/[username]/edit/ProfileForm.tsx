@@ -97,7 +97,7 @@ export function ProfileForm({ userProfile }: { userProfile: UserProfile }) {
         toast.error('Error updating profile');
         console.error('Error updating profile:', error);
       } else {
-        router.refresh();
+        router.push(`/${data.username}`);
         toast.success('Profile updated successfully');
       }
       setIsLoading(false);
