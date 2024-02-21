@@ -19,6 +19,7 @@ import { trpc } from '@/app/_trpc/client';
 import { toast } from 'sonner';
 import ProfileCard from '@/components/ProfileCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import GroupCard from './GroupCard';
 
 export default function RenderChats({
   userProfile,
@@ -207,7 +208,12 @@ export default function RenderChats({
             {chat.chat_type === 'dm' ? (
               <ProfileCard userProfile={getRandomUserFromChat(index)!} />
             ) : (
-              <div>Group Message</div>
+              <GroupCard
+                userProfile={getRandomUserFromChat(index)!}
+                chatMembers={chat.chat_members.map(
+                  (member) => member.user_profiles!,
+                )}
+              />
             )}
           </button>
         );

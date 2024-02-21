@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, Info } from 'lucide-react';
 import ProfileCard from '@/components/ProfileCard';
+import GroupCard from './GroupCard';
 
 export default function StateManager({
   userProfile,
@@ -37,6 +38,8 @@ export default function StateManager({
   } = trpc.getUserChats.useQuery({
     user_id: userProfile.id,
   });
+
+  const currentChatDetails = chats?.find((chat) => chat.id === currentChat);
 
   useEffect(() => {
     if (messagesInCurrentChat) {
@@ -98,7 +101,7 @@ export default function StateManager({
     return chats
       ?.find((chat) => chat.id === chatId)
       ?.chat_members.find((user) => user.user_id != userProfile.id)
-      ?.user_profiles;
+      ?.user_profiles!;
   };
 
   const sendChatMessage = trpc.sendChatMessage.useMutation({
@@ -147,9 +150,20 @@ export default function StateManager({
                   <ChevronLeft className='-ml-1' />
                   Back
                 </Button>
-                <ProfileCard
-                  userProfile={getRandomUserFromChat(currentChat)!}
-                />
+                {currentChatDetails?.chat_type === 'dm' ? (
+                  <ProfileCard
+                    userProfile={getRandomUserFromChat(currentChat)}
+                  />
+                ) : (
+                  <GroupCard
+                    userProfile={getRandomUserFromChat(currentChat)}
+                    chatMembers={
+                      currentChatDetails?.chat_members.map(
+                        (member) => member.user_profiles!,
+                      )!
+                    }
+                  />
+                )}
                 <Info />
               </div>
             </div>

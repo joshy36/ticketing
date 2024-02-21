@@ -10,6 +10,7 @@ import RenderMessages from './RenderMessages';
 import RenderChats from './RenderChats';
 import ProfileCard from '@/components/ProfileCard';
 import { Info } from 'lucide-react';
+import GroupCard from './GroupCard';
 
 export default function Messages({
   userProfile,
@@ -32,11 +33,12 @@ export default function Messages({
   sendMessage: () => void;
   setMessage: Dispatch<SetStateAction<string>>;
 }) {
-  const getRandomUserFromChat = (chatId: string | null) => {
-    return chats
-      ?.find((chat) => chat.id === chatId)
-      ?.chat_members.find((user) => user.user_id != userProfile.id)
-      ?.user_profiles;
+  const currentChatDetails = chats?.find((chat) => chat.id === currentChat);
+
+  const getRandomUserFromChat = () => {
+    return currentChatDetails?.chat_members.find(
+      (user) => user.user_id != userProfile.id,
+    )?.user_profiles!;
   };
 
   return (
@@ -58,10 +60,18 @@ export default function Messages({
           {currentChat ? (
             <div className='flex max-h-screen w-full flex-col justify-between pt-20'>
               <div className='flex items-center justify-between border-b px-4 py-2'>
-                <div></div>
-                <ProfileCard
-                  userProfile={getRandomUserFromChat(currentChat)!}
-                />
+                {currentChatDetails?.chat_type === 'dm' ? (
+                  <ProfileCard userProfile={getRandomUserFromChat()} />
+                ) : (
+                  <GroupCard
+                    userProfile={getRandomUserFromChat()}
+                    chatMembers={
+                      currentChatDetails?.chat_members.map(
+                        (member) => member.user_profiles!,
+                      )!
+                    }
+                  />
+                )}
                 <Info />
               </div>
 
