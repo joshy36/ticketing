@@ -8,7 +8,6 @@ import { Section } from '../(tabs)/home/[id]';
 import { RouterOutputs } from 'api';
 import { trpc } from '../../utils/trpc';
 import { supabase } from '../../utils/supabaseExpo';
-import ConfettiCannon from 'react-native-confetti-cannon';
 
 const TicketSection = ({
   event,

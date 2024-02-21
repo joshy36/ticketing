@@ -13,7 +13,7 @@ export default async function Footer() {
                   className="h-8 mr-3"
                   alt="FlowBite Logo"
                 /> */}
-              <span className='self-center whitespace-nowrap text-2xl font-semibold text-yellow-700'>
+              <span className='self-center whitespace-nowrap bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-2xl font-semibold text-transparent'>
                 Jupiter
               </span>
             </a>

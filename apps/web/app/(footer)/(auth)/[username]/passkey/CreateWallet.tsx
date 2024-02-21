@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { formatEthAddress } from '@/utils/helpers';
 import CopyWallet from '../CopyWallet';
+import confetti from 'canvas-confetti';
 
 export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
   const router = useRouter();
@@ -87,9 +88,43 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
     }
   };
 
+  useEffect(() => {
+    var duration = 3 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min: any, max: any) {
+      return Math.random() * (max - min) + min;
+    }
+
+    var interval: any = setInterval(function () {
+      var timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      var particleCount = 50 * (timeLeft / duration);
+      // since particles fall down, start a bit higher than random
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+      });
+    }, 500);
+  }, []);
+
   return (
-    <div className='flex items-center justify-center pt-24'>
-      <Card className='max-w-[400px] rounded-md border'>
+    <div className='flex flex-col items-center justify-center pt-24'>
+      <h1 className='bg-gradient-to-r from-orange-500 to-orange-700 bg-clip-text pb-16 text-4xl font-bold text-transparent md:pr-4 lg:pr-8 lg:text-7xl'>
+        Welcome to Jupiter!
+      </h1>
+      <Card className='mb-32 max-w-[400px] rounded-md border'>
         <CardHeader className='text-xl font-bold'>Wallet</CardHeader>
         <CardContent>
           <p className='font-light text-muted-foreground'>
@@ -118,8 +153,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
           <div className='flex justify-center pt-8'>
             {!subOrgId && (
               <Button
-                className='w-full rounded-md hover:bg-gradient-to-r hover:from-blue-700 hover:via-indigo-700 hover:to-violet-700
-                hover:text-white'
+                className='w-full rounded-md'
                 onClick={async () => {
                   setLoading(true);
                   await createSubOrg();
