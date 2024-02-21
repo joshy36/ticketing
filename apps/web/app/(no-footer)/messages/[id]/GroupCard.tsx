@@ -29,7 +29,7 @@ export default function GroupCard({
             <AvatarFallback></AvatarFallback>
           )}
         </Avatar>
-        <div className='z-50 flex h-7 w-7 items-center justify-center rounded-full border-2 bg-secondary text-xs font-medium text-white'>
+        <div className='z-50 flex h-6 w-6 items-center justify-center rounded-full border border-black bg-secondary text-xs font-medium text-white'>
           {chatMembers.length}
         </div>
       </div>
