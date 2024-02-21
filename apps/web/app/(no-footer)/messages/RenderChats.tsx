@@ -93,7 +93,10 @@ export default function RenderChats({
               <div className='flex flex-col flex-wrap'>
                 {selectedUsers?.map((user) => {
                   return (
-                    <div className='mx-2 my-1 rounded-full border p-2'>
+                    <div
+                      key={user.id}
+                      className='mx-2 my-1 rounded-full border p-2'
+                    >
                       <ProfileCard userProfile={user} />
                     </div>
                   );
