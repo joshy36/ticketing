@@ -18,6 +18,7 @@ import UserSignOut from './UserSignOut';
 import CopyWallet from './CopyWallet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { notFound } from 'next/navigation';
+import { Wallet } from 'lucide-react';
 
 export default async function ProfileView({
   params,
@@ -90,6 +91,13 @@ export default async function ProfileView({
         </div>
       </div>
       <Separator className='my-8' />
+      <div className='flex flex-row items-center justify-center gap-2'>
+        <h2 className='text-center text-2xl font-bold lg:text-3xl'>
+          Social Wallet
+        </h2>
+        <Wallet />
+      </div>
+
       <div className='grid grid-cols-1 gap-8 px-4 pt-8 md:grid-cols-2 md:px-16'>
         <div>
           <div className='flex flex-row items-center justify-center gap-2'>
@@ -153,7 +161,7 @@ export default async function ProfileView({
         <div>
           <div className='flex flex-row items-center justify-center gap-2'>
             <div className='text-center text-2xl underline underline-offset-8'>
-              SBTs
+              Community
             </div>
             <AlertDialog>
               <AlertDialogTrigger>
@@ -161,7 +169,7 @@ export default async function ProfileView({
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>SBTs</AlertDialogTitle>
+                  <AlertDialogTitle>Community</AlertDialogTitle>
                   <AlertDialogDescription>
                     Lets explain what these are
                   </AlertDialogDescription>
