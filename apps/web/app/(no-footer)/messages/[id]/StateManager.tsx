@@ -4,7 +4,7 @@ import { Message, UserProfile } from 'supabase';
 import Messages from './Messages';
 import { useEffect, useState } from 'react';
 import { RouterOutputs, trpc } from '@/app/_trpc/client';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
 import RenderChats from './RenderChats';
 import RenderMessages from './RenderMessages';
@@ -16,12 +16,13 @@ import GroupCard from './GroupCard';
 
 export default function StateManager({
   userProfile,
+  id,
 }: {
   userProfile: UserProfile;
+  id: string;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentChat = searchParams.get('chat');
+  const currentChat = id;
   const [message, setMessage] = useState('');
   const [messages, setMessages] =
     useState<RouterOutputs['getMessagesByChat']>(null);

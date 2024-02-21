@@ -59,7 +59,7 @@ export default function RenderChats({
       } else if (data) {
         console.log(data);
 
-        router.push(`/messages/?chat=${data}`);
+        router.push(`/messages/${data}`);
         setDialogOpen(false);
         setSelectedUsers(null);
         setUserSearch('');
@@ -205,7 +205,7 @@ export default function RenderChats({
               chat.id === currentChat ? 'bg-secondary' : '' // Apply grey background to the current chat
             }`}
             onClick={() => {
-              router.push(`/messages/?chat=${chat.id}`);
+              router.push(`/messages/${chat.id}`);
             }}
           >
             {chat.chat_type === 'dm' ? (

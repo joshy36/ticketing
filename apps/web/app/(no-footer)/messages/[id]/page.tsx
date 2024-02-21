@@ -1,9 +1,9 @@
 import { serverClient } from '@/app/_trpc/serverClient';
 import createSupabaseServer from '@/utils/supabaseServer';
 import { redirect } from 'next/navigation';
-import StateManager from './[id]/StateManager';
+import StateManager from './StateManager';
 
-export default async function Home() {
+export default async function Home({ params }: { params: { id: string } }) {
   const supabase = createSupabaseServer();
 
   const {
@@ -20,7 +20,7 @@ export default async function Home() {
 
   return (
     <main>
-      <StateManager userProfile={userProfile!} id={''} />
+      <StateManager userProfile={userProfile!} id={params.id} />
     </main>
   );
 }

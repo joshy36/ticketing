@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { UserProfile } from 'supabase';
-import { RouterOutputs } from '../../_trpc/client';
+import { RouterOutputs } from '../../../_trpc/client';
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';

@@ -8,13 +8,10 @@ export default function GroupCard({
   userProfile: UserProfile;
   chatMembers: UserProfile[];
 }) {
-  console.log('userProfile', userProfile);
-  console.log('chatMembers', chatMembers);
   // Exclude the user with the same id as userProfile
   const otherMembers = chatMembers.filter(
     (member) => member.id !== userProfile.id,
   );
-  console.log('otherMembers', otherMembers);
 
   const allMembersNames = otherMembers
     .map((member) => `${member.first_name} ${member.last_name}`)
