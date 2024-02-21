@@ -87,7 +87,7 @@ export default function RenderChats({
               <DialogHeader>
                 <DialogTitle>New Message</DialogTitle>
                 <DialogDescription>
-                  Select a user to start a new chat with.
+                  Select users to start a new chat with.
                 </DialogDescription>
               </DialogHeader>
               <div className='flex flex-col flex-wrap'>
@@ -158,6 +158,12 @@ export default function RenderChats({
                               if (
                                 !selectedUsers?.find((u) => u.id === user.id)
                               ) {
+                                if (selectedUsers?.length === 6) {
+                                  toast.error('Maximum users reached', {
+                                    description: 'Maximum of 6 users per chat',
+                                  });
+                                  return;
+                                }
                                 setSelectedUsers([
                                   ...(selectedUsers || []),
                                   user,

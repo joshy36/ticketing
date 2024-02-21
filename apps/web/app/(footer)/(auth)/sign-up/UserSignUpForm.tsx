@@ -42,6 +42,7 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
     const randomName = uniqueNamesGenerator({
       dictionaries: [adjectives, colors, animals],
     });
+    // maybe need to check if username is taken?
     const res = await supabase.auth.signUp({
       email: email,
       password: password,

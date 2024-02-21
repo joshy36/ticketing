@@ -145,7 +145,7 @@ export const chatsRouter = router({
 
       let newChat: Chat | null;
 
-      if (chatMemberIds.length === 1) {
+      if (chatMemberIds.length <= 2) {
         const { data: chat } = await supabase
           .from('chats')
           .insert({
