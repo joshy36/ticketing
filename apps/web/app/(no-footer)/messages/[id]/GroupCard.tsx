@@ -21,7 +21,7 @@ export default function GroupCard({
 
   return (
     <div className='flex w-full items-center gap-2'>
-      <div className='flex items-center -space-x-4 rtl:space-x-reverse'>
+      <div className='flex items-end -space-x-4 rtl:space-x-reverse'>
         <Avatar className='z-40'>
           {userProfile?.profile_image ? (
             <AvatarImage src={otherMembers[0]?.profile_image!} alt='pfp' />
@@ -29,8 +29,8 @@ export default function GroupCard({
             <AvatarFallback></AvatarFallback>
           )}
         </Avatar>
-        <div className='z-50 flex h-11 w-11 items-center justify-center rounded-full border-2 border-black bg-secondary text-xs font-medium text-white'>
-          +{chatMembers.length - 1}
+        <div className='z-50 flex h-7 w-7 items-center justify-center rounded-full border-2 bg-secondary text-xs font-medium text-white'>
+          {chatMembers.length}
         </div>
       </div>
 
