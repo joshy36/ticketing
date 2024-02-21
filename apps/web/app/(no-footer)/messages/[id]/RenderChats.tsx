@@ -211,12 +211,18 @@ export default function RenderChats({
             {chat.chat_type === 'dm' ? (
               <ProfileCard userProfile={getRandomUserFromChat(index)!} />
             ) : (
-              <GroupCard
-                userProfile={userProfile}
-                chatMembers={chat.chat_members.map(
-                  (member) => member.user_profiles!,
+              <div>
+                {chat ? (
+                  <GroupCard
+                    userProfile={userProfile}
+                    chatMembers={chat?.chat_members.map(
+                      (member) => member.user_profiles!,
+                    )}
+                  />
+                ) : (
+                  <div>Loading...</div>
                 )}
-              />
+              </div>
             )}
           </button>
         );

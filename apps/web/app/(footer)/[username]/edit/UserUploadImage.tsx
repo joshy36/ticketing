@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../../_trpc/client';
+import { trpc } from '../../../_trpc/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import {

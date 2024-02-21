@@ -1,6 +1,6 @@
 import createSupabaseServer from '@/utils/supabaseServer';
 import Image from 'next/image';
-import { serverClient } from '../../../_trpc/serverClient';
+import { serverClient } from '../../_trpc/serverClient';
 import {
   AlertDialog,
   AlertDialogAction,

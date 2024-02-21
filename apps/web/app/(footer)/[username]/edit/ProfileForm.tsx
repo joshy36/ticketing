@@ -20,7 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/ui/icons';
-import { trpc } from '../../../../_trpc/client';
+import { trpc } from '../../../_trpc/client';
 import { UserProfile } from 'supabase';
 
 const profileFormSchema = z.object({

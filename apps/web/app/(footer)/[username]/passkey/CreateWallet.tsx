@@ -9,7 +9,7 @@ import {
 import { getWebAuthnAttestation } from '@turnkey/http';
 import { useEffect, useState } from 'react';
 import { Icons } from '@/components/ui/icons';
-import { trpc } from '../../../../_trpc/client';
+import { trpc } from '../../../_trpc/client';
 import { UserProfile } from 'supabase';
 import { Wallet } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';

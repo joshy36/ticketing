@@ -157,14 +157,18 @@ export default function StateManager({
                     userProfile={getRandomUserFromChat(currentChat)}
                   />
                 ) : (
-                  <GroupCard
-                    userProfile={userProfile}
-                    chatMembers={
-                      currentChatDetails?.chat_members.map(
-                        (member) => member.user_profiles!,
-                      )!
-                    }
-                  />
+                  <div>
+                    {currentChatDetails ? (
+                      <GroupCard
+                        userProfile={userProfile}
+                        chatMembers={currentChatDetails?.chat_members.map(
+                          (member) => member.user_profiles!,
+                        )}
+                      />
+                    ) : (
+                      <div>Loading...</div>
+                    )}
+                  </div>
                 )}
                 <Info />
               </div>
