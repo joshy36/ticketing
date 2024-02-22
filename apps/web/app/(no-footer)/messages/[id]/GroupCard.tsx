@@ -18,7 +18,7 @@ export default function GroupCard({
     .join(', ');
 
   return (
-    <div className='flex w-full items-center gap-2'>
+    <div className='flex w-64 items-center gap-2 truncate'>
       <div className='flex items-end -space-x-4 rtl:space-x-reverse'>
         <Avatar className='z-40'>
           {userProfile?.profile_image ? (
@@ -31,14 +31,9 @@ export default function GroupCard({
           {chatMembers.length}
         </div>
       </div>
-
-      <div className='flex flex-col justify-between'>
-        <div className='flex'>
-          <p className='ml-1 truncate font-medium text-white'>
-            {allMembersNames}
-          </p>
-        </div>
-      </div>
+      <p className='ml-1 truncate text-ellipsis font-medium text-white'>
+        {allMembersNames}
+      </p>
     </div>
   );
 }
