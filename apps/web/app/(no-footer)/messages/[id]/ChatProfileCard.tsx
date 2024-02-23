@@ -9,7 +9,7 @@ export default function ChatProfileCard({
   mostRecentMessage: string | null | undefined;
 }) {
   return (
-    <div className='flex flex-row items-center gap-2'>
+    <div className='flex flex-row items-center gap-5'>
       <Avatar>
         {userProfile?.profile_image ? (
           <AvatarImage src={userProfile?.profile_image!} alt='pfp' />
