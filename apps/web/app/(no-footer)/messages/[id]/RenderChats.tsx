@@ -38,6 +38,7 @@ export default function RenderChats({
     | {
         [id: string]: {
           message: string;
+          created_at: string;
         };
       }
     | undefined;

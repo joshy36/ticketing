@@ -12,7 +12,7 @@ import ProfileCard from '@/components/ProfileCard';
 import { Info } from 'lucide-react';
 import GroupCard from './GroupCard';
 
-export default function Messages({
+export default function LargeScreenMessages({
   userProfile,
   message,
   messages,
@@ -34,6 +34,7 @@ export default function Messages({
     | {
         [id: string]: {
           message: string;
+          created_at: string;
         };
       }
     | undefined;

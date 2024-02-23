@@ -1,7 +1,7 @@
 'use client';
 
 import { Message, UserProfile } from 'supabase';
-import Messages from './Messages';
+import LargeScreenMessages from './LargeScreenMessages';
 import { useEffect, useState } from 'react';
 import { RouterOutputs, trpc } from '@/app/_trpc/client';
 import { useRouter } from 'next/navigation';
@@ -29,6 +29,7 @@ export default function StateManager({
   const [mostRecentMessageByChat, setMostRecentMessageByChat] = useState<{
     [id: string]: {
       message: string;
+      created_at: string;
     };
   }>();
   const [mostRecentMessagesLoaded, setMostRecentMessagesLoaded] =
@@ -70,6 +71,7 @@ export default function StateManager({
           ...prevState,
           [chats?.chats![i]?.id!]: {
             message: chats?.messagesInChats[i]?.[0]?.content!,
+            created_at: chats?.messagesInChats[i]?.[0]?.created_at!,
           },
         }));
       }
@@ -106,6 +108,7 @@ export default function StateManager({
             ...prevState,
             [message.chat_id!]: {
               message: message.content!,
+              created_at: message.created_at!,
             },
           }));
         },
@@ -156,7 +159,7 @@ export default function StateManager({
   return (
     <div>
       <div className='hidden lg:block'>
-        <Messages
+        <LargeScreenMessages
           userProfile={userProfile!}
           message={message}
           messages={messages}
