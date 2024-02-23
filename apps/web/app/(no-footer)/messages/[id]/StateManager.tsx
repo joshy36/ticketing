@@ -90,22 +90,22 @@ export default function StateManager({
         },
         async (payload) => {
           const message = payload.new as Message;
-          const { data: newMessage } = await supabase
-            .from('chat_messages')
-            .select(`*, user_profiles(*)`)
-            .eq('id', message.id)
-            .eq('chat_id', currentChat!)
-            .limit(1)
-            .single();
-
           // only update messages if the chat is the current chat
-          if (newMessage?.chat_id === currentChat) {
+          if (message.chat_id === currentChat) {
+            const { data: newMessage } = await supabase
+              .from('chat_messages')
+              .select(`*, user_profiles(*)`)
+              .eq('id', message.id)
+              .eq('chat_id', currentChat!)
+              .limit(1)
+              .single();
+
             setMessages((prevMessages) => [...prevMessages!, newMessage!]);
           }
           setMostRecentMessageByChat((prevState) => ({
             ...prevState,
             [currentChat!]: {
-              message: newMessage?.content!,
+              message: message.content!,
             },
           }));
         },
