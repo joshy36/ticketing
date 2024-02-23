@@ -104,7 +104,7 @@ export default function StateManager({
           }
           setMostRecentMessageByChat((prevState) => ({
             ...prevState,
-            [currentChat!]: {
+            [message.chat_id!]: {
               message: message.content!,
             },
           }));
