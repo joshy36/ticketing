@@ -1,10 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserProfile } from 'supabase';
 
-export default function ProfileCard({
+export default function ChatProfileCard({
   userProfile,
+  mostRecentMessage,
 }: {
   userProfile: UserProfile;
+  mostRecentMessage: string | null | undefined;
 }) {
   return (
     <div className='flex flex-row items-center gap-2'>
@@ -16,15 +18,16 @@ export default function ProfileCard({
         )}
       </Avatar>
 
-      <div className='flex flex-col justify-between'>
-        <div className='flex'>
-          <p className='font-medium text-white'>{userProfile?.first_name}</p>
-          <p className='ml-1 font-medium text-white'>
-            {userProfile?.last_name}
+      <div className='flex max-w-[300px] flex-col justify-between'>
+        <div className='flex items-center'>
+          <p className='truncate text-ellipsis font-medium text-white'>
+            {userProfile?.first_name} {userProfile?.last_name}
           </p>
         </div>
-        <div className='justify-start text-left text-xs text-muted-foreground'>
-          {`@${userProfile?.username}`}
+        <div>
+          <p className='truncate text-ellipsis text-left text-sm font-light text-muted-foreground'>
+            {mostRecentMessage}
+          </p>
         </div>
       </div>
     </div>

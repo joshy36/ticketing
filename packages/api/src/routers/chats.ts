@@ -18,14 +18,27 @@ export const chatsRouter = router({
 
       const { data: chats } = await supabase
         .from('chats')
-        .select(`*, chat_members(*, user_profiles(*))`);
+        .select(`*, chat_members(*, user_profiles(*), chat_messages(*))`);
 
       // get only chats for user
       const filteredChats = chats?.filter((chat) =>
         chat.chat_members.find((chatUser) => chatUser.user_id === user?.id)
       );
 
-      return filteredChats;
+      const messages = [];
+
+      // grab first 50 messages
+      for (let i = 0; i < filteredChats?.length!; i++) {
+        const { data: chatMessages } = await supabase
+          .from('chat_messages')
+          .select(`*, user_profiles(*)`)
+          .eq('chat_id', filteredChats![i]!.id)
+          .order('created_at', { ascending: false })
+          .range(0, 50);
+        messages.push(chatMessages);
+      }
+
+      return { chats: filteredChats, messagesInChats: messages };
     }),
 
   getMessagesByChat: authedProcedure
@@ -173,6 +186,35 @@ export const chatsRouter = router({
       }
 
       return newChat?.id;
+    }),
+
+  readMessages: authedProcedure
+    .input(z.object({ chat_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      const { data: messages } = await supabase
+        .from('chat_messages')
+        .select()
+        .eq('chat_id', input.chat_id)
+        .order('created_at', { ascending: false });
+
+      if (messages && messages.length > 0) {
+        const { data: lastMessage } = await supabase
+          .from('chat_members')
+          .update({
+            last_read: messages[messages.length - 1]?.id,
+          })
+          .eq('user_id', user?.id)
+          .eq('chat_id', input.chat_id)
+          .select()
+          .single();
+
+        return lastMessage;
+      }
+
+      return null;
     }),
 });
 

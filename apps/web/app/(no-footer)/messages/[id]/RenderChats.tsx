@@ -1,7 +1,7 @@
 import { RouterOutputs } from 'api';
 import { UserProfile } from 'supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, SendHorizonal } from 'lucide-react';
 import {
   Dialog,
@@ -20,18 +20,27 @@ import { toast } from 'sonner';
 import ProfileCard from '@/components/ProfileCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import GroupCard from './GroupCard';
+import ChatProfileCard from './ChatProfileCard';
 
 export default function RenderChats({
   userProfile,
   chats,
   chatsLoading,
   currentChat,
+  mostRecentMessageByChat,
   router,
 }: {
   userProfile: UserProfile;
   chats: RouterOutputs['getUserChats'];
   chatsLoading: boolean;
   currentChat: string | null;
+  mostRecentMessageByChat:
+    | {
+        [id: string]: {
+          message: string;
+        };
+      }
+    | undefined;
   router: AppRouterInstance;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -69,9 +78,14 @@ export default function RenderChats({
   });
 
   const getRandomUserFromChat = (index: number) => {
-    return chats![index]!.chat_members.find(
+    return chats?.chats![index]!.chat_members.find(
       (user) => user.user_id != userProfile.id,
     )?.user_profiles;
+  };
+
+  const convertStringToDate = (date: string) => {
+    const data = new Date(date);
+    return data;
   };
 
   return (
@@ -194,10 +208,10 @@ export default function RenderChats({
           </Dialog>
         </div>
       </div>
-      {chats?.length === 0 && (
+      {chats?.chats?.length === 0 && (
         <p className='pt-8 text-center'>No messages yet.</p>
       )}
-      {chats?.map((chat, index) => {
+      {chats?.chats?.map((chat, index) => {
         return (
           <button
             key={chat.id}
@@ -208,22 +222,49 @@ export default function RenderChats({
               router.push(`/messages/${chat.id}`);
             }}
           >
-            {chat.chat_type === 'dm' ? (
-              <ProfileCard userProfile={getRandomUserFromChat(index)!} />
-            ) : (
+            <div>
+              {chat.chat_type === 'dm' ? (
+                <ChatProfileCard
+                  userProfile={getRandomUserFromChat(index)!}
+                  mostRecentMessage={
+                    mostRecentMessageByChat
+                      ? mostRecentMessageByChat[chat.id]?.message
+                      : null
+                  }
+                />
+              ) : (
+                <div>
+                  {chat ? (
+                    <GroupCard
+                      userProfile={userProfile}
+                      chatMembers={chat?.chat_members.map(
+                        (member) => member.user_profiles!,
+                      )}
+                      mostRecentMessage={
+                        mostRecentMessageByChat
+                          ? mostRecentMessageByChat[chat.id]?.message
+                          : null
+                      }
+                    />
+                  ) : (
+                    <div>Loading...</div>
+                  )}
+                </div>
+              )}
               <div>
-                {chat ? (
-                  <GroupCard
-                    userProfile={userProfile}
-                    chatMembers={chat?.chat_members.map(
-                      (member) => member.user_profiles!,
-                    )}
-                  />
-                ) : (
-                  <div>Loading...</div>
+                {convertStringToDate(
+                  chat.chat_members.find(
+                    (user) => user.user_id === userProfile.id,
+                  )?.chat_messages?.created_at!,
+                ) === new Date()}
+              </div>
+              <div className='flex'>
+                {chat.chat_members.find((user) => user.id === userProfile.id)
+                  ?.last_read && (
+                  <span className='h-3 w-3 rounded-full bg-blue-700'></span>
                 )}
               </div>
-            )}
+            </div>
           </button>
         );
       })}

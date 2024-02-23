@@ -19,6 +19,7 @@ export default function Messages({
   chats,
   chatsLoading,
   currentChat,
+  mostRecentMessageByChat,
   router,
   sendMessage,
   setMessage,
@@ -29,11 +30,20 @@ export default function Messages({
   chats: RouterOutputs['getUserChats'];
   currentChat: string | null;
   chatsLoading: boolean;
+  mostRecentMessageByChat:
+    | {
+        [id: string]: {
+          message: string;
+        };
+      }
+    | undefined;
   router: AppRouterInstance;
   sendMessage: () => void;
   setMessage: Dispatch<SetStateAction<string>>;
 }) {
-  const currentChatDetails = chats?.find((chat) => chat.id === currentChat);
+  const currentChatDetails = chats?.chats?.find(
+    (chat) => chat.id === currentChat,
+  );
 
   const getRandomUserFromChat = () => {
     return currentChatDetails?.chat_members.find(
@@ -54,6 +64,7 @@ export default function Messages({
             chats={chats}
             chatsLoading={chatsLoading}
             currentChat={currentChat}
+            mostRecentMessageByChat={mostRecentMessageByChat}
             router={router}
           />
         </div>
@@ -71,6 +82,7 @@ export default function Messages({
                         chatMembers={currentChatDetails?.chat_members.map(
                           (member) => member.user_profiles!,
                         )}
+                        mostRecentMessage={null}
                       />
                     ) : (
                       <div>Loading...</div>

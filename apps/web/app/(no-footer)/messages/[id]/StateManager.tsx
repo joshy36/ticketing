@@ -26,6 +26,13 @@ export default function StateManager({
   const [message, setMessage] = useState('');
   const [messages, setMessages] =
     useState<RouterOutputs['getMessagesByChat']>(null);
+  const [mostRecentMessageByChat, setMostRecentMessageByChat] = useState<{
+    [id: string]: {
+      message: string;
+    };
+  }>();
+  const [mostRecentMessagesLoaded, setMostRecentMessagesLoaded] =
+    useState<boolean>(false);
   const supabase = createSupabaseBrowserClient();
 
   const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
@@ -40,13 +47,35 @@ export default function StateManager({
     user_id: userProfile.id,
   });
 
-  const currentChatDetails = chats?.find((chat) => chat.id === currentChat);
+  const currentChatDetails = chats?.chats?.find(
+    (chat) => chat.id === currentChat,
+  );
+
+  const readMessages = trpc.readMessages.useMutation();
 
   useEffect(() => {
     if (messagesInCurrentChat) {
       setMessages(messagesInCurrentChat);
+      // set last read message
+      readMessages.mutate({
+        chat_id: currentChat,
+      });
     }
   }, [messagesInCurrentChat]);
+
+  useEffect(() => {
+    if (chats?.messagesInChats) {
+      for (let i = 0; i < chats?.messagesInChats?.length; i++) {
+        setMostRecentMessageByChat((prevState) => ({
+          ...prevState,
+          [chats?.chats![i]?.id!]: {
+            message: chats?.messagesInChats[i]?.[0]?.content!,
+          },
+        }));
+      }
+      setMostRecentMessagesLoaded(true);
+    }
+  }, [chats]);
 
   useEffect(() => {
     const channel = supabase
@@ -69,7 +98,16 @@ export default function StateManager({
             .limit(1)
             .single();
 
-          setMessages((prevMessages) => [...prevMessages!, newMessage!]);
+          // only update messages if the chat is the current chat
+          if (newMessage?.chat_id === currentChat) {
+            setMessages((prevMessages) => [...prevMessages!, newMessage!]);
+          }
+          setMostRecentMessageByChat((prevState) => ({
+            ...prevState,
+            [currentChat!]: {
+              message: newMessage?.content!,
+            },
+          }));
         },
       )
       .on(
@@ -99,7 +137,7 @@ export default function StateManager({
   };
 
   const getRandomUserFromChat = (chatId: string | null) => {
-    return chats
+    return chats?.chats
       ?.find((chat) => chat.id === chatId)
       ?.chat_members.find((user) => user.user_id != userProfile.id)
       ?.user_profiles!;
@@ -125,6 +163,7 @@ export default function StateManager({
           chats={chats!}
           chatsLoading={chatsLoading}
           currentChat={currentChat}
+          mostRecentMessageByChat={mostRecentMessageByChat}
           router={router}
           sendMessage={sendMessage}
           setMessage={setMessage}
@@ -134,9 +173,10 @@ export default function StateManager({
         {!currentChat ? (
           <RenderChats
             userProfile={userProfile}
-            chats={chats}
+            chats={chats!}
             chatsLoading={chatsLoading}
             currentChat={currentChat}
+            mostRecentMessageByChat={mostRecentMessageByChat}
             router={router}
           />
         ) : (
@@ -163,6 +203,7 @@ export default function StateManager({
                         chatMembers={currentChatDetails?.chat_members.map(
                           (member) => member.user_profiles!,
                         )}
+                        mostRecentMessage={null}
                       />
                     ) : (
                       <div>Loading...</div>

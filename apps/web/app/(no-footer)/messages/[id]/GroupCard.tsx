@@ -4,9 +4,11 @@ import { UserProfile } from 'supabase';
 export default function GroupCard({
   userProfile,
   chatMembers,
+  mostRecentMessage,
 }: {
   userProfile: UserProfile;
   chatMembers: UserProfile[];
+  mostRecentMessage: string | null | undefined;
 }) {
   // Exclude the user with the same id as userProfile
   const otherMembers = chatMembers.filter(
@@ -18,7 +20,7 @@ export default function GroupCard({
     .join(', ');
 
   return (
-    <div className='flex w-64 items-center gap-2 truncate'>
+    <div className='flex items-center gap-2'>
       <div className='flex items-end -space-x-4 rtl:space-x-reverse'>
         <Avatar className='z-40'>
           {userProfile?.profile_image ? (
@@ -31,9 +33,14 @@ export default function GroupCard({
           {chatMembers.length}
         </div>
       </div>
-      <p className='ml-1 truncate text-ellipsis font-medium text-white'>
-        {allMembersNames}
-      </p>
+      <div className='ml-1 flex max-w-[300px] flex-col truncate text-ellipsis'>
+        <p className='truncate text-ellipsis font-medium text-white'>
+          {allMembersNames}
+        </p>
+        <p className='truncate text-ellipsis text-left text-sm font-light text-muted-foreground'>
+          {mostRecentMessage}
+        </p>
+      </div>
     </div>
   );
 }
