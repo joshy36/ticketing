@@ -251,13 +251,13 @@ export default function RenderChats({
                   )}
                 </div>
               )}
-              <div>
+              {/* <div>
                 {convertStringToDate(
                   chat.chat_members.find(
                     (user) => user.user_id === userProfile.id,
                   )?.chat_messages?.created_at!,
                 ) === new Date()}
-              </div>
+              </div> */}
               <div className='flex'>
                 {chat.chat_members.find((user) => user.id === userProfile.id)
                   ?.last_read && (

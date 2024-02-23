@@ -18,7 +18,7 @@ export const chatsRouter = router({
 
       const { data: chats } = await supabase
         .from('chats')
-        .select(`*, chat_members(*, user_profiles(*), chat_messages(*))`);
+        .select(`*, chat_members(*, user_profiles(*))`);
 
       // get only chats for user
       const filteredChats = chats?.filter((chat) =>
