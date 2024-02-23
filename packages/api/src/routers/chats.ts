@@ -209,13 +209,12 @@ export const chatsRouter = router({
         const { data: lastMessage } = await supabase
           .from('chat_members')
           .update({
-            last_read: messages[messages.length - 1]?.id,
+            last_read: messages[0]?.id,
           })
           .eq('user_id', user?.id)
           .eq('chat_id', input.chat_id)
           .select()
           .single();
-
         return lastMessage;
       }
 
