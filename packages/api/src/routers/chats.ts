@@ -194,6 +194,11 @@ export const chatsRouter = router({
       const supabase = ctx.supabase;
       const user = ctx.user;
 
+      if (input.chat_id === '') {
+        console.log('no chat selected');
+        return null;
+      }
+
       const { data: messages } = await supabase
         .from('chat_messages')
         .select()
