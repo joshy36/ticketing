@@ -32,8 +32,12 @@ export default function StateManager({
       created_at: string;
     };
   }>();
-  const [mostRecentMessagesLoaded, setMostRecentMessagesLoaded] =
-    useState<boolean>(false);
+  const [lastReadMessageByChat, setLastReadMessageByChat] = useState<{
+    [id: string]: {
+      message: string;
+      created_at: string;
+    };
+  }>();
   const supabase = createSupabaseBrowserClient();
 
   const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
@@ -61,6 +65,16 @@ export default function StateManager({
       readMessages.mutate({
         chat_id: currentChat,
       });
+      setLastReadMessageByChat((prevState) => ({
+        ...prevState,
+        [currentChat!]: {
+          message:
+            messagesInCurrentChat[messagesInCurrentChat.length - 1]?.content!,
+          created_at:
+            messagesInCurrentChat[messagesInCurrentChat.length - 1]
+              ?.created_at!,
+        },
+      }));
     }
   }, [messagesInCurrentChat]);
 
@@ -74,8 +88,15 @@ export default function StateManager({
             created_at: chats?.messagesInChats[i]?.[0]?.created_at!,
           },
         }));
+
+        setLastReadMessageByChat((prevState) => ({
+          ...prevState,
+          [chats?.chats![i]?.id!]: {
+            message: chats?.lastReadMessages[i]?.content!,
+            created_at: chats?.lastReadMessages[i]?.created_at!,
+          },
+        }));
       }
-      setMostRecentMessagesLoaded(true);
     }
   }, [chats]);
 
@@ -101,6 +122,14 @@ export default function StateManager({
               .eq('chat_id', currentChat!)
               .limit(1)
               .single();
+
+            setLastReadMessageByChat((prevState) => ({
+              ...prevState,
+              [message.chat_id!]: {
+                message: message.content!,
+                created_at: message.created_at!,
+              },
+            }));
 
             setMessages((prevMessages) => [...prevMessages!, newMessage!]);
           }
@@ -167,6 +196,7 @@ export default function StateManager({
           chatsLoading={chatsLoading}
           currentChat={currentChat}
           mostRecentMessageByChat={mostRecentMessageByChat}
+          lastReadMessageByChat={lastReadMessageByChat}
           router={router}
           sendMessage={sendMessage}
           setMessage={setMessage}
@@ -180,6 +210,7 @@ export default function StateManager({
             chatsLoading={chatsLoading}
             currentChat={currentChat}
             mostRecentMessageByChat={mostRecentMessageByChat}
+            lastReadMessageByChat={lastReadMessageByChat}
             router={router}
           />
         ) : (

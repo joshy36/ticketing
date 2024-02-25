@@ -26,6 +26,7 @@ export const chatsRouter = router({
       );
 
       const messages = [];
+      const lastReadMessages = [];
 
       // grab first 50 messages
       for (let i = 0; i < filteredChats?.length!; i++) {
@@ -36,9 +37,26 @@ export const chatsRouter = router({
           .order('created_at', { ascending: false })
           .range(0, 50);
         messages.push(chatMessages);
+
+        const { data: lastReadMessage } = await supabase
+          .from('chat_messages')
+          .select()
+          .eq(
+            'id',
+            filteredChats![i]?.chat_members.find(
+              (chatUser) => chatUser.user_id === user?.id
+            )?.last_read!
+          )
+          .limit(1)
+          .single();
+        lastReadMessages.push(lastReadMessage);
       }
 
-      return { chats: filteredChats, messagesInChats: messages };
+      return {
+        chats: filteredChats,
+        messagesInChats: messages,
+        lastReadMessages: lastReadMessages,
+      };
     }),
 
   getMessagesByChat: authedProcedure
@@ -95,11 +113,25 @@ export const chatsRouter = router({
         });
       }
 
-      const { data: newMessage } = await supabase.from('chat_messages').insert({
-        chat_id: input.chat_id,
-        content: input.content,
-        from: user?.id,
-      });
+      const { data: newMessage } = await supabase
+        .from('chat_messages')
+        .insert({
+          chat_id: input.chat_id,
+          content: input.content,
+          from: user?.id,
+        })
+        .select()
+        .single();
+
+      await supabase
+        .from('chat_members')
+        .update({
+          last_read: newMessage?.id!,
+        })
+        .eq('user_id', user?.id)
+        .eq('chat_id', input.chat_id)
+        .select()
+        .single();
 
       return newMessage;
     }),

@@ -28,6 +28,7 @@ export default function RenderChats({
   chatsLoading,
   currentChat,
   mostRecentMessageByChat,
+  lastReadMessageByChat,
   router,
 }: {
   userProfile: UserProfile;
@@ -35,6 +36,14 @@ export default function RenderChats({
   chatsLoading: boolean;
   currentChat: string | null;
   mostRecentMessageByChat:
+    | {
+        [id: string]: {
+          message: string;
+          created_at: string;
+        };
+      }
+    | undefined;
+  lastReadMessageByChat:
     | {
         [id: string]: {
           message: string;
@@ -84,9 +93,10 @@ export default function RenderChats({
     )?.user_profiles;
   };
 
-  const convertStringToDate = (date: string) => {
-    const data = new Date(date);
-    return data;
+  const compareDates = (date1: string, date2: string) => {
+    const data1 = new Date(date1);
+    const data2 = new Date(date2);
+    return data1 < data2;
   };
 
   return (
@@ -216,7 +226,7 @@ export default function RenderChats({
         return (
           <button
             key={chat.id}
-            className={`flex w-full border-b px-4 py-4 ${
+            className={`flex w-full items-center justify-between gap-2 border-b px-4 py-4 ${
               chat.id === currentChat ? 'bg-secondary' : '' // Apply grey background to the current chat
             }`}
             onClick={() => {
@@ -252,20 +262,25 @@ export default function RenderChats({
                   )}
                 </div>
               )}
-              {/* <div>
-                {convertStringToDate(
-                  chat.chat_members.find(
-                    (user) => user.user_id === userProfile.id,
-                  )?.chat_messages?.created_at!,
-                ) === new Date()}
-              </div> */}
-              <div className='flex'>
-                {chat.chat_members.find((user) => user.id === userProfile.id)
-                  ?.last_read && (
-                  <span className='h-3 w-3 rounded-full bg-blue-700'></span>
-                )}
-              </div>
             </div>
+            {(lastReadMessageByChat
+              ? lastReadMessageByChat[chat.id]?.created_at
+              : null) &&
+              (mostRecentMessageByChat
+                ? mostRecentMessageByChat[chat.id]?.created_at
+                : null) &&
+              currentChat !== chat.id && (
+                <div>
+                  {compareDates(
+                    lastReadMessageByChat![chat.id]?.created_at!,
+                    mostRecentMessageByChat![chat.id]?.created_at!,
+                  ) && (
+                    <div className='flex pr-2'>
+                      <span className='h-3 w-3 rounded-full bg-blue-700'></span>
+                    </div>
+                  )}
+                </div>
+              )}
           </button>
         );
       })}

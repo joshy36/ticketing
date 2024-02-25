@@ -20,6 +20,7 @@ export default function LargeScreenMessages({
   chatsLoading,
   currentChat,
   mostRecentMessageByChat,
+  lastReadMessageByChat,
   router,
   sendMessage,
   setMessage,
@@ -31,6 +32,14 @@ export default function LargeScreenMessages({
   currentChat: string | null;
   chatsLoading: boolean;
   mostRecentMessageByChat:
+    | {
+        [id: string]: {
+          message: string;
+          created_at: string;
+        };
+      }
+    | undefined;
+  lastReadMessageByChat:
     | {
         [id: string]: {
           message: string;
@@ -66,6 +75,7 @@ export default function LargeScreenMessages({
             chatsLoading={chatsLoading}
             currentChat={currentChat}
             mostRecentMessageByChat={mostRecentMessageByChat}
+            lastReadMessageByChat={lastReadMessageByChat}
             router={router}
           />
         </div>
