@@ -45,7 +45,7 @@ export const MessagesProvider = ({
         [id]: { unread: 0 },
       }));
     }
-  }, [id, numberOfUnreadMessagesPerChat]);
+  }, [id]);
 
   useEffect(() => {
     if (numberOfUnreadMessagesPerChat) {
