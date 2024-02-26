@@ -22,6 +22,8 @@ import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
 import MessageCenter from './MessageCenter';
 import Image from 'next/image';
+import { useContext } from 'react';
+import { MessagesContext } from '@/utils/messagesProvider';
 
 export const createComponents: {
   title: string;
@@ -54,6 +56,8 @@ export default function NavBar({
   userProfile: UserProfile | null;
   userOrg: string | null | undefined;
 }) {
+  const m = useContext(MessagesContext);
+
   const mainComponents: {
     title: string;
     href: string;
@@ -112,7 +116,14 @@ export default function NavBar({
               <NavigationMenuItem>
                 <Link href={`/messages`} legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Messages
+                    <div className='flex flex-row items-center gap-2'>
+                      <p>Messages</p>
+                      {m.unreadMessages > 0 && (
+                        <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+                          {m.unreadMessages}
+                        </span>
+                      )}
+                    </div>
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>

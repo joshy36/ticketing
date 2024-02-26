@@ -252,6 +252,43 @@ export const chatsRouter = router({
 
       return null;
     }),
+
+  getTotalUnreadMessages: authedProcedure.query(async ({ ctx }) => {
+    const supabase = ctx.supabase;
+    const user = ctx.user;
+
+    const { data: chats } = await supabase
+      .from('chat_members')
+      .select()
+      .eq('user_id', user?.id);
+
+    if (!chats || chats.length === 0) {
+      return [];
+    }
+
+    let unreadMessages: { chat: string; unreadMessages: number }[] = [];
+
+    for (let i = 0; i < chats?.length!; i++) {
+      const { data: messages } = await supabase
+        .from('chat_messages')
+        .select()
+        .eq('chat_id', chats![i]?.chat_id!)
+        .order('created_at', { ascending: true });
+
+      if (messages && messages.length > 0) {
+        const lastReadMessage = messages?.find(
+          (message) => message.id === chats![i]?.last_read!
+        );
+        const lastIndex = messages.indexOf(lastReadMessage!);
+        unreadMessages.push({
+          chat: chats![i]?.chat_id!,
+          unreadMessages: messages.length - lastIndex! - 1,
+        });
+      }
+    }
+
+    return unreadMessages;
+  }),
 });
 
 function areArraysEqual(arr1: any[], arr2: any[]) {

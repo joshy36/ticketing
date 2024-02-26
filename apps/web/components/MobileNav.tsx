@@ -14,6 +14,8 @@ import { UserProfile } from 'supabase';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MessageCenter from './MessageCenter';
 import { MessageCircle } from 'lucide-react';
+import { useContext } from 'react';
+import { MessagesContext } from '@/utils/messagesProvider';
 
 export function MobileNav({
   user,
@@ -25,6 +27,7 @@ export function MobileNav({
   userOrg: string | null | undefined;
 }) {
   const [open, setOpen] = React.useState(false);
+  const m = useContext(MessagesContext);
 
   const mainComponents: {
     title: string;
@@ -85,7 +88,14 @@ export function MobileNav({
             </div>
             {user && (
               <MobileLink href={`/messages`} onOpenChange={setOpen}>
-                Messages
+                <div className='flex flex-row items-center gap-2'>
+                  <p>Messages</p>
+                  {m.unreadMessages > 0 && (
+                    <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+                      {m.unreadMessages}
+                    </span>
+                  )}
+                </div>
               </MobileLink>
             )}
             <div className='py-1.5'></div>
@@ -156,7 +166,11 @@ export function MobileNav({
                 >
                   <MessageCircle className='h-4 w-4' />
                 </Button>
-                <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700'></span>
+                {m.unreadMessages > 0 && (
+                  <span className='absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+                    {m.unreadMessages}
+                  </span>
+                )}
               </div>
             </MobileLink>
             <UserNav user={user} userProfile={userProfile} />

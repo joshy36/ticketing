@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, Info } from 'lucide-react';
 import ProfileCard from '@/components/ProfileCard';
 import GroupCard from './GroupCard';
+import { MessagesContext } from '@/utils/messagesProvider';
 
 export default function StateManager({
   userProfile,

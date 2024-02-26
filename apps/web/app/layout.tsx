@@ -11,6 +11,7 @@ import { MobileNav } from '@/components/MobileNav';
 import { Metadata } from 'next';
 
 import './globals.css';
+import { MessagesProvider } from '@/utils/messagesProvider';
 export const revalidate = 0; //disable cache
 
 export const metadata: Metadata = {
@@ -51,22 +52,24 @@ export default async function RootLayout({
       <body>
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            <div className='pb-16'>
-              <NavBar
+            <MessagesProvider>
+              <div className='pb-16'>
+                <NavBar
+                  user={session?.user}
+                  userProfile={userProfile!}
+                  userOrg={userOrg}
+                />
+              </div>
+              <MobileNav
                 user={session?.user}
                 userProfile={userProfile!}
                 userOrg={userOrg}
               />
-            </div>
-            <MobileNav
-              user={session?.user}
-              userProfile={userProfile!}
-              userOrg={userOrg}
-            />
-            <div>{children}</div>
-            <Toaster richColors />
-            <SpeedInsights />
-            <Analytics />
+              <div>{children}</div>
+              <Toaster richColors />
+              <SpeedInsights />
+              <Analytics />
+            </MessagesProvider>
           </ThemeProvider>
         </Provider>
       </body>
