@@ -52,7 +52,7 @@ export default async function RootLayout({
       <body>
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            <MessagesProvider>
+            <MessagesProvider userProfile={userProfile}>
               <div className='pb-16'>
                 <NavBar
                   user={session?.user}
