@@ -30,7 +30,7 @@ export const MessagesProvider = ({
     useState<{
       [id: string]: { unread: number };
     }>();
-
+  const pathname = usePathname();
   const id = usePathname().split('/').pop();
 
   useEffect(() => {
@@ -83,8 +83,13 @@ export const MessagesProvider = ({
         },
         (payload) => {
           const message = payload.new as Message;
+          const urlParts = pathname.split('/');
+          const currentChat = urlParts[urlParts.length - 1];
 
-          if (userProfile?.id !== message.from) {
+          if (
+            currentChat !== message.chat_id &&
+            userProfile?.id !== message.from
+          ) {
             console.log('message');
             setUnreadMessages((prevState) => prevState + 1);
           }
