@@ -25,6 +25,7 @@ export const MessagesProvider = ({
 }: MessagesProviderProps) => {
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const supabase = createSupabaseBrowserClient();
+  const [didFetch, setDidFetch] = useState(false);
   const { data: unread } = trpc.getTotalUnreadMessages.useQuery();
   const [numberOfUnreadMessagesPerChat, setNumberOfUnreadMessagesPerChat] =
     useState<{
@@ -44,20 +45,20 @@ export const MessagesProvider = ({
         [id]: { unread: 0 },
       }));
     }
-  }, [id]);
+  }, [id, numberOfUnreadMessagesPerChat]);
 
   useEffect(() => {
     if (numberOfUnreadMessagesPerChat) {
       const totalUnreadMessages = Object.values(
         numberOfUnreadMessagesPerChat!,
       ).reduce((accumulator, chat) => accumulator + chat.unread, 0);
-
+      console.log('totalUnreadMessages:', totalUnreadMessages);
       setUnreadMessages(totalUnreadMessages);
     }
   }, [numberOfUnreadMessagesPerChat]);
 
   useEffect(() => {
-    if (unread) {
+    if (unread && !didFetch) {
       for (let i = 0; i < unread.length; i++) {
         setNumberOfUnreadMessagesPerChat((prevState) => ({
           ...prevState,
@@ -68,6 +69,7 @@ export const MessagesProvider = ({
         return accumulator + currentChat.unreadMessages;
       }, 0);
       setUnreadMessages(totalUnreadMessages);
+      setDidFetch(true);
     }
   }, [unread]);
 
@@ -90,7 +92,8 @@ export const MessagesProvider = ({
             currentChat !== message.chat_id &&
             userProfile?.id !== message.from
           ) {
-            console.log('message');
+            console.log('message:', message);
+            console.log('currentChat:', currentChat);
             setUnreadMessages((prevState) => prevState + 1);
           }
         },
