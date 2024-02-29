@@ -1,7 +1,13 @@
 'use client';
 
 import { RouterOutputs, trpc } from '@/app/_trpc/client';
-import { createContext, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 import createSupabaseBrowserClient from './supabaseBrowser';
 import { usePathname } from 'next/navigation';
 import { Message, UserProfile } from 'supabase';
@@ -12,6 +18,7 @@ type MessagesProviderProps = {
 };
 
 type MessagesContextProps = {
+  userProfile: UserProfile | null | undefined;
   unreadMessages: number;
   mostRecentMessageByChat?: {
     [id: string]: {
@@ -24,22 +31,33 @@ type MessagesContextProps = {
   };
   chats?: RouterOutputs['getUserChats'];
   messages?: RouterOutputs['getMessagesByChat'];
+  currentChat: string | null;
+
+  message: string;
+  setMessage: Dispatch<SetStateAction<string>>;
+  sendMessage: () => void;
 };
 
 export const MessagesContext = createContext<MessagesContextProps>({
+  userProfile: null,
   unreadMessages: 0,
   mostRecentMessageByChat: {},
   messages: [],
+  currentChat: null,
+  message: '',
+  setMessage: () => {},
+  sendMessage: () => {},
 });
 
 export const MessagesProvider = ({
   children,
   userProfile,
 }: MessagesProviderProps) => {
-  const [unreadMessages, setUnreadMessages] = useState<number>(0);
-  const supabase = createSupabaseBrowserClient();
   const [didFetch, setDidFetch] = useState(false);
-  const { data: unread } = trpc.getTotalUnreadMessages.useQuery();
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [currentChat, setCurrentChat] = useState<string | null>(null);
+  const [messages, setMessages] =
+    useState<RouterOutputs['getMessagesByChat']>(null);
   const [numberOfUnreadMessagesPerChat, setNumberOfUnreadMessagesPerChat] =
     useState<{
       [id: string]: { unread: number };
@@ -50,10 +68,24 @@ export const MessagesProvider = ({
       created_at: string;
     };
   }>();
-  const [messages, setMessages] =
-    useState<RouterOutputs['getMessagesByChat']>(null);
-  const [currentChat, setCurrentChat] = useState<string | null>(null);
+
   const url = usePathname().split('/');
+
+  const supabase = createSupabaseBrowserClient();
+
+  const { data: unread } = trpc.getTotalUnreadMessages.useQuery();
+  const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
+    chat_id: currentChat,
+  });
+  const {
+    data: chats,
+    isLoading: chatsLoading,
+    refetch,
+  } = trpc.getUserChats.useQuery({
+    user_id: userProfile?.id,
+  });
+
+  const readMessages = trpc.readMessages.useMutation();
 
   useEffect(() => {
     if (url && url[url.length - 2] === 'messages') {
@@ -62,20 +94,6 @@ export const MessagesProvider = ({
       setCurrentChat(null);
     }
   }, [url]);
-
-  const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
-    chat_id: currentChat,
-  });
-
-  const readMessages = trpc.readMessages.useMutation();
-
-  const {
-    data: chats,
-    isLoading: chatsLoading,
-    refetch,
-  } = trpc.getUserChats.useQuery({
-    user_id: userProfile?.id,
-  });
 
   useEffect(() => {
     if (
@@ -218,14 +236,40 @@ export const MessagesProvider = ({
     userProfile,
   ]);
 
+  // should probably put into a unifised message component
+  const [message, setMessage] = useState('');
+
+  const sendMessage = async () => {
+    sendChatMessage.mutate({
+      chat_id: currentChat!,
+      content: message,
+    });
+    setMessage('');
+  };
+
+  const sendChatMessage = trpc.sendChatMessage.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        // console.error('Error sending message:', error);
+      } else if (data) {
+        // console.log('Message sent:', data);
+      }
+    },
+  });
+
   return (
     <MessagesContext.Provider
       value={{
+        userProfile,
         unreadMessages,
         mostRecentMessageByChat,
         numberOfUnreadMessagesPerChat,
         chats,
         messages,
+        currentChat,
+        message,
+        setMessage,
+        sendMessage,
       }}
     >
       {children}

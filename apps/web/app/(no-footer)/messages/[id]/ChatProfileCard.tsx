@@ -18,7 +18,7 @@ export default function ChatProfileCard({
         )}
       </Avatar>
 
-      <div className='flex max-w-[300px] flex-col justify-between'>
+      <div className='flex max-w-[150px] flex-col justify-between'>
         <div className='flex items-center'>
           <p className='truncate text-ellipsis font-medium text-white'>
             {userProfile?.first_name} {userProfile?.last_name}

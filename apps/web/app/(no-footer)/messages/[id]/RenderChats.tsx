@@ -1,4 +1,5 @@
-import { RouterOutputs } from 'api';
+'use client';
+
 import { UserProfile } from 'supabase';
 import { useContext, useState } from 'react';
 import { Check, SendHorizonal } from 'lucide-react';
@@ -25,10 +26,8 @@ import { useRouter } from 'next/navigation';
 
 export default function RenderChats({
   userProfile,
-  currentChat,
 }: {
   userProfile: UserProfile;
-  currentChat: string | null;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>('');
@@ -39,8 +38,14 @@ export default function RenderChats({
   const router = useRouter();
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
 
-  const { chats, mostRecentMessageByChat, numberOfUnreadMessagesPerChat } =
-    useContext(MessagesContext);
+  const {
+    chats,
+    currentChat,
+    mostRecentMessageByChat,
+    numberOfUnreadMessagesPerChat,
+  } = useContext(MessagesContext);
+
+  console.log('currentChat: ', currentChat);
 
   const createChat = trpc.createChat.useMutation({
     onSettled(data, error) {
@@ -200,10 +205,11 @@ export default function RenderChats({
         return (
           <button
             key={chat.id}
-            className={`flex w-full items-center justify-between gap-2 border-b px-4 py-4 ${
+            className={`flex w-full items-center justify-between gap-2 truncate border-b px-4 py-4 text-ellipsis${
               chat.id === currentChat ? 'bg-secondary' : '' // Apply grey background to the current chat
             }`}
             onClick={() => {
+              console.log('chat.id: ', chat.id);
               router.push(`/messages/${chat.id}`);
             }}
           >

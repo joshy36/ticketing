@@ -1,26 +1,23 @@
-import { serverClient } from '@/app/_trpc/serverClient';
-import createSupabaseServer from '@/utils/supabaseServer';
-import { redirect } from 'next/navigation';
-import StateManager from './[id]/StateManager';
+'use client';
+import { useContext } from 'react';
+import RenderChats from './[id]/RenderChats';
+import { MessagesContext } from '@/utils/messagesProvider';
 
-export default async function Home() {
-  const supabase = createSupabaseServer();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    redirect('/unauthenticated');
-  }
-
-  const userProfile = await serverClient.getUserProfile.query({
-    id: session.user.id,
-  });
-
+export default function Home() {
+  const { userProfile } = useContext(MessagesContext);
   return (
-    <main>
-      <StateManager userProfile={userProfile!} id={''} />
-    </main>
+    <div className='lg:flex'>
+      <div className='hidden items-center justify-center lg:flex'>
+        <div className='flex flex-col'>
+          <h1 className='text-4xl font-bold'>Select a message</h1>
+          <p className='font-light text-muted-foreground'>
+            Choose an existing conversation to view or start a new one.
+          </p>
+        </div>
+      </div>
+      <div className='pt-8 lg:hidden'>
+        <RenderChats userProfile={userProfile!} />
+      </div>
+    </div>
   );
 }
