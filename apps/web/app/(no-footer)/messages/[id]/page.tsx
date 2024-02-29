@@ -26,7 +26,7 @@ export default function Home({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className='max-w-screen relative flex max-h-screen w-full flex-col justify-between'>
+    <div className='max-w-screen relative flex h-[100dvh] w-full flex-col justify-between'>
       <div className='mt-16 flex w-full border-b py-2 text-center font-bold'>
         <div className='relative top-0 flex w-full flex-row items-center justify-between px-4'>
           <Button
