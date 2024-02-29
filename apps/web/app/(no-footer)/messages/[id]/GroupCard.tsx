@@ -21,17 +21,26 @@ export default function GroupCard({
 
   return (
     <div className='flex items-center gap-2'>
-      <div className='flex items-end -space-x-4 rtl:space-x-reverse'>
-        <Avatar className='z-40'>
-          {userProfile?.profile_image ? (
-            <AvatarImage src={otherMembers[0]?.profile_image!} alt='pfp' />
-          ) : (
-            <AvatarFallback></AvatarFallback>
-          )}
-        </Avatar>
-        <div className='z-50 flex h-6 w-6 items-center justify-center rounded-full border border-black bg-secondary text-xs font-medium text-white'>
+      <div className='flex items-end -space-x-6 rtl:space-x-reverse'>
+        {otherMembers.map((member) => (
+          <Avatar className='z-40 opacity-100'>
+            {userProfile?.profile_image ? (
+              <AvatarImage src={member?.profile_image!} alt='pfp' />
+            ) : (
+              <AvatarFallback></AvatarFallback>
+            )}
+          </Avatar>
+        ))}
+        {/*         // <Avatar className='z-40'>
+        //   {userProfile?.profile_image ? (
+        //     <AvatarImage src={otherMembers[0]?.profile_image!} alt='pfp' />
+        //   ) : (
+        //     <AvatarFallback></AvatarFallback>
+        //   )}
+        // </Avatar> */}
+        {/* <div className='z-50 flex h-10 w-10 items-center justify-center rounded-full border border-black bg-secondary text-xs font-medium text-white'>
           {chatMembers.length}
-        </div>
+        </div> */}
       </div>
       <div className='ml-1 flex max-w-[300px] flex-col truncate text-ellipsis'>
         <p className='truncate text-ellipsis font-medium text-white'>
