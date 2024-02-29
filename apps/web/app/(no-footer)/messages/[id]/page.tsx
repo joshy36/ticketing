@@ -26,9 +26,9 @@ export default function Home({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className='max-w-screen flex max-h-screen w-full flex-col justify-between'>
+    <div className='max-w-screen relative flex max-h-screen w-full flex-col justify-between'>
       <div className='mt-16 flex w-full border-b py-2 text-center font-bold'>
-        <div className='flex w-full flex-row items-center justify-between px-4'>
+        <div className='relative top-0 flex w-full flex-row items-center justify-between px-4'>
           <Button
             className='-px-2 lg:hidden'
             variant='ghost'
@@ -65,7 +65,7 @@ export default function Home({ params }: { params: { id: string } }) {
         <RenderMessages userProfile={userProfile!} />
       </div>
       <form
-        className='flex w-full flex-row gap-2 border-t px-4 pt-4'
+        className='absolute bottom-0 flex w-full flex-row gap-2 border-t bg-black/50 px-4 pt-4 backdrop-blur-md'
         onSubmit={(e) => {
           e.preventDefault(); // Prevent page reload
           sendMessage();
