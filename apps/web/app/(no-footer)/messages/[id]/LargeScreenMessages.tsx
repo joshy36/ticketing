@@ -3,54 +3,30 @@
 import { Input } from '@/components/ui/input';
 import { UserProfile } from 'supabase';
 import { RouterOutputs } from '../../../_trpc/client';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import { Button } from '@/components/ui/button';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import RenderMessages from './RenderMessages';
 import RenderChats from './RenderChats';
 import ProfileCard from '@/components/ProfileCard';
 import { Info } from 'lucide-react';
 import GroupCard from './GroupCard';
+import { useRouter } from 'next/navigation';
+import { MessagesContext } from '@/utils/messagesProvider';
 
 export default function LargeScreenMessages({
   userProfile,
   message,
-  messages,
-  chats,
-  chatsLoading,
   currentChat,
-  mostRecentMessageByChat,
-  lastReadMessageByChat,
-  router,
   sendMessage,
   setMessage,
 }: {
   userProfile: UserProfile;
   message: string;
-  messages: RouterOutputs['getMessagesByChat'];
-  chats: RouterOutputs['getUserChats'];
   currentChat: string | null;
-  chatsLoading: boolean;
-  mostRecentMessageByChat:
-    | {
-        [id: string]: {
-          message: string;
-          created_at: string;
-        };
-      }
-    | undefined;
-  lastReadMessageByChat:
-    | {
-        [id: string]: {
-          message: string;
-          created_at: string;
-        };
-      }
-    | undefined;
-  router: AppRouterInstance;
   sendMessage: () => void;
   setMessage: Dispatch<SetStateAction<string>>;
 }) {
+  const { chats } = useContext(MessagesContext);
   const currentChatDetails = chats?.chats?.find(
     (chat) => chat.id === currentChat,
   );
@@ -69,15 +45,7 @@ export default function LargeScreenMessages({
       ></meta>
       <div className='flex h-screen border-x'>
         <div className='border-r'>
-          <RenderChats
-            userProfile={userProfile}
-            chats={chats}
-            chatsLoading={chatsLoading}
-            currentChat={currentChat}
-            mostRecentMessageByChat={mostRecentMessageByChat}
-            lastReadMessageByChat={lastReadMessageByChat}
-            router={router}
-          />
+          <RenderChats userProfile={userProfile} currentChat={currentChat} />
         </div>
         <div className='flex w-full justify-center'>
           {currentChat ? (
@@ -104,7 +72,7 @@ export default function LargeScreenMessages({
               </div>
 
               <div className='flex h-screen flex-col overflow-hidden'>
-                <RenderMessages userProfile={userProfile} messages={messages} />
+                <RenderMessages userProfile={userProfile} />
               </div>
               <form
                 className='flex flex-row gap-2 border-t px-4 pt-4'

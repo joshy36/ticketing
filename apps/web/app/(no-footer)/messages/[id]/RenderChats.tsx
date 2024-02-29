@@ -1,7 +1,6 @@
 import { RouterOutputs } from 'api';
 import { UserProfile } from 'supabase';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Check, SendHorizonal } from 'lucide-react';
 import {
   Dialog,
@@ -21,37 +20,15 @@ import ProfileCard from '@/components/ProfileCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import GroupCard from './GroupCard';
 import ChatProfileCard from './ChatProfileCard';
+import { MessagesContext } from '@/utils/messagesProvider';
+import { useRouter } from 'next/navigation';
 
 export default function RenderChats({
   userProfile,
-  chats,
-  chatsLoading,
   currentChat,
-  mostRecentMessageByChat,
-  lastReadMessageByChat,
-  router,
 }: {
   userProfile: UserProfile;
-  chats: RouterOutputs['getUserChats'];
-  chatsLoading: boolean;
   currentChat: string | null;
-  mostRecentMessageByChat:
-    | {
-        [id: string]: {
-          message: string;
-          created_at: string;
-        };
-      }
-    | undefined;
-  lastReadMessageByChat:
-    | {
-        [id: string]: {
-          message: string;
-          created_at: string;
-        };
-      }
-    | undefined;
-  router: AppRouterInstance;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>('');
@@ -59,8 +36,11 @@ export default function RenderChats({
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
     null,
   );
-
+  const router = useRouter();
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
+
+  const { chats, mostRecentMessageByChat, numberOfUnreadMessagesPerChat } =
+    useContext(MessagesContext);
 
   const createChat = trpc.createChat.useMutation({
     onSettled(data, error) {
@@ -91,12 +71,6 @@ export default function RenderChats({
     return chats?.chats![index]!.chat_members.find(
       (user) => user.user_id != userProfile.id,
     )?.user_profiles;
-  };
-
-  const compareDates = (date1: string, date2: string) => {
-    const data1 = new Date(date1);
-    const data2 = new Date(date2);
-    return data1 < data2;
   };
 
   return (
@@ -263,22 +237,11 @@ export default function RenderChats({
                 </div>
               )}
             </div>
-            {(lastReadMessageByChat
-              ? lastReadMessageByChat[chat.id]?.created_at
-              : null) &&
-              (mostRecentMessageByChat
-                ? mostRecentMessageByChat[chat.id]?.created_at
-                : null) &&
-              currentChat !== chat.id && (
-                <div>
-                  {compareDates(
-                    lastReadMessageByChat![chat.id]?.created_at!,
-                    mostRecentMessageByChat![chat.id]?.created_at!,
-                  ) && (
-                    <div className='flex pr-2'>
-                      <span className='h-3 w-3 rounded-full bg-blue-700'></span>
-                    </div>
-                  )}
+            {numberOfUnreadMessagesPerChat &&
+              numberOfUnreadMessagesPerChat[chat.id] &&
+              numberOfUnreadMessagesPerChat[chat.id]?.unread! > 0 && (
+                <div className='flex pr-2'>
+                  <span className='h-3 w-3 rounded-full bg-blue-700'></span>
                 </div>
               )}
           </button>

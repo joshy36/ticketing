@@ -5,10 +5,16 @@ import { Chat } from 'supabase';
 
 export const chatsRouter = router({
   getUserChats: authedProcedure
-    .input(z.object({ user_id: z.string() }))
+    .input(z.object({ user_id: z.string().optional() }))
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const user = ctx.user;
+      if (!input.user_id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No user_id provided',
+        });
+      }
       if (input.user_id !== user?.id) {
         throw new TRPCError({
           code: 'UNAUTHORIZED',
@@ -60,7 +66,7 @@ export const chatsRouter = router({
     }),
 
   getMessagesByChat: authedProcedure
-    .input(z.object({ chat_id: z.string().nullable() }))
+    .input(z.object({ chat_id: z.string().nullable().optional() }))
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const user = ctx.user;

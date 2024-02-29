@@ -1,15 +1,16 @@
 import { UserProfile } from 'supabase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { dateToString } from '@/utils/helpers';
-import { RouterOutputs } from 'api';
+import { useContext } from 'react';
+import { MessagesContext } from '@/utils/messagesProvider';
 
 export default function RenderMessages({
   userProfile,
-  messages,
 }: {
   userProfile: UserProfile;
-  messages: RouterOutputs['getMessagesByChat'];
 }) {
+  const { messages } = useContext(MessagesContext);
+
   return (
     <div className='scroller'>
       <div className='px-4'>

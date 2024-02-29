@@ -56,7 +56,7 @@ export default function NavBar({
   userProfile: UserProfile | null;
   userOrg: string | null | undefined;
 }) {
-  const m = useContext(MessagesContext);
+  const { unreadMessages } = useContext(MessagesContext);
 
   const mainComponents: {
     title: string;
@@ -118,9 +118,9 @@ export default function NavBar({
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     <div className='flex flex-row items-center gap-2'>
                       <p>Messages</p>
-                      {m.unreadMessages > 0 && (
+                      {unreadMessages > 0 && (
                         <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
-                          {m.unreadMessages}
+                          {unreadMessages}
                         </span>
                       )}
                     </div>
