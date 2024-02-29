@@ -23,7 +23,7 @@ export default function GroupCard({
     <div className='flex items-center gap-2'>
       <div className='flex items-end -space-x-6 rtl:space-x-reverse'>
         {otherMembers.map((member) => (
-          <Avatar className='z-40 opacity-100'>
+          <Avatar className='z-40 opacity-100' key={member.id}>
             {userProfile?.profile_image ? (
               <AvatarImage src={member?.profile_image!} alt='pfp' />
             ) : (
