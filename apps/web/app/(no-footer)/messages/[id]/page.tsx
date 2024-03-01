@@ -7,9 +7,9 @@ import { ChevronLeft, Info } from 'lucide-react';
 import RenderMessages from './RenderMessages';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
 import ChatProfileCard from './ChatProfileCard';
 import { trpc } from '@/app/_trpc/client';
+import Link from 'next/link';
 
 export default function Home({ params }: { params: { id: string } }) {
   const [message, setMessage] = useState('');
@@ -34,7 +34,6 @@ export default function Home({ params }: { params: { id: string } }) {
 
   const { userProfile, chats } = useContext(MessagesContext);
 
-  const router = useRouter();
   const currentChatDetails = chats?.chats?.find(
     (chat) => chat.id === params.id,
   );
@@ -49,14 +48,10 @@ export default function Home({ params }: { params: { id: string } }) {
     <div className='max-w-screen relative flex h-[100dvh] w-full flex-col justify-between'>
       <div className='mt-16 flex w-full border-b py-2 text-center font-bold'>
         <div className='relative top-0 flex w-full flex-row items-center justify-between px-4'>
-          <Button
-            className='-px-2 lg:hidden'
-            variant='ghost'
-            onClick={() => {
-              router.push(`/messages`);
-            }}
-          >
-            <ChevronLeft />
+          <Button className='lg:hidden' variant='ghost' asChild>
+            <Link href={`/messages`}>
+              <ChevronLeft />
+            </Link>
           </Button>
           {currentChatDetails?.chat_type === 'dm' ? (
             <ChatProfileCard
@@ -78,14 +73,18 @@ export default function Home({ params }: { params: { id: string } }) {
               )}
             </div>
           )}
-          <Info />
+          <Button asChild variant='ghost'>
+            <Link href={`/messages/${params.id}/info`}>
+              <Info />
+            </Link>
+          </Button>
         </div>
       </div>
       <div className='flex h-screen flex-col overflow-hidden'>
         <RenderMessages userProfile={userProfile!} />
       </div>
       <form
-        className='absolute bottom-0 flex w-full flex-row gap-2 border-t bg-black/50 px-4 pt-4 backdrop-blur-md'
+        className='absolute bottom-0 flex w-full flex-row gap-2 bg-black/50 px-4 pt-4 backdrop-blur-md'
         onSubmit={(e) => {
           e.preventDefault(); // Prevent page reload
           sendMessage();
