@@ -1,7 +1,7 @@
 'use client';
 
 import { MessagesContext } from '@/utils/messagesProvider';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import GroupCard from './GroupCard';
 import { ChevronLeft, Info } from 'lucide-react';
 import RenderMessages from './RenderMessages';
@@ -9,10 +9,30 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import ChatProfileCard from './ChatProfileCard';
+import { trpc } from '@/app/_trpc/client';
 
 export default function Home({ params }: { params: { id: string } }) {
-  const { userProfile, chats, message, setMessage, sendMessage } =
-    useContext(MessagesContext);
+  const [message, setMessage] = useState('');
+
+  const sendMessage = async () => {
+    sendChatMessage.mutate({
+      chat_id: params.id,
+      content: message,
+    });
+    setMessage('');
+  };
+
+  const sendChatMessage = trpc.sendChatMessage.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        // console.error('Error sending message:', error);
+      } else if (data) {
+        // console.log('Message sent:', data);
+      }
+    },
+  });
+
+  const { userProfile, chats } = useContext(MessagesContext);
 
   const router = useRouter();
   const currentChatDetails = chats?.chats?.find(

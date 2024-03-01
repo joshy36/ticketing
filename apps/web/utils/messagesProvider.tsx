@@ -1,13 +1,7 @@
 'use client';
 
 import { RouterOutputs, trpc } from '@/app/_trpc/client';
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useEffect, useState } from 'react';
 import createSupabaseBrowserClient from './supabaseBrowser';
 import { usePathname } from 'next/navigation';
 import { Message, UserProfile } from 'supabase';
@@ -32,10 +26,6 @@ type MessagesContextProps = {
   chats?: RouterOutputs['getUserChats'];
   messages?: RouterOutputs['getMessagesByChat'];
   currentChat: string | null;
-
-  message: string;
-  setMessage: Dispatch<SetStateAction<string>>;
-  sendMessage: () => void;
 };
 
 export const MessagesContext = createContext<MessagesContextProps>({
@@ -44,9 +34,6 @@ export const MessagesContext = createContext<MessagesContextProps>({
   mostRecentMessageByChat: {},
   messages: [],
   currentChat: null,
-  message: '',
-  setMessage: () => {},
-  sendMessage: () => {},
 });
 
 export const MessagesProvider = ({
@@ -236,27 +223,6 @@ export const MessagesProvider = ({
     userProfile,
   ]);
 
-  // should probably put into a unifised message component
-  const [message, setMessage] = useState('');
-
-  const sendMessage = async () => {
-    sendChatMessage.mutate({
-      chat_id: currentChat!,
-      content: message,
-    });
-    setMessage('');
-  };
-
-  const sendChatMessage = trpc.sendChatMessage.useMutation({
-    onSettled(data, error) {
-      if (error) {
-        // console.error('Error sending message:', error);
-      } else if (data) {
-        // console.log('Message sent:', data);
-      }
-    },
-  });
-
   return (
     <MessagesContext.Provider
       value={{
@@ -267,9 +233,6 @@ export const MessagesProvider = ({
         chats,
         messages,
         currentChat,
-        message,
-        setMessage,
-        sendMessage,
       }}
     >
       {children}
