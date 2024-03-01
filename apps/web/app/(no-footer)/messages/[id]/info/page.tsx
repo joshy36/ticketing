@@ -29,9 +29,9 @@ export default function Home({ params }: { params: { id: string } }) {
         <div className='text-2xl font-bold'>People</div>
         <div>
           {currentChatDetails?.chat_members.map((member) => (
-            <div>
+            <div key={member.chat_id}>
               {member.user_id != userProfile?.id && (
-                <div key={member.id} className='border-b py-4'>
+                <div className='border-b py-4'>
                   <ProfileCard userProfile={member.user_profiles!} />
                 </div>
               )}
