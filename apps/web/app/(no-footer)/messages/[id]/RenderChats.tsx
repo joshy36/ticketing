@@ -45,8 +45,6 @@ export default function RenderChats({
     numberOfUnreadMessagesPerChat,
   } = useContext(MessagesContext);
 
-  console.log('currentChat: ', currentChat);
-
   const createChat = trpc.createChat.useMutation({
     onSettled(data, error) {
       if (error) {

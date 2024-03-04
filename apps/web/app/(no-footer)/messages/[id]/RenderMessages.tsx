@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { dateToString } from '@/utils/helpers';
 import { useContext } from 'react';
 import { MessagesContext } from '@/utils/messagesProvider';
+import Link from 'next/link';
 
 export default function RenderMessages({
   userProfile,
@@ -10,7 +11,7 @@ export default function RenderMessages({
   userProfile: UserProfile;
 }) {
   const { messages } = useContext(MessagesContext);
-
+  console.log(messages);
   return (
     <div className='scroller'>
       <div className='px-4 pb-20 '>
@@ -25,52 +26,57 @@ export default function RenderMessages({
                   ) ? (
                     <div className='flex flex-col'>
                       <div className='flex flex-row justify-end'>
-                        <div className='mr-2 flex items-center rounded-bl-lg rounded-tl-lg rounded-tr-lg border bg-white px-3 py-1 text-black'>
+                        <div className='flex items-center rounded-bl-lg rounded-tl-lg rounded-tr-lg border bg-white px-3 py-1 text-black'>
                           {message.chat_messages?.content}
                         </div>
-                        <Avatar>
-                          {userProfile.profile_image ? (
-                            <AvatarImage
-                              src={userProfile.profile_image!}
-                              alt='pfp'
-                            />
-                          ) : (
-                            <AvatarFallback></AvatarFallback>
-                          )}
-                        </Avatar>
                       </div>
-                      <div className='flex justify-end pr-12 pt-1 text-xs font-light text-muted-foreground'>
+                      <div className='flex justify-end pt-1 text-xs font-light text-muted-foreground'>
                         {dateToString(message.created_at)}
                       </div>
                     </div>
                   ) : (
-                    <div className='mr-12 flex items-center rounded-lg border bg-white px-3 py-1 text-black'>
+                    <div className='flex items-center rounded-lg border bg-white px-3 py-1 text-black'>
                       {message.chat_messages?.content}
                     </div>
                   )}
                 </div>
               ) : (
-                <div className='flex justify-start'>
+                <div className='flex flex-col justify-start'>
+                  {!(
+                    messages[index - 1]?.chat_members?.user_id ===
+                    messages[index]?.chat_members?.user_id
+                  ) && (
+                    <div className='ml-14 text-xs font-light text-muted-foreground'>
+                      {messages[index]?.chat_members?.user_profiles
+                        ?.first_name +
+                        ' ' +
+                        messages[index]?.chat_members?.user_profiles?.last_name}
+                    </div>
+                  )}
                   {!(
                     messages[index + 1]?.chat_members?.user_id ===
                     messages[index]?.chat_members?.user_id
                   ) ? (
                     <div className='flex flex-col'>
                       <div className='flex flex-row'>
-                        <Avatar>
-                          {messages[index]?.chat_members?.user_profiles
-                            ?.profile_image ? (
-                            <AvatarImage
-                              src={
-                                messages[index]?.chat_members?.user_profiles
-                                  ?.profile_image!
-                              }
-                              alt='pfp'
-                            />
-                          ) : (
-                            <AvatarFallback></AvatarFallback>
-                          )}
-                        </Avatar>
+                        <Link
+                          href={`/${messages[index]?.chat_members?.user_profiles?.username}`}
+                        >
+                          <Avatar>
+                            {messages[index]?.chat_members?.user_profiles
+                              ?.profile_image ? (
+                              <AvatarImage
+                                src={
+                                  messages[index]?.chat_members?.user_profiles
+                                    ?.profile_image!
+                                }
+                                alt='pfp'
+                              />
+                            ) : (
+                              <AvatarFallback></AvatarFallback>
+                            )}
+                          </Avatar>
+                        </Link>
                         <div className='ml-2 flex items-center rounded-br-lg rounded-tl-lg rounded-tr-lg border bg-secondary px-3 py-1'>
                           {message.chat_messages?.content}
                         </div>
@@ -79,8 +85,15 @@ export default function RenderMessages({
                         {dateToString(message.created_at)}
                       </div>
                     </div>
+                  ) : !(
+                      messages[index - 1]?.chat_members?.user_id ===
+                      messages[index]?.chat_members?.user_id
+                    ) ? (
+                    <div className='ml-12 flex w-fit items-center rounded-lg border bg-secondary px-3 py-1'>
+                      {message.chat_messages?.content}
+                    </div>
                   ) : (
-                    <div className='ml-12 flex items-center rounded-lg border bg-secondary px-3 py-1'>
+                    <div className='ml-12 flex w-fit items-center rounded-lg border bg-secondary px-3 py-1'>
                       {message.chat_messages?.content}
                     </div>
                   )}

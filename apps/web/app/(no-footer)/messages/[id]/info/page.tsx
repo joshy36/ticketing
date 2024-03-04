@@ -29,13 +29,16 @@ export default function Home({ params }: { params: { id: string } }) {
         <div className='text-2xl font-bold'>People</div>
         <div>
           {currentChatDetails?.chat_members.map((member) => (
-            <div key={member.chat_id}>
+            <Link
+              href={`/${member.user_profiles?.username}`}
+              key={member.chat_id}
+            >
               {member.user_id != userProfile?.id && (
                 <div className='border-b py-4'>
                   <ProfileCard userProfile={member.user_profiles!} />
                 </div>
               )}
-            </div>
+            </Link>
           ))}
         </div>
       </div>
