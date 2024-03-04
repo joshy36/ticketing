@@ -56,6 +56,22 @@ export default function OrganizationMembers({
     },
   });
 
+  const removeUserFromOrg = trpc.removeUserFromOrganization.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        console.error(error);
+        toast.error('Error removing user', {
+          description: 'Please try again!',
+        });
+      } else {
+        refetch();
+        toast.success('User removed', {
+          description: 'User is no longer in the organization.',
+        });
+      }
+    },
+  });
+
   return (
     <Card className='mt-4 rounded-md border bg-zinc-950'>
       <CardHeader>
@@ -82,6 +98,12 @@ export default function OrganizationMembers({
                 <Button
                   variant='outline'
                   className='rounded-md border-red-900 text-red-900 hover:bg-red-900'
+                  onClick={() => {
+                    removeUserFromOrg.mutate({
+                      username: member.user_profiles?.username!,
+                      organization_id: organization?.id!,
+                    });
+                  }}
                 >
                   <X className='mr-2 h-4 w-4' />
                   Remove

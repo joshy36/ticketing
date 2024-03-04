@@ -89,6 +89,60 @@ export const organizationsRouter = router({
       return data;
     }),
 
+  removeUserFromOrganization: authedProcedure
+    .input(z.object({ username: z.string(), organization_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: user } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .limit(1)
+        .single();
+
+      if (!user) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User not found',
+        });
+      }
+
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .limit(1)
+        .single();
+
+      const { data: isUserInOrg } = await supabase
+        .from('organization_members')
+        .select()
+        .eq('user_id', userProfile?.id!)
+        .eq('organization_id', input.organization_id)
+        .limit(1)
+        .single();
+
+      if (!isUserInOrg) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User is not in this organization',
+        });
+      }
+
+      const { error } = await supabase
+        .from('organization_members')
+        .delete()
+        .eq('user_id', userProfile?.id!)
+        .eq('organization_id', input.organization_id);
+
+      if (error) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Error removing user from organization: ' + error,
+        });
+      }
+    }),
+
   updateOrganizationName: authedProcedure
     .input(z.object({ organization_id: z.string(), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
