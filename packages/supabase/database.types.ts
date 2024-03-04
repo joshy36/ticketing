@@ -80,6 +80,40 @@ export interface Database {
           }
         ]
       }
+      chat_member_messages: {
+        Row: {
+          chat_member_id: string | null
+          chat_message_id: string | null
+          created_at: string
+          id: string
+        }
+        Insert: {
+          chat_member_id?: string | null
+          chat_message_id?: string | null
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          chat_member_id?: string | null
+          chat_message_id?: string | null
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_member_messages_chat_member_id_fkey"
+            columns: ["chat_member_id"]
+            referencedRelation: "chat_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_member_messages_chat_message_id_fkey"
+            columns: ["chat_message_id"]
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       chat_members: {
         Row: {
           chat_id: string
@@ -158,7 +192,7 @@ export interface Database {
           {
             foreignKeyName: "chat_messages_from_fkey"
             columns: ["from"]
-            referencedRelation: "user_profiles"
+            referencedRelation: "chat_members"
             referencedColumns: ["id"]
           }
         ]

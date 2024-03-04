@@ -17,13 +17,16 @@ export default function RenderMessages({
         {messages?.map((message, index) => {
           return (
             <div key={message.id} className='py-0.5'>
-              {message.from === userProfile.id ? (
+              {message.chat_members?.user_id === userProfile.id ? (
                 <div className='flex justify-end'>
-                  {!(messages[index + 1]?.from === messages[index]?.from) ? (
+                  {!(
+                    messages[index + 1]?.chat_members?.user_id ===
+                    messages[index]?.chat_members?.user_id
+                  ) ? (
                     <div className='flex flex-col'>
                       <div className='flex flex-row justify-end'>
                         <div className='mr-2 flex items-center rounded-bl-lg rounded-tl-lg rounded-tr-lg border bg-white px-3 py-1 text-black'>
-                          {message.content}
+                          {message.chat_messages?.content}
                         </div>
                         <Avatar>
                           {userProfile.profile_image ? (
@@ -42,20 +45,25 @@ export default function RenderMessages({
                     </div>
                   ) : (
                     <div className='mr-12 flex items-center rounded-lg border bg-white px-3 py-1 text-black'>
-                      {message.content}
+                      {message.chat_messages?.content}
                     </div>
                   )}
                 </div>
               ) : (
                 <div className='flex justify-start'>
-                  {!(messages[index + 1]?.from === messages[index]?.from) ? (
+                  {!(
+                    messages[index + 1]?.chat_members?.user_id ===
+                    messages[index]?.chat_members?.user_id
+                  ) ? (
                     <div className='flex flex-col'>
                       <div className='flex flex-row'>
                         <Avatar>
-                          {messages[index]?.user_profiles?.profile_image ? (
+                          {messages[index]?.chat_members?.user_profiles
+                            ?.profile_image ? (
                             <AvatarImage
                               src={
-                                messages[index]?.user_profiles?.profile_image!
+                                messages[index]?.chat_members?.user_profiles
+                                  ?.profile_image!
                               }
                               alt='pfp'
                             />
@@ -64,7 +72,7 @@ export default function RenderMessages({
                           )}
                         </Avatar>
                         <div className='ml-2 flex items-center rounded-br-lg rounded-tl-lg rounded-tr-lg border bg-secondary px-3 py-1'>
-                          {message.content}
+                          {message.chat_messages?.content}
                         </div>
                       </div>
                       <div className='flex justify-start pl-12 pt-1 text-xs font-light text-muted-foreground'>
@@ -73,7 +81,7 @@ export default function RenderMessages({
                     </div>
                   ) : (
                     <div className='ml-12 flex items-center rounded-lg border bg-secondary px-3 py-1'>
-                      {message.content}
+                      {message.chat_messages?.content}
                     </div>
                   )}
                 </div>

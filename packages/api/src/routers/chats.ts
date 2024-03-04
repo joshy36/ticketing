@@ -37,12 +37,17 @@ export const chatsRouter = router({
       // grab first 50 messages
       for (let i = 0; i < filteredChats?.length!; i++) {
         const { data: chatMessages } = await supabase
-          .from('chat_messages')
-          .select(`*, user_profiles(*)`)
-          .eq('chat_id', filteredChats![i]!.id)
+          .from('chat_member_messages')
+          .select(`*, chat_members(*, user_profiles(*)), chat_messages(*)`)
+          .eq('chat_members.chat_id', filteredChats![i]!.id)
+          .eq('chat_messages.chat_id', filteredChats![i]!.id)
           .order('created_at', { ascending: false })
           .range(0, 50);
-        messages.push(chatMessages);
+
+        const filteredMessages = chatMessages?.filter(
+          (message) => message.chat_messages && message.chat_members
+        );
+        messages.push(filteredMessages);
 
         const { data: lastReadMessage } = await supabase
           .from('chat_messages')
@@ -92,12 +97,19 @@ export const chatsRouter = router({
       }
 
       const { data: messages } = await supabase
-        .from('chat_messages')
-        .select(`*, user_profiles(*)`)
-        .eq('chat_id', input.chat_id)
-        .order('created_at', { ascending: true });
-
-      return messages;
+        .from('chat_member_messages')
+        .select(`*, chat_members(*, user_profiles(*)), chat_messages(*)`)
+        .eq('chat_members.chat_id', input.chat_id)
+        .eq('chat_messages.chat_id', input.chat_id)
+        .order('created_at', {
+          referencedTable: 'chat_messages',
+          ascending: true,
+        });
+      // filter out messages where chat_messages is null and chat_members is null
+      const filteredMessages = messages?.filter(
+        (message) => message.chat_messages && message.chat_members
+      );
+      return filteredMessages;
     }),
 
   sendChatMessage: authedProcedure
@@ -124,7 +136,7 @@ export const chatsRouter = router({
         .insert({
           chat_id: input.chat_id,
           content: input.content,
-          from: user?.id,
+          from: isUserInChat[0]?.id,
         })
         .select()
         .single();
@@ -138,6 +150,11 @@ export const chatsRouter = router({
         .eq('chat_id', input.chat_id)
         .select()
         .single();
+
+      await supabase.from('chat_member_messages').insert({
+        chat_member_id: isUserInChat[0]?.id,
+        chat_message_id: newMessage?.id,
+      });
 
       return newMessage;
     }),

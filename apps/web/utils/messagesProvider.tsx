@@ -43,8 +43,9 @@ export const MessagesProvider = ({
   const [didFetch, setDidFetch] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const [currentChat, setCurrentChat] = useState<string | null>(null);
-  const [messages, setMessages] =
-    useState<RouterOutputs['getMessagesByChat']>(null);
+  const [messages, setMessages] = useState<RouterOutputs['getMessagesByChat']>(
+    [],
+  );
   const [numberOfUnreadMessagesPerChat, setNumberOfUnreadMessagesPerChat] =
     useState<{
       [id: string]: { unread: number };
@@ -128,8 +129,8 @@ export const MessagesProvider = ({
         setMostRecentMessageByChat((prevState) => ({
           ...prevState,
           [chats?.chats![i]?.id!]: {
-            message: chats?.messagesInChats[i]?.[0]?.content!,
-            created_at: chats?.messagesInChats[i]?.[0]?.created_at!,
+            message: chats?.messagesInChats[i]?.[0]?.chat_messages?.content!,
+            created_at: chats?.messagesInChats[i]?.[0]?.chat_messages?.content!,
           },
         }));
       }
@@ -162,14 +163,16 @@ export const MessagesProvider = ({
           const message = payload.new as Message;
           // only update messages if the chat is the current chat
           if (message.chat_id === currentChat) {
-            const { data: newMessage } = await supabase
-              .from('chat_messages')
-              .select(`*, user_profiles(*)`)
-              .eq('id', message.id)
-              .eq('chat_id', currentChat!)
-              .limit(1)
-              .single();
+            const { data: messages } = await supabase
+              .from('chat_member_messages')
+              .select(`*, chat_members(*, user_profiles(*)), chat_messages(*)`)
+              .eq('chat_members.chat_id', currentChat)
+              .order('created_at', {
+                referencedTable: 'chat_messages',
+                ascending: true,
+              });
 
+            const newMessage = messages![messages!.length - 1];
             setMessages((prevMessages) => [...prevMessages!, newMessage!]);
           }
 
