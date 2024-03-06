@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import ChatProfileCard from './ChatProfileCard';
 import { trpc } from '@/app/_trpc/client';
 import Link from 'next/link';
+import OrgCard from './OrgCard';
+import RenderMessagesOrg from './RenderMessagesOrg';
 
 export default function Home({ params }: { params: { id: string } }) {
   const [message, setMessage] = useState('');
@@ -53,25 +55,29 @@ export default function Home({ params }: { params: { id: string } }) {
               <ChevronLeft />
             </Link>
           </Button>
-          {currentChatDetails?.chat_type === 'dm' ? (
+          {currentChatDetails?.chat_type === 'dm' && (
             <ChatProfileCard
               userProfile={getRandomUserFromChat()}
               mostRecentMessage={null}
             />
-          ) : (
-            <div>
-              {currentChatDetails ? (
-                <GroupCard
-                  userProfile={userProfile!}
-                  chatMembers={currentChatDetails?.chat_members.map(
-                    (member) => member.user_profiles!,
-                  )}
-                  mostRecentMessage={null}
-                />
-              ) : (
-                <div>Loading...</div>
+          )}
+          {currentChatDetails?.chat_type === 'group' && (
+            <GroupCard
+              userProfile={userProfile!}
+              chatMembers={currentChatDetails?.chat_members.map(
+                (member) => member.user_profiles!,
               )}
-            </div>
+              mostRecentMessage={null}
+            />
+          )}
+          {currentChatDetails?.chat_type === 'organization' && (
+            <OrgCard
+              artistOrVenue={currentChatDetails?.chat_members
+                .map((member) => member.artists || member.venues)
+                .filter((member) => member)
+                .at(0)}
+              mostRecentMessage={null}
+            />
           )}
           <Button asChild variant='ghost'>
             <Link href={`/messages/${params.id}/info`}>
@@ -81,27 +87,39 @@ export default function Home({ params }: { params: { id: string } }) {
         </div>
       </div>
       <div className='flex h-screen flex-col overflow-hidden'>
-        <RenderMessages userProfile={userProfile!} />
+        {currentChatDetails?.chat_type !== 'organization' && (
+          <RenderMessages userProfile={userProfile!} />
+        )}
+        {currentChatDetails?.chat_type === 'organization' && (
+          <RenderMessagesOrg
+            artistOrVenue={currentChatDetails?.chat_members
+              .map((member) => member.artists || member.venues)
+              .filter((member) => member)
+              .at(0)}
+          />
+        )}
       </div>
-      <form
-        className='absolute bottom-0 flex w-full flex-row gap-2 bg-black/50 px-4 pt-4 backdrop-blur-md'
-        onSubmit={(e) => {
-          e.preventDefault(); // Prevent page reload
-          sendMessage();
-        }}
-      >
-        <Input
-          className='mb-4 w-full rounded-full'
-          placeholder='Message...'
-          onChange={(e) => {
-            setMessage(e.target.value);
+      {currentChatDetails?.chat_type !== 'organization' && (
+        <form
+          className='absolute bottom-0 flex w-full flex-row gap-2 bg-black/50 px-4 pt-4 backdrop-blur-md'
+          onSubmit={(e) => {
+            e.preventDefault(); // Prevent page reload
+            sendMessage();
           }}
-          value={message}
-        />
-        <Button type='submit' disabled={message.length === 0}>
-          Send
-        </Button>
-      </form>
+        >
+          <Input
+            className='mb-4 w-full rounded-full'
+            placeholder='Message...'
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
+            value={message}
+          />
+          <Button type='submit' disabled={message.length === 0}>
+            Send
+          </Button>
+        </form>
+      )}
     </div>
   );
 }

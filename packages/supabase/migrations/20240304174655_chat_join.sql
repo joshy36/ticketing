@@ -17,8 +17,5 @@ alter table "public"."chat_member_messages" add constraint "chat_member_messages
 
 alter table "public"."chat_member_messages" validate constraint "chat_member_messages_chat_message_id_fkey";
 
-alter table "public"."chat_messages" add constraint "chat_messages_from_fkey" FOREIGN KEY ("from") REFERENCES chat_members(id) ON UPDATE CASCADE ON DELETE SET NULL not valid;
-
-alter table "public"."chat_messages" validate constraint "chat_messages_from_fkey";
 
 

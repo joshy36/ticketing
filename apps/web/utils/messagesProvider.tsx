@@ -165,8 +165,10 @@ export const MessagesProvider = ({
           if (message.chat_id === currentChat) {
             const { data: messages } = await supabase
               .from('chat_member_messages')
-              .select(`*, chat_members(*, user_profiles(*)), chat_messages(*)`)
-              .eq('chat_members.chat_id', currentChat)
+              .select(
+                `*, chat_members(*, user_profiles(*), artists(*), venues(*)), chat_messages(*)`,
+              )
+              .eq('chat_id', currentChat)
               .order('created_at', {
                 referencedTable: 'chat_messages',
                 ascending: true,
@@ -180,6 +182,7 @@ export const MessagesProvider = ({
             currentChat !== message.chat_id &&
             userProfile?.id !== message.from
           ) {
+            // need to not increment on every message
             setUnreadMessages((prevState) => prevState + 1);
             setNumberOfUnreadMessagesPerChat((prevState) => ({
               ...prevState,

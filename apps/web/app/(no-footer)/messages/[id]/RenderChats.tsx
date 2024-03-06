@@ -23,6 +23,7 @@ import GroupCard from './GroupCard';
 import ChatProfileCard from './ChatProfileCard';
 import { MessagesContext } from '@/utils/messagesProvider';
 import { useRouter } from 'next/navigation';
+import OrgCard from './OrgCard';
 
 export default function RenderChats({
   userProfile,
@@ -212,7 +213,7 @@ export default function RenderChats({
             }}
           >
             <div>
-              {chat.chat_type === 'dm' ? (
+              {chat?.chat_type === 'dm' && (
                 <ChatProfileCard
                   userProfile={getRandomUserFromChat(index)!}
                   mostRecentMessage={
@@ -221,24 +222,32 @@ export default function RenderChats({
                       : null
                   }
                 />
-              ) : (
-                <div>
-                  {chat ? (
-                    <GroupCard
-                      userProfile={userProfile}
-                      chatMembers={chat?.chat_members.map(
-                        (member) => member.user_profiles!,
-                      )}
-                      mostRecentMessage={
-                        mostRecentMessageByChat
-                          ? mostRecentMessageByChat[chat.id]?.message
-                          : null
-                      }
-                    />
-                  ) : (
-                    <div>Loading...</div>
+              )}
+              {chat?.chat_type === 'group' && (
+                <GroupCard
+                  userProfile={userProfile}
+                  chatMembers={chat?.chat_members.map(
+                    (member) => member.user_profiles!,
                   )}
-                </div>
+                  mostRecentMessage={
+                    mostRecentMessageByChat
+                      ? mostRecentMessageByChat[chat.id]?.message
+                      : null
+                  }
+                />
+              )}
+              {chat.chat_type === 'organization' && (
+                <OrgCard
+                  artistOrVenue={chat?.chat_members
+                    .map((member) => member.artists || member.venues)
+                    .filter((member) => member)
+                    .at(0)}
+                  mostRecentMessage={
+                    mostRecentMessageByChat
+                      ? mostRecentMessageByChat[chat.id]?.message
+                      : null
+                  }
+                />
               )}
             </div>
             {numberOfUnreadMessagesPerChat &&

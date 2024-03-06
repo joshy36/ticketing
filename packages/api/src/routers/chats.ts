@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import { Chat } from 'supabase';
+import { areArraysEqual } from '../shared/messages';
 
 export const chatsRouter = router({
   getUserChats: authedProcedure
@@ -24,30 +25,28 @@ export const chatsRouter = router({
 
       const { data: chats } = await supabase
         .from('chats')
-        .select(`*, chat_members(*, user_profiles(*))`);
+        .select(`*, chat_members(*, user_profiles(*), artists(*), venues(*))`);
 
       // get only chats for user
       const filteredChats = chats?.filter((chat) =>
         chat.chat_members.find((chatUser) => chatUser.user_id === user?.id)
       );
 
-      const messages = [];
-      const lastReadMessages = [];
+      const messages: any[] = [];
+      const lastReadMessages: any[] = [];
 
       // grab first 50 messages
       for (let i = 0; i < filteredChats?.length!; i++) {
         const { data: chatMessages } = await supabase
           .from('chat_member_messages')
-          .select(`*, chat_members(*, user_profiles(*)), chat_messages(*)`)
-          .eq('chat_members.chat_id', filteredChats![i]!.id)
-          .eq('chat_messages.chat_id', filteredChats![i]!.id)
+          .select(
+            `*, chat_members(*, user_profiles(*), artists(*), venues(*)), chat_messages(*)`
+          )
+          .eq('chat_id', filteredChats![i]!.id)
           .order('created_at', { ascending: false })
           .range(0, 50);
 
-        const filteredMessages = chatMessages?.filter(
-          (message) => message.chat_messages && message.chat_members
-        );
-        messages.push(filteredMessages);
+        messages.push(chatMessages);
 
         const { data: lastReadMessage } = await supabase
           .from('chat_messages')
@@ -98,18 +97,16 @@ export const chatsRouter = router({
 
       const { data: messages } = await supabase
         .from('chat_member_messages')
-        .select(`*, chat_members(*, user_profiles(*)), chat_messages(*)`)
-        .eq('chat_members.chat_id', input.chat_id)
-        .eq('chat_messages.chat_id', input.chat_id)
+        .select(
+          `*, chat_members(*, user_profiles(*), artists(*), venues(*)), chat_messages(*)`
+        )
+        .eq('chat_id', input.chat_id)
         .order('created_at', {
           referencedTable: 'chat_messages',
           ascending: true,
         });
-      // filter out messages where chat_messages is null and chat_members is null
-      const filteredMessages = messages?.filter(
-        (message) => message.chat_messages && message.chat_members
-      );
-      return filteredMessages;
+
+      return messages;
     }),
 
   sendChatMessage: authedProcedure
@@ -154,6 +151,7 @@ export const chatsRouter = router({
       await supabase.from('chat_member_messages').insert({
         chat_member_id: isUserInChat[0]?.id,
         chat_message_id: newMessage?.id,
+        chat_id: input.chat_id,
       });
 
       return newMessage;
@@ -313,23 +311,3 @@ export const chatsRouter = router({
     return unreadMessages;
   }),
 });
-
-function areArraysEqual(arr1: any[], arr2: any[]) {
-  // Check if the arrays have the same length
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-
-  // Sort the arrays
-  const sortedArr1 = arr1.slice().sort();
-  const sortedArr2 = arr2.slice().sort();
-
-  // Compare the sorted arrays element by element
-  for (let i = 0; i < sortedArr1.length; i++) {
-    if (sortedArr1[i] !== sortedArr2[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}

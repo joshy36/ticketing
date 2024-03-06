@@ -82,24 +82,33 @@ export interface Database {
       }
       chat_member_messages: {
         Row: {
+          chat_id: string | null
           chat_member_id: string | null
           chat_message_id: string | null
           created_at: string
           id: string
         }
         Insert: {
+          chat_id?: string | null
           chat_member_id?: string | null
           chat_message_id?: string | null
           created_at?: string
           id?: string
         }
         Update: {
+          chat_id?: string | null
           chat_member_id?: string | null
           chat_message_id?: string | null
           created_at?: string
           id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "chat_member_messages_chat_id_fkey"
+            columns: ["chat_id"]
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "chat_member_messages_chat_member_id_fkey"
             columns: ["chat_member_id"]
@@ -116,27 +125,39 @@ export interface Database {
       }
       chat_members: {
         Row: {
+          artist_id: string | null
           chat_id: string
           created_at: string
           id: string
           last_read: string | null
-          user_id: string
+          user_id: string | null
+          venue_id: string | null
         }
         Insert: {
+          artist_id?: string | null
           chat_id: string
           created_at?: string
           id?: string
           last_read?: string | null
-          user_id: string
+          user_id?: string | null
+          venue_id?: string | null
         }
         Update: {
+          artist_id?: string | null
           chat_id?: string
           created_at?: string
           id?: string
           last_read?: string | null
-          user_id?: string
+          user_id?: string | null
+          venue_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "chat_members_artist_id_fkey"
+            columns: ["artist_id"]
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "chat_members_chat_id_fkey"
             columns: ["chat_id"]
@@ -154,6 +175,12 @@ export interface Database {
             columns: ["user_id"]
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_members_venue_id_fkey"
+            columns: ["venue_id"]
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -162,6 +189,7 @@ export interface Database {
           chat_id: string
           content: string | null
           created_at: string
+          event_id: string | null
           from: string | null
           id: string
           updated_at: string | null
@@ -170,6 +198,7 @@ export interface Database {
           chat_id: string
           content?: string | null
           created_at?: string
+          event_id?: string | null
           from?: string | null
           id?: string
           updated_at?: string | null
@@ -178,6 +207,7 @@ export interface Database {
           chat_id?: string
           content?: string | null
           created_at?: string
+          event_id?: string | null
           from?: string | null
           id?: string
           updated_at?: string | null
@@ -187,6 +217,12 @@ export interface Database {
             foreignKeyName: "chat_messages_chat_id_fkey"
             columns: ["chat_id"]
             referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -907,7 +943,7 @@ export interface Database {
       }
     }
     Enums: {
-      chat_type: "group" | "dm"
+      chat_type: "group" | "dm" | "organization"
       group_type: "group" | "dm"
       message_status: "read" | "unread" | "deleted"
       role: "owner" | "admin"

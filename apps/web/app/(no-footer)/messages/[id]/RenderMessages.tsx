@@ -11,7 +11,7 @@ export default function RenderMessages({
   userProfile: UserProfile;
 }) {
   const { messages } = useContext(MessagesContext);
-  console.log(messages);
+
   return (
     <div className='scroller'>
       <div className='px-4 pb-20 '>
@@ -61,6 +61,7 @@ export default function RenderMessages({
                       <div className='flex flex-row'>
                         <Link
                           href={`/${messages[index]?.chat_members?.user_profiles?.username}`}
+                          className='flex items-end'
                         >
                           <Avatar>
                             {messages[index]?.chat_members?.user_profiles

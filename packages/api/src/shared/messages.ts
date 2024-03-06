@@ -30,3 +30,23 @@ export const getEventsAttendedInOrg = async (
   const eventIds = ticketsInOrg?.map((ticket) => ticket.event_id!);
   return [...new Set(eventIds)].length;
 };
+
+export const areArraysEqual = (arr1: any[], arr2: any[]): boolean => {
+  // Check if the arrays have the same length
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  // Sort the arrays
+  const sortedArr1 = arr1.slice().sort();
+  const sortedArr2 = arr2.slice().sort();
+
+  // Compare the sorted arrays element by element
+  for (let i = 0; i < sortedArr1.length; i++) {
+    if (sortedArr1[i] !== sortedArr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+};
