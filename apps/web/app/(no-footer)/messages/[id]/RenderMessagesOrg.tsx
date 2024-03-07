@@ -6,11 +6,14 @@ import { MessagesContext } from '@/utils/messagesProvider';
 import Link from 'next/link';
 import { trpc } from '@/app/_trpc/client';
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function RenderMessagesOrg({
-  artistOrVenue,
+  artist,
+  venue,
 }: {
-  artistOrVenue: Artist | Venue | null | undefined;
+  artist: Artist | null | undefined;
+  venue: Venue | null | undefined;
 }) {
   const { messages } = useContext(MessagesContext);
 
@@ -20,10 +23,10 @@ export default function RenderMessagesOrg({
     (t) => mess?.map((message) => t.getEventById({ id: message! })),
   );
 
-  console.log(events);
+  const artistOrVenue = artist || venue;
   return (
     <div className='scroller'>
-      <div className='px-4 pb-20 '>
+      <div className='px-4 pb-20 pt-4'>
         {messages?.map((message, index) => {
           return (
             <div key={message.id} className='py-0.5'>
@@ -43,19 +46,24 @@ export default function RenderMessagesOrg({
                   <div className='flex flex-col'>
                     <div className='flex flex-row'>
                       <Link
-                        href={`/${messages[index]?.chat_members?.user_profiles?.username}`}
+                        href={
+                          artist
+                            ? `/artist/${artistOrVenue?.id}`
+                            : venue
+                            ? `/venue/${artistOrVenue?.id}`
+                            : '/'
+                        }
                         className='flex items-end'
                       >
-                        <Avatar>
-                          {artistOrVenue?.image ? (
-                            <AvatarImage
-                              src={artistOrVenue?.image!}
-                              alt='pfp'
-                            />
-                          ) : (
-                            <AvatarFallback></AvatarFallback>
-                          )}
-                        </Avatar>
+                        {artistOrVenue?.image && (
+                          <Image
+                            src={artistOrVenue?.image!}
+                            alt='img'
+                            width={50}
+                            height={50}
+                            className='h-12 w-12 rounded-md object-contain'
+                          />
+                        )}
                       </Link>
                       <Link
                         href={`/event/${message.chat_messages?.event_id}`}

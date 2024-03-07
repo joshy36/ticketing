@@ -6,6 +6,7 @@ import { MessagesContext } from '@/utils/messagesProvider';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useContext } from 'react';
+import OrgCard from '../OrgCard';
 
 export default function Home({ params }: { params: { id: string } }) {
   const { userProfile, chats } = useContext(MessagesContext);
@@ -13,6 +14,12 @@ export default function Home({ params }: { params: { id: string } }) {
   const currentChatDetails = chats?.chats?.find(
     (chat) => chat.id === params.id,
   );
+
+  const artist = currentChatDetails?.chat_members.find(
+    (member) => member.artists,
+  )?.artists;
+  const venue = currentChatDetails?.chat_members.find((member) => member.venues)
+    ?.venues;
 
   return (
     <div className='relative flex h-[100dvh] w-full flex-col'>
@@ -26,21 +33,40 @@ export default function Home({ params }: { params: { id: string } }) {
         <div></div>
       </div>
       <div className='flex flex-col px-4 pt-4'>
-        <div className='text-2xl font-bold'>People</div>
-        <div>
-          {currentChatDetails?.chat_members.map((member) => (
+        {currentChatDetails?.chat_type !== 'organization' && (
+          <div>
+            <div className='pb-2 text-2xl font-bold'>People</div>
+            <div>
+              {currentChatDetails?.chat_members.map((member) => (
+                <Link
+                  href={`/${member.user_profiles?.username}`}
+                  key={member.user_id}
+                >
+                  {member.user_id != userProfile?.id && (
+                    <div className='border-b py-4 pl-4 hover:bg-secondary'>
+                      <ProfileCard userProfile={member.user_profiles!} />
+                    </div>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+        {currentChatDetails?.chat_type === 'organization' && (
+          <div className='py-4 pl-4 hover:bg-secondary'>
             <Link
-              href={`/${member.user_profiles?.username}`}
-              key={member.chat_id}
+              href={
+                artist
+                  ? `/artist/${artist?.id}`
+                  : venue
+                  ? `/venue/${venue?.id}`
+                  : '/'
+              }
             >
-              {member.user_id != userProfile?.id && (
-                <div className='border-b py-4'>
-                  <ProfileCard userProfile={member.user_profiles!} />
-                </div>
-              )}
+              <OrgCard artist={artist} venue={venue} mostRecentMessage={null} />
             </Link>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

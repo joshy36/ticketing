@@ -72,10 +72,15 @@ export default function Home({ params }: { params: { id: string } }) {
           )}
           {currentChatDetails?.chat_type === 'organization' && (
             <OrgCard
-              artistOrVenue={currentChatDetails?.chat_members
-                .map((member) => member.artists || member.venues)
-                .filter((member) => member)
-                .at(0)}
+              artist={
+                currentChatDetails?.chat_members.find(
+                  (member) => member.artists,
+                )?.artists
+              }
+              venue={
+                currentChatDetails?.chat_members.find((member) => member.venues)
+                  ?.venues
+              }
               mostRecentMessage={null}
             />
           )}
@@ -92,10 +97,14 @@ export default function Home({ params }: { params: { id: string } }) {
         )}
         {currentChatDetails?.chat_type === 'organization' && (
           <RenderMessagesOrg
-            artistOrVenue={currentChatDetails?.chat_members
-              .map((member) => member.artists || member.venues)
-              .filter((member) => member)
-              .at(0)}
+            artist={
+              currentChatDetails?.chat_members.find((member) => member.artists)
+                ?.artists
+            }
+            venue={
+              currentChatDetails?.chat_members.find((member) => member.venues)
+                ?.venues
+            }
           />
         )}
       </div>

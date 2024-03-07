@@ -2,12 +2,15 @@ import { Artist, Venue } from 'supabase';
 import Image from 'next/image';
 
 export default function OrgCard({
-  artistOrVenue,
+  artist,
+  venue,
   mostRecentMessage,
 }: {
-  artistOrVenue: Artist | Venue | null | undefined;
+  artist: Artist | null | undefined;
+  venue: Venue | null | undefined;
   mostRecentMessage: string | null | undefined;
 }) {
+  const artistOrVenue = artist || venue;
   return (
     <div className='flex flex-row items-center gap-5'>
       {artistOrVenue?.image && (

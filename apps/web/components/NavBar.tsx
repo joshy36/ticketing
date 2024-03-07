@@ -180,27 +180,24 @@ export default function NavBar({
           )}
         </div>
       </div>
-      {/* <div className='fixed z-40 mt-16 hidden w-full flex-row items-center justify-center py-1.5 text-center text-lg  md:flex'> */}
-      {/* <div className='relative'> */}
-      {/* <div className='flex flex-row items-center rounded-full border bg-black/40 backdrop-blur-md'> */}
-      {/* <div className='rounded-full border-r bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 py-2 backdrop-blur-xl'> */}
-      {/* <span
-                className='animate-text-gradient 
-              bg-gradient-to-r from-red-500 via-yellow-400
-             to-red-500 bg-[200%_auto] bg-clip-text px-4 py-2 font-semibold text-transparent'
-              >
-                
-                New Message
-              </span> */}
-      {/* <span className='px-4 py-2 font-semibold'>New Message</span> */}
-      {/* </div> */}
-      {/* <p className='px-4 font-light text-muted-foreground'> */}
-      {/* This is a test message that someone will recieve */}
-      {/* </p> */}
-      {/* </div> */}
-      {/* <span className='absolute right-0 top-0 flex h-3 w-3 items-center justify-center rounded-full bg-blue-700'></span> */}
-      {/* </div> */}
-      {/* </div> */}
+
+      {/* <div className='flex justify-center'>
+        <div className='fixed z-40 mt-24 flex items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'>
+          <span className='mr-3 flex rounded-full bg-gradient-to-r from-red-700 via-orange-600 to-yellow-500 px-2 py-1 text-sm font-semibold uppercase'>
+            New
+          </span>
+          <span className='mr-2 flex-auto text-left'>
+            This is a test message that someone will recieve make this longer
+          </span>
+          <svg
+            className='h-4 w-4 fill-current'
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 20 20'
+          >
+            <path d='M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z' />
+          </svg>
+        </div>
+      </div> */}
     </div>
   );
 }

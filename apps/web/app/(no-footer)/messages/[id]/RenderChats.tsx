@@ -204,9 +204,7 @@ export default function RenderChats({
         return (
           <button
             key={chat.id}
-            className={`flex w-full items-center justify-between gap-2 truncate border-b px-4 py-4 text-ellipsis${
-              chat.id === currentChat ? 'bg-secondary' : '' // Apply grey background to the current chat
-            }`}
+            className={`flex w-full items-center justify-between gap-2 truncate text-ellipsis border-b px-4 py-4 hover:bg-zinc-800/50 focus:bg-secondary`}
             onClick={() => {
               console.log('chat.id: ', chat.id);
               router.push(`/messages/${chat.id}`);
@@ -238,10 +236,12 @@ export default function RenderChats({
               )}
               {chat.chat_type === 'organization' && (
                 <OrgCard
-                  artistOrVenue={chat?.chat_members
-                    .map((member) => member.artists || member.venues)
-                    .filter((member) => member)
-                    .at(0)}
+                  artist={
+                    chat?.chat_members.find((member) => member.artists)?.artists
+                  }
+                  venue={
+                    chat?.chat_members.find((member) => member.venues)?.venues
+                  }
                   mostRecentMessage={
                     mostRecentMessageByChat
                       ? mostRecentMessageByChat[chat.id]?.message
