@@ -22,7 +22,7 @@ export default function OrgCard({
           className='h-12 w-12 rounded-md object-contain'
         />
       )}
-      <div className='flex max-w-[150px] flex-col justify-between'>
+      <div className='flex max-w-[225px] flex-col justify-between'>
         <div className='flex items-center'>
           <p className='truncate text-ellipsis font-medium text-white'>
             {artistOrVenue?.name}

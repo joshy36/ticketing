@@ -180,7 +180,9 @@ export const MessagesProvider = ({
 
           if (
             currentChat !== message.chat_id &&
-            userProfile?.id !== message.from
+            userProfile?.id !== message.from &&
+            // make sure message is in one of the chats
+            chats?.chats?.map((chat) => chat.id).includes(message.chat_id!)
           ) {
             // need to not increment on every message
             setUnreadMessages((prevState) => prevState + 1);
@@ -224,6 +226,7 @@ export const MessagesProvider = ({
     unreadMessages,
     setUnreadMessages,
     setMostRecentMessageByChat,
+    chats,
     currentChat,
     setMessages,
     userProfile,

@@ -30,7 +30,7 @@ export default async function MessagesLayout({
           content='width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover'
         ></meta>
         <div className='lg:flex lg:h-screen lg:border-x'>
-          <div className='hidden border-r lg:block'>
+          <div className='hidden border-r lg:block lg:w-[500px]'>
             <RenderChats userProfile={userProfile!} />
           </div>
           <div className='lg:flex lg:w-full lg:justify-center'>{children}</div>

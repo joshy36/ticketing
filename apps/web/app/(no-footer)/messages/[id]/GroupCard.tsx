@@ -42,7 +42,7 @@ export default function GroupCard({
           {chatMembers.length}
         </div> */}
       </div>
-      <div className='ml-1 flex max-w-[150px] flex-col'>
+      <div className='ml-1 flex max-w-[225px] flex-col'>
         <p className='truncate text-ellipsis font-medium text-white'>
           {allMembersNames}
         </p>
