@@ -77,14 +77,16 @@ export default function RenderChats({
     )?.user_profiles;
   };
 
-  // const chatsWithTimestamps = chats?.chats?.map((chat) => ({
-  //   ...chat,
-  //   mostRecentMessageTimestamp:
-  //     mostRecentMessageByChat?.[chat.id]?.created_at || 0,
-  // }));
-  // chatsWithTimestamps?.sort(
-  //   (a, b) => new Date(a.created_at) - new Date(b.created_at),
-  // );
+  const chatsWithTimestamps = chats?.chats?.map((chat) => ({
+    ...chat,
+    mostRecentMessageTimestamp: mostRecentMessageByChat?.[chat.id]?.created_at!,
+  }));
+
+  chatsWithTimestamps?.sort(
+    (a, b) =>
+      new Date(b.mostRecentMessageTimestamp).getTime() -
+      new Date(a.mostRecentMessageTimestamp).getTime(),
+  );
 
   return (
     <div>
@@ -209,7 +211,7 @@ export default function RenderChats({
       {chats?.chats?.length === 0 && (
         <p className='pt-8 text-center'>No messages yet.</p>
       )}
-      {chats?.chats?.map((chat, index) => {
+      {chatsWithTimestamps?.map((chat, index) => {
         return (
           <button
             key={chat.id}

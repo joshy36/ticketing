@@ -130,7 +130,8 @@ export const MessagesProvider = ({
           ...prevState,
           [chats?.chats![i]?.id!]: {
             message: chats?.messagesInChats[i]?.[0]?.chat_messages?.content!,
-            created_at: chats?.messagesInChats[i]?.[0]?.chat_messages?.content!,
+            created_at:
+              chats?.messagesInChats[i]?.[0]?.chat_messages?.created_at!,
           },
         }));
       }
