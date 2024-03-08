@@ -1,5 +1,4 @@
-import { Artist, UserProfile, Venue } from 'supabase';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Artist, Venue } from 'supabase';
 import { dateToString } from '@/utils/helpers';
 import { useContext } from 'react';
 import { MessagesContext } from '@/utils/messagesProvider';
@@ -7,7 +6,6 @@ import Link from 'next/link';
 import { trpc } from '@/app/_trpc/client';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { Separator } from '@/components/ui/separator';
 
 export default function RenderMessagesOrg({
   artist,
@@ -24,8 +22,6 @@ export default function RenderMessagesOrg({
     (t) => mess?.map((message) => t.getEventById({ id: message! })),
   );
 
-  console.log(events);
-
   const artistOrVenue = artist || venue;
   return (
     <div className='scroller'>
@@ -35,7 +31,7 @@ export default function RenderMessagesOrg({
             <div key={message.id} className='py-2'>
               <div className='flex flex-col justify-start'>
                 <div className='flex flex-col'>
-                  <div className='ml-14 text-xs font-light text-muted-foreground'>
+                  <div className='ml-16 text-xs font-light text-muted-foreground'>
                     {artistOrVenue?.name}
                   </div>
                   <div className='flex flex-row'>

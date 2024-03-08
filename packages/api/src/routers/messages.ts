@@ -125,6 +125,7 @@ export const messagesRouter = router({
 
       let chatExists = false;
       let newChat: string = '';
+      let fromChatMembers;
 
       for (let i = 0; i < combinedFansIds.length; i++) {
         chatExists = false;
@@ -141,6 +142,24 @@ export const messagesRouter = router({
             console.log('chat already exists');
             chatExists = true;
             newChat = chats?.[j]!.id!;
+            const { data: isArtist } = await supabase
+              .from('chat_members')
+              .select()
+              .eq('chat_id', newChat)
+              .eq('artist_id', input.from)
+              .single();
+            if (isArtist) {
+              fromChatMembers = isArtist;
+            }
+            const { data: isVenue } = await supabase
+              .from('chat_members')
+              .select()
+              .eq('chat_id', newChat)
+              .eq('venue_id', input.from)
+              .single();
+            if (isVenue) {
+              fromChatMembers = isVenue;
+            }
           } else {
             // dont do anything
           }
@@ -154,41 +173,33 @@ export const messagesRouter = router({
             .select()
             .single();
           newChat = chat?.id!;
-        }
-        // (1) find out why its making multiple chats done
-        // (2) actually send the message
-        // (3) make sure db changes havent effected frontend for other chats
-        // (4) why arent messages showing up for venue
-        // (5) revisit (1)
-        // (6) clean up db
 
-        await supabase.from('chat_members').insert({
-          chat_id: newChat,
-          user_id: combinedFansIds[i]!,
-        });
+          await supabase.from('chat_members').insert({
+            chat_id: newChat,
+            user_id: combinedFansIds[i]!,
+          });
 
-        let fromChatMembers;
-
-        if (input.fromType === 'artist') {
-          const { data } = await supabase
-            .from('chat_members')
-            .insert({
-              chat_id: newChat,
-              artist_id: input.from,
-            })
-            .select()
-            .single();
-          fromChatMembers = data;
-        } else if (input.fromType === 'venue') {
-          const { data } = await supabase
-            .from('chat_members')
-            .insert({
-              chat_id: newChat,
-              venue_id: input.from,
-            })
-            .select()
-            .single();
-          fromChatMembers = data;
+          if (input.fromType === 'artist') {
+            const { data } = await supabase
+              .from('chat_members')
+              .insert({
+                chat_id: newChat,
+                artist_id: input.from,
+              })
+              .select()
+              .single();
+            fromChatMembers = data;
+          } else if (input.fromType === 'venue') {
+            const { data } = await supabase
+              .from('chat_members')
+              .insert({
+                chat_id: newChat,
+                venue_id: input.from,
+              })
+              .select()
+              .single();
+            fromChatMembers = data;
+          }
         }
 
         const { data: newMessage, error } = await supabase
@@ -205,14 +216,12 @@ export const messagesRouter = router({
         if (error) {
           return error;
         }
-        console.log('newMessage: ', newMessage);
-        const { data: test, error: testerror } = await supabase
-          .from('chat_member_messages')
-          .insert({
-            chat_member_id: fromChatMembers?.id,
-            chat_message_id: newMessage?.id,
-            chat_id: newChat,
-          });
+
+        await supabase.from('chat_member_messages').insert({
+          chat_member_id: fromChatMembers?.id,
+          chat_message_id: newMessage?.id,
+          chat_id: newChat,
+        });
       }
     }),
 

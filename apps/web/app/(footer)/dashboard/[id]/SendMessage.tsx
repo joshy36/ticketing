@@ -86,8 +86,8 @@ export default function SendMessage() {
     type: z.enum(['artist', 'venue'], {
       required_error: 'Please select a type.',
     }),
-    artist: z.string().nullable(),
-    venue: z.string().nullable(),
+    artist: z.string().optional(),
+    venue: z.string().optional(),
     message: z.string().min(2, {
       message: 'Message must be at least 2 characters.',
     }),

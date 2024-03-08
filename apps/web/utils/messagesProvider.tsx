@@ -139,6 +139,7 @@ export const MessagesProvider = ({
 
   useEffect(() => {
     if (messagesInCurrentChat) {
+      console.log('TEST: ', currentChat);
       setMessages(messagesInCurrentChat);
       // set last read message
       if (currentChat) {

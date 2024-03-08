@@ -259,7 +259,7 @@ export const chatsRouter = router({
         .order('created_at', { ascending: false });
 
       if (messages && messages.length > 0) {
-        const { data: lastMessage } = await supabase
+        const { data: lastMessage, error } = await supabase
           .from('chat_members')
           .update({
             last_read: messages[0]?.id,
@@ -268,6 +268,12 @@ export const chatsRouter = router({
           .eq('chat_id', input.chat_id)
           .select()
           .single();
+        await supabase
+          .from('chat_members')
+          .select()
+          .eq('user_id', user?.id)
+          .eq('chat_id', input.chat_id);
+
         return lastMessage;
       }
 

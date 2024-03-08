@@ -77,6 +77,15 @@ export default function RenderChats({
     )?.user_profiles;
   };
 
+  // const chatsWithTimestamps = chats?.chats?.map((chat) => ({
+  //   ...chat,
+  //   mostRecentMessageTimestamp:
+  //     mostRecentMessageByChat?.[chat.id]?.created_at || 0,
+  // }));
+  // chatsWithTimestamps?.sort(
+  //   (a, b) => new Date(a.created_at) - new Date(b.created_at),
+  // );
+
   return (
     <div>
       <div className='flex flex-row items-center justify-between gap-8 px-4 pb-4 pt-12 lg:pt-20'>
