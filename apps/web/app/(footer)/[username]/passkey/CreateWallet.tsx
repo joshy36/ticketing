@@ -124,7 +124,7 @@ export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {
       {walletSetup ? (
         <div className='flex flex-col items-center justify-center'>
           {userProfile.profile_image && (
-            <Avatar className='h-24 w-24'>
+            <Avatar className='h-48 w-48'>
               <AvatarImage src={userProfile?.profile_image!} alt='pfp' />
             </Avatar>
           )}
