@@ -63,7 +63,6 @@ export default function NavBar({
     mostRecentMessageByChat,
   } = useContext(MessagesContext);
   const pathname = usePathname();
-  console.log('usePathname: ', pathname);
 
   const mainComponents: {
     title: string;

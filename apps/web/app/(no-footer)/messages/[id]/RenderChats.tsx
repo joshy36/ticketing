@@ -39,12 +39,8 @@ export default function RenderChats({
   const router = useRouter();
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
 
-  const {
-    chats,
-    currentChat,
-    mostRecentMessageByChat,
-    numberOfUnreadMessagesPerChat,
-  } = useContext(MessagesContext);
+  const { chats, mostRecentMessageByChat, numberOfUnreadMessagesPerChat } =
+    useContext(MessagesContext);
 
   const createChat = trpc.createChat.useMutation({
     onSettled(data, error) {
@@ -71,12 +67,6 @@ export default function RenderChats({
     },
   });
 
-  const getRandomUserFromChat = (index: number) => {
-    return chats?.chats![index]!.chat_members.find(
-      (user) => user.user_id != userProfile.id,
-    )?.user_profiles;
-  };
-
   const chatsWithTimestamps = chats?.chats
     ?.map((chat) => ({
       ...chat,
@@ -88,6 +78,12 @@ export default function RenderChats({
         new Date(b.mostRecentMessageTimestamp).getTime() -
         new Date(a.mostRecentMessageTimestamp).getTime(),
     );
+
+  const getRandomUserFromChat = (index: number) => {
+    return chatsWithTimestamps![index]!.chat_members.find(
+      (user) => user.user_id != userProfile.id,
+    )?.user_profiles;
+  };
 
   return (
     <div>
