@@ -211,7 +211,7 @@ export default function NavBar({
             href={`/messages/${chatsWithUnreadMessages[0]?.id}`}
             className='flex justify-center'
           >
-            <div className='fixed z-40 mt-24 flex w-[400px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'>
+            <div className='fixed z-40 mt-24 flex max-w-[350px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'>
               <span className='mr-3 flex rounded-full bg-gradient-to-r from-red-700 via-orange-600 to-yellow-500 px-2 py-1 text-sm font-semibold uppercase'>
                 New
               </span>
