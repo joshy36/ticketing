@@ -77,16 +77,17 @@ export default function RenderChats({
     )?.user_profiles;
   };
 
-  const chatsWithTimestamps = chats?.chats?.map((chat) => ({
-    ...chat,
-    mostRecentMessageTimestamp: mostRecentMessageByChat?.[chat.id]?.created_at!,
-  }));
-
-  chatsWithTimestamps?.sort(
-    (a, b) =>
-      new Date(b.mostRecentMessageTimestamp).getTime() -
-      new Date(a.mostRecentMessageTimestamp).getTime(),
-  );
+  const chatsWithTimestamps = chats?.chats
+    ?.map((chat) => ({
+      ...chat,
+      mostRecentMessageTimestamp:
+        mostRecentMessageByChat?.[chat.id]?.created_at!,
+    }))
+    .sort(
+      (a, b) =>
+        new Date(b.mostRecentMessageTimestamp).getTime() -
+        new Date(a.mostRecentMessageTimestamp).getTime(),
+    );
 
   return (
     <div>
@@ -217,7 +218,6 @@ export default function RenderChats({
             key={chat.id}
             className={`flex w-full items-center justify-between gap-2 truncate text-ellipsis border-b px-4 py-4 hover:bg-zinc-800/50 focus:bg-secondary`}
             onClick={() => {
-              console.log('chat.id: ', chat.id);
               router.push(`/messages/${chat.id}`);
             }}
           >

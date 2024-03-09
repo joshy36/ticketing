@@ -20,10 +20,10 @@ import { User } from '@supabase/supabase-js';
 import { UserNav } from './UserNav';
 import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
-import MessageCenter from './MessageCenter';
 import Image from 'next/image';
 import { useContext } from 'react';
 import { MessagesContext } from '@/utils/messagesProvider';
+import { usePathname } from 'next/navigation';
 
 export const createComponents: {
   title: string;
@@ -56,7 +56,14 @@ export default function NavBar({
   userProfile: UserProfile | null;
   userOrg: string | null | undefined;
 }) {
-  const { unreadMessages } = useContext(MessagesContext);
+  const {
+    chats,
+    unreadMessages,
+    numberOfUnreadMessagesPerChat,
+    mostRecentMessageByChat,
+  } = useContext(MessagesContext);
+  const pathname = usePathname();
+  console.log('usePathname: ', pathname);
 
   const mainComponents: {
     title: string;
@@ -77,6 +84,22 @@ export default function NavBar({
       href: '/tickets',
     },
   ];
+
+  const chatsWithUnreadMessages = chats?.chats
+    ?.filter((chat) => chat.chat_type === 'organization')
+    .map((chat) => ({
+      ...chat,
+      numberUnread: numberOfUnreadMessagesPerChat?.[chat.id]?.unread || 0,
+      mostRecentMessageContent: mostRecentMessageByChat?.[chat.id]?.message!,
+      mostRecentMessageTimestamp:
+        mostRecentMessageByChat?.[chat.id]?.created_at!,
+    }))
+    .filter((chat) => chat.numberUnread > 0)
+    .sort(
+      (a, b) =>
+        new Date(b.mostRecentMessageTimestamp).getTime() -
+        new Date(a.mostRecentMessageTimestamp).getTime(),
+    );
 
   return (
     <div className='flex flex-col'>
@@ -181,23 +204,30 @@ export default function NavBar({
         </div>
       </div>
 
-      {/* <div className='flex justify-center'>
-        <div className='fixed z-40 mt-24 flex items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'>
-          <span className='mr-3 flex rounded-full bg-gradient-to-r from-red-700 via-orange-600 to-yellow-500 px-2 py-1 text-sm font-semibold uppercase'>
-            New
-          </span>
-          <span className='mr-2 flex-auto text-left'>
-            This is a test message that someone will recieve make this longer
-          </span>
-          <svg
-            className='h-4 w-4 fill-current'
-            xmlns='http://www.w3.org/2000/svg'
-            viewBox='0 0 20 20'
+      {chatsWithUnreadMessages &&
+        chatsWithUnreadMessages?.length > 0 &&
+        (pathname === '/' || pathname === '/event/list') && (
+          <Link
+            href={`/messages/${chatsWithUnreadMessages[0]?.id}`}
+            className='flex justify-center'
           >
-            <path d='M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z' />
-          </svg>
-        </div>
-      </div> */}
+            <div className='fixed z-40 mt-24 flex w-[400px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'>
+              <span className='mr-3 flex rounded-full bg-gradient-to-r from-red-700 via-orange-600 to-yellow-500 px-2 py-1 text-sm font-semibold uppercase'>
+                New
+              </span>
+              <span className='mr-2 flex-auto truncate text-ellipsis text-left '>
+                {chatsWithUnreadMessages[0]?.mostRecentMessageContent}
+              </span>
+              <svg
+                className='h-4 w-4 fill-current'
+                xmlns='http://www.w3.org/2000/svg'
+                viewBox='0 0 20 20'
+              >
+                <path d='M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z' />
+              </svg>
+            </div>
+          </Link>
+        )}
     </div>
   );
 }
