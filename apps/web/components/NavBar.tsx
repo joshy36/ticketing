@@ -11,7 +11,17 @@ import {
   NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from './ui/navigation-menu';
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import Link from 'next/link';
 import { cn } from './ui/utils';
 import * as React from 'react';
@@ -23,7 +33,9 @@ import { UserProfile } from 'supabase';
 import Image from 'next/image';
 import { useContext } from 'react';
 import { MessagesContext } from '@/utils/messagesProvider';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { ChevronRight, Trash } from 'lucide-react';
+import { trpc } from '@/app/_trpc/client';
 
 export const createComponents: {
   title: string;
@@ -61,8 +73,11 @@ export default function NavBar({
     unreadMessages,
     numberOfUnreadMessagesPerChat,
     mostRecentMessageByChat,
+    setNumberOfUnreadMessagesPerChat,
   } = useContext(MessagesContext);
   const pathname = usePathname();
+  const router = useRouter();
+  const readMessages = trpc.readMessages.useMutation();
 
   const mainComponents: {
     title: string;
@@ -92,6 +107,7 @@ export default function NavBar({
       mostRecentMessageContent: mostRecentMessageByChat?.[chat.id]?.message!,
       mostRecentMessageTimestamp:
         mostRecentMessageByChat?.[chat.id]?.created_at!,
+      mostRecentMessageEventId: mostRecentMessageByChat?.[chat.id]?.event_id!,
     }))
     .filter((chat) => chat.numberUnread > 0)
     .sort(
@@ -206,26 +222,86 @@ export default function NavBar({
       {chatsWithUnreadMessages &&
         chatsWithUnreadMessages?.length > 0 &&
         (pathname === '/' || pathname === '/event/list') && (
-          <Link
-            href={`/messages/${chatsWithUnreadMessages[0]?.id}`}
-            className='flex justify-center'
-          >
-            <div className='fixed z-40 mt-24 flex max-w-[350px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'>
-              <span className='mr-3 flex rounded-full bg-gradient-to-r from-red-700 via-orange-600 to-yellow-500 px-2 py-1 text-sm font-semibold uppercase'>
-                New
-              </span>
-              <span className='mr-2 flex-auto truncate text-ellipsis text-left '>
-                {chatsWithUnreadMessages[0]?.mostRecentMessageContent}
-              </span>
-              <svg
-                className='h-4 w-4 fill-current'
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 20 20'
+          <div className='flex justify-center'>
+            <AlertDialog>
+              <AlertDialogTrigger
+                onClick={() => {
+                  readMessages.mutate({
+                    chat_id: chatsWithUnreadMessages[0]?.id!,
+                  });
+                }}
+                className='fixed z-40 mt-24 flex max-w-[350px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'
               >
-                <path d='M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z' />
-              </svg>
-            </div>
-          </Link>
+                {/* <div className='fixed z-40 mt-24 flex max-w-[350px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'> */}
+                <span className='mr-3 flex rounded-full bg-gradient-to-r from-red-700 via-orange-600 to-yellow-500 px-2 py-1 text-sm font-semibold uppercase'>
+                  New
+                </span>
+                <span className='mr-2 flex-auto truncate text-ellipsis text-left '>
+                  {chatsWithUnreadMessages[0]?.mostRecentMessageContent}
+                </span>
+                <svg
+                  className='h-4 w-4 fill-current'
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 20 20'
+                >
+                  <path d='M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z' />
+                </svg>
+                {/* </div> */}
+              </AlertDialogTrigger>
+              <AlertDialogContent className='bg-black/40'>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Message</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {chatsWithUnreadMessages[0]?.mostRecentMessageContent}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className='flex flex-row items-center justify-between gap-2'>
+                  <AlertDialogCancel
+                    onClick={() => {
+                      setNumberOfUnreadMessagesPerChat((prevState) => ({
+                        ...prevState,
+                        [chatsWithUnreadMessages[0]?.id!]: {
+                          unread:
+                            prevState &&
+                            prevState[chatsWithUnreadMessages[0]?.id!]
+                              ? prevState[chatsWithUnreadMessages[0]?.id!]!
+                                  .unread - 1
+                              : 0,
+                        },
+                      }));
+                    }}
+                  >
+                    Close
+                  </AlertDialogCancel>
+
+                  <div className='flex gap-2'>
+                    <AlertDialogAction
+                      onClick={() => {
+                        router.push(
+                          `/event/${chatsWithUnreadMessages[0]?.mostRecentMessageEventId}`,
+                        );
+                        setNumberOfUnreadMessagesPerChat((prevState) => ({
+                          ...prevState,
+                          [chatsWithUnreadMessages[0]?.id!]: {
+                            unread:
+                              prevState &&
+                              prevState[chatsWithUnreadMessages[0]?.id!]
+                                ? prevState[chatsWithUnreadMessages[0]?.id!]!
+                                    .unread - 1
+                                : 0,
+                          },
+                        }));
+                      }}
+                      className='items-center gap-2'
+                    >
+                      View Event
+                      <ChevronRight className='h-4 w-4' />
+                    </AlertDialogAction>
+                  </div>
+                </div>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         )}
     </div>
   );

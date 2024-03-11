@@ -39,8 +39,12 @@ export default function RenderChats({
   const router = useRouter();
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
 
-  const { chats, mostRecentMessageByChat, numberOfUnreadMessagesPerChat } =
-    useContext(MessagesContext);
+  const {
+    chats,
+    mostRecentMessageByChat,
+    numberOfUnreadMessagesPerChat,
+    setNumberOfUnreadMessagesPerChat,
+  } = useContext(MessagesContext);
 
   const createChat = trpc.createChat.useMutation({
     onSettled(data, error) {
@@ -214,6 +218,10 @@ export default function RenderChats({
             key={chat.id}
             className={`flex w-full items-center justify-between gap-2 truncate text-ellipsis border-b px-4 py-4 hover:bg-zinc-800/50 focus:bg-secondary`}
             onClick={() => {
+              setNumberOfUnreadMessagesPerChat((prevState) => ({
+                ...prevState,
+                [chat.id]: { unread: 0 },
+              }));
               router.push(`/messages/${chat.id}`);
             }}
           >

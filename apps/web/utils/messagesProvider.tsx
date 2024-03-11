@@ -1,7 +1,13 @@
 'use client';
 
 import { RouterOutputs, trpc } from '@/app/_trpc/client';
-import { createContext, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 import createSupabaseBrowserClient from './supabaseBrowser';
 import { usePathname } from 'next/navigation';
 import { Message, UserProfile } from 'supabase';
@@ -18,6 +24,7 @@ type MessagesContextProps = {
     [id: string]: {
       message: string;
       created_at: string;
+      event_id: string | null;
     };
   };
   numberOfUnreadMessagesPerChat?: {
@@ -26,6 +33,16 @@ type MessagesContextProps = {
   chats?: RouterOutputs['getUserChats'];
   messages?: RouterOutputs['getMessagesByChat'];
   currentChat: string | null;
+  setNumberOfUnreadMessagesPerChat: Dispatch<
+    SetStateAction<
+      | {
+          [id: string]: {
+            unread: number;
+          };
+        }
+      | undefined
+    >
+  >;
 };
 
 export const MessagesContext = createContext<MessagesContextProps>({
@@ -34,6 +51,7 @@ export const MessagesContext = createContext<MessagesContextProps>({
   mostRecentMessageByChat: {},
   messages: [],
   currentChat: null,
+  setNumberOfUnreadMessagesPerChat: () => {},
 });
 
 export const MessagesProvider = ({
@@ -54,6 +72,7 @@ export const MessagesProvider = ({
     [id: string]: {
       message: string;
       created_at: string;
+      event_id: string | null;
     };
   }>();
 
@@ -82,19 +101,6 @@ export const MessagesProvider = ({
       setCurrentChat(null);
     }
   }, [url]);
-
-  useEffect(() => {
-    if (
-      currentChat &&
-      numberOfUnreadMessagesPerChat &&
-      numberOfUnreadMessagesPerChat[currentChat]
-    ) {
-      setNumberOfUnreadMessagesPerChat((prevState) => ({
-        ...prevState,
-        [currentChat]: { unread: 0 },
-      }));
-    }
-  }, [currentChat]);
 
   useEffect(() => {
     if (numberOfUnreadMessagesPerChat) {
@@ -132,6 +138,7 @@ export const MessagesProvider = ({
             message: chats?.messagesInChats[i]?.[0]?.chat_messages?.content!,
             created_at:
               chats?.messagesInChats[i]?.[0]?.chat_messages?.created_at!,
+            event_id: chats?.messagesInChats[i]?.[0]?.chat_messages?.event_id!,
           },
         }));
       }
@@ -202,6 +209,7 @@ export const MessagesProvider = ({
             [message.chat_id!]: {
               message: message.content!,
               created_at: message.created_at!,
+              event_id: message.event_id!,
             },
           }));
         },
@@ -243,6 +251,7 @@ export const MessagesProvider = ({
         chats,
         messages,
         currentChat,
+        setNumberOfUnreadMessagesPerChat,
       }}
     >
       {children}
