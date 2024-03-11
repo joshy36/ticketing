@@ -1,6 +1,7 @@
 'use client';
 
-import { RouterOutputs, trpc } from '@/app/_trpc/client';
+import { RouterOutputs, trpc } from '../../apps/web/app/_trpc/client';
+import React from 'react';
 import {
   Dispatch,
   SetStateAction,
@@ -8,7 +9,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import createSupabaseBrowserClient from './supabaseBrowser';
+import createSupabaseBrowserClient from '../../apps/web/utils/supabaseBrowser';
 import { usePathname } from 'next/navigation';
 import { Message, UserProfile } from 'supabase';
 
@@ -62,7 +63,7 @@ export const MessagesProvider = ({
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const [currentChat, setCurrentChat] = useState<string | null>(null);
   const [messages, setMessages] = useState<RouterOutputs['getMessagesByChat']>(
-    [],
+    []
   );
   const [numberOfUnreadMessagesPerChat, setNumberOfUnreadMessagesPerChat] =
     useState<{
@@ -105,7 +106,7 @@ export const MessagesProvider = ({
   useEffect(() => {
     if (numberOfUnreadMessagesPerChat) {
       const totalUnreadMessages = Object.values(
-        numberOfUnreadMessagesPerChat!,
+        numberOfUnreadMessagesPerChat!
       ).reduce((accumulator, chat) => accumulator + chat.unread, 0);
       setUnreadMessages(totalUnreadMessages);
     }
@@ -174,7 +175,7 @@ export const MessagesProvider = ({
             const { data: messages } = await supabase
               .from('chat_member_messages')
               .select(
-                `*, chat_members(*, user_profiles(*), artists(*), venues(*)), chat_messages(*)`,
+                `*, chat_members(*, user_profiles(*), artists(*), venues(*)), chat_messages(*)`
               )
               .eq('chat_id', currentChat)
               .order('created_at', {
@@ -212,7 +213,7 @@ export const MessagesProvider = ({
               event_id: message.event_id!,
             },
           }));
-        },
+        }
       )
       .on(
         'postgres_changes',
@@ -223,7 +224,7 @@ export const MessagesProvider = ({
         },
         (payload) => {
           refetch();
-        },
+        }
       )
       .subscribe();
 

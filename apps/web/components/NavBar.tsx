@@ -32,7 +32,7 @@ import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
 import Image from 'next/image';
 import { useContext } from 'react';
-import { MessagesContext } from '@/utils/messagesProvider';
+import { MessagesContext } from 'providers';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRight, Trash } from 'lucide-react';
 import { trpc } from '@/app/_trpc/client';

@@ -9,9 +9,10 @@ import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font';
 import { MobileNav } from '@/components/MobileNav';
 import { Metadata } from 'next';
+import { MessagesProvider } from 'providers';
 
 import './globals.css';
-import { MessagesProvider } from '@/utils/messagesProvider';
+
 export const revalidate = 0; //disable cache
 
 export const metadata: Metadata = {

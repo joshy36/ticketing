@@ -21,7 +21,7 @@ import ProfileCard from '@/components/ProfileCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import GroupCard from './GroupCard';
 import ChatProfileCard from './ChatProfileCard';
-import { MessagesContext } from '@/utils/messagesProvider';
+import { MessagesContext } from 'providers';
 import { useRouter } from 'next/navigation';
 import OrgCard from './OrgCard';
 

@@ -15,7 +15,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MessageCenter from './MessageCenter';
 import { MessageCircle } from 'lucide-react';
 import { useContext } from 'react';
-import { MessagesContext } from '@/utils/messagesProvider';
+import { MessagesContext } from 'providers';
 
 export function MobileNav({
   user,

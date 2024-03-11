@@ -1,7 +1,7 @@
 import { Artist, Venue } from 'supabase';
 import { dateToString } from '@/utils/helpers';
 import { useContext } from 'react';
-import { MessagesContext } from '@/utils/messagesProvider';
+import { MessagesContext } from 'providers';
 import Link from 'next/link';
 import { trpc } from '@/app/_trpc/client';
 import { ChevronRight } from 'lucide-react';

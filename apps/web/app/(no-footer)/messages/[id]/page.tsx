@@ -1,6 +1,6 @@
 'use client';
 
-import { MessagesContext } from '@/utils/messagesProvider';
+import { MessagesContext } from 'providers';
 import { useContext, useState } from 'react';
 import GroupCard from './GroupCard';
 import { ChevronLeft, Info } from 'lucide-react';
