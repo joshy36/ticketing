@@ -261,12 +261,7 @@ export default function NavBar({
                       setNumberOfUnreadMessagesPerChat((prevState) => ({
                         ...prevState,
                         [chatsWithUnreadMessages[0]?.id!]: {
-                          unread:
-                            prevState &&
-                            prevState[chatsWithUnreadMessages[0]?.id!]
-                              ? prevState[chatsWithUnreadMessages[0]?.id!]!
-                                  .unread - 1
-                              : 0,
+                          unread: 0,
                         },
                       }));
                     }}
@@ -283,12 +278,7 @@ export default function NavBar({
                         setNumberOfUnreadMessagesPerChat((prevState) => ({
                           ...prevState,
                           [chatsWithUnreadMessages[0]?.id!]: {
-                            unread:
-                              prevState &&
-                              prevState[chatsWithUnreadMessages[0]?.id!]
-                                ? prevState[chatsWithUnreadMessages[0]?.id!]!
-                                    .unread - 1
-                                : 0,
+                            unread: 0,
                           },
                         }));
                       }}
