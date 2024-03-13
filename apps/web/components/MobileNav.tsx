@@ -12,10 +12,9 @@ import { UserNav } from './UserNav';
 import { User } from '@supabase/supabase-js';
 import { UserProfile } from 'supabase';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import MessageCenter from './MessageCenter';
 import { MessageCircle } from 'lucide-react';
 import { useContext } from 'react';
-import { MessagesContext } from 'providers';
+import { MessagesContext } from '@/providers/messagesProvider';
 
 export function MobileNav({
   user,

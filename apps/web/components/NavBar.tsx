@@ -32,9 +32,9 @@ import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
 import Image from 'next/image';
 import { useContext } from 'react';
-import { MessagesContext } from 'providers';
+import { MessagesContext } from '@/providers/messagesProvider';
 import { usePathname, useRouter } from 'next/navigation';
-import { ChevronRight, Trash } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { trpc } from '@/app/_trpc/client';
 
 export const createComponents: {

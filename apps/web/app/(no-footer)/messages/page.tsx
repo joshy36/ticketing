@@ -1,7 +1,7 @@
 'use client';
 import { useContext } from 'react';
 import RenderChats from './[id]/RenderChats';
-import { MessagesContext } from 'providers';
+import { MessagesContext } from '@/providers/messagesProvider';
 
 export default function Home() {
   const { userProfile } = useContext(MessagesContext);

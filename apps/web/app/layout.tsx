@@ -9,7 +9,7 @@ import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font';
 import { MobileNav } from '@/components/MobileNav';
 import { Metadata } from 'next';
-import { MessagesProvider } from 'providers';
+import { MessagesProvider } from '@/providers/messagesProvider';
 
 import './globals.css';
 

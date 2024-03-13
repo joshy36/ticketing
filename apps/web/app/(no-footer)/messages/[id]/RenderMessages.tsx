@@ -2,7 +2,7 @@ import { UserProfile } from 'supabase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { dateToString } from '@/utils/helpers';
 import { useContext } from 'react';
-import { MessagesContext } from 'providers';
+import { MessagesContext } from '@/providers/messagesProvider';
 import Link from 'next/link';
 
 export default function RenderMessages({
