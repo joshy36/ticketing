@@ -81,7 +81,7 @@ export default function TabsLayout() {
             // );
 
             <Ionicons
-              name={focused ? 'notifications' : 'notifications-outline'}
+              name={focused ? 'chatbubble' : 'chatbubble-outline'}
               size={30}
               color={color}
             />

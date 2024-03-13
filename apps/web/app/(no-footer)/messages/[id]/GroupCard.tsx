@@ -31,16 +31,6 @@ export default function GroupCard({
             )}
           </Avatar>
         ))}
-        {/*         // <Avatar className='z-40'>
-        //   {userProfile?.profile_image ? (
-        //     <AvatarImage src={otherMembers[0]?.profile_image!} alt='pfp' />
-        //   ) : (
-        //     <AvatarFallback></AvatarFallback>
-        //   )}
-        // </Avatar> */}
-        {/* <div className='z-50 flex h-10 w-10 items-center justify-center rounded-full border border-black bg-secondary text-xs font-medium text-white'>
-          {chatMembers.length}
-        </div> */}
       </div>
       <div className='ml-1 flex max-w-[225px] flex-col'>
         <p className='truncate text-ellipsis font-medium text-white'>

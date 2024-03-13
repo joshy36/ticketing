@@ -1,6 +1,7 @@
 'use client';
 
-import { RouterOutputs, trpc } from '../../apps/web/app/_trpc/client';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { RouterOutputs, trpc } from '../../../utils/trpc';
 import React from 'react';
 import {
   Dispatch,
@@ -9,17 +10,19 @@ import {
   useEffect,
   useState,
 } from 'react';
-import createSupabaseBrowserClient from '../../apps/web/utils/supabaseBrowser';
-import { usePathname } from 'next/navigation';
-import { Message, UserProfile } from 'supabase';
+import { Database, Message, UserProfile } from 'supabase';
 
 type MessagesProviderProps = {
   children: React.ReactNode;
   userProfile: UserProfile | null | undefined;
+  url: string | null;
+  supabase: SupabaseClient<Database>;
 };
 
 type MessagesContextProps = {
   userProfile: UserProfile | null | undefined;
+  url: string | null;
+  supabase: SupabaseClient<Database>;
   unreadMessages: number;
   mostRecentMessageByChat?: {
     [id: string]: {
@@ -48,6 +51,8 @@ type MessagesContextProps = {
 
 export const MessagesContext = createContext<MessagesContextProps>({
   userProfile: null,
+  url: null,
+  supabase: {} as SupabaseClient<Database>,
   unreadMessages: 0,
   mostRecentMessageByChat: {},
   messages: [],
@@ -58,6 +63,8 @@ export const MessagesContext = createContext<MessagesContextProps>({
 export const MessagesProvider = ({
   children,
   userProfile,
+  url,
+  supabase,
 }: MessagesProviderProps) => {
   const [didFetch, setDidFetch] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
@@ -77,9 +84,9 @@ export const MessagesProvider = ({
     };
   }>();
 
-  const url = usePathname().split('/');
+  // const url = usePathname().split('/');
 
-  const supabase = createSupabaseBrowserClient();
+  // const supabase = createSupabaseBrowserClient();
 
   const { data: unread } = trpc.getTotalUnreadMessages.useQuery();
   const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
@@ -95,14 +102,14 @@ export const MessagesProvider = ({
 
   const readMessages = trpc.readMessages.useMutation();
 
-  // make url a prop?
-
   useEffect(() => {
-    if (url && url[url.length - 2] === 'messages') {
-      setCurrentChat(url[url.length - 1]!);
-    } else {
-      setCurrentChat(null);
-    }
+    // if (url && url[url.length - 2] === 'messages') {
+    //   setCurrentChat(url[url.length - 1]!);
+    // } else {
+    //   setCurrentChat(null);
+    // }
+    setCurrentChat(url);
+    console.log('current: ', currentChat);
   }, [url]);
 
   useEffect(() => {
@@ -248,6 +255,8 @@ export const MessagesProvider = ({
     <MessagesContext.Provider
       value={{
         userProfile,
+        url,
+        supabase,
         unreadMessages,
         mostRecentMessageByChat,
         numberOfUnreadMessagesPerChat,

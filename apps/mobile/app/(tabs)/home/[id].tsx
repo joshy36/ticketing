@@ -15,7 +15,7 @@ import { SupabaseContext } from '../../../utils/supabaseProvider';
 import { useContext } from 'react';
 import TicketSection from '../../components/TicketSection';
 import { A } from '@expo/html-elements';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient';
 
 export type Section = {
   created_at: string;
@@ -88,10 +88,10 @@ const Home = () => {
                 }}
                 // blurRadius={20}
               >
-                <LinearGradient
+                {/* <LinearGradient
                   colors={['#00000000', '#000000']}
                   style={{ height: '100%', width: '100%' }}
-                ></LinearGradient>
+                ></LinearGradient> */}
               </ImageBackground>
               <View className="p-4">
                 <Text className="text-5xl text-white text-center font-bold">

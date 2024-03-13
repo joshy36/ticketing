@@ -54,3 +54,19 @@ export const replaceLocalhostWithIP = (event: any) => {
 
   return event;
 };
+
+export const truncate = (
+  str: string | null | undefined,
+  maxLength: number
+): string => {
+  if (!str) {
+    return ''; // Return an empty string if the input is null or undefined
+  }
+
+  if (str.length <= maxLength) {
+    return str; // If the string is already shorter than the maximum length, return it as is
+  }
+
+  // Truncate the string to the specified length and add an ellipsis (...)
+  return str.slice(0, maxLength - 3) + '...';
+};

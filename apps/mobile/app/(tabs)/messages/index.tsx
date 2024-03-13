@@ -1,54 +1,25 @@
-import { View, ScrollView, RefreshControl, Text } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 import { trpc } from '../../../utils/trpc';
-import { useCallback, useContext, useState } from 'react';
+import { useContext } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
-import MessagePage from './MessagePage';
-import { useFocusEffect } from 'expo-router';
+
+import RenderChats from './RenderChats';
 
 const Tickets = () => {
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    refetch().then(() => {
-      setRefreshing(false);
-    });
-  }, []);
   const supabaseContext = useContext(SupabaseContext);
   const { session, user } = supabaseContext;
 
-  const {
-    data: messages,
-    isLoading: messagesLoading,
-    refetch,
-  } = trpc.getMessagesForUser.useQuery();
-
-  useFocusEffect(
-    useCallback(() => {
-      // Do something when the screen is focused
-      console.log('focused');
-      refetch();
-      console.log('refetched');
-      return async () => {
-        // Do something when the screen is unfocused
-        refetch();
-      };
-    }, [messages])
-  );
+  const { data: userProfile, isLoading: profileLoading } =
+    trpc.getUserProfile.useQuery({
+      id: user?.id!,
+    });
 
   return (
     <View className="flex-1 bg-black">
       {session && user ? (
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor="white"
-            />
-          }
-        >
-          <MessagePage messages={messages!} refetch={refetch} />
+        <ScrollView>
+          {/* <MessagePage messages={messages!} refetch={refetch} /> */}
+          <RenderChats userProfile={userProfile!} />
         </ScrollView>
       ) : (
         <View className="flex-1 items-center justify-center bg-black px-4">

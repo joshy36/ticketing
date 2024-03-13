@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { trpc } from '../../../../utils/trpc';
 import { ImageBackground, ScrollView, View, Text } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient';
 
 const Artist = () => {
   const { id } = useLocalSearchParams();
@@ -21,10 +21,10 @@ const Artist = () => {
             uri: 'https://guitar.com/wp-content/uploads/2020/08/GM385-SRV-Supp-Credit-GETTY-01-HERO@2560x1707.jpg',
           }}
         >
-          <LinearGradient
+          {/* <LinearGradient
             colors={['#00000000', '#000000']}
             style={{ height: '100%', width: '100%' }}
-          ></LinearGradient>
+          ></LinearGradient> */}
         </ImageBackground>
         <View className="p-4">
           <Text className="text-5xl text-white text-center font-bold">
