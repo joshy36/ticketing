@@ -1,6 +1,5 @@
 'use client';
 
-import { SupabaseClient } from '@supabase/supabase-js';
 import { RouterOutputs, trpc } from '../../../utils/trpc';
 import React from 'react';
 import {
@@ -10,19 +9,18 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Database, Message, UserProfile } from 'supabase';
+import { Message, UserProfile } from 'supabase';
+import { supabase } from '../../../utils/supabaseExpo';
 
 type MessagesProviderProps = {
   children: React.ReactNode;
   userProfile: UserProfile | null | undefined;
   url: string | null;
-  supabase: SupabaseClient<Database>;
 };
 
 type MessagesContextProps = {
   userProfile: UserProfile | null | undefined;
   url: string | null;
-  supabase: SupabaseClient<Database>;
   unreadMessages: number;
   mostRecentMessageByChat?: {
     [id: string]: {
@@ -52,7 +50,6 @@ type MessagesContextProps = {
 export const MessagesContext = createContext<MessagesContextProps>({
   userProfile: null,
   url: null,
-  supabase: {} as SupabaseClient<Database>,
   unreadMessages: 0,
   mostRecentMessageByChat: {},
   messages: [],
@@ -64,7 +61,6 @@ export const MessagesProvider = ({
   children,
   userProfile,
   url,
-  supabase,
 }: MessagesProviderProps) => {
   const [didFetch, setDidFetch] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
@@ -86,7 +82,7 @@ export const MessagesProvider = ({
 
   // const url = usePathname().split('/');
 
-  // const supabase = createSupabaseBrowserClient();
+  console.log('UNREAD: ', unreadMessages);
 
   const { data: unread } = trpc.getTotalUnreadMessages.useQuery();
   const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
@@ -256,7 +252,6 @@ export const MessagesProvider = ({
       value={{
         userProfile,
         url,
-        supabase,
         unreadMessages,
         mostRecentMessageByChat,
         numberOfUnreadMessagesPerChat,

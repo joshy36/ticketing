@@ -4,8 +4,18 @@ import { Foundation } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { blurhash } from '../../utils/helpers';
+import { View, Text } from 'react-native';
+import { useContext, useEffect } from 'react';
+import { MessagesContext } from './messages/messagesProvider';
 
 export default function TabsLayout() {
+  const { unreadMessages } = useContext(MessagesContext);
+
+  useEffect(() => {
+    console.log('unreadMessages: ', unreadMessages);
+  }, [unreadMessages]);
+
+  console.log('unreadMessages: ', unreadMessages);
   return (
     <Tabs
       initialRouteName="home"
@@ -69,22 +79,31 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarActiveTintColor: 'white',
           tabBarIcon: ({ color, size, focused }) => (
-            // return (
-            //   <Image
-            //     source={require('../../assets/IMG_8615.png')}
-            //     placeholder={blurhash}
-            //     contentFit="cover"
-            //     style={{ borderRadius: 16 }}
-            //     className="h-8 w-8"
-            //     transition={1000}
-            //   />
-            // );
-
-            <Ionicons
-              name={focused ? 'chatbubble' : 'chatbubble-outline'}
-              size={30}
-              color={color}
-            />
+            <View style={{ position: 'relative' }}>
+              <Ionicons
+                name={focused ? 'chatbubble' : 'chatbubble-outline'}
+                size={30}
+                color={color}
+              />
+              {/* Add a new View for the blue dot with black border and white number */}
+              <View
+                style={{
+                  position: 'absolute',
+                  top: -5,
+                  right: -5,
+                  backgroundColor: 'blue',
+                  borderWidth: 1,
+                  borderColor: 'black',
+                  borderRadius: 10,
+                  width: 20,
+                  height: 20,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Text className="text-white">{unreadMessages}</Text>
+              </View>
+            </View>
           ),
         }}
       />

@@ -1,9 +1,14 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import {
+  Stack,
+  useGlobalSearchParams,
+  useLocalSearchParams,
+} from 'expo-router';
 import { MessagesProvider } from './messagesProvider';
 import { useContext } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import { trpc } from '../../../utils/trpc';
 import { supabase } from '../../../utils/supabaseExpo';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Layout = () => {
   const supabaseContext = useContext(SupabaseContext);
@@ -17,13 +22,12 @@ const Layout = () => {
     );
 
   const { id } = useLocalSearchParams();
+  const local = useLocalSearchParams();
+  console.log('local: ', local);
+  console.log('id: ', id);
 
   return (
-    <MessagesProvider
-      userProfile={profile!}
-      url={id! as string}
-      supabase={supabase}
-    >
+    <MessagesProvider userProfile={profile!} url={id! as string}>
       <Stack
         initialRouteName="index"
         screenOptions={{
@@ -40,6 +44,13 @@ const Layout = () => {
           options={{
             headerTitle: 'Message',
             headerBackTitle: 'Back',
+            headerRight: () => (
+              <Ionicons
+                name={'information-circle-outline'}
+                size={25}
+                color={'white'}
+              />
+            ),
           }}
         />
       </Stack>
