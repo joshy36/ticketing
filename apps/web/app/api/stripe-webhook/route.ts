@@ -62,7 +62,10 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ status: 500, error: ticketError });
         }
 
-        if (userHasTicketToEvent && userHasTicketToEvent?.length > 0) {
+        if (
+          (userHasTicketToEvent && userHasTicketToEvent?.length > 0) ||
+          (i != 0 && j != 0)
+        ) {
           await supabase
             .from('tickets')
             .update({
