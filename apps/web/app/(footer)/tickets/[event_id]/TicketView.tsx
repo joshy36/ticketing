@@ -282,9 +282,9 @@ export function TicketView({
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>New Message</DialogTitle>
+                          <DialogTitle>Transfer Ticket</DialogTitle>
                           <DialogDescription>
-                            Select users to start a new chat with.
+                            Select a user to transfer the ticket to.
                           </DialogDescription>
                         </DialogHeader>
                         <div className='flex flex-col flex-wrap'>
