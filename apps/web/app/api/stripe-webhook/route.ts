@@ -64,7 +64,8 @@ export async function POST(req: NextRequest) {
 
         if (
           (userHasTicketToEvent && userHasTicketToEvent?.length > 0) ||
-          (i != 0 && j != 0)
+          i != 0 ||
+          j != 0
         ) {
           await supabase
             .from('tickets')
