@@ -30,7 +30,14 @@ export default function EventPurchase({
 
   const renderEventDetails = () => {
     if (!event?.etherscan_link) {
-      // Don't want to render tickets yet
+      return (
+        <div className='flex flex-row items-center space-x-1.5'>
+          <div className='relative flex h-3 w-3'>
+            <div className='relative inline-flex h-3 w-3 rounded-full bg-yellow-500 '></div>
+          </div>
+          <p className='text-muted-foreground'>Contract pending deployment</p>
+        </div>
+      );
     } else if (loading) {
       return (
         <div className='flex flex-col space-y-4 pt-2'>

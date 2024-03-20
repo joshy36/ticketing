@@ -87,7 +87,8 @@ export const paymentsRouter = router({
           .select(`*, reservations (id), sections (name)`)
           .eq('event_id', input.event_id)
           .eq('section_id', input.cart_info[i]?.section.id!)
-          .is('user_id', null)
+          .is('purchaser_id', null)
+          .is('owner_id', null)
           .order('price', { ascending: true });
 
         const noReservationTickets = tickets?.filter(

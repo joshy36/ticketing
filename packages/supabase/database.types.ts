@@ -724,7 +724,9 @@ export interface Database {
           created_at: string
           event_id: string
           id: string
+          owner_id: string | null
           price: number
+          purchaser_id: string | null
           qr_code: string | null
           scanned: boolean
           seat: string
@@ -733,13 +735,14 @@ export interface Database {
           token_id: number | null
           transaction_id: string | null
           updated_at: string | null
-          user_id: string | null
         }
         Insert: {
           created_at?: string
           event_id: string
           id?: string
+          owner_id?: string | null
           price: number
+          purchaser_id?: string | null
           qr_code?: string | null
           scanned?: boolean
           seat?: string
@@ -748,13 +751,14 @@ export interface Database {
           token_id?: number | null
           transaction_id?: string | null
           updated_at?: string | null
-          user_id?: string | null
         }
         Update: {
           created_at?: string
           event_id?: string
           id?: string
+          owner_id?: string | null
           price?: number
+          purchaser_id?: string | null
           qr_code?: string | null
           scanned?: boolean
           seat?: string
@@ -763,13 +767,24 @@ export interface Database {
           token_id?: number | null
           transaction_id?: string | null
           updated_at?: string | null
-          user_id?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "tickets_event_id_fkey"
             columns: ["event_id"]
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_owner_id_fkey"
+            columns: ["owner_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_purchaser_id_fkey"
+            columns: ["purchaser_id"]
+            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -782,12 +797,6 @@ export interface Database {
             foreignKeyName: "tickets_transaction_id_fkey"
             columns: ["transaction_id"]
             referencedRelation: "transactions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tickets_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           }
         ]

@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server';
 import { createStripePrice } from '../services/stripe';
 import { ethers } from 'ethers';
 import contractAbi from '../../../../packages/chain/deployments/base-goerli/Event.json';
+import { UserProfile } from 'supabase';
 
 export const ticketsRouter = router({
   // probably need to seperate into public and authed procedure for available and owned tickets
@@ -26,18 +27,6 @@ export const ticketsRouter = router({
       }
     }),
 
-  // should be authed, was having bugs
-  getTicketsForUser: publicProcedure
-    .input(z.object({ user_id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const supabase = ctx.supabase;
-      const { data } = await supabase
-        .from('tickets')
-        .select(`*, events (id, image, name, etherscan_link)`)
-        .eq('user_id', input.user_id);
-      return data;
-    }),
-
   getTicketsForUserByEvent: publicProcedure
     .input(z.object({ event_id: z.string(), user_id: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -45,10 +34,32 @@ export const ticketsRouter = router({
       const { data } = await supabase
         .from('tickets')
         .select(`*, events (id, image, name, etherscan_link, date)`)
-        .eq('user_id', input.user_id)
+        .eq('purchaser_id', input.user_id)
         .eq('event_id', input.event_id)
         .order('id', { ascending: true });
-      return data;
+
+      const { data: ownedTicket } = await supabase
+        .from('tickets')
+        .select(`*, events (id, image, name, etherscan_link, date)`)
+        .eq('owner_id', input.user_id)
+        .eq('event_id', input.event_id)
+        .single();
+
+      const ownerProfiles: UserProfile[] = [];
+      for (let i = 0; i < data?.length!; i++) {
+        const { data: ownerProfile } = await supabase
+          .from('user_profiles')
+          .select()
+          .eq('id', data![i]?.owner_id!)
+          .limit(1)
+          .single();
+        ownerProfiles.push(ownerProfile!);
+      }
+      return {
+        tickets: data,
+        ownedTicket: ownedTicket,
+        ownerProfiles: ownerProfiles,
+      };
     }),
 
   getTicketsForEvent: publicProcedure
@@ -71,7 +82,8 @@ export const ticketsRouter = router({
         .from('tickets')
         .select(`*, reservations (id), sections (name)`)
         .eq('event_id', input.event_id)
-        .is('user_id', null)
+        .is('purchaser_id', null)
+        .is('owner_id', null)
         .order('price', { ascending: true });
 
       const noReservationTickets = tickets?.filter(
@@ -79,6 +91,28 @@ export const ticketsRouter = router({
       );
 
       return noReservationTickets;
+    }),
+
+  getUsersWithoutTicketsForEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: tickets } = await supabase
+        .from('tickets')
+        .select(`*`)
+        .eq('event_id', input.event_id);
+
+      const ownerIds = tickets
+        ?.filter((ticket) => ticket.owner_id !== null)
+        ?.map((ticket) => ticket.owner_id!);
+
+      const { data: allUsers } = await supabase.from('user_profiles').select();
+
+      const filteredUserProfiles = allUsers?.filter(
+        (profile) => !ownerIds?.includes(profile.id)
+      );
+
+      return filteredUserProfiles;
     }),
 
   createReservationForTicket: authedProcedure
@@ -233,7 +267,7 @@ export const ticketsRouter = router({
         .limit(1)
         .single();
 
-      if (ticket?.user_id != user.id) {
+      if (ticket?.owner_id != user.id) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Only the owner can activate a ticket',
@@ -301,6 +335,49 @@ export const ticketsRouter = router({
         .select()
         .single();
       return data;
+    }),
+
+  transferTicketDatabase: authedProcedure
+    .input(
+      z.object({
+        ticket_id: z.string(),
+        user_id: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      const supabase = opts.ctx.supabase;
+
+      const { data: ticketCheck } = await supabase
+        .from('tickets')
+        .select()
+        .eq('id', opts.input.ticket_id)
+        .limit(1)
+        .single();
+
+      if (!ticketCheck) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No ticket with inputted id!',
+        });
+      }
+
+      if (ticketCheck?.purchaser_id != opts.ctx.user.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Only the purchaser can transfer a ticket!',
+        });
+      }
+
+      const { data: ticket, error } = await supabase
+        .from('tickets')
+        .update({
+          owner_id: opts.input.user_id,
+        })
+        .eq('id', opts.input.ticket_id)
+        .select()
+        .single();
+
+      return ticket;
     }),
 
   // needs to have some kinda auth, this gets called by the stripe webhook so it might get weird

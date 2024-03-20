@@ -40,7 +40,7 @@ export const usersRouter = router({
       const { data: upcomingTickets } = await supabase
         .from('tickets')
         .select('*')
-        .eq('user_id', input.user_id)
+        .eq('owner_id', input.user_id)
         .eq('scanned', false);
 
       const eventIds = upcomingTickets?.map((ticket) => ticket.event_id!);

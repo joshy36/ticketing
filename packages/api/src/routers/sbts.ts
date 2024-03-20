@@ -58,7 +58,7 @@ export const sbtsRouter = router({
         const { data: userProfile } = await supabase
           .from('user_profiles')
           .select()
-          .eq('id', ticket?.user_id!)
+          .eq('id', ticket?.owner_id!)
           .limit(1)
           .single();
 
@@ -86,7 +86,7 @@ export const sbtsRouter = router({
 
         await supabase
           .from('sbts')
-          .update({ user_id: ticket?.user_id })
+          .update({ user_id: ticket?.owner_id })
           .eq('id', sbtsToSend![i]?.id!)
           .select();
       }

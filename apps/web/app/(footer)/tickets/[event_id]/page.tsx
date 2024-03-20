@@ -2,6 +2,7 @@ import { serverClient } from '@/app/_trpc/serverClient';
 import { TicketView } from './TicketView';
 import createSupabaseServer from '@/utils/supabaseServer';
 import { notFound, redirect } from 'next/navigation';
+import { RouterOutputs } from '@/app/_trpc/client';
 
 export default async function Home({
   params,
@@ -18,7 +19,7 @@ export default async function Home({
     redirect('/unauthorized');
   }
 
-  let tickets;
+  let tickets: RouterOutputs['getTicketsForUserByEvent'];
   try {
     tickets = await serverClient.getTicketsForUserByEvent.query({
       event_id: params.event_id,
@@ -29,7 +30,7 @@ export default async function Home({
     notFound();
   }
 
-  if (!tickets || tickets.length === 0) {
+  if (!tickets) {
     notFound();
   }
 
@@ -37,12 +38,18 @@ export default async function Home({
     id: session.user.id,
   });
 
+  const usersWithoutTickets =
+    await serverClient.getUsersWithoutTicketsForEvent.query({
+      event_id: params.event_id,
+    });
+
   return (
     <main>
       <TicketView
         tickets={tickets}
         userProfile={userProfile!}
         event_id={params.event_id}
+        usersWithoutTickets={usersWithoutTickets}
       />
     </main>
   );

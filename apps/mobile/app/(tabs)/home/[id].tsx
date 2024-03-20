@@ -114,7 +114,14 @@ const Home = () => {
                       refetch={refetch}
                     />
                   ) : (
-                    <View></View>
+                    <View className="flex flex-row items-center space-x-1.5">
+                      <View className="relative flex h-3 w-3">
+                        <View className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500 "></View>
+                      </View>
+                      <Text className="text-muted-foreground">
+                        Contract pending deployment
+                      </Text>
+                    </View>
                   )}
                 </View>
 

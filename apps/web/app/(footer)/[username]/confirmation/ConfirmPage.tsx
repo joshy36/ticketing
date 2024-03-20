@@ -83,7 +83,7 @@ export default function ConfirmPage({ username }: { username: string }) {
       ) : (
         <div>
           {paymentIntentFull.data?.status === 'succeeded' ? (
-            <Card className='flex flex-col items-center justify-center border border-muted-foreground p-8'>
+            <Card className='flex flex-col items-center justify-center bg-zinc-950 p-8'>
               <CardContent>
                 <div className='flex flex-row gap-4'>
                   <p className='pb-8 text-4xl font-bold'>Order Confirmed!</p>
@@ -127,7 +127,7 @@ export default function ConfirmPage({ username }: { username: string }) {
 
                 <div className='flex justify-center'>
                   <Link href={`/tickets`}>
-                    <Button variant='outline' className='mt-8 px-8'>
+                    <Button className='mt-8 px-8'>
                       View Tickets
                       <ChevronRightIcon />
                     </Button>

@@ -59,7 +59,7 @@ export const collectiblesRouter = router({
         const { data: userProfile } = await supabase
           .from('user_profiles')
           .select()
-          .eq('id', ticket?.user_id!)
+          .eq('id', ticket?.owner_id!)
           .limit(1)
           .single();
 
@@ -87,7 +87,7 @@ export const collectiblesRouter = router({
 
         await supabase
           .from('collectibles')
-          .update({ user_id: ticket?.user_id })
+          .update({ user_id: ticket?.owner_id })
           .eq('id', collectiblesToSend![i]?.id!)
           .select();
       }

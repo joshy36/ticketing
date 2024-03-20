@@ -24,6 +24,7 @@ import ChatProfileCard from './ChatProfileCard';
 import { MessagesContext } from '@/providers/messagesProvider';
 import { useRouter } from 'next/navigation';
 import OrgCard from './OrgCard';
+import UsersList from '@/components/UsersList';
 
 export default function RenderChats({
   userProfile,
@@ -142,69 +143,15 @@ export default function RenderChats({
                   Start Chat
                 </Button>
               </div>
-              <div>
-                {usersLoading ? (
-                  <div>Loading...</div>
-                ) : (
-                  <ScrollArea className='h-[200px] w-full'>
-                    {users
-                      ?.filter(
-                        (user) =>
-                          user?.id !== userProfile.id && // Exclude currently signed-in user
-                          (user?.username
-                            ?.toLowerCase()
-                            .includes(userSearch.toLowerCase()) ||
-                            user?.first_name
-                              ?.toLowerCase()
-                              .includes(userSearch.toLowerCase()) ||
-                            user?.last_name
-                              ?.toLowerCase()
-                              .includes(userSearch.toLowerCase()) ||
-                            `${user.first_name} ${user.last_name}`
-                              .toLowerCase()
-                              .includes(userSearch.toLowerCase())),
-                      )
-                      .slice(0, 10)
-                      .map((user) => {
-                        return (
-                          <Button
-                            key={user.id}
-                            className='flex h-full w-full justify-between rounded-none border-b bg-black hover:bg-secondary'
-                            onClick={() => {
-                              // if user is not selected add them
-                              if (
-                                !selectedUsers?.find((u) => u.id === user.id)
-                              ) {
-                                if (selectedUsers?.length === 5) {
-                                  toast.error('Maximum users reached', {
-                                    description: 'Maximum of 6 users per chat',
-                                  });
-                                  return;
-                                }
-                                setSelectedUsers([
-                                  ...(selectedUsers || []),
-                                  user,
-                                ]);
-                              } else {
-                                // if user is selected remove them
-                                setSelectedUsers(
-                                  selectedUsers?.filter(
-                                    (u) => u.id !== user.id,
-                                  ),
-                                );
-                              }
-                            }}
-                          >
-                            <ProfileCard userProfile={user} />
-                            {selectedUsers?.find((u) => u.id === user.id) && (
-                              <Check className='text-white' />
-                            )}
-                          </Button>
-                        );
-                      })}
-                  </ScrollArea>
-                )}
-              </div>
+              <UsersList
+                users={users}
+                usersLoading={usersLoading}
+                userProfile={userProfile}
+                maxUsers={6}
+                userSearch={userSearch}
+                selectedUsers={selectedUsers}
+                setSelectedUsers={setSelectedUsers}
+              />
             </DialogContent>
           </Dialog>
         </div>
