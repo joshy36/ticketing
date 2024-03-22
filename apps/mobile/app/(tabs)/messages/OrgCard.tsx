@@ -22,7 +22,7 @@ export default function OrgCard({
       {artistOrVenue?.image && (
         <Image
           style={{ borderRadius: 16 }}
-          className="h-16 w-16 flex justify-center items-center"
+          className="h-12 w-12 flex justify-center items-center"
           source={{ uri: replaceLocalhostWithIP(artistOrVenue).image }}
           placeholder={blurhash}
           contentFit="cover"

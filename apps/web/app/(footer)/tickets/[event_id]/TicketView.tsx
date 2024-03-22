@@ -200,10 +200,7 @@ export function TicketView({
           {tickets.tickets
             ?.filter((ticket) => ticket.owner_id !== userProfile.id)
             ?.map((ticket: Ticket, index: number) => (
-              <div
-                key={ticket.id}
-                className={index % 2 === 0 ? 'gap-4 bg-black' : 'bg-zinc-950'}
-              >
+              <div key={ticket.id}>
                 <div className='flex flex-row justify-between border-b px-2 py-2'>
                   <div className='flex items-center gap-8 font-medium'>
                     <p>{ticket.seat}</p>

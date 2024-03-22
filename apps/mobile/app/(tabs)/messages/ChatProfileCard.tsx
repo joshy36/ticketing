@@ -21,7 +21,7 @@ export default function ChatProfileCard({
         {userProfile?.profile_image ? (
           // <AvatarImage src={userProfile?.profile_image!} alt='pfp' />
           <Image
-            className="h-16 w-16 rounded-full flex justify-center items-center"
+            className="h-12 w-12 rounded-full flex justify-center items-center"
             source={{ uri: replaceLocalhostWithIP(userProfile).profile_image }}
             placeholder={blurhash}
             contentFit="cover"

@@ -5,6 +5,7 @@ import { createStripePrice } from '../services/stripe';
 import { ethers } from 'ethers';
 import contractAbi from '../../../../packages/chain/deployments/base-goerli/Event.json';
 import { UserProfile } from 'supabase';
+import sha256 from 'crypto-js/sha256';
 
 export const ticketsRouter = router({
   // probably need to seperate into public and authed procedure for available and owned tickets
@@ -266,25 +267,44 @@ export const ticketsRouter = router({
           message: 'Unauthorized scanner!',
         });
       }
-      const { data: ticket } = await supabase
-        .from('tickets')
-        .select()
-        .eq('qr_code', input.qr_code)
-        .limit(1)
-        .single();
-      if (ticket?.scanned) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Ticket already scanned!',
-        });
+
+      const { data: users } = await supabase
+        .from('user_profiles')
+        .select(`*, user_salts(salt)`);
+
+      for (let i = 0; i < users?.length!; i++) {
+        const sha = sha256(
+          users![i]?.user_salts[0]?.salt + users![i]?.wallet_address!
+        ).toString();
+
+        if (sha === input.qr_code) {
+          const { data: ticket } = await supabase
+            .from('tickets')
+            .select()
+            .eq('owner_id', users![i]?.id!)
+            .eq('event_id', input.event_id)
+            .limit(1)
+            .single();
+          if (ticket?.scanned) {
+            throw new TRPCError({
+              code: 'INTERNAL_SERVER_ERROR',
+              message: 'Ticket already scanned!',
+            });
+          }
+          const { data } = await supabase
+            .from('tickets')
+            .update({ scanned: true })
+            .eq('id', ticket?.id!)
+            .select()
+            .single();
+          return data;
+        }
       }
-      const { data } = await supabase
-        .from('tickets')
-        .update({ scanned: true })
-        .eq('qr_code', input.qr_code)
-        .select()
-        .single();
-      return data;
+
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'No user found',
+      });
     }),
 
   transferTicketDatabase: authedProcedure

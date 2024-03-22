@@ -8,6 +8,8 @@ import QRCode from 'react-qr-code';
 import Separator from '../../components/Separator';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import ProfileCard from '../../components/ProfileCard';
+import { Ticket } from 'supabase';
 
 const Home = () => {
   const { id } = useLocalSearchParams();
@@ -20,6 +22,8 @@ const Home = () => {
       event_id: id as string,
       user_id: user?.id!,
     });
+
+  const { data: userProfile } = trpc.getUserProfile.useQuery({ id: user?.id! });
 
   const { data: event } = trpc.getEventById.useQuery(
     { id: id as string },
@@ -114,6 +118,66 @@ const Home = () => {
                 </View>
               )}
             </View>
+
+            {tickets?.tickets?.filter(
+              (ticket) => ticket.owner_id !== userProfile?.id
+            ).length! > 0 && (
+              <View className="pt-8">
+                <Text className="text-xl font-bold text-white">
+                  Transferable Tickets
+                </Text>
+                <Text className="pb-4 text-sm font-light text-muted-foreground">
+                  You must transfer these tickets to their respective owners
+                  before the event begins for them to be allowed entry. This
+                  will allow us to verify that the person entering the event is
+                  the rightful owner of the ticket.
+                </Text>
+              </View>
+            )}
+
+            {tickets?.tickets
+              ?.filter((ticket) => ticket.owner_id !== userProfile?.id)
+              ?.map((ticket: Ticket, index: number) => (
+                <View key={ticket.id}>
+                  <View className="flex flex-row justify-between items-center border-b border-zinc-800 px-2 py-2">
+                    <Text className="text-white">{ticket.seat}</Text>
+                    {ticket.owner_id ? (
+                      <View className="flex flex-row items-center gap-2 ">
+                        {/* <CheckCircle className='h-4 w-4' /> */}
+                        <Ionicons
+                          name={'checkmark-circle-outline'}
+                          size={25}
+                          color={'#22c55e'}
+                        />
+                        <View>
+                          <ProfileCard
+                            userProfile={tickets.ownerProfiles[index]!}
+                            imageSize={8}
+                          />
+                        </View>
+                      </View>
+                    ) : (
+                      <View className="flex flex-row items-center gap-2 ">
+                        <Ionicons
+                          name={'alert-circle-outline'}
+                          size={25}
+                          color={'#eab308'}
+                        />
+                        <Text className="font-light text-yellow-500">
+                          Not transferred
+                        </Text>
+                        <Link href={`/tickets/transfer/${ticket.id}`} asChild>
+                          <TouchableOpacity className="bg-zinc-600/60 rounded-full py-3 px-4">
+                            <Text className="text-white font-semibold">
+                              Transfer
+                            </Text>
+                          </TouchableOpacity>
+                        </Link>
+                      </View>
+                    )}
+                  </View>
+                </View>
+              ))}
           </ScrollView>
         </View>
       )}

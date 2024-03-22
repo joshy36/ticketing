@@ -9,8 +9,10 @@ import {
 
 export default function ProfileCard({
   userProfile,
+  imageSize = 12,
 }: {
   userProfile: UserProfile;
+  imageSize?: number;
 }) {
   return (
     <View className="flex flex-row items-center gap-5">
@@ -18,7 +20,7 @@ export default function ProfileCard({
         {userProfile?.profile_image ? (
           // <AvatarImage src={userProfile?.profile_image!} alt='pfp' />
           <Image
-            className="h-12 w-12 rounded-full flex justify-center items-center"
+            className={`h-${imageSize} w-${imageSize} rounded-full flex justify-center items-center`}
             source={{ uri: replaceLocalhostWithIP(userProfile).profile_image }}
             placeholder={blurhash}
             contentFit="cover"

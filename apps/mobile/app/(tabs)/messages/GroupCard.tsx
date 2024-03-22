@@ -29,11 +29,11 @@ export default function GroupCard({
     <View className="flex flex-row gap-10 items-center">
       <View className="flex flex-row pl-4">
         {otherMembers.map((member) => (
-          <View className="z-40 -mx-5" key={member.id}>
+          <View className="z-40 -mx-4" key={member.id}>
             {userProfile?.profile_image ? (
               // <AvatarImage src={member?.profile_image!} alt='pfp' />
               <Image
-                className="h-16 w-16 rounded-full flex justify-center items-center border-2 border-black"
+                className="h-12 w-12 rounded-full flex justify-center items-center border-2 border-black"
                 source={{ uri: replaceLocalhostWithIP(member).profile_image }}
                 placeholder={blurhash}
                 contentFit="cover"

@@ -20,6 +20,14 @@ const Layout = () => {
           headerBackTitleVisible: false,
         }}
       />
+      <Stack.Screen
+        name="transfer/[id]"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: 'modal',
+          headerTitle: 'Transfer Ticket',
+        }}
+      />
     </Stack>
   );
 };
