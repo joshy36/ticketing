@@ -36,6 +36,18 @@ const Tickets = () => {
             />
           }
         >
+          <View>
+            {upcomingEvents?.length == 0 && (
+              <View>
+                <Text className="text-white font-semibold text-lg text-center pt-20">
+                  No upcoming events
+                </Text>
+                <Text className="text-muted-foreground font-light text-center">
+                  Check out the events page to explore upcoming events
+                </Text>
+              </View>
+            )}
+          </View>
           <TicketsPage
             upcomingEvents={upcomingEvents}
             upcomingEventsLoading={upcomingEventsLoading}
