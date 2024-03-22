@@ -1,5 +1,7 @@
+import { TRPCError } from '@trpc/server';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
+import sha256 from 'crypto-js/sha256';
 
 export const usersRouter = router({
   getAllUsers: authedProcedure.query(async ({ ctx, input }) => {
@@ -109,5 +111,33 @@ export const usersRouter = router({
         .insert({ user_id: input.user_id, event_id: input.event_id })
         .single();
       return data;
+    }),
+
+  getUserQRCode: authedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      if (user.id !== input.user_id) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to view this user',
+        });
+      }
+
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('id', input.user_id)
+        .single();
+
+      const { data: userSalt } = await supabase
+        .from('user_salts')
+        .select()
+        .eq('user_id', input.user_id)
+        .single();
+
+      return sha256(userSalt?.salt! + userProfile?.wallet_address!).toString();
     }),
 });

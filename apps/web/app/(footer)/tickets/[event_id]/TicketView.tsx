@@ -51,7 +51,6 @@ export function TicketView({
   usersWithoutTickets: RouterOutputs['getUsersWithoutTicketsForEvent'];
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [qr, setQR] = useState<string>('');
   const [front, setFront] = useState<boolean>(true);
   const [dialogOpen, setDialogOpen] = useState<string | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
@@ -71,25 +70,8 @@ export function TicketView({
     { id: event?.venue! },
     { enabled: !!event },
   );
-  const activateTicket = trpc.generateTicketQRCode.useMutation({
-    onSettled(data, error) {
-      if (error) {
-        if (error.message === 'Ticket already activated!') {
-          toast.error('Ticket already activated, try refreshing the page!');
-        } else {
-          toast.error('Error activating ticket');
-        }
-        console.error('Error activating ticket:', error);
-        setIsLoading(false);
-      } else {
-        // router.refresh();
-        toast.success('Ticket activated!');
-
-        setIsLoading(false);
-        setQR(data!);
-        ownedTicket!.qr_code = data!;
-      }
-    },
+  const { data: userQR } = trpc.getUserQRCode.useQuery({
+    user_id: userProfile.id,
   });
 
   const transferTicket = trpc.transferTicketDatabase.useMutation({
@@ -108,10 +90,7 @@ export function TicketView({
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
       <div className='flex flex-col items-center justify-center'>
-        <div
-          key={ownedTicket?.id}
-          className='flex flex-col items-center justify-center'
-        >
+        <div className='flex flex-col items-center justify-center'>
           <div className='flex flex-row items-center justify-between gap-16 pb-4'>
             <Button
               variant='secondary'
@@ -151,26 +130,9 @@ export function TicketView({
                   )}
                 </div>
 
-                {qr ? (
+                {userQR && (
                   <div className='flex items-center justify-center bg-white p-4'>
-                    <QRCode value={qr} />
-                  </div>
-                ) : (
-                  <div className='pt-4'>
-                    <Button
-                      disabled={isLoading}
-                      className='w-full'
-                      onClick={() => {
-                        setIsLoading(true);
-
-                        activateTicket.mutate({
-                          user_id: userProfile.id,
-                          ticket_id: ownedTicket!.id,
-                        });
-                      }}
-                    >
-                      Activate
-                    </Button>
+                    <QRCode value={userQR} />
                   </div>
                 )}
               </CardContent>

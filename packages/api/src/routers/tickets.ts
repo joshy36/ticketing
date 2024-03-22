@@ -250,56 +250,6 @@ export const ticketsRouter = router({
       return ticketData;
     }),
 
-  generateTicketQRCode: authedProcedure
-    .input(
-      z.object({
-        ticket_id: z.string(),
-        user_id: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const supabase = ctx.supabase;
-      const user = ctx.user;
-      const { data: ticket, error: ticketError } = await supabase
-        .from('tickets')
-        .select()
-        .eq('id', input.ticket_id)
-        .limit(1)
-        .single();
-
-      if (ticket?.owner_id != user.id) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Only the owner can activate a ticket',
-        });
-      }
-
-      if (ticket?.qr_code) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Ticket already activated!',
-        });
-      }
-
-      const qr = input.user_id + input.ticket_id;
-
-      const { data: ticketQRCode, error: ticketQRCodeError } = await supabase
-        .from('tickets')
-        .update({ qr_code: qr })
-        .eq('id', ticket?.id!)
-        .select()
-        .single();
-
-      if (ticketQRCodeError?.code === '23505') {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'No duplicate qr codes!',
-        });
-      }
-
-      return ticketQRCode?.qr_code;
-    }),
-
   scanTicket: authedProcedure
     .input(z.object({ event_id: z.string(), qr_code: z.string() }))
     .mutation(async ({ ctx, input }) => {

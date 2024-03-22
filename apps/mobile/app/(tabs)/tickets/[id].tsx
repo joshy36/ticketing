@@ -11,11 +11,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Home = () => {
   const { id } = useLocalSearchParams();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [qr, setQR] = useState<string>('');
   const [front, setFront] = useState<boolean>(true);
-  const [ticketNumber, setTicketNumber] = useState<number>(0);
-  const [error, setError] = useState<string>('');
   const supabaseContext = useContext(SupabaseContext);
   const { user } = supabaseContext;
 
@@ -37,32 +33,9 @@ const Home = () => {
     { id: event?.venue! },
     { enabled: !!event }
   );
-  const activateTicket = trpc.generateTicketQRCode.useMutation({
-    onSettled(data, error) {
-      if (error) {
-        if (error.message === 'Ticket already activated!') {
-          setError('Ticket already activated, try refreshing!');
-        } else {
-          setError('Error activating ticket');
-        }
-
-        console.error('Error activating ticket:', error);
-        setIsLoading(false);
-      } else {
-        // router.refresh();
-
-        setIsLoading(false);
-        setQR(data!);
-        tickets![ticketNumber].qr_code = data!;
-      }
-    },
+  const { data: userQR } = trpc.getUserQRCode.useQuery({
+    user_id: user?.id!,
   });
-
-  useEffect(() => {
-    if (tickets) {
-      setQR(tickets![ticketNumber].qr_code!);
-    }
-  }, [tickets]);
 
   return (
     <View className="flex-1 justify-center bg-black">
@@ -71,123 +44,50 @@ const Home = () => {
       ) : (
         <View className="flex flex-row justify-center">
           <ScrollView className="px-4">
-            <View
-              key={tickets![ticketNumber]?.id}
-              className="flex snap-center flex-col items-center justify-center"
-            >
+            <View className="flex snap-center flex-col items-center justify-center">
               <View className="flex flex-row items-center justify-between gap-16 pb-4">
-                {ticketNumber !== 0 ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setTicketNumber(ticketNumber - 1);
-                      setQR(tickets![ticketNumber - 1].qr_code!);
-                    }}
-                    className="rounded-md"
-                  >
-                    <Ionicons
-                      name="chevron-back-outline"
-                      size={50}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity className="invisible rounded-md">
-                    <Ionicons
-                      name="chevron-back-outline"
-                      size={50}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                )}
                 <TouchableOpacity
                   className="rounded-full bg-white p-4"
                   onPress={() => setFront(!front)}
                 >
                   <Text className="text-black text-center font-bold">Flip</Text>
                 </TouchableOpacity>
-                {ticketNumber < tickets!.length - 1 ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setTicketNumber(ticketNumber + 1);
-                      setQR(tickets![ticketNumber + 1].qr_code!);
-                    }}
-                    className="rounded-md"
-                  >
-                    <Ionicons
-                      name="chevron-forward-outline"
-                      size={50}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity className="invisible rounded-md">
-                    <Ionicons
-                      name="chevron-forward-outline"
-                      size={50}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                )}
               </View>
-              <Text className="pb-2 font-light text-muted-foreground">
-                Ticket {ticketNumber + 1} of {tickets!.length}
-              </Text>
 
               {front ? (
                 <View className="border border-zinc-800 rounded-xl p-4 bg-zinc-950 w-full">
                   <Text className="text-white font-bold text-2xl">
-                    {tickets![ticketNumber]?.events?.name}
+                    {tickets?.ownedTicket?.events?.name}
                   </Text>
                   <Text className="text-muted-foreground pb-4">
-                    {`Seat: ${tickets![ticketNumber]!.seat}`}
+                    {`Seat: ${tickets?.ownedTicket?.seat}`}
                   </Text>
 
                   <View className="py-4 flex items-center justify-center">
                     <Image
-                      source={tickets![ticketNumber]!.events?.image}
+                      source={tickets?.ownedTicket?.events?.image}
                       alt="Ticket Image"
                       className="w-full h-64"
                       placeholder={blurhash}
                     />
                   </View>
 
-                  {qr ? (
+                  {userQR && (
                     <View className="flex items-center justify-center bg-white p-4">
-                      <QRCode value={qr} />
-                    </View>
-                  ) : (
-                    <View className="pt-4">
-                      <TouchableOpacity
-                        disabled={isLoading}
-                        className="w-full bg-white rounded-full p-2"
-                        onPress={() => {
-                          setIsLoading(true);
-
-                          activateTicket.mutate({
-                            user_id: user!.id,
-                            ticket_id: tickets![ticketNumber]!.id,
-                          });
-                        }}
-                      >
-                        <Text className="text-black text-center font-bold">
-                          Activate
-                        </Text>
-                      </TouchableOpacity>
+                      <QRCode value={userQR} />
                     </View>
                   )}
 
                   <Text className="text-sm font-light text-muted-foreground pt-4">
-                    {dateToString(tickets![ticketNumber]?.events?.date!)}
+                    {dateToString(tickets?.ownedTicket?.events?.date!)}
                   </Text>
                 </View>
               ) : (
                 <View className="border border-zinc-800 rounded-xl p-4 bg-zinc-950 w-full">
                   <Text className="text-white font-bold text-2xl">
-                    {tickets![ticketNumber]?.events?.name}
+                    {tickets?.ownedTicket?.events?.name}
                   </Text>
-                  <Text className="text-muted-foreground pb-4">{`Seat: ${
-                    tickets![ticketNumber]!.seat
-                  }`}</Text>
+                  <Text className="text-muted-foreground pb-4">{`Seat: ${tickets?.ownedTicket?.seat}`}</Text>
                   <View className="bg-zinc-950 p-2 ">
                     {/* <View>
               <p className="pb-4 text-2xl">Artist</p>
@@ -209,7 +109,7 @@ const Home = () => {
                     <Text className="text-muted-foreground">{venue?.name}</Text>
                   </View>
                   <Text className="text-sm font-light text-muted-foreground pt-4">
-                    {dateToString(tickets![ticketNumber]?.events?.date!)}
+                    {dateToString(tickets?.ownedTicket?.events?.date!)}
                   </Text>
                 </View>
               )}

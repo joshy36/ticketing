@@ -11,11 +11,6 @@ import { MessagesContext } from './messages/messagesProvider';
 export default function TabsLayout() {
   const { unreadMessages } = useContext(MessagesContext);
 
-  useEffect(() => {
-    console.log('unreadMessages: ', unreadMessages);
-  }, [unreadMessages]);
-
-  console.log('unreadMessages: ', unreadMessages);
   return (
     <Tabs
       initialRouteName="home"
@@ -85,24 +80,25 @@ export default function TabsLayout() {
                 size={30}
                 color={color}
               />
-              {/* Add a new View for the blue dot with black border and white number */}
-              <View
-                style={{
-                  position: 'absolute',
-                  top: -5,
-                  right: -5,
-                  backgroundColor: 'blue',
-                  borderWidth: 1,
-                  borderColor: 'black',
-                  borderRadius: 10,
-                  width: 20,
-                  height: 20,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Text className="text-white">{unreadMessages}</Text>
-              </View>
+              {unreadMessages > 0 && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: -5,
+                    right: -5,
+                    backgroundColor: 'blue',
+                    borderWidth: 1,
+                    borderColor: 'black',
+                    borderRadius: 10,
+                    width: 20,
+                    height: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text className="text-white">{unreadMessages}</Text>
+                </View>
+              )}
             </View>
           ),
         }}
