@@ -53,6 +53,14 @@ const Layout = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="startChat"
+          options={{
+            // Set the presentation mode to modal for our modal route.
+            presentation: 'modal',
+            headerTitle: 'New Message',
+          }}
+        />
       </Stack>
     </MessagesProvider>
   );

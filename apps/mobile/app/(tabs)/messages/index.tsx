@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 
 import RenderChats from './RenderChats';
+import { Link } from 'expo-router';
 
 const Tickets = () => {
   const supabaseContext = useContext(SupabaseContext);
@@ -18,6 +19,12 @@ const Tickets = () => {
     <View className="flex-1 bg-black">
       {session && user ? (
         <ScrollView>
+          <Link
+            href="/messages/startChat"
+            className=" text-center rounded-full py-4 bg-white font-semibold"
+          >
+            New Message
+          </Link>
           {/* <MessagePage messages={messages!} refetch={refetch} /> */}
           <RenderChats userProfile={userProfile!} />
         </ScrollView>

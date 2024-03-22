@@ -126,7 +126,7 @@ export default function Home() {
           className="px-2 flex w-full items-center flex-row gap-2 bg-black backdrop-blur-md"
         >
           <TextInput
-            className="mb-3 rounded-full flex-1 py-3 px-6 border border-zinc-800  text-muted-foreground items-center"
+            className="mb-3 rounded-full flex-1 py-3 px-6 border border-zinc-800 text-muted-foreground items-center"
             placeholder="Message..."
             placeholderTextColor="#6B7280"
             onChangeText={handleInputChange}

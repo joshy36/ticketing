@@ -1,11 +1,11 @@
 import { Check } from 'lucide-react';
 import ProfileCard from './ProfileCard';
-import { Button } from './ui/button';
-import { ScrollArea } from './ui/scroll-area';
-import { RouterOutputs } from '@/app/_trpc/client';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { RouterOutputs } from 'api';
 import { UserProfile } from 'supabase';
 import { Dispatch, SetStateAction } from 'react';
-import { toast } from 'sonner';
+import Ionicons from '@expo/vector-icons/Ionicons';
+// import { toast } from 'sonner';
 
 export default function UsersList({
   users,
@@ -25,11 +25,11 @@ export default function UsersList({
   setSelectedUsers: Dispatch<SetStateAction<UserProfile[] | null>>;
 }) {
   return (
-    <div>
+    <View>
       {usersLoading ? (
-        <div>Loading...</div>
+        <View>Loading...</View>
       ) : (
-        <ScrollArea className='h-[200px] w-full'>
+        <ScrollView>
           {users
             ?.filter(
               (user) =>
@@ -45,41 +45,47 @@ export default function UsersList({
                     .includes(userSearch.toLowerCase()) ||
                   `${user.first_name} ${user.last_name}`
                     .toLowerCase()
-                    .includes(userSearch.toLowerCase())),
+                    .includes(userSearch.toLowerCase()))
             )
             .slice(0, 10)
             .map((user) => {
               return (
-                <Button
+                <TouchableOpacity
                   key={user.id}
-                  className='my-1 flex h-full w-full justify-between rounded-full bg-black/80 px-2 hover:bg-zinc-700/20'
-                  onClick={() => {
+                  className="my-1 flex w-full justify-between border-b border-zinc-800 px-2 pt-2 pb-4"
+                  onPress={() => {
                     // if user is not selected add them
                     if (!selectedUsers?.find((u) => u.id === user.id)) {
                       if (selectedUsers?.length === maxUsers) {
-                        toast.error('Maximum users reached', {
-                          description: `Maximum of ${maxUsers} users.`,
-                        });
+                        // toast.error('Maximum users reached', {
+                        //   description: `Maximum of ${maxUsers} users.`,
+                        // });
                         return;
                       }
                       setSelectedUsers([...(selectedUsers || []), user]);
                     } else {
                       // if user is selected remove them
                       setSelectedUsers(
-                        selectedUsers?.filter((u) => u.id !== user.id),
+                        selectedUsers?.filter((u) => u.id !== user.id)
                       );
                     }
                   }}
                 >
-                  <ProfileCard userProfile={user} />
-                  {selectedUsers?.find((u) => u.id === user.id) && (
-                    <Check className='text-white' />
-                  )}
-                </Button>
+                  <View className="flex flex-row justify-between items-center">
+                    <ProfileCard userProfile={user} />
+                    {selectedUsers?.find((u) => u.id === user.id) && (
+                      <Ionicons
+                        name={'checkmark-outline'}
+                        size={25}
+                        color={'white'}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
               );
             })}
-        </ScrollArea>
+        </ScrollView>
       )}
-    </div>
+    </View>
   );
 }
