@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createRouteClient } from 'supabase';
-import { addJobToQueue, executeNextJob } from 'api/src/job-queue/utils';
+import { inngest } from '@/inngest/client';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -89,19 +89,21 @@ export async function POST(req: NextRequest) {
             .select()
             .single();
 
-          // await addJobToQueue('transferTicket', {
-          //   event_id: metadata?.event_id!,
-          //   ticket_id: ticket?.id!,
-          //   user_id: metadata?.user_id!,
-          // });
-        }
+          console.log('send to inngest');
 
-        console.log('stripe-webhook job added');
+          await inngest.send({
+            name: 'ticket/transfer',
+            data: {
+              event_id: metadata?.event_id!,
+              ticket_id: ticket?.id!,
+              user_id: metadata?.user_id!,
+            },
+          });
+
+          console.log('sent to inngest');
+        }
       }
     }
-    // also add jobs to queue to speed this thing up
-    // instead of get next job and then execute should be a executeNextJOb for concurency
-    // executeNextJob();
   }
 
   return NextResponse.json({ status: 200 });

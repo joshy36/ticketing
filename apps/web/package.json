@@ -65,6 +65,7 @@
     "ethers": "^6.7.1",
     "fetch-ponyfill": "^7.1.0",
     "geist": "^1.0.0",
+    "inngest": "^3.16.1",
     "ioredis": "^5.3.2",
     "lucide-react": "^0.263.1",
     "next": "^14.0.1",
