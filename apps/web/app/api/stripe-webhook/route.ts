@@ -89,19 +89,31 @@ export async function POST(req: NextRequest) {
             .select()
             .single();
 
-          console.log('send to inngest');
+          // console.log('send to inngest');
 
-          await inngest.send({
-            name: 'ticket/transfer',
-            data: {
-              event_id: metadata?.event_id!,
-              ticket_id: ticket?.id!,
-              user_id: metadata?.user_id!,
-            },
-          });
+          // await inngest.send({
+          //   name: 'ticket/transfer',
+          //   data: {
+          //     event_id: metadata?.event_id!,
+          //     ticket_id: ticket?.id!,
+          //     user_id: metadata?.user_id!,
+          //   },
+          // });
 
-          console.log('sent to inngest');
+          // console.log('sent to inngest');
         }
+        console.log('send to inngest');
+
+        await inngest.send({
+          name: 'ticket/transfer',
+          data: {
+            event_id: metadata?.event_id!,
+            ticket_id: ticket?.id!,
+            user_id: metadata?.user_id!,
+          },
+        });
+
+        console.log('sent to inngest');
       }
     }
   }
