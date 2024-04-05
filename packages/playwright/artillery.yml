@@ -1,0 +1,11 @@
+config:
+  target: 'https://jupiter-tickets.com'
+  phases:
+    - duration: 5
+      arrivalRate: 10
+  engines:
+    playwright: {}
+  processor: './tests/artillery/login.ts'
+scenarios:
+  - engine: playwright
+    testFunction: 'artilleryScript'
