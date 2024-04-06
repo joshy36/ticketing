@@ -4,9 +4,8 @@ import { RouterOutputs, trpc } from '@/app/_trpc/client';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { toast } from 'sonner';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Ticket, UserProfile } from 'supabase';
-import QRCode from 'react-qr-code';
 import {
   Card,
   CardContent,
@@ -70,9 +69,6 @@ export function TicketView({
     { id: event?.venue! },
     { enabled: !!event },
   );
-  const { data: userQR } = trpc.getUserQRCode.useQuery({
-    user_id: userProfile.id,
-  });
 
   const transferTicket = trpc.transferTicketDatabase.useMutation({
     onSettled(data, error) {
@@ -129,12 +125,6 @@ export function TicketView({
                     />
                   )}
                 </div>
-
-                {userQR && (
-                  <div className='flex items-center justify-center bg-white p-4'>
-                    <QRCode value={userQR} />
-                  </div>
-                )}
               </CardContent>
               <CardFooter className='flex'>
                 <p className='text-sm font-light text-muted-foreground'>

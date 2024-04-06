@@ -10,6 +10,9 @@ import {
 } from '../../../components/ui/tabs';
 import { dateToString } from '@/utils/helpers';
 import { trpc } from '@/app/_trpc/client';
+import { Button } from '@/components/ui/button';
+import { ScanFace } from 'lucide-react';
+import Link from 'next/link';
 
 export default function TicketList({
   userProfile,
@@ -40,43 +43,57 @@ export default function TicketList({
         <TabsContent value='upcoming' className='py-6'>
           <div>
             {upcomingEvents?.length != 0 ? (
-              <div className='grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
-                {upcomingEvents?.map((event) => (
-                  <a
-                    key={event?.id}
-                    href={`tickets/${event?.id}`}
-                    className='group'
-                  >
-                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
-                      {event?.image ? (
-                        <Image
-                          src={event.image}
-                          alt='Event Image'
-                          width={500}
-                          height={500}
-                          className='h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75'
-                        />
-                      ) : (
-                        <Image
-                          src='/fallback.jpeg'
-                          alt='image'
-                          width={500}
-                          height={500}
-                          className='h-full w-full object-cover object-center group-hover:opacity-75'
-                        />
-                      )}
+              <div>
+                <Link href={`/${userProfile.username}/id`}>
+                  <Button className='mb-4 w-full rounded-md'>
+                    <div className='flex flex-row items-center gap-2'>
+                      <p>Scan In</p>
+                      <ScanFace />
                     </div>
-                    <h1 className='mt-2 text-xl text-accent-foreground'>
-                      {event?.name}
-                    </h1>
-                    <p className='font-sm mt-0.5 text-sm text-muted-foreground'>
-                      {`${dateToString(event?.date!)}`}
-                    </p>
-                    <p className='font-sm mt-0.5 text-sm text-muted-foreground'>
-                      {`${event?.venues.name}`}
-                    </p>
-                  </a>
-                ))}
+                  </Button>
+                </Link>
+                <div className='grid grid-cols-1 '>
+                  {upcomingEvents?.map((event) => (
+                    <div
+                      key={event?.id}
+                      // href={`tickets/${event?.id}`}
+                      className='group flex flex-row justify-between rounded-3xl border p-6'
+                    >
+                      <div className='flex flex-row items-center justify-center gap-2'>
+                        <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-24 overflow-hidden rounded-lg bg-background'>
+                          {event?.image ? (
+                            <Image
+                              src={event.image}
+                              alt='Event Image'
+                              width={500}
+                              height={500}
+                              className='h-full w-full object-cover object-center'
+                            />
+                          ) : (
+                            <Image
+                              src='/fallback.jpeg'
+                              alt='image'
+                              width={500}
+                              height={500}
+                              className='h-full w-full object-cover object-center'
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <h1 className='mt-2 text-xl text-accent-foreground'>
+                            {event?.name}
+                          </h1>
+                          <p className='font-sm mt-0.5 text-sm text-muted-foreground'>
+                            {`${dateToString(event?.date!)}`}
+                          </p>
+                          <p className='font-sm mt-0.5 text-sm text-muted-foreground'>
+                            {`${event?.venues.name}`}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
               <div>

@@ -63,6 +63,39 @@ export const ticketsRouter = router({
       };
     }),
 
+  getTicketsForUser: publicProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('tickets')
+        .select(`*, events (id, image, name, etherscan_link, date)`)
+        .eq('purchaser_id', input.user_id)
+        .order('id', { ascending: true });
+
+      const { data: ownedTicket } = await supabase
+        .from('tickets')
+        .select(`*, events (id, image, name, etherscan_link, date)`)
+        .eq('owner_id', input.user_id)
+        .single();
+
+      const ownerProfiles: UserProfile[] = [];
+      for (let i = 0; i < data?.length!; i++) {
+        const { data: ownerProfile } = await supabase
+          .from('user_profiles')
+          .select()
+          .eq('id', data![i]?.owner_id!)
+          .limit(1)
+          .single();
+        ownerProfiles.push(ownerProfile!);
+      }
+      return {
+        tickets: data,
+        ownedTicket: ownedTicket,
+        ownerProfiles: ownerProfiles,
+      };
+    }),
+
   getTicketsForEvent: publicProcedure
     .input(z.object({ event_id: z.string() }))
     .query(async ({ ctx, input }) => {

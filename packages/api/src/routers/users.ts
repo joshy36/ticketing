@@ -35,6 +35,27 @@ export const usersRouter = router({
       }
     }),
 
+  getUserSalt: authedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+      if (user.id !== input.user_id) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to view this user',
+        });
+      }
+
+      const { data } = await supabase
+        .from('user_salts')
+        .select()
+        .eq('user_id', input.user_id)
+        .single();
+
+      return data;
+    }),
+
   getUpcomingEventsForUser: publicProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async ({ ctx, input }) => {
