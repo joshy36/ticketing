@@ -57,7 +57,7 @@ export default function TicketList({
                     <div
                       key={event?.id}
                       // href={`tickets/${event?.id}`}
-                      className='group flex flex-row justify-between rounded-3xl border p-6'
+                      className='group flex flex-row justify-between border-b p-6'
                     >
                       <div className='flex flex-row items-center justify-center gap-2'>
                         <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-24 overflow-hidden rounded-lg bg-background'>
