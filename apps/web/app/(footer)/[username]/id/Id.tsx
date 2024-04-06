@@ -124,22 +124,18 @@ export function Id({
                       {ticket.seat}
                     </p>
                   </div>
-
-                  {ticket.owner_id ? (
-                    <div className='flex flex-row items-center gap-2 font-light text-green-500'>
-                      <CheckCircle className='h-4 w-4' />
-                      Transfered
-                    </div>
-                  ) : (
-                    <div className='flex flex-row items-center gap-2 font-light text-yellow-500'>
-                      <AlertCircle className='h-4 w-4' />
-                      Not transferred
-                    </div>
-                  )}
                 </div>
 
                 {ticket.owner_id ? (
-                  <Link href={`/${tickets.ownerProfiles[index]?.username}`}>
+                  <Link
+                    href={`/${tickets.ownerProfiles[index]?.username}`}
+                    className='flex flex-row gap-2'
+                  >
+                    {ticket.owner_id && (
+                      <div className='flex flex-row items-center gap-2 font-light text-green-500'>
+                        <CheckCircle className='h-4 w-4' />
+                      </div>
+                    )}
                     <ProfileCard userProfile={tickets.ownerProfiles[index]!} />
                   </Link>
                 ) : (
@@ -151,10 +147,14 @@ export function Id({
                   >
                     <DialogTrigger asChild>
                       <Button
-                        variant='secondary'
+                        variant='outline'
                         onClick={() => setDialogOpen(ticket.id)}
+                        className='text-yellow-500'
                       >
-                        Transfer
+                        <div className='flex flex-row items-center gap-2'>
+                          <AlertCircle className='h-4 w-4' />
+                          Transfer
+                        </div>
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
