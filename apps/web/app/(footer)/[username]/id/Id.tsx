@@ -52,8 +52,8 @@ export function Id({
   const transferTicket = trpc.transferTicketDatabase.useMutation({
     onSettled(data, error) {
       if (error) {
-        toast.error('Error transferring ticket');
-        console.error('Error transferring ticket:', error);
+        toast.error(`Error transferring ticket: ${error.message}`);
+        console.error('Error transferring ticket: ', error);
         setIsLoading(false);
       } else {
         toast.success('Ticket transferred!');

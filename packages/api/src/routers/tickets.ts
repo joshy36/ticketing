@@ -371,6 +371,22 @@ export const ticketsRouter = router({
         });
       }
 
+      // check if person transferring ticket to has one for that event
+      const { data: ticketTransfer } = await supabase
+        .from('tickets')
+        .select()
+        .eq('owner_id', opts.input.user_id)
+        .eq('event_id', ticketCheck.event_id)
+        .limit(1)
+        .single();
+
+      if (ticketTransfer) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User already has a ticket for this event!',
+        });
+      }
+
       const { data: ticket, error } = await supabase
         .from('tickets')
         .update({
