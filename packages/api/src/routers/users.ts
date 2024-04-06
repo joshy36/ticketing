@@ -40,6 +40,8 @@ export const usersRouter = router({
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const user = ctx.user;
+      console.log('user: ', user.id);
+      console.log('input: ', input.user_id);
       if (user.id !== input.user_id) {
         throw new TRPCError({
           code: 'UNAUTHORIZED',
