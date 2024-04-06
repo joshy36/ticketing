@@ -27,11 +27,11 @@ import { toast } from 'sonner';
 
 export function Id({
   userProfile,
-  userSalt,
+
   tickets,
 }: {
   userProfile: UserProfile;
-  userSalt: string | null | undefined;
+
   tickets: RouterOutputs['getTicketsForUser'];
 }) {
   const [qrCode, showQRCode] = useState(false);
@@ -45,6 +45,9 @@ export function Id({
   const router = useRouter();
 
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
+  const { data: userSalt, isLoading: saltLoading } = trpc.getUserSalt.useQuery({
+    user_id: userProfile?.id!,
+  });
 
   const transferTicket = trpc.transferTicketDatabase.useMutation({
     onSettled(data, error) {
@@ -78,7 +81,11 @@ export function Id({
             >
               Hide Qr
             </Button>
-            <QRCode value={userSalt} bgColor='#000000' fgColor='#FFFFFF' />
+            <QRCode
+              value={userSalt.salt!}
+              bgColor='#000000'
+              fgColor='#FFFFFF'
+            />
           </div>
         )}
         {!qrCode && (

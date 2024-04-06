@@ -22,21 +22,13 @@ export default async function Home({
     redirect('/unauthorized');
   }
 
-  const userSalt = await serverClient.getUserSalt.query({
-    user_id: userProfile?.id!,
-  });
-
   const tickets = await serverClient.getTicketsForUser.query({
     user_id: userProfile?.id!,
   });
 
   return (
     <main>
-      <Id
-        userProfile={userProfile!}
-        userSalt={userSalt?.salt}
-        tickets={tickets}
-      />
+      <Id userProfile={userProfile!} tickets={tickets} />
     </main>
   );
 }
