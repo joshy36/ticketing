@@ -52,7 +52,7 @@ export default function TicketList({
                     </div>
                   </Button>
                 </Link>
-                <div className='grid grid-cols-1 '>
+                <div className='grid grid-cols-1 gap-y-2'>
                   {upcomingEvents?.map((event) => (
                     <div
                       key={event?.id}
