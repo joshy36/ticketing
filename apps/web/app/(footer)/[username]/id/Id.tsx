@@ -116,7 +116,7 @@ export function Id({
           ?.filter((ticket) => ticket.owner_id !== userProfile.id)
           ?.map((ticket: Ticket, index: number) => (
             <div key={ticket.id}>
-              <div className='flex flex-row justify-between border-b px-2 py-2'>
+              <div className='flex flex-row items-center justify-between border-b px-2 py-2'>
                 <div className='flex items-center gap-8 font-medium'>
                   <div className='flex flex-col'>
                     <p>{tickets.tickets![index]?.events?.name}</p>
