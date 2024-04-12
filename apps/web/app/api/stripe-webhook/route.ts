@@ -63,7 +63,9 @@ export async function POST(req: NextRequest) {
             .is('owner_id', null)
             .eq('section_id', cartInfo[i]?.section?.id!)
             .eq('event_id', metadata?.event_id!)
+            .order('id', { ascending: true })
             .select()
+            .limit(1)
             .single();
         } else if (i == 0 && j == 0) {
           // give first ticket to user
@@ -78,7 +80,9 @@ export async function POST(req: NextRequest) {
             .is('owner_id', null)
             .eq('section_id', cartInfo[i]?.section?.id!)
             .eq('event_id', metadata?.event_id!)
+            .order('id', { ascending: true })
             .select()
+            .limit(1)
             .single();
 
           console.log('send to inngest');
