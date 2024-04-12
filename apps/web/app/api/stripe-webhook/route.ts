@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
           i != 0 ||
           j != 0
         ) {
-          await supabase
+          const { data: ticket, error } = await supabase
             .from('tickets')
             .update({
               purchaser_id: metadata?.user_id,
@@ -67,6 +67,8 @@ export async function POST(req: NextRequest) {
             .select()
             .limit(1)
             .single();
+          // print i, j, ticket and error
+          console.log('WEBHOOK: ', metadata.user_id, i, j, ticket, error);
         } else if (i == 0 && j == 0) {
           // give first ticket to user
           const { data: ticket } = await supabase
@@ -85,7 +87,7 @@ export async function POST(req: NextRequest) {
             .limit(1)
             .single();
 
-          console.log('send to inngest');
+          console.log(`send to inngest ${ticket?.id}`);
 
           await inngest.send({
             name: 'ticket/transfer',
@@ -95,8 +97,6 @@ export async function POST(req: NextRequest) {
               user_id: metadata?.user_id!,
             },
           });
-
-          console.log('sent to inngest');
         }
       }
     }
