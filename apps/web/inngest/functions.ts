@@ -20,7 +20,7 @@ export const transferTicket = inngest.createFunction(
   { id: 'transfer-ticket', concurrency: 1 },
   { event: 'ticket/transfer' },
   async ({ event, step }) => {
-    console.log('INNGEST::recieved');
+    console.log(`INNGEST::recieved: ${event.data.ticket_id}`);
     await step.run('transfer', async () => {
       try {
         const tx = await serverClient.transferTicket.mutate({
