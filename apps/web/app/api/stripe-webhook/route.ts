@@ -48,20 +48,6 @@ export async function POST(req: NextRequest) {
 
     for (let i = 0; i < cartInfo.length; i++) {
       for (let j = 0; j < cartInfo[i]!.quantity; j++) {
-        const { data: ticket, error: ticketError } = await supabase
-          .from('tickets')
-          .select()
-          .is('purchaser_id', null)
-          .is('owner_id', null)
-          .eq('section_id', cartInfo[i]?.section?.id!)
-          .eq('event_id', metadata?.event_id!)
-          .limit(1)
-          .single();
-
-        if (ticketError) {
-          return NextResponse.json({ status: 500, error: ticketError });
-        }
-
         if (
           (userHasTicketToEvent && userHasTicketToEvent?.length > 0) ||
           i != 0 ||
@@ -73,19 +59,25 @@ export async function POST(req: NextRequest) {
               purchaser_id: metadata?.user_id,
               transaction_id: transaction?.id,
             })
-            .eq('id', ticket?.id!)
+            .is('purchaser_id', null)
+            .is('owner_id', null)
+            .eq('section_id', cartInfo[i]?.section?.id!)
+            .eq('event_id', metadata?.event_id!)
             .select()
             .single();
         } else if (i == 0 && j == 0) {
           // give first ticket to user
-          await supabase
+          const { data: ticket } = await supabase
             .from('tickets')
             .update({
               owner_id: metadata?.user_id,
               purchaser_id: metadata?.user_id,
               transaction_id: transaction?.id,
             })
-            .eq('id', ticket?.id!)
+            .is('purchaser_id', null)
+            .is('owner_id', null)
+            .eq('section_id', cartInfo[i]?.section?.id!)
+            .eq('event_id', metadata?.event_id!)
             .select()
             .single();
 
