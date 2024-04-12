@@ -722,12 +722,12 @@ export interface Database {
       tickets: {
         Row: {
           created_at: string
+          current_wallet_address: string | null
           event_id: string
           id: string
           owner_id: string | null
           price: number
           purchaser_id: string | null
-          qr_code: string | null
           scanned: boolean
           seat: string
           section_id: string | null
@@ -738,12 +738,12 @@ export interface Database {
         }
         Insert: {
           created_at?: string
+          current_wallet_address?: string | null
           event_id: string
           id?: string
           owner_id?: string | null
           price: number
           purchaser_id?: string | null
-          qr_code?: string | null
           scanned?: boolean
           seat?: string
           section_id?: string | null
@@ -754,12 +754,12 @@ export interface Database {
         }
         Update: {
           created_at?: string
+          current_wallet_address?: string | null
           event_id?: string
           id?: string
           owner_id?: string | null
           price?: number
           purchaser_id?: string | null
-          qr_code?: string | null
           scanned?: boolean
           seat?: string
           section_id?: string | null

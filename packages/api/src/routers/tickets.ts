@@ -467,8 +467,15 @@ export const ticketsRouter = router({
       );
 
       console.log(
-        `Token transferred! Check it out at: https://base-sepolia.blockscout.com//tx/${tx.hash}`
+        `Token transferred! Check it out at: https://base-sepolia.blockscout.com/tx/${tx.hash}`
       );
+
+      await supabase
+        .from('tickets')
+        .update({
+          current_wallet_address: userProfile?.wallet_address,
+        })
+        .eq('id', opts.input.ticket_id);
 
       return tx.hash;
     }),
