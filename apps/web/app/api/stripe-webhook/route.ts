@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
         ) {
           console.log('send to inngest');
           const ticket = await inngest.send({
-            name: 'ticket/transferdb',
+            name: 'ticket/transfer.database',
             data: {
               purchaser_id: metadata?.user_id!,
               transaction_id: transaction?.id!,
