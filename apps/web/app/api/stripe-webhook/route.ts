@@ -53,22 +53,15 @@ export async function POST(req: NextRequest) {
           i != 0 ||
           j != 0
         ) {
-          const { data: ticket, error } = await supabase
-            .from('tickets')
-            .update({
-              purchaser_id: metadata?.user_id,
-              transaction_id: transaction?.id,
-            })
-            .is('purchaser_id', null)
-            .is('owner_id', null)
-            .eq('section_id', cartInfo[i]?.section?.id!)
-            .eq('event_id', metadata?.event_id!)
-            .order('id', { ascending: true })
-            .select()
-            .limit(1)
-            .single();
-          // print i, j, ticket and error
-          console.log('WEBHOOK: ', metadata.user_id, i, j, ticket, error);
+          await inngest.send({
+            name: 'ticket/transferdb',
+            data: {
+              purchaser_id: metadata?.user_id!,
+              transaction_id: transaction?.id!,
+              section_id: cartInfo[i]?.section.id!,
+              event_id: metadata?.event_id!,
+            },
+          });
         } else if (i == 0 && j == 0) {
           // give first ticket to user
           const { data: ticket } = await supabase

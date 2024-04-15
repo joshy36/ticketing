@@ -19,6 +19,29 @@ export const helloWorld = inngest.createFunction(
   },
 );
 
+export const transferTicketDatabase = inngest.createFunction(
+  { id: 'transfer-ticket-database', concurrency: 1 },
+  { event: 'ticket/transferdb' },
+  async ({ event }) => {
+    const supabase = createSupabaseServer();
+    const { data: ticket, error } = await supabase
+      .from('tickets')
+      .update({
+        purchaser_id: event.data.user_id,
+        transaction_id: event.data.id,
+      })
+      .is('purchaser_id', null)
+      .is('owner_id', null)
+      .eq('section_id', event.data.section?.id!)
+      .eq('event_id', event.data.event_id!)
+      .order('id', { ascending: true })
+      .select()
+      .limit(1)
+      .single();
+    return ticket;
+  },
+);
+
 export const transferTicket = inngest.createFunction(
   { id: 'transfer-ticket', concurrency: 1 },
   { event: 'ticket/transfer' },
