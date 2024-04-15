@@ -53,7 +53,8 @@ export async function POST(req: NextRequest) {
           i != 0 ||
           j != 0
         ) {
-          await inngest.send({
+          console.log('send to inngest');
+          const ticket = await inngest.send({
             name: 'ticket/transferdb',
             data: {
               purchaser_id: metadata?.user_id!,
@@ -62,6 +63,7 @@ export async function POST(req: NextRequest) {
               event_id: metadata?.event_id!,
             },
           });
+          console.log(`sent to inngest ${ticket}`);
         } else if (i == 0 && j == 0) {
           // give first ticket to user
           const { data: ticket } = await supabase

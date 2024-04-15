@@ -24,6 +24,7 @@ export const transferTicketDatabase = inngest.createFunction(
   { event: 'ticket/transferdb' },
   async ({ event }) => {
     const supabase = createSupabaseServer();
+    console.log(`INNGEST::recieved: ${event.data.transaction_id}`);
     const { data: ticket, error } = await supabase
       .from('tickets')
       .update({
@@ -38,6 +39,7 @@ export const transferTicketDatabase = inngest.createFunction(
       .select()
       .limit(1)
       .single();
+    console.log(`INNGEST::done: ${ticket}`);
     return ticket;
   },
 );
