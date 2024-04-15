@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 // Create a simple async Next.js API route handler
 export async function GET() {
   await inngest.send({
-    name: 'hello-world',
+    name: 'test/hello.world',
   });
 
   return NextResponse.json({ name: 'Hello Inngest from Next!' });
