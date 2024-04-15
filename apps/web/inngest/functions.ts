@@ -24,17 +24,19 @@ export const transferTicketDatabase = inngest.createFunction(
   { event: 'ticket/transfer.database' },
   async ({ event }) => {
     const supabase = createSupabaseServer();
-    console.log(`INNGEST::recieved: ${event.data.transaction_id}`);
+    console.log(
+      `INNGEST::recieved: ${event.data.transaction_id} ${event.data.purchaser_id} ${event.data.section_id} ${event.data.event_id}`,
+    );
     const { data: ticket, error } = await supabase
       .from('tickets')
       .update({
-        purchaser_id: event.data.user_id,
-        transaction_id: event.data.id,
+        purchaser_id: event.data.purchaser_id,
+        transaction_id: event.data.transaction_id,
       })
       .is('purchaser_id', null)
       .is('owner_id', null)
-      .eq('section_id', event.data.section?.id!)
-      .eq('event_id', event.data.event_id!)
+      .eq('section_id', event.data.section_id)
+      .eq('event_id', event.data.event_id)
       .order('id', { ascending: true })
       .select()
       .limit(1)
