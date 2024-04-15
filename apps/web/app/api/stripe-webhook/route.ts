@@ -54,44 +54,40 @@ export async function POST(req: NextRequest) {
           j != 0
         ) {
           console.log('send to inngest');
+          const { ids } = await inngest.send({
+            name: 'ticket/transfer.database',
+            data: {
+              owner_id: null,
+              purchaser_id: metadata?.user_id,
+              transaction_id: transaction?.id,
+              section_id: cartInfo[i]?.section.id,
+              event_id: metadata?.event_id,
+            },
+          });
+          console.log(`sent to inngest ${ids}`);
+        } else if (i == 0 && j == 0) {
+          // give first ticket to user
           const ticket = await inngest.send({
             name: 'ticket/transfer.database',
             data: {
-              purchaser_id: metadata?.user_id!,
-              transaction_id: transaction?.id!,
-              section_id: cartInfo[i]?.section.id!,
-              event_id: metadata?.event_id!,
-            },
-          });
-          console.log(`sent to inngest ${ticket}`);
-        } else if (i == 0 && j == 0) {
-          // give first ticket to user
-          const { data: ticket } = await supabase
-            .from('tickets')
-            .update({
               owner_id: metadata?.user_id,
               purchaser_id: metadata?.user_id,
               transaction_id: transaction?.id,
-            })
-            .is('purchaser_id', null)
-            .is('owner_id', null)
-            .eq('section_id', cartInfo[i]?.section?.id!)
-            .eq('event_id', metadata?.event_id!)
-            .order('id', { ascending: true })
-            .select()
-            .limit(1)
-            .single();
-
-          console.log(`send to inngest ${ticket?.id}`);
-
-          await inngest.send({
-            name: 'ticket/transfer',
-            data: {
-              event_id: metadata?.event_id!,
-              ticket_id: ticket?.id!,
-              user_id: metadata?.user_id!,
+              section_id: cartInfo[i]?.section.id,
+              event_id: metadata?.event_id,
             },
           });
+
+          // console.log(`send to inngest ${ticket?.id}`);
+
+          // await inngest.send({
+          //   name: 'ticket/transfer',
+          //   data: {
+          //     event_id: metadata?.event_id!,
+          //     ticket_id: ticket?.id!,
+          //     user_id: metadata?.user_id!,
+          //   },
+          // });
         }
       }
     }

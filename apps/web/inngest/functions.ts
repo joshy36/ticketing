@@ -30,6 +30,7 @@ export const transferTicketDatabase = inngest.createFunction(
     const { data: ticket, error } = await supabase
       .from('tickets')
       .update({
+        owner_id: event.data.owner_id,
         purchaser_id: event.data.purchaser_id,
         transaction_id: event.data.transaction_id,
       })
