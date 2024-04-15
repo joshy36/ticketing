@@ -21,7 +21,7 @@ export const helloWorld = inngest.createFunction(
 
 export const transferTicketDatabase = inngest.createFunction(
   { id: 'transfer-ticket-database', concurrency: 1 },
-  { event: 'ticket/transferdb' },
+  { event: 'ticket/transfer.database' },
   async ({ event }) => {
     const supabase = createSupabaseServer();
     console.log(`INNGEST::recieved: ${event.data.transaction_id}`);
