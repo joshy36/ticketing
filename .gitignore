@@ -55,6 +55,9 @@ scripts/eventMetadata/
 # Expo
 .expo
 
+# k6
+packages/k6
+
 sw.*
 workbox-*
 swe-worker-*
