@@ -1,14 +1,20 @@
 import { NextResponse } from 'next/server';
-import { inngest } from '../../../inngest/client'; // Import our client
+import { createModularAccountAlchemyClient } from '@alchemy/aa-alchemy';
+import { sepolia } from '@alchemy/aa-core';
+import { createTurnkeySigner } from '../../../utils/turnkey';
 
 // Opt out of caching; every request should send a new event
 export const dynamic = 'force-dynamic';
 
 // Create a simple async Next.js API route handler
 export async function GET() {
-  await inngest.send({
-    name: 'test/hello.world',
+  const chain = sepolia;
+
+  const provider = await createModularAccountAlchemyClient({
+    apiKey: process.env.ALCHEMY_DEV_API_KEY,
+    chain,
+    signer: await createTurnkeySigner(),
   });
 
-  return NextResponse.json({ name: 'Hello Inngest from Next!' });
+  return NextResponse.json({ status: 'Done' });
 }

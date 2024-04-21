@@ -54,9 +54,9 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
   const [queryClient] = React.useState(() => new QueryClient());
   const [trpcClient] = React.useState(() =>
     trpc.createClient({
-      transformer: superjson,
       links: [
         httpBatchLink({
+          transformer: superjson,
           url: `${getBaseUrl()}/api/trpc`,
           async headers() {
             const headers = new Map<string, string>();

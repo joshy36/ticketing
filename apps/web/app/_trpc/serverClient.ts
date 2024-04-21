@@ -1,5 +1,5 @@
 import {
-  createTRPCProxyClient,
+  createTRPCClient,
   loggerLink,
   unstable_httpBatchStreamLink,
 } from '@trpc/client';
@@ -7,10 +7,10 @@ import { cookies } from 'next/headers';
 import fetchPonyfill from 'fetch-ponyfill';
 
 import { type AppRouter } from 'api';
-import { getUrl, transformer } from './shared';
+import { getUrl } from './shared';
+import SuperJSON from 'superjson';
 
-export const serverClient = createTRPCProxyClient<AppRouter>({
-  transformer,
+export const serverClient = createTRPCClient<AppRouter>({
   links: [
     // loggerLink({
     //   enabled: (op) =>
@@ -18,6 +18,7 @@ export const serverClient = createTRPCProxyClient<AppRouter>({
     //     (op.direction === 'down' && op.result instanceof Error),
     // }),
     unstable_httpBatchStreamLink({
+      transformer: SuperJSON,
       url: getUrl(),
       fetch: fetchPonyfill().fetch,
       headers() {
