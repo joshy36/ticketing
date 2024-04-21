@@ -1,7 +1,7 @@
 import {
   TurnkeySigner,
   TurnkeySubOrganization,
-} from '@alchemy/aa-signers/src/turnkey';
+} from '@alchemy/aa-signers/turnkey';
 import { WebauthnStamper } from '@turnkey/webauthn-stamper';
 import { http } from 'viem';
 
