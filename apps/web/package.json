@@ -12,6 +12,10 @@
     "prettier:check": "prettier . --check"
   },
   "dependencies": {
+    "@alchemy/aa-accounts": "^3.8.2-alpha.1",
+    "@alchemy/aa-alchemy": "^3.9.0-alpha.3",
+    "@alchemy/aa-core": "^3.8.2-alpha.1",
+    "@alchemy/aa-signers": "^3.8.2-alpha.1",
     "@devnomic/marquee": "^1.0.1",
     "@hookform/resolvers": "^3.2.0",
     "@openzeppelin/contracts": "^4.9.3",
