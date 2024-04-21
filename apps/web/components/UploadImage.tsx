@@ -165,10 +165,10 @@ export default function UploadImage({ params }: { params: Props }) {
             {params.bucket === 'events'
               ? 'Create Event'
               : params.bucket === 'artists'
-              ? 'Create Artist'
-              : params.bucket === 'venues'
-              ? 'Create Venue'
-              : ''}
+                ? 'Create Artist'
+                : params.bucket === 'venues'
+                  ? 'Create Venue'
+                  : ''}
           </Button>
         </div>
       </form>

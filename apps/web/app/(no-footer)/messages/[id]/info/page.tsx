@@ -18,8 +18,9 @@ export default function Home({ params }: { params: { id: string } }) {
   const artist = currentChatDetails?.chat_members.find(
     (member) => member.artists,
   )?.artists;
-  const venue = currentChatDetails?.chat_members.find((member) => member.venues)
-    ?.venues;
+  const venue = currentChatDetails?.chat_members.find(
+    (member) => member.venues,
+  )?.venues;
 
   return (
     <div className='relative flex h-[100dvh] w-full flex-col'>
@@ -59,8 +60,8 @@ export default function Home({ params }: { params: { id: string } }) {
                 artist
                   ? `/artist/${artist?.id}`
                   : venue
-                  ? `/venue/${venue?.id}`
-                  : '/'
+                    ? `/venue/${venue?.id}`
+                    : '/'
               }
             >
               <OrgCard artist={artist} venue={venue} mostRecentMessage={null} />

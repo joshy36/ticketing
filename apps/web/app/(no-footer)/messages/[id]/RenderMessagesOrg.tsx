@@ -19,8 +19,8 @@ export default function RenderMessagesOrg({
 
   const mess = messages?.map((m) => m.chat_messages?.event_id)!;
 
-  const events = trpc.useQueries(
-    (t) => mess?.map((message) => t.getEventById({ id: message! })),
+  const events = trpc.useQueries((t) =>
+    mess?.map((message) => t.getEventById({ id: message! })),
   );
 
   const artistOrVenue = artist || venue;
@@ -41,8 +41,8 @@ export default function RenderMessagesOrg({
                         artist
                           ? `/artist/${artistOrVenue?.id}`
                           : venue
-                          ? `/venue/${artistOrVenue?.id}`
-                          : '/'
+                            ? `/venue/${artistOrVenue?.id}`
+                            : '/'
                       }
                       className='flex items-end'
                     >
