@@ -1,9 +1,5 @@
 {
     "compilerOptions": {
-      "baseUrl": ".", // this handles the root
-      "paths": {
-        "@/*": ["./*"]
-      },
       "target": "es6",
       "lib": ["dom", "dom.iterable", "esnext"],
       "allowJs": true,
@@ -15,19 +11,14 @@
       "noEmit": true,
       "noErrorTruncation": true,
       "esModuleInterop": true,
-      "module": "esnext",
-      "moduleResolution": "node",
+      "module": "Preserve",
+      "moduleResolution": "Bundler",
       "resolveJsonModule": true,
       "isolatedModules": true,
       "jsx": "preserve",
       "incremental": true,
       "strictNullChecks": true, // true required for prisma singleton mock
       "sourceMap": true,
-      "plugins": [
-        {
-          "name": "next"
-        }
-      ]
     },
     "exclude": [
       "node_modules",
@@ -35,6 +26,7 @@
       "docs",
       "dist",
       ".next",
+      ".expo",
       "apps/web/next.config.js",
       "prisma",
       "themes",
@@ -50,10 +42,5 @@
       "apps/web/next.config.js",
       "scripts/metadata.js"
     ],
-    "ts-node": {
-      "compilerOptions": {
-        "module": "commonjs"
-      }
-    }
   }
   
