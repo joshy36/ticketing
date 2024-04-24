@@ -16,6 +16,7 @@ import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Separator } from '@/components/ui/separator';
 import UserSignOut from './UserSignOut';
 import CopyWallet from './CopyWallet';
+import FriendRequest from './FriendRequest';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { notFound } from 'next/navigation';
 import { Wallet } from 'lucide-react';
@@ -50,6 +51,10 @@ export default async function ProfileView({
     data: { session },
   } = await supabase.auth.getSession();
 
+  const relationship = await serverClient.getFriendshipStatus.query({
+    otherUser: params.username,
+  });
+
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
       <div className='flex flex-col gap-4'>
@@ -61,10 +66,8 @@ export default async function ProfileView({
               <AvatarFallback></AvatarFallback>
             )}
           </Avatar>
-          {session?.user! && session?.user.id === userProfile?.id ? (
+          {session?.user! && session?.user.id === userProfile?.id && (
             <UserSignOut userProfile={userProfile} />
-          ) : (
-            <div></div>
           )}
           <div className='py-3'></div>
           {userProfile?.wallet_address && (
@@ -74,19 +77,25 @@ export default async function ProfileView({
         <div className='flex flex-col items-start justify-start'>
           <div className='flex items-center'>
             {userProfile?.first_name && (
-              <p className='py-4 text-2xl font-medium md:text-5xl'>
+              <p className='py-2 text-2xl font-medium md:text-5xl'>
                 {userProfile.first_name}
               </p>
             )}
             {userProfile?.last_name && (
-              <p className='ml-2 py-4 text-2xl font-medium md:ml-4 md:text-5xl'>
+              <p className='ml-2 py-2 text-2xl font-medium md:ml-4 md:text-5xl'>
                 {userProfile.last_name}
               </p>
             )}
           </div>
-          <p className='pb-8 font-light text-muted-foreground'>{`@${userProfile?.username}`}</p>
+          <p className='pb-8 text-sm font-light text-muted-foreground md:text-lg'>{`@${userProfile?.username}`}</p>
           {userProfile?.bio && (
             <p className='py-4 text-xl font-light'>{`${userProfile?.bio}`}</p>
+          )}
+          {session?.user! && session?.user.id !== userProfile?.id && (
+            <FriendRequest
+              userProfile={userProfile}
+              relationship={relationship}
+            />
           )}
         </div>
       </div>

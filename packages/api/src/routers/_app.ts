@@ -16,6 +16,7 @@ import { messagesRouter } from './messages';
 import { openAiRouter } from './openai';
 import { transactionsRouter } from './transactions';
 import { chatsRouter } from './chats';
+import { friendsRouter } from './friends';
 
 export const appRouter = mergeRouters(
   eventsRouter,
@@ -31,7 +32,8 @@ export const appRouter = mergeRouters(
   messagesRouter,
   openAiRouter,
   transactionsRouter,
-  chatsRouter
+  chatsRouter,
+  friendsRouter
 );
 
 export type AppRouter = typeof appRouter;
