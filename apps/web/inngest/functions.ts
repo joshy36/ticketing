@@ -23,7 +23,7 @@ export const helloWorld = inngest.createFunction(
 
 export const generatePfpForUser = inngest.createFunction(
   { id: 'generate-pfp-for-user', concurrency: 5 },
-  { event: 'user/generate-pfp' },
+  { event: 'user/generate.pfp' },
   async ({ event }) => {
     const openai = new OpenAI({
       apiKey: process.env.OPEN_AI_API_KEY,
