@@ -16,7 +16,7 @@ import {
   colors,
   animals,
 } from 'unique-names-generator';
-import { trpc } from '@/app/_trpc/client';
+import { inngest } from '@/inngest/client';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -28,14 +28,6 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
   // const router = useRouter();
 
   const supabase = createSupabaseBrowserClient();
-
-  const generatePfp = trpc.generatePfpForUser.useMutation({
-    onSettled(error) {
-      if (error) {
-        console.error('Error deleting reservation:', error);
-      }
-    },
-  });
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -79,9 +71,12 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
       );
 
       if (id) {
-        generatePfp.mutate({
-          id: id,
-          prompt: randomName,
+        await inngest.send({
+          name: 'user/generate-pfp',
+          data: {
+            prompt: randomName,
+            id: id,
+          },
         });
       }
     }

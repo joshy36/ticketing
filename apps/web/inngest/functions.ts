@@ -2,6 +2,8 @@ import { inngest } from './client';
 import { ethers } from 'ethers';
 import contractAbi from '../../../packages/chain/deployments/base-goerli/Event.json';
 import createSupabaseServer from '@/utils/supabaseServer';
+import OpenAI from 'openai';
+import { serverClient } from '@/app/_trpc/serverClient';
 
 export const helloWorld = inngest.createFunction(
   { id: 'hello-world', concurrency: 1 },
@@ -16,6 +18,58 @@ export const helloWorld = inngest.createFunction(
 
     console.log('Done sleeping');
     return { event, body: 'Hello, World!' };
+  },
+);
+
+export const generatePfpForUser = inngest.createFunction(
+  { id: 'generate-pfp-for-user', concurrency: 5 },
+  { event: 'user/generate-pfp' },
+  async ({ event }) => {
+    const openai = new OpenAI({
+      apiKey: process.env.OPEN_AI_API_KEY,
+    });
+
+    const response = await openai.images.generate({
+      model: 'dall-e-3',
+      prompt: event.data.prompt,
+      n: 1,
+      size: '1024x1024',
+    });
+
+    const image_url = response.data[0]?.url;
+    console.log(image_url);
+    const bucket = 'users';
+    const formData = new FormData();
+    await fetch(image_url!)
+      .then((response) => response.blob())
+      .then(async (blob) => {
+        formData.append('file', blob);
+        formData.append('fileName', 'profile.png');
+        formData.append('location', `/${event.data.id}/profile.png`);
+        formData.append('bucket', bucket);
+        formData.append('id', event.data.id);
+
+        console.log('formData:', formData);
+
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+        const resImage = await fetch(baseUrl + `/api/image/upload`, {
+          method: 'POST',
+          body: formData,
+          cache: 'no-store',
+        });
+
+        const fileName = await resImage.json();
+
+        await serverClient.updateUser.mutate({
+          id: event.data.id,
+          profile_image:
+            process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
+            '/' +
+            bucket +
+            fileName.location,
+        });
+      })
+      .catch((error) => console.error('Error:', error));
   },
 );
 

@@ -1,6 +1,7 @@
 import { authedProcedure, publicProcedure, router } from '../trpc';
 import { z } from 'zod';
 import { qstashClient } from '../job-queue/utils';
+// import { inngest } from '@/inngest/client';
 
 export const openAiRouter = router({
   generatePfpForUser: publicProcedure
@@ -12,6 +13,15 @@ export const openAiRouter = router({
       const openaiApiKey = process.env.OPEN_AI_API_KEY;
 
       console.log('generating image from openai');
+
+      // const ticket = await inngest.send({
+      //   name: 'user/generate-pfp',
+      //   data: {
+      //     prompt: prompt,
+      //     id: input.id,
+      //   },
+      // });
+
       const res = await qstashClient.publishJSON({
         url: 'https://api.openai.com/v1/images/generations',
         callback: `${process.env.UPSTASH_URL}/api/qstash-callback-dalle?id=${input.id}`,
