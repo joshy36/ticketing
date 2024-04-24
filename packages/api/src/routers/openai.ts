@@ -16,7 +16,7 @@ export const openAiRouter = router({
 
       console.log('generating image from openai');
 
-      inngest.send({
+      await inngest.send({
         name: 'user/generate.pfp',
         data: {
           prompt: prompt,
