@@ -1,9 +1,12 @@
 import { router, publicProcedure, authedProcedure } from '../trpc';
 import { z } from 'zod';
-import { TurnkeyApiTypes, TSignedRequest, TurnkeyClient } from '@turnkey/http';
+import { TurnkeyApiTypes, TurnkeyClient } from '@turnkey/http';
 import { createActivityPoller } from '@turnkey/http';
 import { ApiKeyStamper } from '@turnkey/api-key-stamper';
 import { TRPCError } from '@trpc/server';
+import { createModularAccountAlchemyClient } from '@alchemy/aa-alchemy';
+import { createTurnkeySigner } from '../services/turnkey';
+import { sepolia } from '@alchemy/aa-core';
 // import axios from 'axios';
 
 type TAttestation = TurnkeyApiTypes['v1Attestation'];
@@ -91,13 +94,27 @@ export const turnkeyRouter = router({
             ?.subOrganizationId
         );
 
+        const walletAddress = refineNonNull(
+          completedActivity.result.createSubOrganizationResultV4?.wallet
+            ?.addresses[0]
+        );
+
+        const chain = sepolia;
+
+        const provider = await createModularAccountAlchemyClient({
+          apiKey: process.env.ALCHEMY_DEV_API_KEY,
+          chain,
+          signer: await createTurnkeySigner(subOrgId, walletAddress),
+        });
+
         await supabase
           .from('user_profiles')
           .update({
             turnkey_sub_org: subOrgId,
-            wallet_address:
+            eoa_address:
               completedActivity.result.createSubOrganizationResultV4?.wallet
                 ?.addresses[0],
+            wallet_address: provider.account.address,
             turnkey_wallet_id:
               completedActivity.result.createSubOrganizationResultV4?.wallet
                 ?.walletId,

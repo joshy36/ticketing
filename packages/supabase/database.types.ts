@@ -394,6 +394,83 @@ export interface Database {
           }
         ]
       }
+      friend_requests: {
+        Row: {
+          created_at: string
+          from: string
+          id: string
+          status: Database["public"]["Enums"]["friend_request_status"]
+          to: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          from: string
+          id?: string
+          status?: Database["public"]["Enums"]["friend_request_status"]
+          to: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          from?: string
+          id?: string
+          status?: Database["public"]["Enums"]["friend_request_status"]
+          to?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friend_requests_from_fkey"
+            columns: ["from"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friend_requests_to_fkey"
+            columns: ["to"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      friends: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string | null
+          user1_id: string
+          user2_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          updated_at?: string | null
+          user1_id: string
+          user2_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string | null
+          user1_id?: string
+          user2_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friends_user1_id_fkey"
+            columns: ["user1_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friends_user2_id_fkey"
+            columns: ["user2_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       messages: {
         Row: {
           created_at: string
@@ -845,6 +922,7 @@ export interface Database {
         Row: {
           bio: string | null
           created_at: string | null
+          eoa_address: string | null
           first_name: string | null
           id: string
           last_name: string | null
@@ -858,6 +936,7 @@ export interface Database {
         Insert: {
           bio?: string | null
           created_at?: string | null
+          eoa_address?: string | null
           first_name?: string | null
           id: string
           last_name?: string | null
@@ -871,6 +950,7 @@ export interface Database {
         Update: {
           bio?: string | null
           created_at?: string | null
+          eoa_address?: string | null
           first_name?: string | null
           id?: string
           last_name?: string | null
@@ -984,6 +1064,7 @@ export interface Database {
     }
     Enums: {
       chat_type: "group" | "dm" | "organization"
+      friend_request_status: "pending" | "accepted" | "rejected"
       group_type: "group" | "dm"
       message_status: "read" | "unread" | "deleted"
       role: "owner" | "admin"
