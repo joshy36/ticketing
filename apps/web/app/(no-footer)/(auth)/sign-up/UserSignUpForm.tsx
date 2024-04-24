@@ -79,8 +79,6 @@ export function UserSignUpForm({ className, ...props }: UserAuthFormProps) {
       );
 
       if (id) {
-        console.log('id:', id);
-        console.log('randomName:', randomName);
         generatePfp.mutate({
           id: id,
           prompt: randomName,
