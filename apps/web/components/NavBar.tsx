@@ -152,6 +152,21 @@ export default function NavBar({
             ))}
             {user && (
               <NavigationMenuItem>
+                <Link
+                  href={`/${userProfile?.username}/id`}
+                  legacyBehavior
+                  passHref
+                >
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <div className='flex flex-row items-center gap-2'>
+                      <p>Scan In</p>
+                    </div>
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            )}
+            {user && (
+              <NavigationMenuItem>
                 <Link href={`/messages`} legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     <div className='flex flex-row items-center gap-2'>

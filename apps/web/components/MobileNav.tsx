@@ -86,8 +86,18 @@ export function MobileNav({
               ))}
             </div>
             {user && (
+              <MobileLink
+                href={`/${userProfile?.username}/id`}
+                onOpenChange={setOpen}
+              >
+                <div className='flex flex-row items-center gap-2 pb-3'>
+                  <p>Scan In</p>
+                </div>
+              </MobileLink>
+            )}
+            {user && (
               <MobileLink href={`/messages`} onOpenChange={setOpen}>
-                <div className='flex flex-row items-center gap-2'>
+                <div className='flex flex-row items-center gap-2 pb-3'>
                   <p>Messages</p>
                   {unreadMessages > 0 && (
                     <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
@@ -97,7 +107,7 @@ export function MobileNav({
                 </div>
               </MobileLink>
             )}
-            <div className='py-1.5'></div>
+            <div className=''></div>
             {userOrg && (
               <MobileLink href={`/dashboard/${userOrg}`} onOpenChange={setOpen}>
                 Admin Dashboard
