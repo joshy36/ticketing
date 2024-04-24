@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { router, publicProcedure, authedProcedure } from '../trpc';
 
 export const friendsRouter = router({
-  getFriendshipStatus: authedProcedure
+  getFriendshipStatus: publicProcedure
     .input(z.object({ otherUser: z.string() }))
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
