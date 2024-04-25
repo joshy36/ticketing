@@ -137,7 +137,7 @@ export default async function ProfileView({
           </div>
           <div className='grid grid-cols-1 gap-8 px-4 pt-8'>
             {collectibles?.length === 0 ? (
-              <div className='text-center text-2xl font-extralight md:pt-32'>
+              <div className='text-center text-xl font-extralight md:pt-32'>
                 Attend events to build a collection!
               </div>
             ) : (
@@ -196,7 +196,7 @@ export default async function ProfileView({
           </div>
           <div className='grid grid-cols-1 gap-8 px-4 pt-8'>
             {sbts?.length === 0 ? (
-              <div className='text-center text-2xl font-extralight md:pt-32'>
+              <div className='text-center text-xl font-extralight md:pt-32'>
                 Attend events to build a collection!
               </div>
             ) : (
