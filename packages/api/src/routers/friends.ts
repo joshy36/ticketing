@@ -57,6 +57,48 @@ export const friendsRouter = router({
       }
       return 'none';
     }),
+
+  getPendingFriendRequestsForUser: authedProcedure.query(
+    async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      const { data: friendRequests } = await supabase
+        .from('friend_requests')
+        .select(`*, from:user_profiles!friend_requests_from_fkey(*)`)
+        .eq('to', user?.id)
+        .eq('status', 'pending');
+
+      return friendRequests;
+    }
+  ),
+
+  getTotalFriendsForUser: authedProcedure.query(async ({ ctx }) => {
+    const supabase = ctx.supabase;
+    const user = ctx.user;
+
+    let friendsCount = 0;
+
+    const { data: friends } = await supabase
+      .from('friends')
+      .select()
+      .eq('user1_id', user?.id);
+
+    if (friends) {
+      friendsCount += friends.length;
+    }
+
+    const { data: friends2 } = await supabase
+      .from('friends')
+      .select()
+      .eq('user2_id', user?.id);
+
+    if (friends2) {
+      friendsCount += friends2.length;
+    }
+
+    return friendsCount;
+  }),
   requestFriend: authedProcedure
     .input(z.object({ to: z.string() }))
     .mutation(async ({ ctx, input }) => {

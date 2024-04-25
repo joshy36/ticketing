@@ -14,7 +14,8 @@ import { UserProfile } from 'supabase';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { MessageCircle } from 'lucide-react';
 import { useContext } from 'react';
-import { MessagesContext } from '~/providers/messagesProvider';
+import { MessagesContext } from '../providers/messagesProvider';
+import { trpc } from '../app/_trpc/client';
 
 export function MobileNav({
   user,
@@ -27,6 +28,8 @@ export function MobileNav({
 }) {
   const [open, setOpen] = React.useState(false);
   const { unreadMessages } = useContext(MessagesContext);
+  const { data: friendRequests } =
+    trpc.getPendingFriendRequestsForUser.useQuery();
 
   const mainComponents: {
     title: string;
@@ -99,11 +102,12 @@ export function MobileNav({
               <MobileLink href={`/messages`} onOpenChange={setOpen}>
                 <div className='flex flex-row items-center gap-2 pb-3'>
                   <p>Messages</p>
-                  {unreadMessages > 0 && (
-                    <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
-                      {unreadMessages}
-                    </span>
-                  )}
+                  {friendRequests &&
+                    unreadMessages + friendRequests?.length > 0 && (
+                      <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+                        {unreadMessages + friendRequests?.length}
+                      </span>
+                    )}
                 </div>
               </MobileLink>
             )}
@@ -175,11 +179,12 @@ export function MobileNav({
                 >
                   <MessageCircle className='h-4 w-4' />
                 </Button>
-                {unreadMessages > 0 && (
-                  <span className='absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
-                    {unreadMessages}
-                  </span>
-                )}
+                {friendRequests &&
+                  unreadMessages + friendRequests?.length > 0 && (
+                    <span className='absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+                      {unreadMessages + friendRequests?.length}
+                    </span>
+                  )}
               </div>
             </MobileLink>
             <UserNav user={user} userProfile={userProfile} />

@@ -25,7 +25,7 @@ export default function CopyWallet({
         <TooltipTrigger asChild>
           <Button
             variant='ghost'
-            className='gap-2 text-muted-foreground'
+            className='max-w-[200px] gap-2 font-light text-muted-foreground'
             onClick={() => {
               navigator.clipboard.writeText(userProfile?.wallet_address!);
               setCopy(true);

@@ -32,10 +32,10 @@ import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
 import Image from 'next/image';
 import { useContext } from 'react';
-import { MessagesContext } from '~/providers/messagesProvider';
+import { MessagesContext } from '../providers/messagesProvider';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import { trpc } from '~/app/_trpc/client';
+import { trpc } from '../app/_trpc/client';
 
 export const createComponents: {
   title: string;
@@ -75,6 +75,8 @@ export default function NavBar({
     mostRecentMessageByChat,
     setNumberOfUnreadMessagesPerChat,
   } = useContext(MessagesContext);
+  const { data: friendRequests } =
+    trpc.getPendingFriendRequestsForUser.useQuery();
   const pathname = usePathname();
   const router = useRouter();
   const readMessages = trpc.readMessages.useMutation();
@@ -171,11 +173,12 @@ export default function NavBar({
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     <div className='flex flex-row items-center gap-2'>
                       <p>Messages</p>
-                      {unreadMessages > 0 && (
-                        <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
-                          {unreadMessages}
-                        </span>
-                      )}
+                      {friendRequests &&
+                        unreadMessages + friendRequests?.length > 0 && (
+                          <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+                            {unreadMessages + friendRequests?.length}
+                          </span>
+                        )}
                     </div>
                   </NavigationMenuLink>
                 </Link>

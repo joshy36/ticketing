@@ -21,11 +21,13 @@ export default function UserSignOut({
   };
 
   return (
-    <div className='flex flex-row items-center gap-4 pt-4'>
+    <div className='flex flex-col items-center gap-4 pt-4'>
       <Link href={`/${userProfile.username}/edit/`}>
-        <Button variant='default'>Edit Profile</Button>
+        <Button variant='default' className='w-[120px]'>
+          Edit Profile
+        </Button>
       </Link>
-      <Button variant='outline' onClick={handleSignOut}>
+      <Button variant='outline' className='w-[120px]' onClick={handleSignOut}>
         Sign Out
       </Button>
     </div>

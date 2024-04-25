@@ -2,7 +2,7 @@
 
 import { UserProfile } from 'supabase';
 import { useContext, useState } from 'react';
-import { Check, SendHorizonal } from 'lucide-react';
+import { Users, SendHorizonal } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -39,6 +39,9 @@ export default function RenderChats({
   );
   const router = useRouter();
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
+  const { data: friendRequests } =
+    trpc.getPendingFriendRequestsForUser.useQuery();
+  console.log(friendRequests);
 
   const {
     chats,
@@ -159,6 +162,24 @@ export default function RenderChats({
       {chats?.chats?.length === 0 && (
         <p className='pt-8 text-center'>No messages yet.</p>
       )}
+      <button
+        className='flex w-full items-center justify-between border-b px-4 py-6 font-medium hover:bg-zinc-800/50 focus:bg-secondary'
+        onClick={() => {
+          router.push(`/messages/requests`);
+        }}
+      >
+        <div className='flex flex-row gap-4'>
+          <Users />
+          <p>Friend Requests</p>
+        </div>
+        {friendRequests && friendRequests?.length > 0 && (
+          <div className='flex pr-2'>
+            <span className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+              {friendRequests?.length}
+            </span>
+          </div>
+        )}
+      </button>
       {chatsWithTimestamps?.map((chat, index) => {
         return (
           <button
@@ -216,7 +237,7 @@ export default function RenderChats({
               numberOfUnreadMessagesPerChat[chat.id] &&
               numberOfUnreadMessagesPerChat[chat.id]?.unread! > 0 && (
                 <div className='flex pr-2'>
-                  <span className='h-3 w-3 rounded-full bg-blue-700'></span>
+                  <span className='h-4 w-4 rounded-full bg-blue-700'></span>
                 </div>
               )}
           </button>

@@ -32,6 +32,8 @@ export default async function ProfileView({
     username: params.username,
   });
 
+  const friendCount = await serverClient.getTotalFriendsForUser.query();
+
   if (!userProfile) {
     notFound();
   }
@@ -56,9 +58,9 @@ export default async function ProfileView({
   });
 
   return (
-    <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+    <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-24'>
       <div className='flex flex-col gap-4'>
-        <div className='flex flex-col items-center justify-center '>
+        <div className='flex flex-row justify-between'>
           <Avatar className='h-32 w-32'>
             {userProfile?.profile_image ? (
               <AvatarImage src={userProfile?.profile_image} alt='pfp' />
@@ -69,27 +71,30 @@ export default async function ProfileView({
           {session?.user! && session?.user.id === userProfile?.id && (
             <UserSignOut userProfile={userProfile} />
           )}
-          <div className='py-3'></div>
-          {userProfile?.wallet_address && (
-            <CopyWallet userProfile={userProfile} />
-          )}
         </div>
+
         <div className='flex flex-col items-start justify-start'>
           <div className='flex items-center'>
             {userProfile?.first_name && (
-              <p className='py-2 text-2xl font-medium md:text-5xl'>
+              <p className='py-2 text-2xl font-medium md:text-3xl'>
                 {userProfile.first_name}
               </p>
             )}
             {userProfile?.last_name && (
-              <p className='ml-2 py-2 text-2xl font-medium md:ml-4 md:text-5xl'>
+              <p className='mx-2 py-2 text-2xl font-medium md:ml-2 md:text-3xl'>
                 {userProfile.last_name}
               </p>
             )}
+            {userProfile?.wallet_address && (
+              <CopyWallet userProfile={userProfile} />
+            )}
           </div>
-          <p className='pb-8 text-sm font-light text-muted-foreground md:text-lg'>{`@${userProfile?.username}`}</p>
+          <div className='flex flex-row'>
+            <p className='md:text-md pb-8 text-sm font-light text-muted-foreground'>{`@${userProfile?.username} ·`}</p>
+            <p className='md:text-md ml-1 pb-8 text-sm font-semibold text-muted-foreground hover:underline'>{`${friendCount} friends`}</p>
+          </div>
           {userProfile?.bio && (
-            <p className='py-4 text-xl font-light'>{`${userProfile?.bio}`}</p>
+            <p className='text-lg font-light'>{`${userProfile?.bio}`}</p>
           )}
           {session?.user! && session?.user.id !== userProfile?.id && (
             <FriendRequest
