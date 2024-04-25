@@ -99,6 +99,7 @@ export const friendsRouter = router({
 
     return friendsCount;
   }),
+
   requestFriend: authedProcedure
     .input(z.object({ to: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -110,4 +111,8 @@ export const friendsRouter = router({
         to: input.to,
       });
     }),
+
+  rejectFriendRequest: authedProcedure
+    .input(z.object({ from: z.string() }))
+    .mutation(async ({ ctx, input }) => {}),
 });

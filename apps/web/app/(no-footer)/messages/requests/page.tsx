@@ -28,7 +28,10 @@ export default function Requests() {
         <div>
           {friendRequests?.map((request) => {
             return (
-              <div className='flex flex-row justify-between gap-12 border-b p-4'>
+              <div
+                key={request.id}
+                className='flex flex-row justify-between gap-12 border-b p-4'
+              >
                 <ProfileCard userProfile={request.from!} />
                 <div className='flex gap-2'>
                   <Button variant='destructive' className='rounded-md'>
