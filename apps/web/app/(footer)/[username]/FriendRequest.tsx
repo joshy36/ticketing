@@ -1,12 +1,12 @@
 'use client';
 
 import { UserProfile } from 'supabase';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import { UserPlus } from 'lucide-react';
-import { trpc } from '@/app/_trpc/client';
+import { trpc } from '~/app/_trpc/client';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Icons } from '@/components/ui/icons';
+import { Icons } from '~/components/ui/icons';
 
 export default function FriendRequest({
   userProfile,

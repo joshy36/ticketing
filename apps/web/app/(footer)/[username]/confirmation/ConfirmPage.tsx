@@ -1,11 +1,11 @@
 'use client';
 
-import { trpc } from '@/app/_trpc/client';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Icons } from '@/components/ui/icons';
-import { Separator } from '@/components/ui/separator';
+import { trpc } from '~/app/_trpc/client';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
+import { Card, CardContent } from '~/components/ui/card';
+import { Icons } from '~/components/ui/icons';
+import { Separator } from '~/components/ui/separator';
 import confetti from 'canvas-confetti';
 import {
   CheckCircle2,

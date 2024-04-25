@@ -1,8 +1,8 @@
 'use client';
 
 import { trpc } from '../../../_trpc/client';
-import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/ui/icons';
+import { Button } from '~/components/ui/button';
+import { Icons } from '~/components/ui/icons';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -11,10 +11,10 @@ import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import { Events, UserProfile } from 'supabase';
 import { Section } from './TicketSection';
 import CheckoutForm from './CheckoutForm';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { Separator } from '~/components/ui/separator';
+import { Badge } from '~/components/ui/badge';
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
+import { Label } from '~/components/ui/label';
 import { AnimatedGradientBorderTW } from './AnimatedGradientBorderTW';
 import { RouterOutputs } from 'api';
 

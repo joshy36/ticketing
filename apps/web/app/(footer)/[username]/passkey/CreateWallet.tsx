@@ -1,21 +1,21 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import {
   base64UrlEncode,
   generateRandomBuffer,
   humanReadableDateTime,
-} from '@/utils/turnkey';
+} from '~/utils/turnkey';
 import { getWebAuthnAttestation } from '@turnkey/http';
 import { useEffect, useState } from 'react';
-import { Icons } from '@/components/ui/icons';
+import { Icons } from '~/components/ui/icons';
 import { trpc } from '../../../_trpc/client';
 import { UserProfile } from 'supabase';
 import { ChevronRight, User, Wallet } from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '~/components/ui/card';
 import CopyWallet from '../CopyWallet';
 import confetti from 'canvas-confetti';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage } from '~/components/ui/avatar';
 import Link from 'next/link';
 
 export default function Turnkey({ userProfile }: { userProfile: UserProfile }) {

@@ -1,7 +1,7 @@
-import { serverClient } from '@/app/_trpc/serverClient';
-import UploadImage from '@/components/UploadImage';
-import { Separator } from '@/components/ui/separator';
-import createSupabaseServer from '@/utils/supabaseServer';
+import { serverClient } from '~/app/_trpc/serverClient';
+import UploadImage from '~/components/UploadImage';
+import { Separator } from '~/components/ui/separator';
+import createSupabaseServer from '~/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }: { params: { id: string } }) {

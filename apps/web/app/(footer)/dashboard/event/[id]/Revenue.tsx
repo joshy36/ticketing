@@ -7,18 +7,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { trpc } from '@/app/_trpc/client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Icons } from '@/components/ui/icons';
+} from '~/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { trpc } from '~/app/_trpc/client';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Icons } from '~/components/ui/icons';
 import { useState } from 'react';
 import { Events } from 'supabase';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '~/components/ui/badge';
 import { X } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '~/components/ui/separator';
+import { Skeleton } from '~/components/ui/skeleton';
 
 export default function Revenue({ event }: { event: Events }) {
   const revenue = trpc.getRevenueForEvent.useQuery({ event_id: event.id });

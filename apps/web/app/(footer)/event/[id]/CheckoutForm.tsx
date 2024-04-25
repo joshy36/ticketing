@@ -4,9 +4,9 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import Link from 'next/link';
-import { Icons } from '@/components/ui/icons';
+import { Icons } from '~/components/ui/icons';
 import { useRouter } from 'next/navigation';
 import { Events, UserProfile } from 'supabase';
 

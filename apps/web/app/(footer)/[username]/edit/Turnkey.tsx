@@ -1,14 +1,14 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import {
   base64UrlEncode,
   generateRandomBuffer,
   humanReadableDateTime,
-} from '@/utils/turnkey';
+} from '~/utils/turnkey';
 import { getWebAuthnAttestation } from '@turnkey/http';
 import { useEffect, useState } from 'react';
-import { Icons } from '@/components/ui/icons';
+import { Icons } from '~/components/ui/icons';
 import { trpc } from '../../../_trpc/client';
 import { UserProfile } from 'supabase';
 import { revalidatePath } from 'next/cache';

@@ -21,7 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from './ui/alert-dialog';
 import Link from 'next/link';
 import { cn } from './ui/utils';
 import * as React from 'react';
@@ -32,10 +32,10 @@ import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
 import Image from 'next/image';
 import { useContext } from 'react';
-import { MessagesContext } from '@/providers/messagesProvider';
+import { MessagesContext } from '~/providers/messagesProvider';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import { trpc } from '@/app/_trpc/client';
+import { trpc } from '~/app/_trpc/client';
 
 export const createComponents: {
   title: string;

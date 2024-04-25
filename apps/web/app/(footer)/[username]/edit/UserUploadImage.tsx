@@ -2,12 +2,12 @@
 
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import { toast } from 'sonner';
-import { Input } from '@/components/ui/input';
+import { Input } from '~/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { trpc } from '../../../_trpc/client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 
 import {
   AlertDialog,
@@ -19,7 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '~/components/ui/alert-dialog';
 
 const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp', 'heic'];
 

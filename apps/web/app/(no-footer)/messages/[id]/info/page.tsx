@@ -1,8 +1,8 @@
 'use client';
 
-import ProfileCard from '@/components/ProfileCard';
-import { Button } from '@/components/ui/button';
-import { MessagesContext } from '@/providers/messagesProvider';
+import ProfileCard from '~/components/ProfileCard';
+import { Button } from '~/components/ui/button';
+import { MessagesContext } from '~/providers/messagesProvider';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useContext } from 'react';

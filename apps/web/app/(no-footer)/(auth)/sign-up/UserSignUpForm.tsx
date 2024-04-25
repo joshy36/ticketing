@@ -2,13 +2,13 @@
 
 import * as React from 'react';
 
-import { cn } from '@/components/ui/utils';
-import { Icons } from '@/components/ui/icons';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { cn } from '~/components/ui/utils';
+import { Icons } from '~/components/ui/icons';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
 import { useState } from 'react';
-import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
+import createSupabaseBrowserClient from '~/utils/supabaseBrowser';
 import { toast } from 'sonner';
 import {
   uniqueNamesGenerator,
@@ -16,7 +16,7 @@ import {
   colors,
   animals,
 } from 'unique-names-generator';
-import { trpc } from '@/app/_trpc/client';
+import { trpc } from '~/app/_trpc/client';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 

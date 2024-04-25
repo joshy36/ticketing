@@ -1,15 +1,15 @@
-import NavBar from '@/components/NavBar';
-import { ThemeProvider } from '@/components/ThemeProvider';
-import { Toaster } from '@/components/ui/sonner';
+import NavBar from '~/components/NavBar';
+import { ThemeProvider } from '~/components/ThemeProvider';
+import { Toaster } from '~/components/ui/sonner';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
-import createSupabaseServer from '@/utils/supabaseServer';
+import createSupabaseServer from '~/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font';
-import { MobileNav } from '@/components/MobileNav';
+import { MobileNav } from '~/components/MobileNav';
 import { Metadata } from 'next';
-import { MessagesProvider } from '@/providers/messagesProvider';
+import { MessagesProvider } from '~/providers/messagesProvider';
 
 import './globals.css';
 

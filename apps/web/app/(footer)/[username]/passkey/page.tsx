@@ -1,5 +1,5 @@
-import { serverClient } from '@/app/_trpc/serverClient';
-import createSupabaseServer from '@/utils/supabaseServer';
+import { serverClient } from '~/app/_trpc/serverClient';
+import createSupabaseServer from '~/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 import CreateWallet from './CreateWallet';
 

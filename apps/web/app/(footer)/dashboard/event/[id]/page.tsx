@@ -1,6 +1,6 @@
-import { serverClient } from '../../../../_trpc/serverClient';
+import { serverClient } from '~/app/_trpc/serverClient';
 import { notFound } from 'next/navigation';
-import createSupabaseServer from '@/utils/supabaseServer';
+import createSupabaseServer from '~/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 import ManageEvent from './ManageEvent';
 

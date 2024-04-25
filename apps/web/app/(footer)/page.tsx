@@ -18,26 +18,26 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from '@/components/ui/command';
+} from '~/components/ui/command';
 
 import * as React from 'react';
 import { addDays, format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 
 import { cn } from '../../components/ui/utils';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+import { Button } from '~/components/ui/button';
+import { Calendar } from '~/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '~/components/ui/popover';
 import Image from 'next/image';
-import { Marquee } from '@/components/ui/marquee';
-import { dateToString } from '@/utils/helpers';
+import { Marquee } from '~/components/ui/marquee';
+import { dateToString } from '~/utils/helpers';
 import { trpc } from '../_trpc/client';
 import { useEffect, useState } from 'react';
-import { LandingPageInput } from '@/components/ui/landing-page-input';
+import { LandingPageInput } from '~/components/ui/landing-page-input';
 
 export default function Home() {
   const [date, setDate] = React.useState<DateRange | undefined>({

@@ -1,11 +1,11 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import { trpc } from '../../../_trpc/client';
 import { Events, UserProfile } from 'supabase';
 import TicketSection from './TicketSection';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '~/components/ui/skeleton';
+import { Separator } from '~/components/ui/separator';
 
 export default function EventPurchase({
   userProfile,

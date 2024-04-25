@@ -7,7 +7,7 @@ import {
   useDisconnect,
   useEnsName,
 } from 'wagmi';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import Image from 'next/image';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import React from 'react';
@@ -15,7 +15,7 @@ import { useSignMessage } from 'wagmi';
 import { recoverMessageAddress } from 'viem';
 import { trpc } from '../../../_trpc/client';
 import { UserProfile } from 'supabase';
-import { formatEthAddress } from '@/utils/helpers';
+import { formatEthAddress } from '~/utils/helpers';
 
 export function WalletConnect({ userProfile }: { userProfile: UserProfile }) {
   const {

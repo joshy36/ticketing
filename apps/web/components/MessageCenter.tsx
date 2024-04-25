@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
+} from './ui/sheet';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,11 +18,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from './ui/alert-dialog';
 import { Button } from './ui/button';
 import { Bell, ChevronRight, Trash } from 'lucide-react';
-import { trpc } from '@/app/_trpc/client';
-import { dateToString } from '@/utils/helpers';
+import { trpc } from '~/app/_trpc/client';
+import { dateToString } from '~/utils/helpers';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ScrollArea } from './ui/scroll-area';

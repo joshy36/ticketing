@@ -1,15 +1,15 @@
 'use client';
 
-import { trpc } from '@/app/_trpc/client';
-import { Button } from '@/components/ui/button';
-import { dateToString } from '@/utils/helpers';
+import { trpc } from '~/app/_trpc/client';
+import { Button } from '~/components/ui/button';
+import { dateToString } from '~/utils/helpers';
 import { router } from 'api/src/trpc';
 import { ArrowLeft, ExternalLink, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Events, Organization } from 'supabase';
 import { useRouter } from 'next/navigation';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '~/components/ui/separator';
 import Scanners from './Scanners';
 import Revenue from './Revenue';
 import TicketSales from './TicketSales';

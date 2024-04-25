@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,25 +14,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from '~/components/ui/form';
+import { Input } from '~/components/ui/input';
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '~/components/ui/popover';
 
-import { Calendar } from '@/components/ui/calendar';
+import { Calendar } from '~/components/ui/calendar';
 
 import { CalendarIcon, CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-import { cn } from '@/components/ui/utils';
+import { cn } from '~/components/ui/utils';
 import { format } from 'date-fns';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
+import { Textarea } from '~/components/ui/textarea';
 import { toast } from 'sonner';
-import { Icons } from '@/components/ui/icons';
-import { Separator } from '@/components/ui/separator';
+import { Icons } from '~/components/ui/icons';
+import { Separator } from '~/components/ui/separator';
 import { useRouter } from 'next/navigation';
 import { trpc } from '../../../../../_trpc/client';
 
@@ -45,9 +45,9 @@ import {
 } from '../../../../../../components/ui/command';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { dateToString } from '@/utils/helpers';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { Card, CardContent, CardHeader } from '~/components/ui/card';
+import { dateToString } from '~/utils/helpers';
 
 const formSchema = z.object({
   name: z.string().min(2, {

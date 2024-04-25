@@ -1,6 +1,6 @@
-import { serverClient } from '@/app/_trpc/serverClient';
+import { serverClient } from '~/app/_trpc/serverClient';
 import EventCreateTickets from './EventCreateTickets';
-import createSupabaseServer from '@/utils/supabaseServer';
+import createSupabaseServer from '~/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({

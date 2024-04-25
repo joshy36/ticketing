@@ -2,14 +2,14 @@
 
 import * as React from 'react';
 
-import { cn } from '@/components/ui/utils';
-import { Icons } from '@/components/ui/icons';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { cn } from '~/components/ui/utils';
+import { Icons } from '~/components/ui/icons';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
+import createSupabaseBrowserClient from '~/utils/supabaseBrowser';
 import { AuthResponse } from '@supabase/supabase-js';
 import { toast } from 'sonner';
 

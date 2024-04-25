@@ -7,18 +7,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { trpc } from '@/app/_trpc/client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+} from '~/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
+import { trpc } from '~/app/_trpc/client';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
 import { toast } from 'sonner';
-import { Icons } from '@/components/ui/icons';
+import { Icons } from '~/components/ui/icons';
 import { useState } from 'react';
 import { Organization } from 'supabase';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '~/components/ui/badge';
 import { X } from 'lucide-react';
-import ProfileCard from '@/components/ProfileCard';
+import ProfileCard from '~/components/ProfileCard';
 
 export default function OrganizationMembers({
   organization,

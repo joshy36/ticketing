@@ -11,20 +11,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Icons } from '@/components/ui/icons';
-import { trpc } from '@/app/_trpc/client';
+} from '~/components/ui/dialog';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Icons } from '~/components/ui/icons';
+import { trpc } from '~/app/_trpc/client';
 import { toast } from 'sonner';
-import ProfileCard from '@/components/ProfileCard';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import ProfileCard from '~/components/ProfileCard';
+import { ScrollArea } from '~/components/ui/scroll-area';
 import GroupCard from './GroupCard';
 import ChatProfileCard from './ChatProfileCard';
-import { MessagesContext } from '@/providers/messagesProvider';
+import { MessagesContext } from '~/providers/messagesProvider';
 import { useRouter } from 'next/navigation';
 import OrgCard from './OrgCard';
-import UsersList from '@/components/UsersList';
+import UsersList from '~/components/UsersList';
 
 export default function RenderChats({
   userProfile,

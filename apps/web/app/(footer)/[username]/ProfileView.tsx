@@ -1,4 +1,4 @@
-import createSupabaseServer from '@/utils/supabaseServer';
+import createSupabaseServer from '~/utils/supabaseServer';
 import Image from 'next/image';
 import { serverClient } from '../../_trpc/serverClient';
 import {
@@ -11,13 +11,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '~/components/ui/alert-dialog';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '~/components/ui/separator';
 import UserSignOut from './UserSignOut';
 import CopyWallet from './CopyWallet';
 import FriendRequest from './FriendRequest';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { notFound } from 'next/navigation';
 import { Wallet } from 'lucide-react';
 

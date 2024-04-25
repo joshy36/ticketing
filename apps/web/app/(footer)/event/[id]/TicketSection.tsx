@@ -10,17 +10,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Separator } from '@/components/ui/separator';
+} from '~/components/ui/alert-dialog';
+import { Separator } from '~/components/ui/separator';
 import { useEffect, useState } from 'react';
 import { RouterOutputs } from 'api';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import Link from 'next/link';
 import EventCheckout from './EventCheckout';
 import { UserProfile } from 'supabase';
 import { ChevronLeft, ChevronRight, MinusIcon, PlusIcon } from 'lucide-react';
-import { trpc } from '@/app/_trpc/client';
-import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
+import { trpc } from '~/app/_trpc/client';
+import createSupabaseBrowserClient from '~/utils/supabaseBrowser';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 

@@ -1,4 +1,4 @@
-import { serverClient } from '@/app/_trpc/serverClient';
+import { serverClient } from '~/app/_trpc/serverClient';
 import EventsList from './EventsList';
 
 export default async function Home() {

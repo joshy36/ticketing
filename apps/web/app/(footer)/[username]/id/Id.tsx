@@ -1,15 +1,15 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { Ticket, UserProfile } from 'supabase';
 import QRCode from 'react-qr-code';
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '~/components/ui/button';
+import { Separator } from '~/components/ui/separator';
 import { RouterOutputs } from 'api';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import ProfileCard from '@/components/ProfileCard';
+import ProfileCard from '~/components/ProfileCard';
 import {
   Dialog,
   DialogContent,
@@ -17,12 +17,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import UsersList from '@/components/UsersList';
-import { Icons } from '@/components/ui/icons';
+} from '~/components/ui/dialog';
+import { Input } from '~/components/ui/input';
+import UsersList from '~/components/UsersList';
+import { Icons } from '~/components/ui/icons';
 import { useRouter } from 'next/navigation';
-import { trpc } from '@/app/_trpc/client';
+import { trpc } from '~/app/_trpc/client';
 import { toast } from 'sonner';
 
 export function Id({

@@ -1,14 +1,14 @@
 'use client';
 
-import { MessagesContext } from '@/providers/messagesProvider';
+import { MessagesContext } from '~/providers/messagesProvider';
 import { useContext, useState } from 'react';
 import GroupCard from './GroupCard';
 import { ChevronLeft, Info } from 'lucide-react';
 import RenderMessages from './RenderMessages';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Button } from '~/components/ui/button';
 import ChatProfileCard from './ChatProfileCard';
-import { trpc } from '@/app/_trpc/client';
+import { trpc } from '~/app/_trpc/client';
 import Link from 'next/link';
 import OrgCard from './OrgCard';
 import RenderMessagesOrg from './RenderMessagesOrg';

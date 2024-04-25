@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,13 +14,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from '~/components/ui/form';
+import { Input } from '~/components/ui/input';
 
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from '~/components/ui/textarea';
 import { toast } from 'sonner';
-import { Icons } from '@/components/ui/icons';
-import { Separator } from '@/components/ui/separator';
+import { Icons } from '~/components/ui/icons';
+import { Separator } from '~/components/ui/separator';
 import { useRouter } from 'next/navigation';
 import { trpc } from '../../../../_trpc/client';
 

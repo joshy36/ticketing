@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import { UserProfile } from 'supabase';
-import createSupabaseBrowserClient from '@/utils/supabaseBrowser';
+import createSupabaseBrowserClient from '~/utils/supabaseBrowser';
 
 export default function UserSignOut({
   userProfile,

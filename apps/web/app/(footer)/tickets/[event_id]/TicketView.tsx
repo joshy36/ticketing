@@ -1,7 +1,7 @@
 'use client';
 
-import { RouterOutputs, trpc } from '@/app/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { RouterOutputs, trpc } from '~/app/_trpc/client';
+import { Button } from '~/components/ui/button';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useState } from 'react';
@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../../../../components/ui/card';
-import { dateToString } from '@/utils/helpers';
+import { dateToString } from '~/utils/helpers';
 import { Separator } from '../../../../components/ui/separator';
 import {
   Avatar,
@@ -22,7 +22,7 @@ import {
   AvatarImage,
 } from '../../../../components/ui/avatar';
 import { AlertCircle, CheckCircle } from 'lucide-react';
-import ProfileCard from '@/components/ProfileCard';
+import ProfileCard from '~/components/ProfileCard';
 import Link from 'next/link';
 import {
   Dialog,
@@ -32,10 +32,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Icons } from '@/components/ui/icons';
-import UsersList from '@/components/UsersList';
+} from '~/components/ui/dialog';
+import { Input } from '~/components/ui/input';
+import { Icons } from '~/components/ui/icons';
+import UsersList from '~/components/UsersList';
 import { useRouter } from 'next/navigation';
 
 export function TicketView({

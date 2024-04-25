@@ -6,11 +6,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { dateToString } from '@/utils/helpers';
+} from '~/components/ui/table';
+import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
+import { dateToString } from '~/utils/helpers';
 import { ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import Link from 'next/link';
 
 export default function EventTable({ events }: { events: any }) {

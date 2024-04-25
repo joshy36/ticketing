@@ -11,10 +11,10 @@ import { CommandMenu } from './ui/command-menu';
 import { UserNav } from './UserNav';
 import { User } from '@supabase/supabase-js';
 import { UserProfile } from 'supabase';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { MessageCircle } from 'lucide-react';
 import { useContext } from 'react';
-import { MessagesContext } from '@/providers/messagesProvider';
+import { MessagesContext } from '~/providers/messagesProvider';
 
 export function MobileNav({
   user,

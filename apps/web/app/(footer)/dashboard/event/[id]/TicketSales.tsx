@@ -1,14 +1,14 @@
 'use client';
 
-import { trpc } from '@/app/_trpc/client';
+import { trpc } from '~/app/_trpc/client';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+} from '~/components/ui/card';
+import { Progress } from '~/components/ui/progress';
 import { Events } from 'supabase';
 
 export default function TicketSales({ event }: { event: Events }) {

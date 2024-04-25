@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { formatEthAddress } from '@/utils/helpers';
+import { Button } from '~/components/ui/button';
+import { formatEthAddress } from '~/utils/helpers';
 import { UserProfile } from 'supabase';
 import { Copy } from 'lucide-react';
 import {
@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from '~/components/ui/tooltip';
 import { useState } from 'react';
 import { toast } from 'sonner';
 

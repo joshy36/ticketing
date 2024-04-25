@@ -1,7 +1,7 @@
 import { serverClient } from '../../../_trpc/serverClient';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '~/components/ui/separator';
 
 export default async function VenueView({
   params,

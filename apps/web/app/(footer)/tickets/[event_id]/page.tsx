@@ -1,8 +1,8 @@
-import { serverClient } from '@/app/_trpc/serverClient';
+import { serverClient } from '~/app/_trpc/serverClient';
 import { TicketView } from './TicketView';
-import createSupabaseServer from '@/utils/supabaseServer';
+import createSupabaseServer from '~/utils/supabaseServer';
 import { notFound, redirect } from 'next/navigation';
-import { RouterOutputs } from '@/app/_trpc/client';
+import { RouterOutputs } from '~/app/_trpc/client';
 
 export default async function Home({
   params,

@@ -1,7 +1,7 @@
 import DashBoard from './Dashboard';
 import { serverClient } from '../../../_trpc/serverClient';
 import { notFound } from 'next/navigation';
-import createSupabaseServer from '@/utils/supabaseServer';
+import createSupabaseServer from '~/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
 export default async function Home({ params }: { params: { id: string } }) {

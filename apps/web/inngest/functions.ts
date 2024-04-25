@@ -1,9 +1,9 @@
 import { inngest } from './client';
 import { ethers } from 'ethers';
 import contractAbi from '../../../packages/chain/deployments/base-goerli/Event.json';
-import createSupabaseServer from '@/utils/supabaseServer';
+import createSupabaseServer from '~/utils/supabaseServer';
 import OpenAI from 'openai';
-import { serverClient } from '@/app/_trpc/serverClient';
+import { serverClient } from '~/app/_trpc/serverClient';
 
 export const helloWorld = inngest.createFunction(
   { id: 'hello-world', concurrency: 1 },

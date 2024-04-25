@@ -2,15 +2,10 @@
 
 import { UserProfile } from 'supabase';
 import Image from 'next/image';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '../../../components/ui/tabs';
-import { dateToString } from '@/utils/helpers';
-import { trpc } from '@/app/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import { dateToString } from '~/utils/helpers';
+import { trpc } from '~/app/_trpc/client';
+import { Button } from '~/components/ui/button';
 import { ScanFace } from 'lucide-react';
 import Link from 'next/link';
 

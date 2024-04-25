@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '~/components/ui/card';
 import {
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '~/components/ui/table';
 import {
   Form,
   FormControl,
@@ -25,42 +25,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '~/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
+} from '~/components/ui/select';
+import { Checkbox } from '~/components/ui/checkbox';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { trpc } from '@/app/_trpc/client';
-import { Button } from '@/components/ui/button';
+import { trpc } from '~/app/_trpc/client';
+import { Button } from '~/components/ui/button';
 import { toast } from 'sonner';
-import { Icons } from '@/components/ui/icons';
+import { Icons } from '~/components/ui/icons';
 import { useState } from 'react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn } from '@/components/ui/utils';
+} from '~/components/ui/popover';
+import { cn } from '~/components/ui/utils';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '@/components/ui/command';
+} from '~/components/ui/command';
 import { CheckIcon, Mail } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
-import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Textarea } from '~/components/ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import Link from 'next/link';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
 
 export default function SendMessage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

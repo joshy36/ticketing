@@ -1,15 +1,15 @@
 'use client';
 
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '~/components/ui/separator';
 import { ProfileForm } from './ProfileForm';
 import { SidebarNav } from '../../../../components/SidebarNav';
 import { WagmiConfig } from 'wagmi';
-import { wagmiConfig } from '@/utils/wagmiClient';
+import { wagmiConfig } from '~/utils/wagmiClient';
 import { trpc } from '../../../_trpc/client';
 import UserUploadImage from './UserUploadImage';
 import { WalletConnect } from './WalletConnect';
 import Turnkey from './Turnkey';
-import { Button } from '@/components/ui/button';
+import { Button } from '~/components/ui/button';
 import { useRouter } from 'next/navigation';
 
 const sidebarNavItems = [

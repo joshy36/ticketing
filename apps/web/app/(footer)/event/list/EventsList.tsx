@@ -1,6 +1,6 @@
 'use client';
 
-import { dateToString } from '@/utils/helpers';
+import { dateToString } from '~/utils/helpers';
 import { RouterOutputs } from 'api';
 import Image from 'next/image';
 
