@@ -178,7 +178,9 @@ export default function RenderChats({
         )}
       </button>
       {chats?.chats?.length === 0 && (
-        <p className='pt-8 text-center'>No messages yet.</p>
+        <p className='pt-8 text-center text-muted-foreground'>
+          No messages yet.
+        </p>
       )}
       {chatsWithTimestamps?.map((chat, index) => {
         return (

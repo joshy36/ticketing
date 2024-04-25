@@ -22,7 +22,7 @@ export default function Requests() {
       </div>
       {friendRequests?.length === 0 ? (
         <div className='flex h-64 flex-col items-center justify-center'>
-          <p className='text-muted-foreground'>No new friend requests</p>
+          <p className='text-muted-foreground'>No new friend requests.</p>
         </div>
       ) : (
         <div>
