@@ -159,9 +159,6 @@ export default function RenderChats({
           </Dialog>
         </div>
       </div>
-      {chats?.chats?.length === 0 && (
-        <p className='pt-8 text-center'>No messages yet.</p>
-      )}
       <button
         className='flex w-full items-center justify-between border-b px-4 py-6 font-medium hover:bg-zinc-800/50 focus:bg-secondary'
         onClick={() => {
@@ -180,6 +177,9 @@ export default function RenderChats({
           </div>
         )}
       </button>
+      {chats?.chats?.length === 0 && (
+        <p className='pt-8 text-center'>No messages yet.</p>
+      )}
       {chatsWithTimestamps?.map((chat, index) => {
         return (
           <button
