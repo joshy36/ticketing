@@ -73,7 +73,7 @@ export const friendsRouter = router({
     }
   ),
 
-  getTotalFriendsForUser: authedProcedure.query(async ({ ctx }) => {
+  getTotalFriendsForUser: publicProcedure.query(async ({ ctx }) => {
     const supabase = ctx.supabase;
     const user = ctx.user;
 
