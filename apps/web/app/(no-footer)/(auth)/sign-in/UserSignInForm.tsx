@@ -88,10 +88,10 @@ export function UserSignInForm({ className, ...props }: UserAuthFormProps) {
             />
           </div>
           <Button disabled={isLoading} className='rounded-md'>
+            Sign In with Email
             {isLoading && (
               <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
             )}
-            Sign In with Email
           </Button>
         </div>
       </form>
