@@ -36,6 +36,7 @@ import { MessagesContext } from '../providers/messagesProvider';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { trpc } from '../app/_trpc/client';
+import { FriendRequestContext } from '../providers/friendRequestsProvider';
 
 export const createComponents: {
   title: string;
@@ -75,8 +76,8 @@ export default function NavBar({
     mostRecentMessageByChat,
     setNumberOfUnreadMessagesPerChat,
   } = useContext(MessagesContext);
-  const { data: friendRequests } =
-    trpc.getPendingFriendRequestsForUser.useQuery();
+  const { friendRequests } = useContext(FriendRequestContext);
+
   const pathname = usePathname();
   const router = useRouter();
   const readMessages = trpc.readMessages.useMutation();

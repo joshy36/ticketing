@@ -16,6 +16,7 @@ import { MessageCircle } from 'lucide-react';
 import { useContext } from 'react';
 import { MessagesContext } from '../providers/messagesProvider';
 import { trpc } from '../app/_trpc/client';
+import { FriendRequestContext } from '../providers/friendRequestsProvider';
 
 export function MobileNav({
   user,
@@ -28,8 +29,7 @@ export function MobileNav({
 }) {
   const [open, setOpen] = React.useState(false);
   const { unreadMessages } = useContext(MessagesContext);
-  const { data: friendRequests } =
-    trpc.getPendingFriendRequestsForUser.useQuery();
+  const { friendRequests } = useContext(FriendRequestContext);
 
   const mainComponents: {
     title: string;

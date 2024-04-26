@@ -75,7 +75,7 @@ export const chatsRouter = router({
       const supabase = ctx.supabase;
       const user = ctx.user;
 
-      if (!input.chat_id) {
+      if (!input.chat_id || input.chat_id === 'requests') {
         return [];
       }
 

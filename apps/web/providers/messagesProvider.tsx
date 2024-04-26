@@ -32,6 +32,7 @@ type MessagesContextProps = {
     [id: string]: { unread: number };
   };
   chats?: RouterOutputs['getUserChats'];
+  chatsLoading?: boolean;
   messages?: RouterOutputs['getMessagesByChat'];
   currentChat: string | null;
   setNumberOfUnreadMessagesPerChat: Dispatch<
@@ -239,6 +240,7 @@ export const MessagesProvider = ({
     setUnreadMessages,
     setMostRecentMessageByChat,
     chats,
+    chatsLoading,
     currentChat,
     setMessages,
     userProfile,
@@ -252,6 +254,7 @@ export const MessagesProvider = ({
         mostRecentMessageByChat,
         numberOfUnreadMessagesPerChat,
         chats,
+        chatsLoading,
         messages,
         currentChat,
         setNumberOfUnreadMessagesPerChat,

@@ -25,6 +25,8 @@ import { MessagesContext } from '~/providers/messagesProvider';
 import { useRouter } from 'next/navigation';
 import OrgCard from './OrgCard';
 import UsersList from '~/components/UsersList';
+import ChatProfileCardSkeleton from './ChatProfileCardSkeleton';
+import { FriendRequestContext } from '~/providers/friendRequestsProvider';
 
 export default function RenderChats({
   userProfile,
@@ -39,12 +41,11 @@ export default function RenderChats({
   );
   const router = useRouter();
   const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
-  const { data: friendRequests } =
-    trpc.getPendingFriendRequestsForUser.useQuery();
-  console.log(friendRequests);
 
+  const { friendRequests } = useContext(FriendRequestContext);
   const {
     chats,
+    chatsLoading,
     mostRecentMessageByChat,
     numberOfUnreadMessagesPerChat,
     setNumberOfUnreadMessagesPerChat,
@@ -181,6 +182,19 @@ export default function RenderChats({
         <p className='pt-8 text-center text-muted-foreground'>
           No messages yet.
         </p>
+      )}
+      {chatsLoading && (
+        <div>
+          <div className='border-b'>
+            <ChatProfileCardSkeleton />
+          </div>
+          <div className='border-b'>
+            <ChatProfileCardSkeleton />
+          </div>
+          <div className='border-b'>
+            <ChatProfileCardSkeleton />
+          </div>
+        </div>
       )}
       {chatsWithTimestamps?.map((chat, index) => {
         return (

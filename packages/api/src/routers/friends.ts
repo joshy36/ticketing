@@ -114,5 +114,32 @@ export const friendsRouter = router({
 
   rejectFriendRequest: authedProcedure
     .input(z.object({ from: z.string() }))
-    .mutation(async ({ ctx, input }) => {}),
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      await supabase
+        .from('friend_requests')
+        .update({ status: 'rejected' })
+        .eq('from', input.from)
+        .eq('to', user?.id);
+    }),
+
+  acceptFriendRequest: authedProcedure
+    .input(z.object({ from: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      await supabase
+        .from('friend_requests')
+        .update({ status: 'accepted' })
+        .eq('from', input.from)
+        .eq('to', user?.id);
+
+      await supabase.from('friends').insert({
+        user1_id: user?.id,
+        user2_id: input.from,
+      });
+    }),
 });
