@@ -1,9 +1,5 @@
-import {
-  createTRPCClient,
-  loggerLink,
-  unstable_httpBatchStreamLink,
-} from '@trpc/client';
-import { cookies, headers } from 'next/headers';
+import { createTRPCClient, loggerLink, httpBatchLink } from '@trpc/client';
+import { headers } from 'next/headers';
 import fetchPonyfill from 'fetch-ponyfill';
 
 import { type AppRouter } from 'api';
@@ -17,16 +13,16 @@ export const serverClient = createTRPCClient<AppRouter>({
     //     process.env.NODE_ENV === 'development' ||
     //     (op.direction === 'down' && op.result instanceof Error),
     // }),
-    unstable_httpBatchStreamLink({
+    httpBatchLink({
       transformer: SuperJSON,
       url: getUrl(),
-      // fetch: fetchPonyfill().fetch,
+      fetch: fetchPonyfill().fetch,
       headers: () => {
         const h = new Map(headers());
         h.delete('connection');
         h.delete('transfer-encoding');
         h.set('x-trpc-source', 'server');
-        console.log('headers', Object.fromEntries(h.entries()));
+        console.log('headers', Object.fromEntries(h));
         return Object.fromEntries(h.entries());
       },
     }),
