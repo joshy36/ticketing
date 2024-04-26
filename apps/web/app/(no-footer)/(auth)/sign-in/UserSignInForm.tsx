@@ -10,8 +10,8 @@ import { Label } from '~/components/ui/label';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import createSupabaseBrowserClient from '~/utils/supabaseBrowser';
-import { AuthResponse } from '@supabase/supabase-js';
 import { toast } from 'sonner';
+import { trpc } from '~/app/_trpc/client';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -23,33 +23,27 @@ export function UserSignInForm({ className, ...props }: UserAuthFormProps) {
 
   const supabase = createSupabaseBrowserClient();
 
+  const signIn = trpc.signIn.useMutation({
+    onSettled(error) {
+      setIsLoading(false);
+
+      if (error) {
+        console.error('Error signing in:', error);
+        toast.error('Invalid login credentials', {
+          description: 'Forgot your password? Do something here',
+        });
+      } else {
+        router.push('/');
+        router.refresh();
+      }
+    },
+  });
+
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const res: AuthResponse = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    // console.log('error: ', res.error?.message);
-
-    if (res.error?.message == 'Invalid login credentials') {
-      toast.error('Invalid login credentials', {
-        description: 'Forgot your password? Do something here',
-      });
-    } else {
-      router.refresh();
-      router.push('/');
-    }
+    setIsLoading(true);
+    signIn.mutate({ email, password });
   };
-
-  // async function onSubmit(event: React.SyntheticEvent) {
-  //   event.preventDefault();
-  //   setIsLoading(true);
-
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 3000);
-  // }
 
   return (
     <div className={cn('grid gap-6', className)} {...props}>

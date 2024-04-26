@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '~/components/ui/button';
 import { UserProfile } from 'supabase';
-import createSupabaseBrowserClient from '~/utils/supabaseBrowser';
+import { trpc } from '~/app/_trpc/client';
+import { toast } from 'sonner';
 
 export default function UserSignOut({
   userProfile,
@@ -12,12 +13,22 @@ export default function UserSignOut({
   userProfile: UserProfile;
 }) {
   const router = useRouter();
-  const supabase = createSupabaseBrowserClient();
+
+  const signOut = trpc.signOut.useMutation({
+    onSettled(error) {
+      if (error) {
+        toast.error('Error signing out', {
+          description: 'Please try again',
+        });
+      } else {
+        router.push('/');
+        router.refresh();
+      }
+    },
+  });
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-    router.push('/');
+    signOut.mutate();
   };
 
   return (
