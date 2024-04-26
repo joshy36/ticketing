@@ -75,6 +75,9 @@ export const friendsRouter = router({
 
     let friendsCount = 0;
 
+    console.log('user: ', user);
+    console.log('friendscount: ', friendsCount);
+
     const { data: friends } = await supabase
       .from('friends')
       .select()
@@ -84,6 +87,8 @@ export const friendsRouter = router({
       friendsCount += friends.length;
     }
 
+    console.log('friendscount2: ', friendsCount);
+
     const { data: friends2 } = await supabase
       .from('friends')
       .select()
@@ -92,6 +97,8 @@ export const friendsRouter = router({
     if (friends2) {
       friendsCount += friends2.length;
     }
+
+    console.log('friendscount3: ', friendsCount);
 
     return friendsCount;
   }),
