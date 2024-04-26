@@ -22,8 +22,6 @@ export const friendsRouter = router({
         .limit(1)
         .single();
 
-      console.log(friends);
-
       if (friends) {
         return 'accepted';
       } else {
@@ -34,8 +32,6 @@ export const friendsRouter = router({
           .eq('user2_id', user?.id)
           .limit(1)
           .single();
-
-        console.log(friends2);
 
         if (friends2) {
           return 'accepted';

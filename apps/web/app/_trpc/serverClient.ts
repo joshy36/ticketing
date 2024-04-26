@@ -3,7 +3,7 @@ import {
   loggerLink,
   unstable_httpBatchStreamLink,
 } from '@trpc/client';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import fetchPonyfill from 'fetch-ponyfill';
 
 import { type AppRouter } from 'api';
@@ -22,10 +22,12 @@ export const serverClient = createTRPCClient<AppRouter>({
       url: getUrl(),
       fetch: fetchPonyfill().fetch,
       headers() {
-        const heads = new Map();
-        heads.set('cookie', cookies().toString());
-        heads.set('x-trpc-source', 'rsc');
-        return Object.fromEntries(heads);
+        const h = new Map(headers());
+        h.delete('connection');
+        h.delete('transfer-encoding');
+        h.set('x-trpc-source', 'server');
+        console.log('headers', Object.fromEntries(h.entries()));
+        return Object.fromEntries(h.entries());
       },
     }),
   ],
