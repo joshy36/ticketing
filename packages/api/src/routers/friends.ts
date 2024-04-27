@@ -3,10 +3,15 @@ import { router, publicProcedure, authedProcedure } from '../trpc';
 
 export const friendsRouter = router({
   getFriendshipStatus: publicProcedure
-    .input(z.object({ otherUser: z.string() }))
+    .input(
+      z.object({ currentUserId: z.string().optional(), otherUser: z.string() })
+    )
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
-      const user = ctx.user;
+
+      if (!input.currentUserId) {
+        return 'none';
+      }
 
       const { data: otherUserProfile } = await supabase
         .from('user_profiles')
@@ -17,7 +22,7 @@ export const friendsRouter = router({
       const { data: friends } = await supabase
         .from('friends')
         .select()
-        .eq('user1_id', user?.id)
+        .eq('user1_id', input.currentUserId)
         .eq('user2_id', otherUserProfile?.id!)
         .limit(1)
         .single();
@@ -29,7 +34,7 @@ export const friendsRouter = router({
           .from('friends')
           .select()
           .eq('user1_id', otherUserProfile?.id!)
-          .eq('user2_id', user?.id)
+          .eq('user2_id', input.currentUserId)
           .limit(1)
           .single();
 
@@ -39,7 +44,7 @@ export const friendsRouter = router({
           const { data: friendRequests } = await supabase
             .from('friend_requests')
             .select()
-            .eq('from', user?.id)
+            .eq('from', input.currentUserId)
             .eq('to', otherUserProfile?.id!)
             .limit(1)
             .single();
@@ -69,39 +74,43 @@ export const friendsRouter = router({
     }
   ),
 
-  getTotalFriendsForUser: publicProcedure.query(async ({ ctx }) => {
-    const supabase = ctx.supabase;
-    const user = ctx.user;
+  getTotalFriendsForUser: publicProcedure
+    .input(z.object({ username: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
 
-    let friendsCount = 0;
+      let friendsCount = 0;
 
-    console.log('user: ', user);
-    console.log('friendscount: ', friendsCount);
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .single();
 
-    const { data: friends } = await supabase
-      .from('friends')
-      .select()
-      .eq('user1_id', user?.id);
+      const { data: friends } = await supabase
+        .from('friends')
+        .select()
+        .eq('user1_id', userProfile?.id!);
 
-    if (friends) {
-      friendsCount += friends.length;
-    }
+      if (friends) {
+        friendsCount += friends.length;
+      }
 
-    console.log('friendscount2: ', friendsCount);
+      console.log('friendscount2: ', friendsCount);
 
-    const { data: friends2 } = await supabase
-      .from('friends')
-      .select()
-      .eq('user2_id', user?.id);
+      const { data: friends2 } = await supabase
+        .from('friends')
+        .select()
+        .eq('user2_id', userProfile?.id!);
 
-    if (friends2) {
-      friendsCount += friends2.length;
-    }
+      if (friends2) {
+        friendsCount += friends2.length;
+      }
 
-    console.log('friendscount3: ', friendsCount);
+      console.log('friendscount3: ', friendsCount);
 
-    return friendsCount;
-  }),
+      return friendsCount;
+    }),
 
   requestFriend: authedProcedure
     .input(z.object({ to: z.string() }))

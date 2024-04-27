@@ -32,7 +32,9 @@ export default async function ProfileView({
     username: params.username,
   });
 
-  const friendCount = await serverClient.getTotalFriendsForUser.query();
+  const friendCount = await serverClient.getTotalFriendsForUser.query({
+    username: params.username,
+  });
 
   if (!userProfile) {
     notFound();
@@ -49,11 +51,12 @@ export default async function ProfileView({
   // console.log(collectibles);
   // console.log(sbts);
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { data: user } = await supabase.auth.getUser();
+
+  console.log('user:', user);
 
   const relationship = await serverClient.getFriendshipStatus.query({
+    currentUserId: user?.user?.id,
     otherUser: params.username,
   });
 
@@ -68,7 +71,7 @@ export default async function ProfileView({
               <AvatarFallback></AvatarFallback>
             )}
           </Avatar>
-          {session?.user! && session?.user.id === userProfile?.id && (
+          {user && user.user?.id === userProfile?.id && (
             <UserSignOut userProfile={userProfile} />
           )}
         </div>
@@ -96,7 +99,7 @@ export default async function ProfileView({
           {userProfile?.bio && (
             <p className='font-light'>{`${userProfile?.bio}`}</p>
           )}
-          {session?.user! && session?.user.id !== userProfile?.id && (
+          {user.user && user.user?.id !== userProfile?.id && (
             <FriendRequest
               userProfile={userProfile}
               relationship={relationship}

@@ -26,7 +26,6 @@ export const serverClient = createTRPCClient<AppRouter>({
         h.delete('connection');
         h.delete('transfer-encoding');
         h.set('x-trpc-source', 'server');
-        console.log('headers', Object.fromEntries(h));
         return Object.fromEntries(h.entries());
       },
     }),
