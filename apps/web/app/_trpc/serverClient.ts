@@ -23,8 +23,9 @@ export const serverClient = createTRPCClient<AppRouter>({
       // fetch: fetchPonyfill().fetch,
       headers: () => {
         const h = new Map(headers());
-        // h.delete('connection');
-        // h.delete('transfer-encoding');
+        h.delete('connection');
+        h.delete('transfer-encoding');
+        h.delete('content-length');
         h.set('x-trpc-source', 'server');
         return Object.fromEntries(h.entries());
       },
