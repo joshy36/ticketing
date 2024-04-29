@@ -20,12 +20,12 @@ export const serverClient = createTRPCClient<AppRouter>({
     unstable_httpBatchStreamLink({
       transformer: SuperJSON,
       url: getUrl(),
-      // fetch: fetchPonyfill().fetch,
+      fetch: fetchPonyfill().fetch,
       headers: () => {
         const h = new Map(headers());
-        h.delete('connection');
-        h.delete('transfer-encoding');
-        h.delete('content-length');
+        // h.delete('connection');
+        // h.delete('transfer-encoding');
+        // h.delete('content-length');
         h.set('x-trpc-source', 'server');
         return Object.fromEntries(h.entries());
       },
