@@ -91,7 +91,7 @@ export function CommandMenu({ ...props }: DialogProps) {
         </kbd> */}
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder='Search events, artists, and venues...' />
+        <CommandInput placeholder='Search events, artists, venues, and users' />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           {!events ? (

@@ -11,5 +11,6 @@ export type Organization = DB['public']['Tables']['organizations']['Row'];
 export type Reservation = DB['public']['Tables']['reservations']['Row'];
 export type Message = DB['public']['Tables']['chat_messages']['Row'];
 export type Chat = DB['public']['Tables']['chats']['Row'];
+export type Friend = DB['public']['Tables']['friends']['Row'];
 
 export { createRouteClient };

@@ -7,12 +7,11 @@ import { UserProfile } from 'supabase';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
 
-export default function UsersList({
+export default function UsersListSingle({
   users,
   usersLoading,
   userProfile,
   userSearch,
-  maxUsers,
   selectedUsers,
   setSelectedUsers,
 }: {
@@ -20,7 +19,6 @@ export default function UsersList({
   usersLoading: boolean;
   userProfile: UserProfile;
   userSearch: string;
-  maxUsers: number;
   selectedUsers: UserProfile[] | null;
   setSelectedUsers: Dispatch<SetStateAction<UserProfile[] | null>>;
 }) {
@@ -56,13 +54,11 @@ export default function UsersList({
                   onClick={() => {
                     // if user is not selected add them
                     if (!selectedUsers?.find((u) => u.id === user.id)) {
-                      if (selectedUsers?.length === maxUsers) {
-                        toast.error('Maximum users reached', {
-                          description: `Maximum of ${maxUsers} users.`,
-                        });
-                        return;
+                      if (selectedUsers?.length === 1) {
+                        setSelectedUsers([user]);
+                      } else {
+                        setSelectedUsers([...(selectedUsers || []), user]);
                       }
-                      setSelectedUsers([...(selectedUsers || []), user]);
                     } else {
                       // if user is selected remove them
                       setSelectedUsers(

@@ -32,7 +32,7 @@ export default async function ProfileView({
     username: params.username,
   });
 
-  const friendCount = await serverClient.getTotalFriendsForUser.query({
+  const friendCount = await serverClient.getTotalFriendsCountForUser.query({
     username: params.username,
   });
 

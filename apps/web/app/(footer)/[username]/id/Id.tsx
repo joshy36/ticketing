@@ -19,7 +19,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog';
 import { Input } from '~/components/ui/input';
-import UsersList from '~/components/UsersList';
+import UsersListSingle from '~/components/UsersListSingle';
 import { Icons } from '~/components/ui/icons';
 import { useRouter } from 'next/navigation';
 import { trpc } from '~/app/_trpc/client';
@@ -27,11 +27,9 @@ import { toast } from 'sonner';
 
 export function Id({
   userProfile,
-
   tickets,
 }: {
   userProfile: UserProfile;
-
   tickets: RouterOutputs['getTicketsForUser'];
 }) {
   const [qrCode, showQRCode] = useState(false);
@@ -44,7 +42,8 @@ export function Id({
 
   const router = useRouter();
 
-  const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
+  const { data: users, isLoading: usersLoading } =
+    trpc.getTotalFriendsForUser.useQuery({ username: userProfile.username! });
   const { data: userSalt, isLoading: saltLoading } = trpc.getUserSalt.useQuery({
     user_id: userProfile?.id!,
   });
@@ -161,7 +160,10 @@ export function Id({
                       <DialogHeader>
                         <DialogTitle>Transfer Ticket</DialogTitle>
                         <DialogDescription>
-                          Select a user to transfer the ticket to.
+                          Select a user to transfer the ticket to. You must be
+                          friends with someone to send them a ticket. You can
+                          find people using the search bar to send them a friend
+                          request.
                         </DialogDescription>
                       </DialogHeader>
                       <div className='flex flex-col flex-wrap'>
@@ -179,7 +181,7 @@ export function Id({
                       <div className='flex w-full flex-row space-x-2 pt-4'>
                         <Input
                           type='text'
-                          placeholder='username'
+                          placeholder='Search'
                           className='text-muted-foreground'
                           onChange={(e) => setUserSearch(e.target.value)}
                         />
@@ -203,11 +205,10 @@ export function Id({
                           Transfer Ticket
                         </Button>
                       </div>
-                      <UsersList
+                      <UsersListSingle
                         users={users}
                         usersLoading={usersLoading}
                         userProfile={userProfile}
-                        maxUsers={1}
                         userSearch={userSearch}
                         selectedUsers={selectedUsers}
                         setSelectedUsers={setSelectedUsers}

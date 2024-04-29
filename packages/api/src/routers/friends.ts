@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { router, publicProcedure, authedProcedure } from '../trpc';
+import { UserProfile } from 'supabase';
 
 export const friendsRouter = router({
   getFriendshipStatus: publicProcedure
@@ -74,7 +75,7 @@ export const friendsRouter = router({
     }
   ),
 
-  getTotalFriendsForUser: publicProcedure
+  getTotalFriendsCountForUser: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
@@ -92,24 +93,60 @@ export const friendsRouter = router({
         .select()
         .eq('user1_id', userProfile?.id!);
 
+      console.log('friends: ', friends);
+
       if (friends) {
         friendsCount += friends.length;
       }
-
-      console.log('friendscount2: ', friendsCount);
 
       const { data: friends2 } = await supabase
         .from('friends')
         .select()
         .eq('user2_id', userProfile?.id!);
 
+      console.log('friends2: ', friends2);
+
       if (friends2) {
         friendsCount += friends2.length;
       }
 
-      console.log('friendscount3: ', friendsCount);
-
       return friendsCount;
+    }),
+
+  getTotalFriendsForUser: publicProcedure
+    .input(z.object({ username: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+
+      let totalFriends: UserProfile[] = [];
+
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select()
+        .eq('username', input.username)
+        .single();
+
+      const { data: friends } = await supabase
+        .from('friends')
+        .select(`*, friend_profile:user_profiles!friends_user2_id_fkey(*)`)
+        .eq('user1_id', userProfile?.id!);
+
+      if (friends) {
+        const friendProfiles = friends.map((f) => f.friend_profile!);
+        totalFriends.push(...friendProfiles);
+      }
+
+      const { data: friends2 } = await supabase
+        .from('friends')
+        .select(`*, friend_profile:user_profiles!friends_user1_id_fkey(*)`)
+        .eq('user2_id', userProfile?.id!);
+
+      if (friends2) {
+        const friendProfiles2 = friends2.map((f) => f.friend_profile!);
+        totalFriends.push(...friendProfiles2);
+      }
+
+      return totalFriends;
     }),
 
   requestFriend: authedProcedure
