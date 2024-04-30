@@ -67,20 +67,8 @@ export const ticketsRouter = router({
         )
         .eq('from', input.user_id);
 
-      const ownerProfiles: UserProfile[] = [];
-      for (let i = 0; i < data?.length!; i++) {
-        const { data: ownerProfile } = await supabase
-          .from('user_profiles')
-          .select()
-          .eq('id', data![i]?.owner_id!)
-          .limit(1)
-          .single();
-        ownerProfiles.push(ownerProfile!);
-      }
       return {
         tickets: data,
-        ownedTicket: ownedTicket,
-        ownerProfiles: ownerProfiles,
         pushRequestTickets: pushRequestTickets,
       };
     }),
