@@ -58,11 +58,13 @@ export function Id({
       if (error) {
         toast.error(`Error requesting transfer: ${error.message}`);
         console.error('Error requesting transfer: ', error);
-        setIsLoading(false);
       } else {
         toast.success('Ticket transfer request sent!');
-        setIsLoading(false);
       }
+      setIsLoading(false);
+      setDialogOpen(null); // Close the dialog
+      setSelectedUsers(null);
+      router.refresh();
     },
   });
 
@@ -71,11 +73,12 @@ export function Id({
       if (error) {
         toast.error(`Error canceling transfer: ${error.message}`);
         console.error('Error canceling transfer: ', error);
-        setIsLoading(false);
       } else {
         toast.success('Ticket transfer request canceled!');
-        setIsLoading(false);
       }
+      setIsLoading(false);
+      setDialogOpen(null);
+      router.refresh();
     },
   });
 
@@ -157,9 +160,6 @@ export function Id({
                       cancelRequestTransfer.mutate({
                         ticket_id: pending.ticket_id,
                       });
-                      setDialogOpen(null); // Close the dialog
-                      setSelectedUsers(null);
-                      router.refresh();
                     }}
                   >
                     {isLoading && (
@@ -298,17 +298,10 @@ export function Id({
                           className='w-full'
                           onClick={() => {
                             setIsLoading(true);
-                            // transferTicket.mutate({
-                            //   user_id: selectedUsers![0]!.id,
-                            //   ticket_id: ticket.id,
-                            // });
                             requestTransfer.mutate({
                               to: selectedUsers![0]!.id,
                               ticket_id: ticket.id,
                             });
-                            setDialogOpen(null); // Close the dialog
-                            setSelectedUsers(null);
-                            router.refresh();
                           }}
                         >
                           {isLoading && (
