@@ -6,7 +6,7 @@ export default async function Home() {
   console.log(salts);
   return (
     <div className='flex flex-col items-center justify-center py-20'>
-      {salts.map((salt) => (
+      {salts?.map((salt) => (
         <div className='py-48' key={salt.id}>
           <div>{`username: ${salt.user_profiles.username}`}</div>
           <div>{`id: ${salt.user_profiles.id}`}</div>
