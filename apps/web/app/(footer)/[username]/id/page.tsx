@@ -22,13 +22,9 @@ export default async function Home({
     redirect('/unauthorized');
   }
 
-  const tickets = await serverClient.getTicketsForUser.query({
-    user_id: userProfile?.id!,
-  });
-
   return (
     <main>
-      <Id userProfile={userProfile!} tickets={tickets} />
+      <Id userProfile={userProfile!} />
     </main>
   );
 }

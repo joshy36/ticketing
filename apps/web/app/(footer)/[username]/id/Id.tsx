@@ -30,13 +30,7 @@ import { useRouter } from 'next/navigation';
 import { trpc } from '~/app/_trpc/client';
 import { toast } from 'sonner';
 
-export function Id({
-  userProfile,
-  tickets,
-}: {
-  userProfile: UserProfile;
-  tickets: RouterOutputs['getTicketsForUser'];
-}) {
+export function Id({ userProfile }: { userProfile: UserProfile }) {
   const [qrCode, showQRCode] = useState(false);
   const [dialogOpen, setDialogOpen] = useState<string | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
@@ -47,6 +41,9 @@ export function Id({
 
   const router = useRouter();
 
+  const { data: tickets, refetch } = trpc.getTicketsForUser.useQuery({
+    user_id: userProfile?.id!,
+  });
   const { data: users, isLoading: usersLoading } =
     trpc.getTotalFriendsForUser.useQuery({ username: userProfile.username! });
   const { data: userSalt, isLoading: saltLoading } = trpc.getUserSalt.useQuery({
@@ -61,10 +58,10 @@ export function Id({
       } else {
         toast.success('Ticket transfer request sent!');
       }
+      refetch();
       setIsLoading(false);
       setDialogOpen(null); // Close the dialog
       setSelectedUsers(null);
-      router.refresh();
     },
   });
 
@@ -76,9 +73,9 @@ export function Id({
       } else {
         toast.success('Ticket transfer request canceled!');
       }
+      refetch();
       setIsLoading(false);
       setDialogOpen(null);
-      router.refresh();
     },
   });
 
@@ -211,8 +208,9 @@ export function Id({
       </div>
 
       <div className='flex max-w-[600px] flex-col justify-center px-2 py-6'>
-        {tickets.tickets?.filter((ticket) => ticket.owner_id !== userProfile.id)
-          .length! > 0 && (
+        {tickets?.tickets?.filter(
+          (ticket) => ticket.owner_id !== userProfile.id,
+        ).length! > 0 && (
           <div>
             <h1 className='text-xl font-bold'>Transferable Tickets</h1>
             <p className='pb-4 text-sm font-light text-muted-foreground'>
@@ -223,7 +221,7 @@ export function Id({
             </p>
           </div>
         )}
-        {tickets.tickets
+        {tickets?.tickets
           ?.filter((ticket) => ticket.owner_id !== userProfile.id)
           ?.map((ticket: Ticket, index: number) => (
             <div key={ticket.id}>
