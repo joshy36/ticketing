@@ -8,8 +8,8 @@ export default async function Home() {
     <div className='flex flex-col items-center justify-center py-20'>
       {salts?.map((salt) => (
         <div className='py-48' key={salt.id}>
-          <div>{`username: ${salt.user_profiles.username}`}</div>
-          <div>{`id: ${salt.user_profiles.id}`}</div>
+          <div>{`username: ${salt.user_profiles?.username}`}</div>
+          <div>{`id: ${salt.user_profiles?.id}`}</div>
           <QRCode value={salt} bgColor='#000000' fgColor='#FFFFFF' />
         </div>
       ))}
