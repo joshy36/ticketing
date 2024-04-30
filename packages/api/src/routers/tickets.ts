@@ -4,8 +4,11 @@ import { TRPCError } from '@trpc/server';
 import { createStripePrice } from '../services/stripe';
 import { ethers } from 'ethers';
 import contractAbi from '../../../../packages/chain/deployments/base-goerli/Event.json';
-import { UserProfile } from 'supabase';
 import sha256 from 'crypto-js/sha256';
+import { Inngest } from 'inngest';
+
+// Create a client to send and receive events
+export const inngest = new Inngest({ id: 'my-app' });
 
 export const ticketsRouter = router({
   // probably need to seperate into public and authed procedure for available and owned tickets
@@ -401,7 +404,7 @@ export const ticketsRouter = router({
         .eq('ticket_id', input.ticket_id);
     }),
 
-  getTicketTransferPushRequests: authedProcedure.query(
+  getPendingTicketTransferPushRequests: authedProcedure.query(
     async ({ ctx, input }) => {
       const supabase = ctx.supabase;
       const user = ctx.user;
@@ -411,7 +414,8 @@ export const ticketsRouter = router({
         .select(
           `*, from_profile:user_profiles!ticket_transfer_push_request_from_fkey(*), tickets(*, events(*))`
         )
-        .eq('to', user.id);
+        .eq('to', user.id)
+        .eq('status', 'pending');
 
       return pushRequests;
     }
@@ -430,20 +434,30 @@ export const ticketsRouter = router({
         .eq('to', user.id);
     }),
 
-  transferTicketDatabase: authedProcedure
+  acceptTicketTransferPush: authedProcedure
     .input(
       z.object({
         ticket_id: z.string(),
-        user_id: z.string(),
       })
     )
-    .mutation(async (opts) => {
-      const supabase = opts.ctx.supabase;
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+
+      const { data: request } = await supabase
+        .from('ticket_transfer_push_request')
+        .update({
+          status: 'accepted',
+        })
+        .eq('ticket_id', input.ticket_id)
+        .select()
+        .single();
+
+      const user_id = request?.from!;
 
       const { data: ticketCheck } = await supabase
         .from('tickets')
         .select()
-        .eq('id', opts.input.ticket_id)
+        .eq('id', input.ticket_id)
         .limit(1)
         .single();
 
@@ -454,37 +468,39 @@ export const ticketsRouter = router({
         });
       }
 
-      if (ticketCheck?.purchaser_id != opts.ctx.user.id) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Only the purchaser can transfer a ticket!',
-        });
-      }
+      // // check if person transferring ticket to has one for that event
+      // const { data: ticketTransfer } = await supabase
+      //   .from('tickets')
+      //   .select()
+      //   .eq('owner_id', user_id)
+      //   .eq('event_id', ticketCheck.event_id)
+      //   .limit(1)
+      //   .single();
 
-      // check if person transferring ticket to has one for that event
-      const { data: ticketTransfer } = await supabase
-        .from('tickets')
-        .select()
-        .eq('owner_id', opts.input.user_id)
-        .eq('event_id', ticketCheck.event_id)
-        .limit(1)
-        .single();
-
-      if (ticketTransfer) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'User already has a ticket for this event!',
-        });
-      }
+      // if (ticketTransfer) {
+      //   throw new TRPCError({
+      //     code: 'INTERNAL_SERVER_ERROR',
+      //     message: 'User already has a ticket for this event!',
+      //   });
+      // }
 
       const { data: ticket, error } = await supabase
         .from('tickets')
         .update({
-          owner_id: opts.input.user_id,
+          owner_id: user_id,
         })
-        .eq('id', opts.input.ticket_id)
+        .eq('id', input.ticket_id)
         .select()
         .single();
+
+      await inngest.send({
+        name: 'ticket/transfer',
+        data: {
+          event_id: ticket?.event_id,
+          ticket_id: ticket?.id!,
+          user_id: user_id,
+        },
+      });
 
       return ticket;
     }),

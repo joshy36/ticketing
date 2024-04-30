@@ -50,8 +50,8 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
   const { data: userSalt, isLoading: saltLoading } = trpc.getUserSalt.useQuery({
     user_id: userProfile?.id!,
   });
-  const { data: pushRequsts, refetch: refetchPush } =
-    trpc.getTicketTransferPushRequests.useQuery();
+  const { data: pendingPushRequsts, refetch: refetchPush } =
+    trpc.getPendingTicketTransferPushRequests.useQuery();
 
   const requestTransfer = trpc.requestTransferTicketPush.useMutation({
     onSettled: async (data, error) => {
@@ -90,6 +90,20 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
       } else {
         await refetchPush();
         toast.success('Ticket transfer request rejected!');
+      }
+      setIsLoading(false);
+      setDialogOpen(null);
+    },
+  });
+
+  const acceptTransfer = trpc.acceptTicketTransferPush.useMutation({
+    onSettled: async (data, error) => {
+      if (error) {
+        toast.error(`Error accepting transfer: ${error.message}`);
+        console.error('Error accepting transfer: ', error);
+      } else {
+        await refetchPush();
+        toast.success('Ticket transfer request accepted!');
       }
       setIsLoading(false);
       setDialogOpen(null);
@@ -352,19 +366,19 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
             accept or reject these tickets before the event begins.
           </p>
         </div>
-        {pushRequsts?.length === 0 && (
+        {pendingPushRequsts?.length === 0 && (
           <div>No tickets to accept right now.</div>
         )}
-        {pushRequsts?.map((request, index) => (
+        {pendingPushRequsts?.map((request, index) => (
           <div key={request.id} className='border-b px-2 py-2'>
             <p className='font-bold'>From:</p>
             <div className='flex flex-row items-center justify-between py-2'>
               <ProfileCard userProfile={request.from_profile!} />
               <div className='flex items-center gap-8 font-medium'>
                 <div className='flex flex-col'>
-                  <p>{pushRequsts![index]?.tickets?.events?.name}</p>
+                  <p>{pendingPushRequsts![index]?.tickets?.events?.name}</p>
                   <p className='text-sm font-extralight text-muted-foreground'>
-                    {pushRequsts![index]?.tickets?.seat}
+                    {pendingPushRequsts![index]?.tickets?.seat}
                   </p>
                 </div>
               </div>
@@ -421,7 +435,17 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
                   </div>
                 </DialogContent>
               </Dialog>
-              <Button variant='outline'>Accept</Button>
+              <Button
+                variant='outline'
+                onClick={() => {
+                  setIsLoading(true);
+                  acceptTransfer.mutate({
+                    ticket_id: request.ticket_id!,
+                  });
+                }}
+              >
+                Accept
+              </Button>
             </div>
           </div>
         ))}
