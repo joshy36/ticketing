@@ -16,14 +16,14 @@ export default function ProfileCard({
         )}
       </Avatar>
 
-      <div className='flex flex-col justify-between'>
+      <div className='flex max-w-[200px] flex-col justify-between'>
         <div className='flex'>
           <p className='font-medium text-white'>{userProfile?.first_name}</p>
-          <p className='ml-1 font-medium text-white'>
+          <p className='ml-1 truncate text-ellipsis font-medium text-white'>
             {userProfile?.last_name}
           </p>
         </div>
-        <div className='justify-start text-left text-xs text-muted-foreground'>
+        <div className='justify-start truncate text-ellipsis text-left text-xs text-muted-foreground'>
           {`@${userProfile?.username}`}
         </div>
       </div>

@@ -796,6 +796,55 @@ export interface Database {
           }
         ]
       }
+      ticket_transfer_push_request: {
+        Row: {
+          created_at: string
+          from: string | null
+          id: string
+          status: Database["public"]["Enums"]["friend_request_status"] | null
+          ticket_id: string | null
+          to: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          from?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
+          ticket_id?: string | null
+          to?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          from?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
+          ticket_id?: string | null
+          to?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_transfer_push_request_from_fkey"
+            columns: ["from"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ticket_transfer_push_request_ticket_id_fkey"
+            columns: ["ticket_id"]
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ticket_transfer_push_request_to_fkey"
+            columns: ["to"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       tickets: {
         Row: {
           created_at: string

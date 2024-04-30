@@ -7,7 +7,12 @@ import { useState } from 'react';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import { RouterOutputs } from 'api';
-import { AlertCircle, CheckCircle } from 'lucide-react';
+import {
+  AlertCircle,
+  CheckCircle,
+  CircleEllipsis,
+  XCircle,
+} from 'lucide-react';
 import Link from 'next/link';
 import ProfileCard from '~/components/ProfileCard';
 import {
@@ -48,18 +53,128 @@ export function Id({
     user_id: userProfile?.id!,
   });
 
-  const transferTicket = trpc.transferTicketDatabase.useMutation({
+  const requestTransfer = trpc.requestTransferTicketPush.useMutation({
     onSettled(data, error) {
       if (error) {
-        toast.error(`Error transferring ticket: ${error.message}`);
-        console.error('Error transferring ticket: ', error);
+        toast.error(`Error requesting transfer: ${error.message}`);
+        console.error('Error requesting transfer: ', error);
         setIsLoading(false);
       } else {
-        toast.success('Ticket transferred!');
+        toast.success('Ticket transfer request sent!');
         setIsLoading(false);
       }
     },
   });
+
+  const cancelRequestTransfer = trpc.cancelTicketTransferPush.useMutation({
+    onSettled(data, error) {
+      if (error) {
+        toast.error(`Error canceling transfer: ${error.message}`);
+        console.error('Error canceling transfer: ', error);
+        setIsLoading(false);
+      } else {
+        toast.success('Ticket transfer request canceled!');
+        setIsLoading(false);
+      }
+    },
+  });
+
+  const renderTicketRequest = (pending: any) => {
+    if (pending.status === 'accepted') {
+      return (
+        <Link
+          href={`/${pending.to_profile.username}`}
+          className='flex flex-col gap-2'
+        >
+          <ProfileCard userProfile={pending.to_profile} />
+          <div className='flex flex-row items-center gap-2 font-light text-green-500'>
+            <p className='text-sm'>Accepted</p>
+            <CheckCircle className='h-4 w-4' />
+          </div>
+        </Link>
+      );
+    } else if (pending.status === 'rejected') {
+      return (
+        <div className='flex flex-row items-center gap-2 font-light text-red-500'>
+          <AlertCircle className='h-4 w-4' />
+          <p>Rejected</p>
+        </div>
+      );
+    } else if (pending.status === 'pending') {
+      return (
+        <div className='flex flex-col gap-2'>
+          <Link
+            href={`/${pending.to_profile.username}`}
+            className='flex flex-row items-center gap-2'
+          >
+            <ProfileCard userProfile={pending.to_profile} />
+          </Link>
+
+          <div className='flex flex-row items-center justify-between gap-8 text-yellow-500'>
+            <div className='flex flex-row items-center gap-2'>
+              <p className='text-sm '>Pending</p>
+              <CircleEllipsis className='h-4 w-4' />
+            </div>
+
+            <Dialog
+              open={dialogOpen === pending.ticket_id} // Only open the dialog if its id matches with dialogOpen state
+              onOpenChange={(isOpen) => {
+                if (!isOpen) setDialogOpen(null); // Close the dialog
+              }}
+            >
+              <DialogTrigger asChild>
+                <Button
+                  variant='outline'
+                  className='flex flex-row items-center gap-2'
+                  onClick={() => setDialogOpen(pending.ticket_id)}
+                >
+                  <XCircle className='h-4 w-4' />
+                  Cancel
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Cancel Transfer Request</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to cancel this transfer request?
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className='flex w-full flex-row justify-end space-x-2 pt-4'>
+                  <Button
+                    variant='secondary'
+                    onClick={() => {
+                      setDialogOpen(null);
+                    }}
+                  >
+                    No
+                  </Button>
+                  <Button
+                    disabled={isLoading}
+                    className=''
+                    onClick={() => {
+                      setIsLoading(true);
+                      cancelRequestTransfer.mutate({
+                        ticket_id: pending.ticket_id,
+                      });
+                      setDialogOpen(null); // Close the dialog
+                      setSelectedUsers(null);
+                      router.refresh();
+                    }}
+                  >
+                    {isLoading && (
+                      <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                    )}
+                    Yes
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className='flex flex-col items-center justify-center pt-8'>
@@ -74,10 +189,7 @@ export function Id({
         <Separator className='my-4' />
         {userSalt && qrCode && (
           <div className='flex flex-col items-center justify-center'>
-            <Button
-              onClick={() => showQRCode(!qrCode)}
-              className='mb-4 w-full rounded-md'
-            >
+            <Button onClick={() => showQRCode(!qrCode)} className='mb-4 w-full'>
               Hide Qr
             </Button>
             <QRCode
@@ -91,7 +203,7 @@ export function Id({
           <Button
             onClick={() => showQRCode(!qrCode)}
             variant='secondary'
-            className='w-full rounded-md'
+            className='w-full'
           >
             Show QR
           </Button>
@@ -119,24 +231,20 @@ export function Id({
                 <div className='flex items-center gap-8 font-medium'>
                   <div className='flex flex-col'>
                     <p>{tickets.tickets![index]?.events?.name}</p>
-                    <p className='font-extralight text-muted-foreground'>
+                    <p className='text-sm font-extralight text-muted-foreground'>
                       {ticket.seat}
                     </p>
                   </div>
                 </div>
 
-                {ticket.owner_id ? (
-                  <Link
-                    href={`/${tickets.ownerProfiles[index]?.username}`}
-                    className='flex flex-row gap-2'
-                  >
-                    {ticket.owner_id && (
-                      <div className='flex flex-row items-center gap-2 font-light text-green-500'>
-                        <CheckCircle className='h-4 w-4' />
-                      </div>
-                    )}
-                    <ProfileCard userProfile={tickets.ownerProfiles[index]!} />
-                  </Link>
+                {tickets.pushRequestTickets?.find(
+                  (ticketFind) => ticketFind.ticket_id === ticket.id,
+                ) ? (
+                  renderTicketRequest(
+                    tickets.pushRequestTickets?.find(
+                      (ticketFind) => ticketFind.ticket_id === ticket.id,
+                    ),
+                  )
                 ) : (
                   <Dialog
                     open={dialogOpen === ticket.id} // Only open the dialog if its id matches with dialogOpen state
@@ -148,7 +256,7 @@ export function Id({
                       <Button
                         variant='outline'
                         onClick={() => setDialogOpen(ticket.id)}
-                        className='text-yellow-500'
+                        className='text-red-500'
                       >
                         <div className='flex flex-row items-center gap-2'>
                           <AlertCircle className='h-4 w-4' />
@@ -182,16 +290,20 @@ export function Id({
                         <Input
                           type='text'
                           placeholder='Search'
-                          className='text-muted-foreground'
+                          className='rounded-full text-muted-foreground'
                           onChange={(e) => setUserSearch(e.target.value)}
                         />
                         <Button
                           disabled={isLoading || !selectedUsers?.length}
-                          className='w-48 rounded-md'
+                          className='w-full'
                           onClick={() => {
                             setIsLoading(true);
-                            transferTicket.mutate({
-                              user_id: selectedUsers![0]!.id,
+                            // transferTicket.mutate({
+                            //   user_id: selectedUsers![0]!.id,
+                            //   ticket_id: ticket.id,
+                            // });
+                            requestTransfer.mutate({
+                              to: selectedUsers![0]!.id,
                               ticket_id: ticket.id,
                             });
                             setDialogOpen(null); // Close the dialog
@@ -202,7 +314,7 @@ export function Id({
                           {isLoading && (
                             <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
                           )}
-                          Transfer Ticket
+                          Request Ticket Transfer
                         </Button>
                       </div>
                       <UsersListSingle

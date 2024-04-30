@@ -79,6 +79,13 @@ export const ticketsRouter = router({
         .eq('owner_id', input.user_id)
         .single();
 
+      const { data: pushRequestTickets } = await supabase
+        .from('ticket_transfer_push_request')
+        .select(
+          `*, to_profile:user_profiles!ticket_transfer_push_request_to_fkey(*)`
+        )
+        .eq('from', input.user_id);
+
       const ownerProfiles: UserProfile[] = [];
       for (let i = 0; i < data?.length!; i++) {
         const { data: ownerProfile } = await supabase
@@ -93,6 +100,7 @@ export const ticketsRouter = router({
         tickets: data,
         ownedTicket: ownedTicket,
         ownerProfiles: ownerProfiles,
+        pushRequestTickets: pushRequestTickets,
       };
     }),
 
@@ -338,6 +346,90 @@ export const ticketsRouter = router({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'No user found',
       });
+    }),
+
+  requestTransferTicketPush: authedProcedure
+    .input(z.object({ to: z.string(), ticket_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      const { data: ticket } = await supabase
+        .from('tickets')
+        .select()
+        .eq('id', input.ticket_id)
+        .limit(1)
+        .single();
+
+      if (!ticket) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No ticket with inputted id!',
+        });
+      }
+
+      if (!ticket.owner_id && ticket.purchaser_id != user.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Not the owner of the ticket!',
+        });
+      }
+
+      if (ticket.owner_id && ticket.owner_id != user.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Not the owner of the ticket!',
+        });
+      }
+
+      await supabase
+        .from('ticket_transfer_push_request')
+        .insert({
+          from: user.id,
+          to: input.to,
+          ticket_id: input.ticket_id,
+        })
+        .select();
+    }),
+
+  cancelTicketTransferPush: authedProcedure
+    .input(z.object({ ticket_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      const { data: ticket } = await supabase
+        .from('tickets')
+        .select()
+        .eq('id', input.ticket_id)
+        .limit(1)
+        .single();
+
+      if (!ticket) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No ticket with inputted id!',
+        });
+      }
+
+      if (!ticket.owner_id && ticket.purchaser_id != user.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Not the owner of the ticket!',
+        });
+      }
+
+      if (ticket.owner_id && ticket.owner_id != user.id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Not the owner of the ticket!',
+        });
+      }
+
+      await supabase
+        .from('ticket_transfer_push_request')
+        .delete()
+        .eq('ticket_id', input.ticket_id);
     }),
 
   transferTicketDatabase: authedProcedure
