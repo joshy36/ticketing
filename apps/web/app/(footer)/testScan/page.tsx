@@ -10,7 +10,7 @@ export default async function Home() {
         <div className='py-48' key={salt.id}>
           <div>{`username: ${salt.user_profiles?.username}`}</div>
           <div>{`id: ${salt.user_profiles?.id}`}</div>
-          <QRCode value={salt} bgColor='#000000' fgColor='#FFFFFF' />
+          <QRCode value={salt.salt!} bgColor='#000000' fgColor='#FFFFFF' />
         </div>
       ))}
     </div>
