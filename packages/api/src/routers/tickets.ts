@@ -401,6 +401,22 @@ export const ticketsRouter = router({
         .eq('ticket_id', input.ticket_id);
     }),
 
+  getTicketTransferPushRequests: authedProcedure.query(
+    async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      const { data: pushRequests } = await supabase
+        .from('ticket_transfer_push_request')
+        .select(
+          `*, from_profile:user_profiles!ticket_transfer_push_request_from_fkey(*), tickets(*, events(*))`
+        )
+        .eq('to', user.id);
+
+      return pushRequests;
+    }
+  ),
+
   transferTicketDatabase: authedProcedure
     .input(
       z.object({

@@ -59,7 +59,6 @@ export default function Requests() {
                 <div className='flex gap-2'>
                   <Button
                     variant='destructive'
-                    className='rounded-md'
                     onClick={() => {
                       rejectRequest.mutate({ from: request.from.id });
                     }}
@@ -68,7 +67,6 @@ export default function Requests() {
                   </Button>
                   <Button
                     variant='outline'
-                    className='rounded-md'
                     onClick={() => {
                       acceptRequest.mutate({ from: request.from.id });
                     }}
