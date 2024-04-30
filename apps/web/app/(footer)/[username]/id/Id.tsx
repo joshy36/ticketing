@@ -56,9 +56,9 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
         toast.error(`Error requesting transfer: ${error.message}`);
         console.error('Error requesting transfer: ', error);
       } else {
+        await refetch();
         toast.success('Ticket transfer request sent!');
       }
-      await refetch();
       setIsLoading(false);
       setDialogOpen(null); // Close the dialog
       setSelectedUsers(null);
@@ -71,9 +71,9 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
         toast.error(`Error canceling transfer: ${error.message}`);
         console.error('Error canceling transfer: ', error);
       } else {
+        await refetch();
         toast.success('Ticket transfer request canceled!');
       }
-      await refetch();
       setIsLoading(false);
       setDialogOpen(null);
     },
