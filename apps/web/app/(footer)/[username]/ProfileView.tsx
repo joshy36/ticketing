@@ -93,11 +93,11 @@ export default async function ProfileView({
             )}
           </div>
           <div className='flex flex-row'>
-            <p className='md:text-md pb-6 text-sm font-light text-muted-foreground'>{`@${userProfile?.username} ·`}</p>
+            <p className='md:text-md pb-4 text-sm font-light text-muted-foreground'>{`@${userProfile?.username} ·`}</p>
             {friendCount === 1 ? (
-              <p className='md:text-md ml-1 pb-6 text-sm font-semibold text-muted-foreground hover:underline'>{`${friendCount} friend`}</p>
+              <p className='md:text-md ml-1 pb-4 text-sm font-semibold text-muted-foreground hover:underline'>{`${friendCount} friend`}</p>
             ) : (
-              <p className='md:text-md ml-1 pb-6 text-sm font-semibold text-muted-foreground hover:underline'>{`${friendCount} friends`}</p>
+              <p className='md:text-md ml-1 pb-4 text-sm font-semibold text-muted-foreground hover:underline'>{`${friendCount} friends`}</p>
             )}
           </div>
           {userProfile?.bio && (
