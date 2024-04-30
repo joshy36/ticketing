@@ -51,14 +51,14 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
   });
 
   const requestTransfer = trpc.requestTransferTicketPush.useMutation({
-    onSettled(data, error) {
+    onSettled: async (data, error) => {
       if (error) {
         toast.error(`Error requesting transfer: ${error.message}`);
         console.error('Error requesting transfer: ', error);
       } else {
         toast.success('Ticket transfer request sent!');
       }
-      refetch();
+      await refetch();
       setIsLoading(false);
       setDialogOpen(null); // Close the dialog
       setSelectedUsers(null);
@@ -66,14 +66,14 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
   });
 
   const cancelRequestTransfer = trpc.cancelTicketTransferPush.useMutation({
-    onSettled(data, error) {
+    onSettled: async (data, error) => {
       if (error) {
         toast.error(`Error canceling transfer: ${error.message}`);
         console.error('Error canceling transfer: ', error);
       } else {
         toast.success('Ticket transfer request canceled!');
       }
-      refetch();
+      await refetch();
       setIsLoading(false);
       setDialogOpen(null);
     },
