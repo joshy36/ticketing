@@ -452,7 +452,7 @@ export const ticketsRouter = router({
         .select()
         .single();
 
-      const user_id = request?.from!;
+      const user_id = request?.to!;
 
       const { data: ticketCheck } = await supabase
         .from('tickets')
