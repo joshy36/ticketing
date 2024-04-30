@@ -60,6 +60,14 @@ export const usersRouter = router({
       return data;
     }),
 
+  getAllSalts: publicProcedure.query(async ({ ctx }) => {
+    const supabase = ctx.supabase;
+    const { data } = await supabase
+      .from('user_salts')
+      .select(`*, user_profiles (*)`);
+    return data;
+  }),
+
   getUpcomingEventsForUser: publicProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async ({ ctx, input }) => {
