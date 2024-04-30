@@ -40,7 +40,7 @@ export default function FriendRequest({
         requestFriend.mutate({ to: userProfile.id });
       }}
       disabled={isLoading || relationshipStatus !== 'none'}
-      className='pt-4'
+      className='mt-4'
     >
       {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
       {relationshipStatus === 'none' && (
