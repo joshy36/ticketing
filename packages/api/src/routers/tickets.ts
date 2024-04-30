@@ -39,27 +39,8 @@ export const ticketsRouter = router({
         .eq('event_id', input.event_id)
         .order('id', { ascending: true });
 
-      const { data: ownedTicket } = await supabase
-        .from('tickets')
-        .select(`*, events (id, image, name, etherscan_link, date)`)
-        .eq('owner_id', input.user_id)
-        .eq('event_id', input.event_id)
-        .single();
-
-      const ownerProfiles: UserProfile[] = [];
-      for (let i = 0; i < data?.length!; i++) {
-        const { data: ownerProfile } = await supabase
-          .from('user_profiles')
-          .select()
-          .eq('id', data![i]?.owner_id!)
-          .limit(1)
-          .single();
-        ownerProfiles.push(ownerProfile!);
-      }
       return {
         tickets: data,
-        ownedTicket: ownedTicket,
-        ownerProfiles: ownerProfiles,
       };
     }),
 
