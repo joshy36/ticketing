@@ -6,7 +6,10 @@ import sha256 from 'crypto-js/sha256';
 export const usersRouter = router({
   getAllUsers: authedProcedure.query(async ({ ctx, input }) => {
     const supabase = ctx.supabase;
-    const { data } = await supabase.from('user_profiles').select();
+    const { data } = await supabase
+      .from('user_profiles')
+      .select()
+      .not('username', 'is', null);
     return data;
   }),
 
