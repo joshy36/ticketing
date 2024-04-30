@@ -20,7 +20,8 @@ import { SearchIcon } from 'lucide-react';
 import { trpc } from '../../../../apps/web/app/_trpc/client';
 import Image from 'next/image';
 import { dateToString } from '../../utils/helpers';
-import { Artist, Venue } from 'supabase';
+import { Artist, UserProfile, Venue } from 'supabase';
+import ProfileCard from '../ProfileCard';
 
 export interface NavItem {
   title: string;
@@ -54,6 +55,8 @@ export function CommandMenu({ ...props }: DialogProps) {
     trpc.getArtists.useQuery();
 
   const { data: venues, isLoading: venuesLoading } = trpc.getVenues.useQuery();
+
+  const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -221,6 +224,34 @@ export function CommandMenu({ ...props }: DialogProps) {
                     <div>
                       <div className='text-lg'>{navItem.name}</div>
                     </div>
+                  </CommandItem>
+                ))}
+            </CommandGroup>
+          )}
+
+          {!users ? (
+            <CommandEmpty>No results found.</CommandEmpty>
+          ) : (
+            <CommandGroup heading='Users'>
+              {users
+                // .filter((navitem: any) => !navitem.external)
+                .map((navItem: UserProfile) => (
+                  <CommandItem
+                    key={navItem.id}
+                    value={
+                      navItem.first_name +
+                      ' ' +
+                      navItem.last_name +
+                      ' ' +
+                      navItem.username
+                    }
+                    onSelect={() => {
+                      runCommand(() =>
+                        router.push(`/${navItem.username}` as string),
+                      );
+                    }}
+                  >
+                    <ProfileCard userProfile={navItem} />
                   </CommandItem>
                 ))}
             </CommandGroup>

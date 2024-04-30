@@ -417,6 +417,19 @@ export const ticketsRouter = router({
     }
   ),
 
+  rejectTicketTransferPush: authedProcedure
+    .input(z.object({ ticket_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const user = ctx.user;
+
+      await supabase
+        .from('ticket_transfer_push_request')
+        .delete()
+        .eq('ticket_id', input.ticket_id)
+        .eq('to', user.id);
+    }),
+
   transferTicketDatabase: authedProcedure
     .input(
       z.object({

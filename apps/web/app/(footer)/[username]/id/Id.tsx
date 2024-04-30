@@ -29,6 +29,7 @@ import { Icons } from '~/components/ui/icons';
 import { useRouter } from 'next/navigation';
 import { trpc } from '~/app/_trpc/client';
 import { toast } from 'sonner';
+import { Badge } from '~/components/ui/badge';
 
 export function Id({ userProfile }: { userProfile: UserProfile }) {
   const [qrCode, showQRCode] = useState(false);
@@ -49,7 +50,8 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
   const { data: userSalt, isLoading: saltLoading } = trpc.getUserSalt.useQuery({
     user_id: userProfile?.id!,
   });
-  const { data: pushRequsts } = trpc.getTicketTransferPushRequests.useQuery();
+  const { data: pushRequsts, refetch: refetchPush } =
+    trpc.getTicketTransferPushRequests.useQuery();
 
   const requestTransfer = trpc.requestTransferTicketPush.useMutation({
     onSettled: async (data, error) => {
@@ -80,19 +82,37 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
     },
   });
 
+  const rejectTransfer = trpc.rejectTicketTransferPush.useMutation({
+    onSettled: async (data, error) => {
+      if (error) {
+        toast.error(`Error rejecting transfer: ${error.message}`);
+        console.error('Error rejecting transfer: ', error);
+      } else {
+        await refetchPush();
+        toast.success('Ticket transfer request rejected!');
+      }
+      setIsLoading(false);
+      setDialogOpen(null);
+    },
+  });
+
   const renderTicketRequest = (pending: any) => {
     if (pending.status === 'accepted') {
       return (
-        <Link
-          href={`/${pending.to_profile.username}`}
-          className='flex flex-col gap-2'
-        >
-          <ProfileCard userProfile={pending.to_profile} />
+        <div className='flex flex-col gap-2'>
+          <Link
+            href={`/${pending.to_profile.username}`}
+            className='flex flex-col gap-2'
+          >
+            <ProfileCard userProfile={pending.to_profile} />
+          </Link>
           <div className='flex flex-row items-center gap-2 font-light text-green-500'>
-            <p className='text-sm'>Accepted</p>
-            <CheckCircle className='h-4 w-4' />
+            <Badge className='w-full justify-center gap-2 bg-green-800/40 text-green-400 hover:bg-green-800/20'>
+              <p>Accepted</p>
+              <CheckCircle className='h-3 w-3' />
+            </Badge>
           </div>
-        </Link>
+        </div>
       );
     } else if (pending.status === 'rejected') {
       return (
@@ -112,9 +132,11 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
           </Link>
 
           <div className='flex flex-row items-center justify-between gap-8 text-yellow-500'>
-            <div className='flex flex-row items-center gap-2'>
-              <p className='text-sm '>Pending</p>
-              <CircleEllipsis className='h-4 w-4' />
+            <div className='flex flex-row items-center gap-2 '>
+              <Badge className=' gap-2 bg-yellow-800/40 text-yellow-400 hover:bg-yellow-800/20'>
+                <p>Pending</p>
+                <CircleEllipsis className='h-4 w-4' />
+              </Badge>
             </div>
 
             <Dialog
@@ -348,7 +370,57 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
               </div>
             </div>
             <div className='flex justify-end gap-2'>
-              <Button variant='destructive'>Reject</Button>
+              <Dialog
+                open={dialogOpen === request.id} // Only open the dialog if its id matches with dialogOpen state
+                onOpenChange={(isOpen) => {
+                  if (!isOpen) setDialogOpen(null); // Close the dialog
+                }}
+              >
+                <DialogTrigger asChild>
+                  <Button
+                    variant='destructive'
+                    className='flex flex-row items-center gap-2'
+                    onClick={() => setDialogOpen(request.id)}
+                  >
+                    <XCircle className='h-4 w-4' />
+                    Reject
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Reject Ticket Transfer</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to reject this ticket?
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className='flex w-full flex-row justify-end space-x-2 pt-4'>
+                    <Button
+                      variant='secondary'
+                      onClick={() => {
+                        setDialogOpen(null);
+                      }}
+                    >
+                      No
+                    </Button>
+                    <Button
+                      disabled={isLoading}
+                      className=''
+                      onClick={() => {
+                        setIsLoading(true);
+                        rejectTransfer.mutate({
+                          ticket_id: request.ticket_id!,
+                        });
+                      }}
+                    >
+                      {isLoading && (
+                        <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                      )}
+                      Yes
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <Button variant='outline'>Accept</Button>
             </div>
           </div>
