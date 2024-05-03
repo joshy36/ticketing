@@ -149,7 +149,7 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
             <div className='flex flex-row items-center gap-2 '>
               <Badge className=' gap-2 bg-yellow-800/40 text-yellow-400 hover:bg-yellow-800/20'>
                 <p>Pending</p>
-                <CircleEllipsis className='h-4 w-4' />
+                {/* <CircleEllipsis className='h-4 w-4' /> */}
               </Badge>
             </div>
 
@@ -343,7 +343,7 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
                         {isLoading && (
                           <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
                         )}
-                        Request Ticket Transfer
+                        Transfer Ticket
                       </Button>
                     </div>
                     <UsersListSingle

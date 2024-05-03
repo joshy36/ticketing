@@ -16,7 +16,8 @@ export default function App() {
         if (error.message == 'Unauthorized scanner!') {
           alert(`User not authorized to scan tickets for this event!`);
         } else {
-          alert(`Ticket has already been scanned!`);
+          // alert(`Ticket has already been scanned!`);
+          alert(`Error: ${error}`);
         }
       } else {
         console.log('ticket scanned');
