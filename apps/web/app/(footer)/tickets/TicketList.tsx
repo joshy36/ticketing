@@ -56,6 +56,9 @@ export default function TicketList({
   const { data: pendingPushRequsts, refetch: refetchPush } =
     trpc.getPendingTicketTransferPushRequests.useQuery();
 
+  console.log('upcomingEvents', upcomingEvents);
+  console.log('tickets', tickets);
+
   const requestTransfer = trpc.requestTransferTicketPush.useMutation({
     onSettled: async (data, error) => {
       if (error) {
@@ -283,10 +286,10 @@ export default function TicketList({
                           </AccordionTrigger>
                           <AccordionContent>
                             {tickets?.tickets
+                              ?.filter((ticket) => ticket.event_id === event.id)
                               ?.filter(
                                 (ticket) => ticket.owner_id !== userProfile.id,
                               )
-                              ?.filter((ticket) => ticket.event_id === event.id)
                               ?.map((ticket: Ticket, index: number) => (
                                 <div
                                   key={ticket.id}
