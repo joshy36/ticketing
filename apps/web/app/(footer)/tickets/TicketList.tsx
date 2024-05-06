@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { dateToString } from '~/utils/helpers';
 import { trpc } from '~/app/_trpc/client';
 import { Button } from '~/components/ui/button';
-import { AlertCircle, CheckCircle, ScanFace, XCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle, ScanFace, X } from 'lucide-react';
 import Link from 'next/link';
 import {
   Accordion,
@@ -126,17 +126,15 @@ export default function TicketList({
           >
             <ProfileCard userProfile={pending.to_profile} />
           </Link>
-          <div className='flex flex-row items-center gap-2 font-light text-green-500'>
-            <Badge className='w-full justify-center gap-2 bg-green-800/40 text-green-400 hover:bg-green-800/20'>
-              <CheckCircle className='h-3 w-3' />
-              <p>Accepted</p>
-            </Badge>
+          <div className='flex flex-row items-center gap-2'>
+            <span className='h-2 w-2 rounded-full bg-green-500'></span>
+            <p className='text-muted-foreground'>Accepted</p>
           </div>
         </div>
       );
     } else if (pending.status === 'rejected') {
       return (
-        <div className='flex flex-row items-center gap-2 font-light text-red-500'>
+        <div className='flex flex-row items-center gap-2 font-light text-red-600'>
           <AlertCircle className='h-4 w-4' />
           <p>Rejected</p>
         </div>
@@ -151,12 +149,10 @@ export default function TicketList({
             <ProfileCard userProfile={pending.to_profile} />
           </Link>
 
-          <div className='flex flex-row items-center justify-between gap-8 text-yellow-500'>
+          <div className='flex flex-row items-center justify-between gap-4'>
             <div className='flex flex-row items-center gap-2 '>
-              <Badge className=' gap-2 bg-yellow-800/40 text-yellow-400 hover:bg-yellow-800/20'>
-                <p>Pending</p>
-                {/* <CircleEllipsis className='h-4 w-4' /> */}
-              </Badge>
+              <span className='h-2 w-2 rounded-full bg-yellow-500'></span>
+              <p className='text-muted-foreground'>Pending</p>
             </div>
 
             <Dialog
@@ -168,10 +164,10 @@ export default function TicketList({
               <DialogTrigger asChild>
                 <Button
                   variant='outline'
-                  className='flex flex-row items-center gap-2'
+                  className='flex flex-row items-center gap-2 text-yellow-500'
                   onClick={() => setDialogOpen(pending.ticket_id)}
                 >
-                  <XCircle className='h-4 w-4' />
+                  <X className='h-4 w-4' />
                   Cancel
                 </Button>
               </DialogTrigger>
@@ -250,39 +246,62 @@ export default function TicketList({
                     <div key={event?.id}>
                       <Accordion type='single' collapsible>
                         <AccordionItem value='item-1'>
-                          <AccordionTrigger>
-                            <div className='flex w-full flex-row items-center gap-4'>
-                              <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-24 overflow-hidden rounded-lg bg-background'>
-                                {event?.image ? (
-                                  <Image
-                                    src={event.image}
-                                    alt='Event Image'
-                                    width={500}
-                                    height={500}
-                                    className='h-full w-full object-cover object-center'
-                                  />
-                                ) : (
-                                  <Image
-                                    src='/fallback.jpeg'
-                                    alt='image'
-                                    width={500}
-                                    height={500}
-                                    className='h-full w-full object-cover object-center'
-                                  />
-                                )}
-                              </div>
-                              <div>
-                                <h1 className='mt-2 text-start text-xl text-accent-foreground'>
-                                  {event?.name}
-                                </h1>
-                                <p className='font-sm mt-0.5 text-start text-sm font-light text-muted-foreground'>
-                                  {`${dateToString(event?.date!)}`}
-                                </p>
-                                <p className='font-sm mt-0.5 text-start text-sm font-light text-muted-foreground'>
-                                  {`${event?.venues.name}`}
-                                </p>
+                          <AccordionTrigger className='hover:bg-zinc-800/50 hover:no-underline'>
+                            <div className='flex w-full flex-row items-center justify-between'>
+                              <div className='flex flex-row gap-4'>
+                                <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-24 overflow-hidden rounded-lg bg-background'>
+                                  {event?.image ? (
+                                    <Image
+                                      src={event.image}
+                                      alt='Event Image'
+                                      width={500}
+                                      height={500}
+                                      className='h-full w-full object-cover object-center'
+                                    />
+                                  ) : (
+                                    <Image
+                                      src='/fallback.jpeg'
+                                      alt='image'
+                                      width={500}
+                                      height={500}
+                                      className='h-full w-full object-cover object-center'
+                                    />
+                                  )}
+                                </div>
+                                <div>
+                                  <h1 className='mt-2 text-start text-xl text-accent-foreground'>
+                                    {event?.name}
+                                  </h1>
+                                  <p className='font-sm mt-0.5 text-start text-sm font-light text-muted-foreground'>
+                                    {`${dateToString(event?.date!)}`}
+                                  </p>
+                                  <p className='font-sm mt-0.5 text-start text-sm font-light text-muted-foreground'>
+                                    {`${event?.venues.name}`}
+                                  </p>
+                                </div>
                               </div>
                             </div>
+                            {tickets?.tickets
+                              ?.filter((ticket) => ticket.event_id === event.id)
+                              ?.filter(
+                                (ticket) => ticket.owner_id !== userProfile.id,
+                              )
+                              ?.some(
+                                (ticket) =>
+                                  !tickets.pushRequestTickets?.find(
+                                    (ticketFind) =>
+                                      ticketFind.ticket_id === ticket.id,
+                                  ),
+                              ) && (
+                              <div className='mr-4 flex flex-row items-center gap-1 text-red-600'>
+                                <Badge className='w-full justify-center gap-2 bg-red-800/40 text-red-600 hover:bg-red-800/20'>
+                                  <AlertCircle className='h-4 w-4' />
+                                  <p className='text-base font-normal'>
+                                    Transfer
+                                  </p>
+                                </Badge>
+                              </div>
+                            )}
                           </AccordionTrigger>
                           <AccordionContent>
                             {tickets?.tickets
@@ -297,10 +316,7 @@ export default function TicketList({
                                 >
                                   <div className='flex items-center gap-8 font-medium'>
                                     <div className='flex flex-col'>
-                                      <p>{ticket.events.name}</p>
-                                      <p className='text-sm font-extralight text-muted-foreground'>
-                                        {ticket.seat}
-                                      </p>
+                                      <p className=' '>{ticket.seat}</p>
                                     </div>
                                   </div>
 
@@ -327,7 +343,7 @@ export default function TicketList({
                                           onClick={() =>
                                             setDialogOpen(ticket.id)
                                           }
-                                          className='text-red-500'
+                                          className='text-red-600'
                                         >
                                           <div className='flex flex-row items-center gap-2'>
                                             <AlertCircle className='h-4 w-4' />

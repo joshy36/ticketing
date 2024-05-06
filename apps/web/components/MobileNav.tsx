@@ -44,7 +44,7 @@ export function MobileNav({
       href: '/event/list',
     },
     {
-      title: 'My Tickets',
+      title: 'Upcoming Events',
       href: '/tickets',
     },
   ];
@@ -74,7 +74,7 @@ export function MobileNav({
             <div className='flex flex-col space-y-3 pb-3'>
               {mainComponents.map((item) => (
                 <div key={item.href}>
-                  {item.title === 'My Tickets' && !user ? (
+                  {item.title === 'Upcomding Events' && !user ? (
                     <div key={item.href}></div>
                   ) : (
                     <MobileLink

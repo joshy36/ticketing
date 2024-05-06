@@ -97,7 +97,7 @@ export default function NavBar({
       href: '/event/list',
     },
     {
-      title: 'My Tickets',
+      title: 'Upcoming Events',
       href: '/tickets',
     },
   ];
@@ -126,7 +126,7 @@ export default function NavBar({
           <NavigationMenuList>
             {mainComponents.map((component) => (
               <div key={component.title}>
-                {component.title === 'My Tickets' && !user ? (
+                {component.title === 'Upcoming Events' && !user ? (
                   <div key={component.title}></div>
                 ) : (
                   <NavigationMenuItem key={component.title}>

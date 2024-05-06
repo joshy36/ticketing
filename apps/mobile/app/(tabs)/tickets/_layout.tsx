@@ -7,7 +7,7 @@ const Layout = () => {
       screenOptions={{
         headerStyle: { backgroundColor: '#000000' },
         headerTintColor: '#FFFFFF',
-        headerTitle: 'My Tickets',
+        headerTitle: 'Upcoming Events',
         headerTitleStyle: {
           fontWeight: 'bold',
         },
