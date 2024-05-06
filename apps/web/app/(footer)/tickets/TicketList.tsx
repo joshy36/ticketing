@@ -128,8 +128,8 @@ export default function TicketList({
           </Link>
           <div className='flex flex-row items-center gap-2 font-light text-green-500'>
             <Badge className='w-full justify-center gap-2 bg-green-800/40 text-green-400 hover:bg-green-800/20'>
-              <p>Accepted</p>
               <CheckCircle className='h-3 w-3' />
+              <p>Accepted</p>
             </Badge>
           </div>
         </div>
@@ -290,21 +290,16 @@ export default function TicketList({
                               ?.filter(
                                 (ticket) => ticket.owner_id !== userProfile.id,
                               )
-                              ?.map((ticket: Ticket, index: number) => (
+                              ?.map((ticket: any, index: number) => (
                                 <div
                                   key={ticket.id}
                                   className='flex flex-row items-center justify-between border-b px-2 py-2'
                                 >
                                   <div className='flex items-center gap-8 font-medium'>
                                     <div className='flex flex-col'>
-                                      <p>
-                                        {tickets.tickets![index]?.events?.name}
-                                      </p>
+                                      <p>{ticket.events.name}</p>
                                       <p className='text-sm font-extralight text-muted-foreground'>
                                         {ticket.seat}
-                                      </p>
-                                      <p className='text-sm font-extralight text-muted-foreground'>
-                                        {ticket.event_id}
                                       </p>
                                     </div>
                                   </div>
