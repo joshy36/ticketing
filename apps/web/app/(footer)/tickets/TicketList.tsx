@@ -304,6 +304,24 @@ export default function TicketList({
                             )}
                           </AccordionTrigger>
                           <AccordionContent>
+                            <div className='flex flex-row items-center justify-between border-b px-2 py-2'>
+                              {
+                                tickets?.tickets
+                                  ?.filter(
+                                    (ticket) => ticket.event_id === event.id,
+                                  )
+                                  ?.filter(
+                                    (ticket) =>
+                                      ticket.owner_id === userProfile.id,
+                                  )
+                                  .filter(
+                                    (ticket) =>
+                                      ticket.purchaser_id === userProfile.id,
+                                  )[0]?.seat
+                              }
+
+                              <p>Your Ticket</p>
+                            </div>
                             {tickets?.tickets
                               ?.filter((ticket) => ticket.event_id === event.id)
                               ?.filter(
