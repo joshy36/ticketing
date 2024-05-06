@@ -224,7 +224,7 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
         {userSalt && qrCode && (
           <div className='flex flex-col items-center justify-center'>
             <Button onClick={() => showQRCode(!qrCode)} className='mb-4 w-full'>
-              Hide Qr
+              Hide QR
             </Button>
             <QRCode
               value={userSalt.salt!}

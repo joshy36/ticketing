@@ -303,6 +303,9 @@ export default function TicketList({
                                       <p className='text-sm font-extralight text-muted-foreground'>
                                         {ticket.seat}
                                       </p>
+                                      <p className='text-sm font-extralight text-muted-foreground'>
+                                        {ticket.event_id}
+                                      </p>
                                     </div>
                                   </div>
 
