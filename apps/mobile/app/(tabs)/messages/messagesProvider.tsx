@@ -82,8 +82,6 @@ export const MessagesProvider = ({
 
   // const url = usePathname().split('/');
 
-  console.log('UNREAD: ', unreadMessages);
-
   const { data: unread } = trpc.getTotalUnreadMessages.useQuery();
   const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
     chat_id: currentChat,
@@ -95,6 +93,8 @@ export const MessagesProvider = ({
   } = trpc.getUserChats.useQuery({
     user_id: userProfile?.id,
   });
+
+  console.log('UNREAD: ', unread);
 
   const readMessages = trpc.readMessages.useMutation();
 

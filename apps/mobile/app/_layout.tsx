@@ -3,6 +3,7 @@ import { TRPCProvider } from '../utils/trpc';
 import { SupabaseProvider } from '../utils/supabaseProvider';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { MessagesProvider } from './(tabs)/messages/messagesProvider';
+import { FriendRequestProvider } from './(tabs)/messages/friendRequestsProvider';
 
 export default function RootLayout() {
   return (
@@ -10,9 +11,11 @@ export default function RootLayout() {
       <SupabaseProvider>
         <TRPCProvider>
           <MessagesProvider userProfile={null} url={null}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
+            <FriendRequestProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
+            </FriendRequestProvider>
           </MessagesProvider>
         </TRPCProvider>
       </SupabaseProvider>

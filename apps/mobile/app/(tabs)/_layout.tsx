@@ -7,9 +7,11 @@ import { blurhash } from '../../utils/helpers';
 import { View, Text } from 'react-native';
 import { useContext, useEffect } from 'react';
 import { MessagesContext } from './messages/messagesProvider';
+import { FriendRequestContext } from './messages/friendRequestsProvider';
 
 export default function TabsLayout() {
   const { unreadMessages } = useContext(MessagesContext);
+  const { friendRequests } = useContext(FriendRequestContext);
 
   return (
     <Tabs
@@ -80,25 +82,28 @@ export default function TabsLayout() {
                 size={30}
                 color={color}
               />
-              {unreadMessages > 0 && (
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: -5,
-                    right: -5,
-                    backgroundColor: 'blue',
-                    borderWidth: 1,
-                    borderColor: 'black',
-                    borderRadius: 10,
-                    width: 20,
-                    height: 20,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text className="text-white">{unreadMessages}</Text>
-                </View>
-              )}
+              {friendRequests &&
+                unreadMessages + friendRequests?.length > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: -5,
+                      right: -5,
+                      backgroundColor: '#1d4ed8',
+                      borderWidth: 1,
+                      borderColor: 'black',
+                      borderRadius: 10,
+                      width: 20,
+                      height: 20,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text className="text-white text-xs items-center">
+                      {unreadMessages + friendRequests?.length}
+                    </Text>
+                  </View>
+                )}
             </View>
           ),
         }}

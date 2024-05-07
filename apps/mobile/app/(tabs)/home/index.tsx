@@ -17,9 +17,12 @@ const Home = () => {
             <Text className="text-white">Loading...</Text>
           ) : (
             events?.map((event: any) => (
-              <View className="px-2 " key={event.id}>
+              <View
+                className="px-2 pb-3 border-b border-zinc-800"
+                key={event.id}
+              >
                 <Link href={`/home/${event.id}`}>
-                  <View className="flex flex-row items-center py-3 ">
+                  <View className="flex flex-row items-center pb-3 gap-4">
                     <View>
                       <Image
                         style={{ borderRadius: 16 }}
@@ -34,7 +37,7 @@ const Home = () => {
                     </View>
                     <View className="flex flex-col">
                       <View>
-                        <Text className="text-white pl-2 text-2xl text-bold">
+                        <Text className="text-white pl-2 text-2xl font-semibold">
                           {event.name}
                         </Text>
                       </View>
