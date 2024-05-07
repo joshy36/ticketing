@@ -68,6 +68,7 @@ export function UserSignInForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
               onChange={(e) => setEmail(e.target.value)}
               value={email}
+              className='rounded-full'
             />
             <p>Password</p>
             <Label className='sr-only' htmlFor='password'>
@@ -85,13 +86,14 @@ export function UserSignInForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+              className='rounded-full'
             />
           </div>
-          <Button disabled={isLoading} className='rounded-md'>
-            Sign In with Email
+          <Button disabled={isLoading} className='rounded-full'>
             {isLoading && (
               <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
             )}
+            Sign In with Email
           </Button>
         </div>
       </form>
