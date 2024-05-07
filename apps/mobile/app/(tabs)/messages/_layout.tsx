@@ -40,11 +40,15 @@ const Layout = () => {
             fontWeight: 'bold',
           },
           headerRight: () => (
-            <Link href="messages/startChat">
-              <View className="bg-white p-2 rounded-full flex items-center ">
-                <Feather name="send" size={24} color="black" />
-              </View>
-            </Link>
+            <View>
+              {session && user && (
+                <Link href="messages/startChat">
+                  <View className="bg-white p-2 rounded-full flex items-center ">
+                    <Feather name="send" size={24} color="black" />
+                  </View>
+                </Link>
+              )}
+            </View>
           ),
         }}
       >
@@ -64,7 +68,11 @@ const Layout = () => {
         />
         <Stack.Screen
           name="requests"
-          options={{ headerTitle: 'Friend Requests', headerBackTitle: 'Back' }}
+          options={{
+            headerTitle: 'Friend Requests',
+            headerBackTitle: 'Back',
+            headerRight: () => <View></View>,
+          }}
         />
         <Stack.Screen
           name="startChat"

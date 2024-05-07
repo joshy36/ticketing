@@ -19,12 +19,14 @@ type FriendRequestContextProps = {
     SetStateAction<RouterOutputs['getPendingFriendRequestsForUser']>
   >;
   friendRequestsLoading: boolean;
+  refetchFriendRequests: () => Promise<any>;
 };
 
 export const FriendRequestContext = createContext<FriendRequestContextProps>({
   friendRequests: [],
   setFriendRequests: () => {},
   friendRequestsLoading: false,
+  refetchFriendRequests: async () => {},
 });
 
 export const FriendRequestProvider = ({
@@ -33,8 +35,11 @@ export const FriendRequestProvider = ({
   const [friendRequests, setFriendRequests] = useState<
     RouterOutputs['getPendingFriendRequestsForUser']
   >([]);
-  const { data: requests, isLoading: friendRequestsLoading } =
-    trpc.getPendingFriendRequestsForUser.useQuery();
+  const {
+    data: requests,
+    isLoading: friendRequestsLoading,
+    refetch: refetchFriendRequests,
+  } = trpc.getPendingFriendRequestsForUser.useQuery();
 
   console.log('requests', requests);
 
@@ -46,7 +51,12 @@ export const FriendRequestProvider = ({
 
   return (
     <FriendRequestContext.Provider
-      value={{ friendRequests, setFriendRequests, friendRequestsLoading }}
+      value={{
+        friendRequests,
+        setFriendRequests,
+        friendRequestsLoading,
+        refetchFriendRequests,
+      }}
     >
       {children}
     </FriendRequestContext.Provider>

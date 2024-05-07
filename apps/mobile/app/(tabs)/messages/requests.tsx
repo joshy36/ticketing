@@ -34,6 +34,7 @@ export default function Requests() {
 
   return (
     <View className="flex-1 bg-black">
+      <ToastManager backdropColor="black" />
       <View className="flex w-full flex-col">
         {friendRequests?.length === 0 && !friendRequestsLoading ? (
           <View className="flex h-64 flex-col items-center justify-center">
@@ -43,6 +44,17 @@ export default function Requests() {
           </View>
         ) : (
           <View>
+            <TouchableOpacity
+              onPress={() => {
+                Toast.success('Promised is resolved');
+              }}
+              style={{
+                backgroundColor: 'white',
+                borderColor: 'green',
+                borderWidth: 1,
+                padding: 10,
+              }}
+            ></TouchableOpacity>
             {friendRequests?.map((request) => {
               return (
                 <View

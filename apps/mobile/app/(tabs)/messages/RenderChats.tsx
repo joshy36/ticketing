@@ -1,7 +1,6 @@
 'use client';
 
 import { UserProfile } from 'supabase';
-import { useContext, useState } from 'react';
 import { Check, SendHorizonal } from 'lucide-react';
 // import {
 //   Dialog,
@@ -25,8 +24,17 @@ import { MessagesContext } from './messagesProvider';
 import ChatProfileCard from './ChatProfileCard';
 import OrgCard from './OrgCard';
 import GroupCard from './GroupCard';
-import { View, TouchableOpacity } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+  Text,
+} from 'react-native';
+import { FriendRequestContext } from './friendRequestsProvider';
+import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
+import { useCallback, useContext, useState } from 'react';
 
 export default function RenderChats({
   userProfile,
@@ -48,6 +56,17 @@ export default function RenderChats({
     numberOfUnreadMessagesPerChat,
     setNumberOfUnreadMessagesPerChat,
   } = useContext(MessagesContext);
+  const { friendRequests, refetchFriendRequests } =
+    useContext(FriendRequestContext);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetchFriendRequests().then(() => {
+      setRefreshing(false);
+    });
+  }, []);
 
   //   const createChat = trpc.createChat.useMutation({
   //     onSettled(data, error) {
@@ -93,7 +112,15 @@ export default function RenderChats({
   };
 
   return (
-    <View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor="white"
+        />
+      }
+    >
       {/* <View className="flex justify-center">
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
@@ -207,6 +234,25 @@ export default function RenderChats({
             </DialogContent>
           </Dialog>
         </View> */}
+      <Link href="/messages/requests" asChild>
+        <TouchableOpacity className="flex flex-row w-full items-center justify-between border-b border-zinc-800 px-4 py-6 font-medium hover:bg-zinc-800/50 focus:bg-secondary">
+          <View className="flex flex-row gap-4 items-center">
+            <Feather name="users" color="white" size={20} />
+            <Text className="text-white font-bold text-lg">
+              Friend Requests
+            </Text>
+          </View>
+          {friendRequests && friendRequests?.length > 0 && (
+            <View className="flex pr-2">
+              <View className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light">
+                <Text className="text-white text-xs">
+                  {friendRequests?.length}
+                </Text>
+              </View>
+            </View>
+          )}
+        </TouchableOpacity>
+      </Link>
       {chats?.chats?.length === 0 && (
         <p className="pt-8 text-center">No messages yet.</p>
       )}
@@ -275,6 +321,6 @@ export default function RenderChats({
           </Link>
         );
       })}
-    </View>
+    </ScrollView>
   );
 }
