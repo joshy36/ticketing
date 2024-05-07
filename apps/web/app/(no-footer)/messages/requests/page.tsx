@@ -8,6 +8,7 @@ import ProfileCard from '~/components/ProfileCard';
 import { useContext } from 'react';
 import { toast } from 'sonner';
 import { FriendRequestContext } from '~/providers/friendRequestsProvider';
+import { X, Check } from 'lucide-react';
 
 export default function Requests() {
   const { friendRequests, setFriendRequests, friendRequestsLoading } =
@@ -63,7 +64,7 @@ export default function Requests() {
                       rejectRequest.mutate({ from: request.from.id });
                     }}
                   >
-                    Reject
+                    <X size={16} />
                   </Button>
                   <Button
                     variant='outline'
@@ -71,7 +72,7 @@ export default function Requests() {
                       acceptRequest.mutate({ from: request.from.id });
                     }}
                   >
-                    Accept
+                    <Check size={16} />
                   </Button>
                 </div>
               </div>
