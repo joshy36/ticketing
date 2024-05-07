@@ -8,8 +8,8 @@ import { FriendRequestProvider } from './(tabs)/messages/friendRequestsProvider'
 export default function RootLayout() {
   return (
     <StripeProvider publishableKey={process.env.EXPO_PUBLIC_STRIPE_KEY!}>
-      <SupabaseProvider>
-        <TRPCProvider>
+      <TRPCProvider>
+        <SupabaseProvider>
           <MessagesProvider userProfile={null} url={null}>
             <FriendRequestProvider>
               <Stack>
@@ -17,8 +17,8 @@ export default function RootLayout() {
               </Stack>
             </FriendRequestProvider>
           </MessagesProvider>
-        </TRPCProvider>
-      </SupabaseProvider>
+        </SupabaseProvider>
+      </TRPCProvider>
     </StripeProvider>
   );
 }

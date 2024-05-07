@@ -94,8 +94,6 @@ export const MessagesProvider = ({
     user_id: userProfile?.id,
   });
 
-  console.log('UNREAD: ', unread);
-
   const readMessages = trpc.readMessages.useMutation();
 
   useEffect(() => {

@@ -1,15 +1,16 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Foundation } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
-import { blurhash } from '../../utils/helpers';
 import { View, Text } from 'react-native';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { MessagesContext } from './messages/messagesProvider';
 import { FriendRequestContext } from './messages/friendRequestsProvider';
+import { SupabaseContext } from '../../utils/supabaseProvider';
+import { Image } from 'expo-image';
+import { blurhash, replaceLocalhostWithIP } from '../../utils/helpers';
 
 export default function TabsLayout() {
+  const { userProfile } = useContext(SupabaseContext);
   const { unreadMessages } = useContext(MessagesContext);
   const { friendRequests } = useContext(FriendRequestContext);
 
@@ -17,7 +18,21 @@ export default function TabsLayout() {
     <Tabs
       initialRouteName="home"
       screenOptions={{
-        tabBarStyle: { backgroundColor: '#000000', height: 90 },
+        tabBarStyle: {
+          backgroundColor: 'transparent',
+          position: 'absolute',
+          height: 90,
+          borderTopWidth: 0.5,
+          borderTopColor: 'rgba(255, 255, 255, 0.2)',
+        },
+        tabBarBackground: () => (
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            }}
+          />
+        ),
       }}
     >
       <Tabs.Screen
@@ -116,11 +131,25 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarActiveTintColor: 'white',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'person-circle' : 'person-circle-outline'}
-              size={30}
-              color={color}
-            />
+            <View>
+              {userProfile ? (
+                <Image
+                  className="h-8 w-8 rounded-full flex justify-center items-center"
+                  source={{
+                    uri: replaceLocalhostWithIP(userProfile).profile_image,
+                  }}
+                  placeholder={blurhash}
+                  contentFit="cover"
+                  transition={1000}
+                />
+              ) : (
+                <Ionicons
+                  name={focused ? 'person-circle' : 'person-circle-outline'}
+                  size={30}
+                  color={color}
+                />
+              )}
+            </View>
           ),
         }}
       />

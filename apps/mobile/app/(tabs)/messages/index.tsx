@@ -16,7 +16,7 @@ const Tickets = () => {
   return (
     <View className="flex-1 bg-black">
       {session && user ? (
-        <View>
+        <View className="flex-1">
           <RenderChats userProfile={userProfile!} />
         </View>
       ) : (

@@ -35,6 +35,8 @@ export const usersRouter = router({
           .limit(1)
           .single();
         return data;
+      } else {
+        return null;
       }
     }),
 

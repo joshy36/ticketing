@@ -1,12 +1,15 @@
 import { Session, User } from '@supabase/supabase-js';
 import { createContext, useEffect, useState } from 'react';
-
 import { ExpoSecureStoreAdapter, supabase } from './supabaseExpo';
 import { Alert } from 'react-native';
+import { trpc } from './trpc';
+import { UserProfile } from 'supabase';
 
 type SupabaseContextProps = {
   user: User | null;
   session: Session | null;
+  userProfile: UserProfile | null | undefined;
+  userProfileLoading: boolean;
   initialized?: boolean;
   signUp: (email: string, password: string) => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
@@ -20,6 +23,8 @@ type SupabaseProviderProps = {
 export const SupabaseContext = createContext<SupabaseContextProps>({
   user: null,
   session: null,
+  userProfile: null,
+  userProfileLoading: false,
   initialized: false,
   signUp: async () => {},
   signInWithPassword: async () => {},
@@ -32,6 +37,24 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [initialized, setInitialized] = useState<boolean>(false);
+  const [userProfile, setUserProfile] = useState<
+    UserProfile | null | undefined
+  >(null);
+
+  const {
+    data: profile,
+    isLoading: userProfileLoading,
+    refetch,
+  } = trpc.getUserProfile.useQuery(
+    {
+      id: user?.id,
+    },
+    { enabled: !!user }
+  );
+
+  useEffect(() => {
+    setUserProfile(profile);
+  }, [profile]);
 
   const signUp = async (email: string, password: string) => {
     const { error } = await supabase.auth.signUp({
@@ -67,6 +90,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
       ExpoSecureStoreAdapter.setItem('mobile-session', JSON.stringify(session));
       setSession(session);
       setUser(session ? session.user : null);
+      refetch();
       setInitialized(true);
     });
     return () => {
@@ -78,6 +102,8 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
     <SupabaseContext.Provider
       value={{
         user,
+        userProfile,
+        userProfileLoading,
         session,
         initialized,
         signUp,

@@ -8,17 +8,20 @@ import {
   dateToString,
   replaceLocalhostWithIP,
 } from '../../utils/helpers';
+import ProfileCard from '../components/ProfileCard';
 
 const Search = () => {
   const { data: events, isLoading: eventsLoading } = trpc.getEvents.useQuery();
   const { data: artists, isLoading: artistsLoading } =
     trpc.getArtists.useQuery();
   const { data: venues, isLoading: venuesLoading } = trpc.getVenues.useQuery();
+  const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredEvents, setFilteredEvents] = useState<typeof events>([]);
   const [filteredArtists, setFilteredArtists] = useState<typeof artists>([]);
   const [filteredVenues, setFilteredVenues] = useState<typeof venues>([]);
+  const [filteredUsers, setFilteredUsers] = useState<typeof users>([]);
 
   const handleSearch = (text: any) => {
     setSearchQuery(text);
@@ -38,10 +41,21 @@ const Search = () => {
         venue.name.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredVenues(filteredVenues);
+
+      const filteredUsers = users?.filter((user) => {
+        const fullName = `${user.first_name?.toLowerCase() || ''} ${user.last_name?.toLowerCase() || ''}`;
+        return (
+          fullName.includes(text.toLowerCase()) ||
+          (user.username &&
+            user.username.toLowerCase().includes(text.toLowerCase()))
+        );
+      });
+      setFilteredUsers(filteredUsers);
     } else {
       setFilteredEvents([]);
       setFilteredArtists([]);
       setFilteredVenues([]);
+      setFilteredUsers([]);
     }
   };
 
@@ -49,7 +63,7 @@ const Search = () => {
     <View className="pt-14 px-5 flex-1 justify-start bg-black">
       <TextInput
         className="h-12 border-2 rounded-full mb-2 text-muted-foreground pl-4 bg-zinc-900"
-        placeholder="Search events, artists, venues"
+        placeholder="Search events, artists, venues, users"
         placeholderTextColor="#6B7280"
         onChangeText={handleSearch}
         value={searchQuery}
@@ -58,6 +72,7 @@ const Search = () => {
         {filteredEvents?.length === 0 &&
         filteredArtists?.length === 0 &&
         filteredVenues?.length === 0 &&
+        filteredUsers?.length === 0 &&
         searchQuery.length !== 0 ? (
           <Text className="text-white text-2xl text-center pt-24 ">
             No results found.
@@ -200,6 +215,19 @@ const Search = () => {
                     </Text>
                   </View>
                 </View>
+              </View>
+            </Link>
+          </Text>
+        ))}
+
+        {filteredUsers?.length !== 0 && (
+          <Text className="text-white text-xl font-bold">Users</Text>
+        )}
+        {filteredUsers?.map((user) => (
+          <Text key={user.id} className="text-white text-xl">
+            <Link href={`/home/user/${user.id}`}>
+              <View className="flex flex-row items-center py-3">
+                <ProfileCard userProfile={user} />
               </View>
             </Link>
           </Text>
