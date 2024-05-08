@@ -14,7 +14,7 @@ export default function RenderMessages({
 
   return (
     <div className='scroller'>
-      <div className='px-4 pb-20 pt-4'>
+      <div className='px-2 pb-20 pt-4 md:px-4'>
         {messages?.map((message, index) => {
           return (
             <div key={message.id} className='py-0.5'>

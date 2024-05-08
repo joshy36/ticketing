@@ -32,7 +32,7 @@ export default function GroupCard({
           </Avatar>
         ))}
       </div>
-      <div className='ml-1 flex max-w-[225px] flex-col'>
+      <div className='ml-1 flex max-w-[180px] flex-col'>
         <p className='truncate text-ellipsis font-medium text-white'>
           {allMembersNames}
         </p>
