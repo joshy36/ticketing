@@ -443,7 +443,7 @@ export const ticketsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
 
-      const { data: request } = await supabase
+      const { data: request, error: ticketError } = await supabase
         .from('ticket_transfer_push_request')
         .update({
           status: 'accepted',
@@ -451,6 +451,13 @@ export const ticketsRouter = router({
         .eq('ticket_id', input.ticket_id)
         .select()
         .single();
+
+      if (ticketError) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Ticket request is no longer available!',
+        });
+      }
 
       const user_id = request?.to!;
 
