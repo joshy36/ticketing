@@ -12,5 +12,7 @@ export type Reservation = DB['public']['Tables']['reservations']['Row'];
 export type Message = DB['public']['Tables']['chat_messages']['Row'];
 export type Chat = DB['public']['Tables']['chats']['Row'];
 export type Friend = DB['public']['Tables']['friends']['Row'];
+export type TicketTransferPushRequest =
+  DB['public']['Tables']['ticket_transfer_push_requests']['Row'];
 
 export { createRouteClient };

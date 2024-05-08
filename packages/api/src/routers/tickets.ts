@@ -64,9 +64,9 @@ export const ticketsRouter = router({
         .single();
 
       const { data: pushRequestTickets } = await supabase
-        .from('ticket_transfer_push_request')
+        .from('ticket_transfer_push_requests')
         .select(
-          `*, to_profile:user_profiles!ticket_transfer_push_request_to_fkey(*)`
+          `*, to_profile:user_profiles!ticket_transfer_push_requests_to_fkey(*)`
         )
         .eq('from', input.user_id);
 
@@ -355,7 +355,7 @@ export const ticketsRouter = router({
       }
 
       await supabase
-        .from('ticket_transfer_push_request')
+        .from('ticket_transfer_push_requests')
         .insert({
           from: user.id,
           to: input.to,
@@ -399,7 +399,7 @@ export const ticketsRouter = router({
       }
 
       await supabase
-        .from('ticket_transfer_push_request')
+        .from('ticket_transfer_push_requests')
         .delete()
         .eq('ticket_id', input.ticket_id);
     }),
@@ -410,9 +410,9 @@ export const ticketsRouter = router({
       const user = ctx.user;
 
       const { data: pushRequests } = await supabase
-        .from('ticket_transfer_push_request')
+        .from('ticket_transfer_push_requests')
         .select(
-          `*, from_profile:user_profiles!ticket_transfer_push_request_from_fkey(*), tickets(*, events(*))`
+          `*, from_profile:user_profiles!ticket_transfer_push_requests_from_fkey(*), tickets(*, events(*))`
         )
         .eq('to', user.id)
         .eq('status', 'pending');
@@ -428,7 +428,7 @@ export const ticketsRouter = router({
       const user = ctx.user;
 
       await supabase
-        .from('ticket_transfer_push_request')
+        .from('ticket_transfer_push_requests')
         .delete()
         .eq('ticket_id', input.ticket_id)
         .eq('to', user.id);
@@ -444,7 +444,7 @@ export const ticketsRouter = router({
       const supabase = ctx.supabase;
 
       const { data: request, error: ticketError } = await supabase
-        .from('ticket_transfer_push_request')
+        .from('ticket_transfer_push_requests')
         .update({
           status: 'accepted',
         })

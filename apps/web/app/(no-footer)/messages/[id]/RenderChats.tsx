@@ -2,7 +2,7 @@
 
 import { UserProfile } from 'supabase';
 import { useContext, useState } from 'react';
-import { Users, SendHorizonal } from 'lucide-react';
+import { Users, SendHorizonal, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -112,15 +112,21 @@ export default function RenderChats({
                   Select users to start a new chat with.
                 </DialogDescription>
               </DialogHeader>
-              <div className='flex flex-col flex-wrap'>
+              <div className='flex flex-col'>
                 {selectedUsers?.map((user) => {
                   return (
-                    <div
+                    <Button
                       key={user.id}
-                      className='mx-2 my-1 rounded-full border p-2'
+                      className='my-1 flex flex-row items-center justify-between rounded-full bg-black/80 py-8 hover:bg-zinc-700/20'
+                      onClick={() => {
+                        setSelectedUsers(
+                          selectedUsers?.filter((u) => u.id !== user.id),
+                        );
+                      }}
                     >
                       <ProfileCard userProfile={user} />
-                    </div>
+                      <X className='mr-4 text-white' />
+                    </Button>
                   );
                 })}
               </div>
@@ -128,12 +134,12 @@ export default function RenderChats({
                 <Input
                   type='text'
                   placeholder='username'
-                  className='text-muted-foreground'
+                  className='rounded-full text-muted-foreground'
                   onChange={(e) => setUserSearch(e.target.value)}
                 />
                 <Button
                   disabled={isLoading || !selectedUsers?.length}
-                  className='w-48 rounded-md'
+                  className='w-48'
                   onClick={() => {
                     setIsLoading(true);
                     createChat.mutate({

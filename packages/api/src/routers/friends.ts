@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { router, publicProcedure, authedProcedure } from '../trpc';
-import { UserProfile } from 'supabase';
+import { Ticket, UserProfile, TicketTransferPushRequest } from 'supabase';
 
 export const friendsRouter = router({
   getFriendshipStatus: publicProcedure
@@ -118,7 +118,22 @@ export const friendsRouter = router({
     .query(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
 
-      let totalFriends: UserProfile[] = [];
+      let totalFriends: {
+        profile: UserProfile;
+        ticket_transfer_push_requests: {
+          created_at: string;
+          from: string | null;
+          id: string;
+          status: 'pending' | 'accepted' | 'rejected' | null;
+          ticket_id: string | null;
+          to: string | null;
+          updated_at: string | null;
+          tickets: {
+            event_id: string;
+          } | null;
+        }[];
+        tickets: Ticket[];
+      }[] = [];
 
       const { data: userProfile } = await supabase
         .from('user_profiles')
@@ -126,24 +141,62 @@ export const friendsRouter = router({
         .eq('username', input.username)
         .single();
 
-      const { data: friends } = await supabase
+      const { data: friends, error: friendsError } = await supabase
         .from('friends')
-        .select(`*, friend_profile:user_profiles!friends_user2_id_fkey(*)`)
+        .select(
+          `*, friend_profile:user_profiles!friends_user2_id_fkey(
+            *, 
+            tickets!tickets_owner_id_fkey(*), 
+            ticket_transfer_push_requests!ticket_transfer_push_requests_to_fkey(*, tickets(event_id))
+          )`
+        )
         .eq('user1_id', userProfile?.id!);
 
+      console.log('friends:', friends);
+      console.log('friendsError:', friendsError);
+      console.log(
+        'friends:',
+        friends![0]?.friend_profile?.ticket_transfer_push_requests
+      );
+
       if (friends) {
-        const friendProfiles = friends.map((f) => f.friend_profile!);
-        totalFriends.push(...friendProfiles);
+        friends
+          .map((f) => f.friend_profile!)
+          .map((f) => {
+            const { tickets, ticket_transfer_push_requests, ...profile } = f;
+            totalFriends.push({
+              profile: profile,
+              ticket_transfer_push_requests: ticket_transfer_push_requests,
+              tickets: tickets,
+            });
+          });
       }
 
-      const { data: friends2 } = await supabase
+      const { data: friends2, error } = await supabase
         .from('friends')
-        .select(`*, friend_profile:user_profiles!friends_user1_id_fkey(*)`)
+        .select(
+          `*, friend_profile:user_profiles!friends_user1_id_fkey(
+            *, 
+            tickets!tickets_owner_id_fkey(*), 
+            ticket_transfer_push_requests!ticket_transfer_push_requests_to_fkey(*, tickets(event_id))
+          )`
+        )
         .eq('user2_id', userProfile?.id!);
 
+      // console.log('friends2:', friends2);
+      // console.log('error:', error);
+
       if (friends2) {
-        const friendProfiles2 = friends2.map((f) => f.friend_profile!);
-        totalFriends.push(...friendProfiles2);
+        friends2
+          .map((f) => f.friend_profile!)
+          .map((f) => {
+            const { tickets, ticket_transfer_push_requests, ...profile } = f;
+            totalFriends.push({
+              profile: profile,
+              ticket_transfer_push_requests: ticket_transfer_push_requests,
+              tickets: tickets,
+            });
+          });
       }
 
       return totalFriends;

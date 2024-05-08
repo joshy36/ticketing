@@ -1,12 +1,12 @@
 'use client';
 
-import { Ticket, UserProfile } from 'supabase';
+import { UserProfile } from 'supabase';
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { dateToString } from '~/utils/helpers';
 import { trpc } from '~/app/_trpc/client';
 import { Button } from '~/components/ui/button';
-import { AlertCircle, CheckCircle, ScanFace, X } from 'lucide-react';
+import { AlertCircle, ScanFace, X } from 'lucide-react';
 import Link from 'next/link';
 import {
   Accordion,
@@ -36,6 +36,7 @@ export default function TicketList({
   userProfile: UserProfile;
 }) {
   const [dialogOpen, setDialogOpen] = useState<string | null>(null);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<string | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
     null,
   );
@@ -50,22 +51,22 @@ export default function TicketList({
     user_id: userProfile?.id!,
   });
 
-  const { data: users, isLoading: usersLoading } =
-    trpc.getTotalFriendsForUser.useQuery({ username: userProfile.username! });
+  const {
+    data: users,
+    isLoading: usersLoading,
+    refetch: refetchUsers,
+  } = trpc.getTotalFriendsForUser.useQuery({ username: userProfile.username! });
 
-  const { data: pendingPushRequsts, refetch: refetchPush } =
-    trpc.getPendingTicketTransferPushRequests.useQuery();
-
-  console.log('upcomingEvents', upcomingEvents);
-  console.log('tickets', tickets);
+  console.log(users);
 
   const requestTransfer = trpc.requestTransferTicketPush.useMutation({
     onSettled: async (data, error) => {
+      await refetch();
+      await refetchUsers();
       if (error) {
         toast.error(`Error requesting transfer: ${error.message}`);
         console.error('Error requesting transfer: ', error);
       } else {
-        await refetch();
         toast.success('Ticket transfer request sent!');
       }
       setIsLoading(false);
@@ -76,43 +77,16 @@ export default function TicketList({
 
   const cancelRequestTransfer = trpc.cancelTicketTransferPush.useMutation({
     onSettled: async (data, error) => {
+      await refetch();
+      await refetchUsers();
       if (error) {
         toast.error(`Error canceling transfer: ${error.message}`);
         console.error('Error canceling transfer: ', error);
       } else {
-        await refetch();
         toast.success('Ticket transfer request canceled!');
       }
       setIsLoading(false);
-      setDialogOpen(null);
-    },
-  });
-
-  const rejectTransfer = trpc.rejectTicketTransferPush.useMutation({
-    onSettled: async (data, error) => {
-      if (error) {
-        toast.error(`Error rejecting transfer: ${error.message}`);
-        console.error('Error rejecting transfer: ', error);
-      } else {
-        await refetchPush();
-        toast.success('Ticket transfer request rejected!');
-      }
-      setIsLoading(false);
-      setDialogOpen(null);
-    },
-  });
-
-  const acceptTransfer = trpc.acceptTicketTransferPush.useMutation({
-    onSettled: async (data, error) => {
-      if (error) {
-        toast.error(`Error accepting transfer: ${error.message}`);
-        console.error('Error accepting transfer: ', error);
-      } else {
-        await refetchPush();
-        toast.success('Ticket transfer request accepted!');
-      }
-      setIsLoading(false);
-      setDialogOpen(null);
+      setCancelDialogOpen(null);
     },
   });
 
@@ -156,16 +130,16 @@ export default function TicketList({
             </div>
 
             <Dialog
-              open={dialogOpen === pending.ticket_id} // Only open the dialog if its id matches with dialogOpen state
+              open={cancelDialogOpen === pending.ticket_id} // Only open the dialog if its id matches with dialogOpen state
               onOpenChange={(isOpen) => {
-                if (!isOpen) setDialogOpen(null); // Close the dialog
+                if (!isOpen) setCancelDialogOpen(null); // Close the dialog
               }}
             >
               <DialogTrigger asChild>
                 <Button
                   variant='outline'
                   className='flex flex-row items-center gap-2 text-yellow-500'
-                  onClick={() => setDialogOpen(pending.ticket_id)}
+                  onClick={() => setCancelDialogOpen(pending.ticket_id)}
                 >
                   <X className='h-4 w-4' />
                   Cancel
@@ -183,7 +157,7 @@ export default function TicketList({
                   <Button
                     variant='secondary'
                     onClick={() => {
-                      setDialogOpen(null);
+                      setCancelDialogOpen(null);
                     }}
                   >
                     No
@@ -234,10 +208,10 @@ export default function TicketList({
             {upcomingEvents?.length != 0 ? (
               <div>
                 <Link href={`/${userProfile.username}/id`}>
-                  <Button className='mb-4 w-full rounded-md'>
+                  <Button className='mb-4 w-full'>
                     <div className='flex flex-row items-center gap-2'>
-                      <p>Scan In</p>
                       <ScanFace />
+                      <p>Scan In</p>
                     </div>
                   </Button>
                 </Link>
@@ -426,7 +400,23 @@ export default function TicketList({
                                           </Button>
                                         </div>
                                         <UsersListSingle
-                                          users={users}
+                                          users={users
+                                            ?.filter(
+                                              (user) =>
+                                                !user.tickets.some(
+                                                  (ticket) =>
+                                                    ticket.event_id ===
+                                                    event.id,
+                                                ) &&
+                                                !user.ticket_transfer_push_requests.some(
+                                                  (request) =>
+                                                    request.status ===
+                                                      'pending' &&
+                                                    request?.tickets
+                                                      ?.event_id === event.id,
+                                                ),
+                                            )
+                                            .map((user) => user.profile)}
                                           usersLoading={usersLoading}
                                           userProfile={userProfile}
                                           userSearch={userSearch}

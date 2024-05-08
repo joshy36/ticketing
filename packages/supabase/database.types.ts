@@ -796,7 +796,7 @@ export interface Database {
           }
         ]
       }
-      ticket_transfer_push_request: {
+      ticket_transfer_push_requests: {
         Row: {
           created_at: string
           from: string | null
@@ -826,19 +826,19 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "ticket_transfer_push_request_from_fkey"
+            foreignKeyName: "ticket_transfer_push_requests_from_fkey"
             columns: ["from"]
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "ticket_transfer_push_request_ticket_id_fkey"
+            foreignKeyName: "ticket_transfer_push_requests_ticket_id_fkey"
             columns: ["ticket_id"]
             referencedRelation: "tickets"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "ticket_transfer_push_request_to_fkey"
+            foreignKeyName: "ticket_transfer_push_requests_to_fkey"
             columns: ["to"]
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]

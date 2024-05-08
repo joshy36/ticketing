@@ -28,6 +28,11 @@ export default function UsersListSingle({
         <div>Loading...</div>
       ) : (
         <ScrollArea className='h-[200px] w-full'>
+          {users?.length === 0 && (
+            <div className='pt-8 text-center text-sm font-light text-muted-foreground'>
+              No users found.
+            </div>
+          )}
           {users
             ?.filter(
               (user) =>

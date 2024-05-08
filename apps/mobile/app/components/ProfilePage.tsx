@@ -48,15 +48,17 @@ const ProfilePage = () => {
 
           <View className="flex flex-col gap-2">
             <View>
-              <Image
-                className="h-20 w-20 rounded-full flex justify-center items-center"
-                source={{
-                  uri: replaceLocalhostWithIP(userProfile).profile_image,
-                }}
-                placeholder={blurhash}
-                contentFit="cover"
-                transition={1000}
-              />
+              {userProfile && (
+                <Image
+                  className="h-20 w-20 rounded-full flex justify-center items-center"
+                  source={{
+                    uri: replaceLocalhostWithIP(userProfile).profile_image,
+                  }}
+                  placeholder={blurhash}
+                  contentFit="cover"
+                  transition={1000}
+                />
+              )}
             </View>
             <View className="pb-6">
               <View className="flex flex-row">
@@ -83,6 +85,7 @@ const ProfilePage = () => {
             </View>
             <Separator />
           </View>
+
           <ScrollView>
             <View className="flex flex-row items-center justify-center gap-2 pt-4">
               <Text className="text-center text-white text-2xl font-bold">
