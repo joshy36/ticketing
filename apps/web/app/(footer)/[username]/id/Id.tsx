@@ -85,6 +85,7 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
   const rejectTransfer = trpc.rejectTicketTransferPush.useMutation({
     onSettled: async (data, error) => {
       if (error) {
+        await refetchPush();
         toast.error(`Error rejecting transfer: ${error.message}`);
         console.error('Error rejecting transfer: ', error);
       } else {
@@ -99,6 +100,7 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
   const acceptTransfer = trpc.acceptTicketTransferPush.useMutation({
     onSettled: async (data, error) => {
       if (error) {
+        await refetchPush();
         toast.error(`Error accepting transfer: ${error.message}`);
         console.error('Error accepting transfer: ', error);
       } else {
@@ -246,7 +248,7 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
 
       <div className='flex max-w-[600px] flex-col justify-center px-2 py-6'>
         <div className='pt-4'>
-          <h1 className='text-xl font-bold'>Recieve Tickets</h1>
+          <h1 className='text-xl font-bold'>Accept Tickets</h1>
           <p className='pb-4 text-sm font-light text-muted-foreground'>
             Here you can see pending ticket transfers from friends. You must
             accept or reject these tickets before the event begins.
