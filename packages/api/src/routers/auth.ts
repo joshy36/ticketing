@@ -21,7 +21,7 @@ export const authRouter = router({
 
   signOut: publicProcedure.mutation(async ({ ctx }) => {
     const supabase = ctx.supabase;
-    await supabase.auth.signOut();
+    await supabase.auth.signOut({ scope: 'local' });
     revalidatePath('/', 'layout');
   }),
 });
