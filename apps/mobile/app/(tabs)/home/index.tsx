@@ -35,7 +35,7 @@ const Home = () => {
                         transition={1000}
                       />
                     </View>
-                    <View className="flex flex-col">
+                    <View className="flex flex-col gap-1">
                       <View>
                         <Text className="text-white pl-2 text-2xl font-semibold">
                           {event.name}
@@ -44,6 +44,11 @@ const Home = () => {
                       <View>
                         <Text className="text-muted-foreground pl-2">
                           {dateToString(event.date)}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text className="text-muted-foreground pl-2">
+                          {event.artists?.name}
                         </Text>
                       </View>
                       <View>

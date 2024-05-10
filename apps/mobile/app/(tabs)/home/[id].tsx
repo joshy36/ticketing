@@ -186,7 +186,7 @@ const Home = () => {
                 )}
                 {isScanner ? (
                   <Link href={`/home/scan/${event?.id}`} asChild>
-                    <TouchableOpacity className="bg-white py-3 rounded-full flex">
+                    <TouchableOpacity className="bg-white py-3 rounded-full flex mb-20">
                       <Text className="text-black text-center font-bold">
                         Scan Tickets
                       </Text>
