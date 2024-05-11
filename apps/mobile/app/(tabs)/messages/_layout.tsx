@@ -1,9 +1,4 @@
-import {
-  Link,
-  Stack,
-  useGlobalSearchParams,
-  useLocalSearchParams,
-} from 'expo-router';
+import { Link, Stack, useGlobalSearchParams } from 'expo-router';
 import { MessagesProvider } from './messagesProvider';
 import { useContext } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
@@ -23,13 +18,10 @@ const Layout = () => {
       { enabled: !!user }
     );
 
-  const { id } = useLocalSearchParams();
-  const local = useLocalSearchParams();
-  console.log('local: ', local);
-  console.log('id: ', id);
+  const glob = useGlobalSearchParams();
 
   return (
-    <MessagesProvider userProfile={profile!} url={id! as string}>
+    <MessagesProvider userProfile={profile!} url={glob.id! as string}>
       <Stack
         initialRouteName="index"
         screenOptions={{

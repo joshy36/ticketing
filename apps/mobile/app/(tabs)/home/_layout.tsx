@@ -54,6 +54,15 @@ const Layout = () => {
           headerStyle: { backgroundColor: 'transparent' },
         }}
       />
+      <Stack.Screen
+        name="user/[id]"
+        options={{
+          headerTitle: '',
+          headerBackTitleVisible: false,
+          headerTransparent: true,
+          headerStyle: { backgroundColor: 'transparent' },
+        }}
+      />
     </Stack>
   );
 };

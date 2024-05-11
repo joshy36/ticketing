@@ -45,6 +45,7 @@ type MessagesContextProps = {
       | undefined
     >
   >;
+  setUnreadMessages: Dispatch<SetStateAction<number>>;
 };
 
 export const MessagesContext = createContext<MessagesContextProps>({
@@ -54,7 +55,9 @@ export const MessagesContext = createContext<MessagesContextProps>({
   mostRecentMessageByChat: {},
   messages: [],
   currentChat: null,
+  numberOfUnreadMessagesPerChat: {},
   setNumberOfUnreadMessagesPerChat: () => {},
+  setUnreadMessages: () => {},
 });
 
 export const MessagesProvider = ({
@@ -126,6 +129,7 @@ export const MessagesProvider = ({
       const totalUnreadMessages = unread.reduce((accumulator, currentChat) => {
         return accumulator + currentChat.unreadMessages;
       }, 0);
+      console.log('total: ', totalUnreadMessages);
       setUnreadMessages(totalUnreadMessages);
       setDidFetch(true);
     }
@@ -157,6 +161,11 @@ export const MessagesProvider = ({
         readMessages.mutate({
           chat_id: currentChat,
         });
+        console.log('unread: ', numberOfUnreadMessagesPerChat![currentChat]);
+        // setNumberOfUnreadMessagesPerChat((prevState) => ({
+        //   ...prevState,
+        //   [currentChat]: { unread: 0 },
+        // }));
       }
     }
   }, [messagesInCurrentChat]);
@@ -190,13 +199,24 @@ export const MessagesProvider = ({
             setMessages((prevMessages) => [...prevMessages!, newMessage!]);
           }
 
+          console.log('current chat: ', currentChat);
+          console.log('message chat: ', message.chat_id);
+          console.log('user: ', userProfile?.id);
+          console.log('message from: ', message.from);
+          console.log(
+            'test: ',
+            chats?.chats?.map((chat) => chat.id).includes(message.chat_id!)
+          );
+
           if (
             currentChat !== message.chat_id &&
-            userProfile?.id !== message.from &&
+            userProfile?.id !== message.from
             // make sure message is in one of the chats
-            chats?.chats?.map((chat) => chat.id).includes(message.chat_id!)
+            // chats?.chats?.map((chat) => chat.id).includes(message.chat_id!)
           ) {
+            console.log('incrementing');
             // need to not increment on every message
+            console.log('unread3.5: ', unreadMessages);
             setUnreadMessages((prevState) => prevState + 1);
             setNumberOfUnreadMessagesPerChat((prevState) => ({
               ...prevState,
@@ -207,6 +227,7 @@ export const MessagesProvider = ({
                     : 1,
               },
             }));
+            console.log('unread4: ', unreadMessages);
           }
           setMostRecentMessageByChat((prevState) => ({
             ...prevState,
@@ -257,6 +278,7 @@ export const MessagesProvider = ({
         messages,
         currentChat,
         setNumberOfUnreadMessagesPerChat,
+        setUnreadMessages,
       }}
     >
       {children}

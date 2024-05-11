@@ -1,25 +1,4 @@
-'use client';
-
 import { UserProfile } from 'supabase';
-import { Check, SendHorizonal } from 'lucide-react';
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogDescription,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from '@/components/ui/dialog';
-// import { Button } from '@/components/ui/button';
-// import { Input } from '@/components/ui/input';
-// import { Icons } from '@/components/ui/icons';
-import { trpc } from '../../../utils/trpc';
-// import { toast } from 'sonner';
-// import { ScrollArea } from '@/components/ui/scroll-area';
-// import { useRouter } from 'next/navigation';
-// import ProfileCard from './ProfileCard';
-// import { MessagesContext } from 'providers';
 import { MessagesContext } from './messagesProvider';
 import ChatProfileCard from './ChatProfileCard';
 import OrgCard from './OrgCard';
@@ -41,20 +20,13 @@ export default function RenderChats({
 }: {
   userProfile: UserProfile;
 }) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [userSearch, setUserSearch] = useState<string>('');
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
-    null
-  );
-  //   const router = useRouter();
-  const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
-
   const {
     chats,
     mostRecentMessageByChat,
     numberOfUnreadMessagesPerChat,
+    unreadMessages,
     setNumberOfUnreadMessagesPerChat,
+    setUnreadMessages,
   } = useContext(MessagesContext);
   const { friendRequests, refetchFriendRequests } =
     useContext(FriendRequestContext);
@@ -124,10 +96,19 @@ export default function RenderChats({
             <TouchableOpacity
               className={`flex flex-row items-center justify-between w-full gap-2 border-b border-zinc-800 px-4 py-4`}
               onPress={() => {
+                console.log(
+                  'unred2: ',
+                  numberOfUnreadMessagesPerChat![chat.id]?.unread
+                );
+                console.log('unred: ', unreadMessages);
+                setUnreadMessages(0);
                 setNumberOfUnreadMessagesPerChat((prevState) => ({
                   ...prevState,
                   [chat.id]: { unread: 0 },
                 }));
+
+                console.log('unred3: ', unreadMessages);
+
                 //   router.push(`/messages/${chat.id}`);
               }}
             >

@@ -33,6 +33,8 @@ const Home = () => {
   const { user } = supabaseContext;
   const { id } = useLocalSearchParams();
 
+  console.log('ied: ', id);
+
   const { data: event, isLoading: eventLoading } = trpc.getEventById.useQuery({
     id: id! as string,
   });
@@ -81,18 +83,20 @@ const Home = () => {
             <Text className="text-white text-2xl">Loading...</Text>
           ) : (
             <View>
-              <ImageBackground
-                style={{ width: '100%', height: 200 }}
-                source={{
-                  uri: replaceLocalhostWithIP(event).image,
-                }}
-                // blurRadius={20}
-              >
-                <LinearGradient
-                  colors={['#00000000', '#000000']}
-                  style={{ height: '100%', width: '100%' }}
-                ></LinearGradient>
-              </ImageBackground>
+              {event?.image && (
+                <ImageBackground
+                  style={{ width: '100%', height: 200 }}
+                  source={{
+                    uri: replaceLocalhostWithIP(event).image,
+                  }}
+                  // blurRadius={20}
+                >
+                  <LinearGradient
+                    colors={['#00000000', '#000000']}
+                    style={{ height: '100%', width: '100%' }}
+                  ></LinearGradient>
+                </ImageBackground>
+              )}
               <View className="p-4">
                 <Text className="text-5xl text-white text-center font-bold">
                   {event?.name}

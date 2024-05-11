@@ -14,6 +14,8 @@ export default function TabsLayout() {
   const { unreadMessages } = useContext(MessagesContext);
   const { friendRequests } = useContext(FriendRequestContext);
 
+  console.log('unreadMessages', unreadMessages);
+
   return (
     <Tabs
       initialRouteName="home"
@@ -108,8 +110,8 @@ export default function TabsLayout() {
                       borderWidth: 1,
                       borderColor: 'black',
                       borderRadius: 10,
-                      width: 20,
-                      height: 20,
+                      width: 18,
+                      height: 18,
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}
