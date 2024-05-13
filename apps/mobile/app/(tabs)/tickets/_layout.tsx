@@ -1,11 +1,13 @@
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
+import Feather from '@expo/vector-icons/Feather';
+import { TouchableOpacity } from 'react-native';
 
 const Layout = () => {
   return (
     <Stack
       initialRouteName="index"
       screenOptions={{
-        headerStyle: { backgroundColor: '#000000' },
+        headerStyle: { backgroundColor: 'black' },
         headerTintColor: '#FFFFFF',
         headerTitle: 'Upcoming Events',
         headerTitleStyle: {
@@ -13,11 +15,23 @@ const Layout = () => {
         },
       }}
     >
-      <Stack.Screen
+      {/* <Stack.Screen
         name="[id]"
         options={{
           headerTitle: 'Tickets',
           headerBackTitleVisible: false,
+        }}
+      /> */}
+      <Stack.Screen
+        name="scanIn"
+        options={{
+          presentation: 'modal',
+          headerTitle: 'Scan In',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Feather name="x" size={24} color="white" />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen

@@ -57,8 +57,6 @@ export default function TicketList({
     refetch: refetchUsers,
   } = trpc.getTotalFriendsForUser.useQuery({ username: userProfile.username! });
 
-  console.log(users);
-
   const requestTransfer = trpc.requestTransferTicketPush.useMutation({
     onSettled: async (data, error) => {
       await refetch();
@@ -328,7 +326,7 @@ export default function TicketList({
                                           onClick={() =>
                                             setDialogOpen(ticket.id)
                                           }
-                                          className='text-red-600'
+                                          className='border-red-600 text-red-600 hover:bg-red-900/30 hover:text-red-600'
                                         >
                                           <div className='flex flex-row items-center gap-2'>
                                             <AlertCircle className='h-4 w-4' />
