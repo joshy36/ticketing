@@ -173,9 +173,7 @@ export default function TicketList({
                     <Text className="text-white">
                       {
                         tickets?.tickets?.filter(
-                          (ticket) =>
-                            ticket.current_wallet_address ===
-                            userProfile?.wallet_address
+                          (ticket) => ticket.owner_id === userProfile?.id
                         )[0]?.seat
                       }
                     </Text>

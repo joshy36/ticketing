@@ -280,8 +280,7 @@ export default function TicketList({
                               {
                                 tickets?.tickets?.filter(
                                   (ticket) =>
-                                    ticket.current_wallet_address ===
-                                    userProfile.wallet_address,
+                                    ticket.owner_id === userProfile.id,
                                 )[0]?.seat
                               }
 
