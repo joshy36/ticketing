@@ -161,18 +161,12 @@ export const usersRouter = router({
         });
       }
 
-      const { data: userProfile } = await supabase
-        .from('user_profiles')
-        .select()
-        .eq('id', input.user_id)
-        .single();
-
       const { data: userSalt } = await supabase
         .from('user_salts')
         .select()
         .eq('user_id', input.user_id)
         .single();
 
-      return sha256(userSalt?.salt! + userProfile?.wallet_address!).toString();
+      return userSalt?.salt!;
     }),
 });

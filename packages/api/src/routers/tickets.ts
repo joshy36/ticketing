@@ -268,56 +268,57 @@ export const ticketsRouter = router({
     .input(z.object({ event_id: z.string(), qr_code: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
-      const { data: user } = await supabase
+
+      const { data: scanner } = await supabase
         .from('scanners')
         .select()
         .eq('user_id', ctx.user.id)
         .eq('event_id', input.event_id)
         .single();
-      if (!user) {
+
+      if (!scanner) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Unauthorized scanner!',
         });
       }
 
-      const { data: users } = await supabase
-        .from('user_profiles')
-        .select(`*, user_salts(salt)`);
+      const { data: user } = await supabase
+        .from('user_salts')
+        .select(`*, user_profiles (*)`)
+        .eq('salt', input.qr_code)
+        .single();
 
-      for (let i = 0; i < users?.length!; i++) {
-        const sha = sha256(
-          users![i]?.user_salts[0]?.salt + users![i]?.wallet_address!
-        ).toString();
+      const { data: ticket } = await supabase
+        .from('tickets')
+        .select()
+        .eq('owner_id', user?.user_id!)
+        .eq('event_id', input.event_id)
+        .limit(1)
+        .single();
 
-        if (sha === input.qr_code) {
-          const { data: ticket } = await supabase
-            .from('tickets')
-            .select()
-            .eq('owner_id', users![i]?.id!)
-            .eq('event_id', input.event_id)
-            .limit(1)
-            .single();
-          if (ticket?.scanned) {
-            throw new TRPCError({
-              code: 'INTERNAL_SERVER_ERROR',
-              message: 'Ticket already scanned!',
-            });
-          }
-          const { data } = await supabase
-            .from('tickets')
-            .update({ scanned: true })
-            .eq('id', ticket?.id!)
-            .select()
-            .single();
-          return data;
-        }
+      if (!ticket) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No user found',
+        });
       }
 
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'No user found',
-      });
+      if (ticket?.scanned) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Ticket already scanned!',
+        });
+      }
+
+      const { data } = await supabase
+        .from('tickets')
+        .update({ scanned: true })
+        .eq('id', ticket?.id!)
+        .select()
+        .single();
+
+      return data;
     }),
 
   requestTransferTicketPush: authedProcedure
