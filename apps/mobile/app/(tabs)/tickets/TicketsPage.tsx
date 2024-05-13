@@ -7,35 +7,33 @@ import {
 } from '../../../utils/helpers';
 import { RouterOutputs, trpc } from '../../../utils/trpc';
 import { ListItem } from '@rneui/themed';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import ProfileCard from '../../components/ProfileCard';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { TicketsContext } from './ticketsProvider';
 
 export default function TicketList({
   userProfile,
-  upcomingEvents,
-  upcomingEventsLoading,
 }: {
   userProfile: UserProfile | undefined | null;
-  upcomingEvents: RouterOutputs['getUpcomingEventsForUser'] | undefined;
-  upcomingEventsLoading: boolean;
 }) {
-  const [expanded, setExpanded] = useState<boolean[]>(
-    new Array(upcomingEvents?.length).fill(false)
-  );
-  const { data: tickets, refetch } = trpc.getTicketsForUser.useQuery(
-    {
-      user_id: userProfile?.id!,
-    },
-    { enabled: !!userProfile }
-  );
+  const { upcomingEvents, upcomingEventsLoading, tickets } =
+    useContext(TicketsContext);
+
+  const [expanded, setExpanded] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    if (!upcomingEventsLoading && upcomingEvents?.length) {
+      setExpanded(new Array(upcomingEvents.length).fill(false));
+    }
+  }, [upcomingEventsLoading, upcomingEvents]);
 
   const renderTicketRequest = (pending: any) => {
     if (pending.status === 'accepted') {
       return (
-        <View className="flex flex-col gap-2">
+        <View className="flex flex-col gap-1">
           <Link
             href={`/${pending.to_profile.username}`}
             className="flex flex-col gap-2"
@@ -43,7 +41,7 @@ export default function TicketList({
             <ProfileCard userProfile={pending.to_profile} />
           </Link>
           <View className="flex flex-row items-center gap-2">
-            <Text className="h-2 w-2 rounded-full bg-green-500"></Text>
+            <View className="h-2 w-2 rounded-full bg-green-500"></View>
             <Text className="text-muted-foreground">Accepted</Text>
           </View>
         </View>
@@ -60,37 +58,32 @@ export default function TicketList({
         <View className="flex flex-col gap-2">
           <Link
             href={`/${pending.to_profile.username}`}
-            className="flex flex-row items-center gap-2"
+            className="flex flex-row items-center"
           >
             <ProfileCard userProfile={pending.to_profile} />
           </Link>
 
           <View className="flex flex-row items-center justify-between gap-4">
             <View className="flex flex-row items-center gap-2 ">
-              <Text className="h-2 w-2 rounded-full bg-yellow-500"></Text>
+              <View className="h-2 w-2 rounded-full bg-yellow-500"></View>
               <Text className="text-muted-foreground">Pending</Text>
             </View>
+
+            <TouchableOpacity
+              onPress={() => {
+                router.push(`/tickets/cancel/${pending.ticket_id}`);
+              }}
+            >
+              <View className="flex flex-row items-center p-2 text-yellow-500 border border-yellow-500 rounded-full">
+                {/* <Feather name="x" size={16} /> */}
+                <Text className="text-yellow-500">Cancel</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       );
     }
   };
-
-  const list2 = [
-    {
-      name: 'Item 1',
-      subtitle: 'This is the subtitle for Item 1',
-    },
-    {
-      name: 'Item 2',
-      subtitle: 'This is the subtitle for Item 2',
-    },
-    {
-      name: 'Item 3',
-      subtitle: 'This is the subtitle for Item 3',
-    },
-    // Add more items as needed
-  ];
 
   return (
     <View>
@@ -103,60 +96,62 @@ export default function TicketList({
                 content={
                   <>
                     <ListItem.Content>
-                      <ListItem.Title className="flex flex-row items-center justify-between">
+                      <ListItem.Title>
                         <View className="flex flex-row items-center justify-between">
-                          <View className="flex flex-row gap-4">
-                            <View>
-                              {event?.image && (
-                                <Image
-                                  style={{ borderRadius: 16 }}
-                                  className="h-20 w-20"
-                                  source={{
-                                    uri: replaceLocalhostWithIP(event).image,
-                                  }}
-                                  placeholder={blurhash}
-                                  contentFit="cover"
-                                  transition={1000}
-                                />
-                              )}
-                            </View>
-                            <View>
-                              <Text className="mt-2 text-start text-xl text-accent-foreground text-white">
-                                {event?.name}
-                              </Text>
-                              <Text className="font-sm mt-0.5 text-start text-sm font-light text-muted-foreground">
-                                {`${dateToString(event?.date!)}`}
-                              </Text>
-                              <Text className="font-sm mt-0.5 text-start text-sm font-light text-muted-foreground">
-                                {`${event?.venues.name}`}
-                              </Text>
+                          <View className="flex flex-row items-center justify-between">
+                            <View className="flex flex-row gap-4">
+                              <View>
+                                {event?.image && (
+                                  <Image
+                                    style={{ borderRadius: 16 }}
+                                    className="h-20 w-20"
+                                    source={{
+                                      uri: replaceLocalhostWithIP(event).image,
+                                    }}
+                                    placeholder={blurhash}
+                                    contentFit="cover"
+                                    transition={1000}
+                                  />
+                                )}
+                              </View>
+                              <View>
+                                <Text className="mt-2 text-start text-xl text-accent-foreground text-white">
+                                  {event?.name}
+                                </Text>
+                                <Text className="font-sm mt-0.5 text-start text-sm font-light text-muted-foreground">
+                                  {`${dateToString(event?.date!)}`}
+                                </Text>
+                                <Text className="font-sm mt-0.5 text-start text-sm font-light text-muted-foreground">
+                                  {`${event?.venues.name}`}
+                                </Text>
+                              </View>
                             </View>
                           </View>
-                        </View>
 
-                        {tickets?.tickets
-                          ?.filter((ticket) => ticket.event_id === event.id)
-                          ?.filter(
-                            (ticket) => ticket.owner_id !== userProfile?.id
-                          )
-                          ?.some(
-                            (ticket) =>
-                              !tickets.pushRequestTickets?.find(
-                                (ticketFind) =>
-                                  ticketFind.ticket_id === ticket.id
-                              )
-                          ) && (
-                          <View className="px-2 flex flex-row items-center gap-1 text-red-600 bg-red-800/40 rounded-full justify-center">
-                            <Feather
-                              name="alert-circle"
-                              size={16}
-                              color="red"
-                            />
-                            <Text className="text-red-600 text-sm">
-                              Transfer
-                            </Text>
-                          </View>
-                        )}
+                          {tickets?.tickets
+                            ?.filter((ticket) => ticket.event_id === event.id)
+                            ?.filter(
+                              (ticket) => ticket.owner_id !== userProfile?.id
+                            )
+                            ?.some(
+                              (ticket) =>
+                                !tickets.pushRequestTickets?.find(
+                                  (ticketFind) =>
+                                    ticketFind.ticket_id === ticket.id
+                                )
+                            ) && (
+                            <View className="ml-8 px-2 py-1 flex flex-row items-center text-red-600 bg-red-800/40 rounded-full">
+                              <Feather
+                                name="alert-circle"
+                                size={16}
+                                color="red"
+                              />
+                              <Text className="text-red-600 text-sm pl-1">
+                                Transfer
+                              </Text>
+                            </View>
+                          )}
+                        </View>
                       </ListItem.Title>
                     </ListItem.Content>
                   </>
@@ -202,14 +197,20 @@ export default function TicketList({
                             )
                           )
                         ) : (
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => {
+                              router.push(`/tickets/transfer/${ticket.id}`);
+                            }}
+                          >
                             <View className="flex flex-row border border-red-600 p-2 rounded-full">
                               <Feather
                                 name="alert-circle"
                                 size={16}
                                 color="red"
                               />
-                              <Text className="text-red-600">Transfer</Text>
+                              <Text className="text-red-600 pl-1">
+                                Transfer
+                              </Text>
                             </View>
                           </TouchableOpacity>
                         )}

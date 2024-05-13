@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   ScrollView,
   TextInput,
-  Touchable,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,8 +13,9 @@ import { UserProfile } from 'supabase';
 import { trpc } from '../../../../utils/trpc';
 import ProfileCard from '../../../components/ProfileCard';
 import { SupabaseContext } from '../../../../utils/supabaseProvider';
-import UsersList from '../../../components/UsersLists';
 import { useLocalSearchParams } from 'expo-router';
+import UsersListSingle from '@/app/components/UsersListSingle';
+import { TicketsContext } from '../ticketsProvider';
 
 export default function Modal() {
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
@@ -23,36 +23,39 @@ export default function Modal() {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>('');
-  const supabaseContext = useContext(SupabaseContext);
-  const { user } = supabaseContext;
+  const { userProfile } = useContext(SupabaseContext);
+  const { refetchTickets } = useContext(TicketsContext);
   const { id } = useLocalSearchParams();
-
-  console.log('id:', id);
 
   const handleInputChange = (input: string) => {
     setUserSearch(input);
   };
 
-  const { data: users, isLoading: usersLoading } = trpc.getAllUsers.useQuery();
+  const {
+    data: users,
+    isLoading: usersLoading,
+    refetch: refetchUsers,
+  } = trpc.getTotalFriendsForUser.useQuery({
+    username: userProfile?.username!,
+  });
 
-  const { data: userProfile, isLoading: profileLoading } =
-    trpc.getUserProfile.useQuery(
-      {
-        id: user?.id!,
-      },
-      { enabled: !!user }
-    );
+  const { data: selectedTicket } = trpc.getTicketById.useQuery({
+    id: id as string,
+  });
 
-  const transferTicket = trpc.transferTicketDatabase.useMutation({
-    onSettled(data, error) {
+  const requestTransfer = trpc.requestTransferTicketPush.useMutation({
+    onSettled: async (data, error) => {
+      await refetchTickets();
+      await refetchUsers();
       if (error) {
-        // toast.error('Error transferring ticket');
-        console.error('Error transferring ticket:', error);
-        setIsLoading(false);
+        // toast.error(`Error requesting transfer: ${error.message}`);
+        console.error('Error requesting transfer: ', error);
       } else {
-        // toast.success('Ticket transferred!');
-        setIsLoading(false);
+        // toast.success('Ticket transfer request sent!');
       }
+      setIsLoading(false);
+      setSelectedUsers(null);
+      router.back();
     },
   });
 
@@ -61,15 +64,13 @@ export default function Modal() {
   const isPresented = router.canGoBack();
   return (
     <View className="flex-1 justify-center bg-black pt-4">
-      {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
       {!isPresented && (
         <Link href="../" className="text-white">
-          Dismiss
+          <Text className="text-white"> Dismiss</Text>
         </Link>
       )}
       {/* Native modals have dark backgrounds on iOS, set the status bar to light content. */}
       <StatusBar style="light" />
-
       <View className="flex-1">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Text className="text-center text-muted-foreground">
@@ -98,25 +99,35 @@ export default function Modal() {
               className="w-28 rounded-full bg-white p-3 items-center justify-center"
               onPress={() => {
                 setIsLoading(true);
-                transferTicket.mutate({
-                  user_id: selectedUsers![0]!.id,
-                  ticket_id: id! as string,
+                requestTransfer.mutate({
+                  to: selectedUsers![0]!.id,
+                  ticket_id: id as string,
                 });
-
-                setSelectedUsers(null);
-                router.back();
               }}
             >
-              <Text className="font-semibold">Transfer</Text>
-              {isLoading && <ActivityIndicator className="pr-2" />}
+              <View className="flex flex-row">
+                {isLoading && <ActivityIndicator className="pr-2" />}
+                <Text className="font-semibold">Transfer</Text>
+              </View>
             </TouchableOpacity>
           </View>
 
-          <UsersList
-            users={users}
+          <UsersListSingle
+            users={users
+              ?.filter(
+                (user) =>
+                  !user.tickets.some(
+                    (ticket) => ticket.event_id === selectedTicket?.event_id
+                  ) &&
+                  !user.ticket_transfer_push_requests.some(
+                    (request) =>
+                      request.status === 'pending' &&
+                      request?.tickets?.event_id === selectedTicket?.event_id
+                  )
+              )
+              .map((user) => user.profile)}
             usersLoading={usersLoading}
             userProfile={userProfile!}
-            maxUsers={1}
             userSearch={userSearch}
             selectedUsers={selectedUsers}
             setSelectedUsers={setSelectedUsers}

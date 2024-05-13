@@ -13,7 +13,7 @@ import { UserProfile } from 'supabase';
 import { trpc } from '../../../utils/trpc';
 import ProfileCard from '../../components/ProfileCard';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
-import UsersList from '../../components/UsersLists';
+import UsersList from '../../components/UsersList';
 
 export default function Modal() {
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(

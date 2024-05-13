@@ -10,24 +10,19 @@ import { useCallback, useContext, useState } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import TicketsPage from './TicketsPage';
 import { Link } from 'expo-router';
+import { TicketsContext } from './ticketsProvider';
 
 const Tickets = () => {
   const [refreshing, setRefreshing] = useState(false);
 
-  const supabaseContext = useContext(SupabaseContext);
-  const { session, user, userProfile } = supabaseContext;
+  const { session, user, userProfile } = useContext(SupabaseContext);
+  const { upcomingEvents, refetchTickets, refetchUpcomingEvents } =
+    useContext(TicketsContext);
 
-  const {
-    data: upcomingEvents,
-    isLoading: upcomingEventsLoading,
-    refetch,
-  } = trpc.getUpcomingEventsForUser.useQuery({
-    user_id: user?.id!,
-  });
-
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    refetch().then(() => {
+    await refetchUpcomingEvents();
+    refetchTickets().then(() => {
       setRefreshing(false);
     });
   }, []);
@@ -57,11 +52,7 @@ const Tickets = () => {
                 </View>
               )}
             </View>
-            <TicketsPage
-              userProfile={userProfile}
-              upcomingEvents={upcomingEvents}
-              upcomingEventsLoading={upcomingEventsLoading}
-            />
+            <TicketsPage userProfile={userProfile} />
           </ScrollView>
           <View className="-bottom-10 absolute w-full border-t border-zinc-800">
             <Link href="/tickets/scanIn" className="flex w-full pt-4">

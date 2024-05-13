@@ -1,5 +1,3 @@
-'use client';
-
 import { RouterOutputs, trpc } from '../../../utils/trpc';
 import React from 'react';
 import {

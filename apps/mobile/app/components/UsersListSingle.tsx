@@ -1,18 +1,17 @@
 import { Check } from 'lucide-react';
 import ProfileCard from './ProfileCard';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View, Text } from 'react-native';
 import { RouterOutputs } from 'api';
 import { UserProfile } from 'supabase';
 import { Dispatch, SetStateAction } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 // import { toast } from 'sonner';
 
-export default function UsersList({
+export default function UsersListSingle({
   users,
   usersLoading,
   userProfile,
   userSearch,
-  maxUsers,
   selectedUsers,
   setSelectedUsers,
 }: {
@@ -20,16 +19,22 @@ export default function UsersList({
   usersLoading: boolean;
   userProfile: UserProfile;
   userSearch: string;
-  maxUsers: number;
   selectedUsers: UserProfile[] | null;
   setSelectedUsers: Dispatch<SetStateAction<UserProfile[] | null>>;
 }) {
   return (
     <View>
       {usersLoading ? (
-        <View>Loading...</View>
+        <View>
+          <Text className="text-white">Loading...</Text>
+        </View>
       ) : (
         <ScrollView>
+          {users?.length === 0 && (
+            <Text className="pt-8 text-center text-sm font-light text-muted-foreground">
+              No users found.
+            </Text>
+          )}
           {users
             ?.filter(
               (user) =>
@@ -52,17 +57,15 @@ export default function UsersList({
               return (
                 <TouchableOpacity
                   key={user.id}
-                  className="my-1 flex w-full justify-between border-b border-zinc-800 px-2 pt-2 pb-4"
+                  className=" flex w-full justify-between border-b border-zinc-800 px-2 py-2"
                   onPress={() => {
                     // if user is not selected add them
                     if (!selectedUsers?.find((u) => u.id === user.id)) {
-                      if (selectedUsers?.length === maxUsers) {
-                        // toast.error('Maximum users reached', {
-                        //   description: `Maximum of ${maxUsers} users.`,
-                        // });
-                        return;
+                      if (selectedUsers?.length === 1) {
+                        setSelectedUsers([user]);
+                      } else {
+                        setSelectedUsers([...(selectedUsers || []), user]);
                       }
-                      setSelectedUsers([...(selectedUsers || []), user]);
                     } else {
                       // if user is selected remove them
                       setSelectedUsers(
