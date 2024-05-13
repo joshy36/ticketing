@@ -300,7 +300,7 @@ export const ticketsRouter = router({
       if (!ticket) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'No user found',
+          message: 'User does not have a ticket to this event!',
         });
       }
 
