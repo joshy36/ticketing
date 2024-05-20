@@ -16,6 +16,7 @@ type TicketsContextProps = {
   numberOfTicketsNeedToTransfer: number;
   refetchUpcomingEvents: () => Promise<any>;
   refetchTickets: () => Promise<any>;
+  refetchPush: () => Promise<any>;
 };
 
 export const TicketsContext = createContext<TicketsContextProps>({
@@ -26,6 +27,7 @@ export const TicketsContext = createContext<TicketsContextProps>({
   numberOfTicketsNeedToTransfer: 0,
   refetchUpcomingEvents: async () => {},
   refetchTickets: async () => {},
+  refetchPush: async () => {},
 });
 
 export const TicketsProvider = ({ children }: TicketsProviderProps) => {
@@ -77,6 +79,7 @@ export const TicketsProvider = ({ children }: TicketsProviderProps) => {
         numberOfTicketsNeedToTransfer,
         refetchUpcomingEvents,
         refetchTickets,
+        refetchPush,
       }}
     >
       {children}

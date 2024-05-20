@@ -13,14 +13,20 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import { useContext, useEffect, useState } from 'react';
 import { TicketsContext } from '../../../providers/ticketsProvider';
+import AcceptTickets from './AcceptTickets';
 
 export default function TicketList({
   userProfile,
 }: {
   userProfile: UserProfile | undefined | null;
 }) {
-  const { upcomingEvents, upcomingEventsLoading, tickets } =
-    useContext(TicketsContext);
+  const {
+    upcomingEvents,
+    upcomingEventsLoading,
+    tickets,
+    pendingPushRequsts,
+    refetchPush,
+  } = useContext(TicketsContext);
 
   const [expanded, setExpanded] = useState<boolean[]>([]);
 
@@ -123,6 +129,10 @@ export default function TicketList({
     <View>
       {upcomingEvents?.length != 0 ? (
         <View>
+          <AcceptTickets
+            pendingPushRequsts={pendingPushRequsts}
+            refetchPush={refetchPush}
+          />
           {upcomingEvents?.map((event, index) => (
             <View key={event?.id} className="border-b border-zinc-800">
               <ListItem.Accordion

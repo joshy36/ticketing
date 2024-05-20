@@ -16,12 +16,13 @@ const Tickets = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const { session, user, userProfile } = useContext(SupabaseContext);
-  const { upcomingEvents, refetchTickets, refetchUpcomingEvents } =
+  const { upcomingEvents, refetchTickets, refetchUpcomingEvents, refetchPush } =
     useContext(TicketsContext);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetchUpcomingEvents();
+    await refetchPush();
     refetchTickets().then(() => {
       setRefreshing(false);
     });

@@ -162,15 +162,29 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size, focused }) => (
             <View>
               {userProfile ? (
-                <Image
-                  className="h-8 w-8 rounded-full flex justify-center items-center"
-                  source={{
-                    uri: replaceLocalhostWithIP(userProfile).profile_image,
-                  }}
-                  placeholder={blurhash}
-                  contentFit="cover"
-                  transition={1000}
-                />
+                <View>
+                  {focused ? (
+                    <Image
+                      className="h-8 w-8 rounded-full flex justify-center items-center border-2 border-white"
+                      source={{
+                        uri: replaceLocalhostWithIP(userProfile).profile_image,
+                      }}
+                      placeholder={blurhash}
+                      contentFit="cover"
+                      transition={1000}
+                    />
+                  ) : (
+                    <Image
+                      className="h-8 w-8 rounded-full flex justify-center items-center"
+                      source={{
+                        uri: replaceLocalhostWithIP(userProfile).profile_image,
+                      }}
+                      placeholder={blurhash}
+                      contentFit="cover"
+                      transition={1000}
+                    />
+                  )}
+                </View>
               ) : (
                 <Ionicons
                   name={focused ? 'person-circle' : 'person-circle-outline'}
