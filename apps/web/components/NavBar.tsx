@@ -37,6 +37,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { trpc } from '../app/_trpc/client';
 import { FriendRequestContext } from '../providers/friendRequestsProvider';
+import { TicketsContext } from '../providers/ticketsProvider';
 
 export const createComponents: {
   title: string;
@@ -77,6 +78,8 @@ export default function NavBar({
     setNumberOfUnreadMessagesPerChat,
   } = useContext(MessagesContext);
   const { friendRequests } = useContext(FriendRequestContext);
+  const { pendingPushRequsts, numberOfTicketsNeedToTransfer } =
+    useContext(TicketsContext);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -95,10 +98,6 @@ export default function NavBar({
     {
       title: 'Explore Events',
       href: '/event/list',
-    },
-    {
-      title: 'Upcoming Events',
-      href: '/tickets',
     },
   ];
 
@@ -153,6 +152,26 @@ export default function NavBar({
                 )}
               </div>
             ))}
+            {user && (
+              <NavigationMenuItem>
+                <Link href={`/tickets`} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <div className='flex flex-row items-center gap-2'>
+                      <p>Upcoming Events</p>
+                      {pendingPushRequsts &&
+                        pendingPushRequsts?.length +
+                          numberOfTicketsNeedToTransfer >
+                          0 && (
+                          <span className='flex h-4 w-4 items-center justify-center rounded-full bg-red-700 text-xs font-light'>
+                            {pendingPushRequsts?.length +
+                              numberOfTicketsNeedToTransfer}
+                          </span>
+                        )}
+                    </div>
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            )}
             {user && (
               <NavigationMenuItem>
                 <Link

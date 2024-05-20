@@ -17,6 +17,7 @@ import { useContext } from 'react';
 import { MessagesContext } from '../providers/messagesProvider';
 import { trpc } from '../app/_trpc/client';
 import { FriendRequestContext } from '../providers/friendRequestsProvider';
+import { TicketsContext } from '../providers/ticketsProvider';
 
 export function MobileNav({
   user,
@@ -30,6 +31,8 @@ export function MobileNav({
   const [open, setOpen] = React.useState(false);
   const { unreadMessages } = useContext(MessagesContext);
   const { friendRequests } = useContext(FriendRequestContext);
+  const { pendingPushRequsts, numberOfTicketsNeedToTransfer } =
+    useContext(TicketsContext);
 
   const mainComponents: {
     title: string;
@@ -43,23 +46,29 @@ export function MobileNav({
       title: 'Explore Events',
       href: '/event/list',
     },
-    {
-      title: 'Upcoming Events',
-      href: '/tickets',
-    },
   ];
 
   return (
     <div className='fixed top-0 z-40 flex w-full items-center bg-black/50 p-2 backdrop-blur-md transition-colors duration-500 md:hidden'>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button
-            variant='ghost'
-            className='mr-2 pr-4 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden'
-          >
-            <HamburgerMenuIcon className='h-5 w-5' />
-            <span className='sr-only'>Toggle Menu</span>
-          </Button>
+          <div className='relative'>
+            <Button
+              variant='ghost'
+              className='mr-2 pr-4 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden'
+            >
+              <HamburgerMenuIcon className='h-5 w-5' />
+
+              <span className='sr-only'>Toggle Menu</span>
+            </Button>
+            {pendingPushRequsts &&
+              pendingPushRequsts?.length + numberOfTicketsNeedToTransfer >
+                0 && (
+                <span className='absolute right-2 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-700 text-xs font-light'>
+                  {pendingPushRequsts?.length + numberOfTicketsNeedToTransfer}
+                </span>
+              )}
+          </div>
         </SheetTrigger>
         <SheetContent side='left' className='pr-0'>
           {/* <MobileLink
@@ -95,6 +104,21 @@ export function MobileNav({
               >
                 <div className='flex flex-row items-center gap-2 pb-3'>
                   <p>Scan In</p>
+                </div>
+              </MobileLink>
+            )}
+            {user && (
+              <MobileLink href={`/tickets`} onOpenChange={setOpen}>
+                <div className='flex flex-row items-center gap-2 pb-3'>
+                  <p>Upcoming Events</p>
+                  {pendingPushRequsts &&
+                    pendingPushRequsts?.length + numberOfTicketsNeedToTransfer >
+                      0 && (
+                      <span className='flex h-4 w-4 items-center justify-center rounded-full bg-red-700 text-xs font-light'>
+                        {pendingPushRequsts?.length +
+                          numberOfTicketsNeedToTransfer}
+                      </span>
+                    )}
                 </div>
               </MobileLink>
             )}

@@ -11,6 +11,7 @@ import { MobileNav } from '~/components/MobileNav';
 import { Metadata } from 'next';
 import { MessagesProvider } from '~/providers/messagesProvider';
 import { FriendRequestProvider } from '~/providers/friendRequestsProvider';
+import { TicketsProvider } from '~/providers/ticketsProvider';
 
 import './globals.css';
 
@@ -55,24 +56,26 @@ export default async function RootLayout({
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
             <MessagesProvider userProfile={userProfile}>
-              <FriendRequestProvider>
-                <div className='pb-16'>
-                  <NavBar
+              <TicketsProvider userProfile={userProfile}>
+                <FriendRequestProvider>
+                  <div className='pb-16'>
+                    <NavBar
+                      user={session?.user}
+                      userProfile={userProfile!}
+                      userOrg={userOrg}
+                    />
+                  </div>
+                  <MobileNav
                     user={session?.user}
                     userProfile={userProfile!}
                     userOrg={userOrg}
                   />
-                </div>
-                <MobileNav
-                  user={session?.user}
-                  userProfile={userProfile!}
-                  userOrg={userOrg}
-                />
-                <div>{children}</div>
-                <Toaster richColors />
-                <SpeedInsights />
-                <Analytics />
-              </FriendRequestProvider>
+                  <div>{children}</div>
+                  <Toaster richColors />
+                  <SpeedInsights />
+                  <Analytics />
+                </FriendRequestProvider>
+              </TicketsProvider>
             </MessagesProvider>
           </ThemeProvider>
         </Provider>
