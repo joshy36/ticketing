@@ -53,13 +53,6 @@ export default async function ProfileView({
 
   const { data: user } = await supabase.auth.getUser();
 
-  console.log('user:', user);
-
-  const relationship = await serverClient.getFriendshipStatus.query({
-    currentUserId: user?.user?.id,
-    otherUser: params.username,
-  });
-
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-24'>
       <div className='flex flex-col gap-4'>
@@ -105,8 +98,8 @@ export default async function ProfileView({
           )}
           {user.user && user.user?.id !== userProfile?.id && (
             <FriendRequest
-              userProfile={userProfile}
-              relationship={relationship}
+              currentUserId={user.user?.id!}
+              otherUserProfile={userProfile}
             />
           )}
         </div>

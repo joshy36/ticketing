@@ -50,6 +50,10 @@ export const friendsRouter = router({
             .limit(1)
             .single();
 
+          console.log('input.currentUserId', input.currentUserId);
+          console.log('otherUserProfile?.id!', otherUserProfile?.id!);
+          console.log('friendRequests:', friendRequests);
+
           if (friendRequests?.status === 'pending') {
             return 'requested';
           } else if (friendRequests?.status === 'rejected') {
