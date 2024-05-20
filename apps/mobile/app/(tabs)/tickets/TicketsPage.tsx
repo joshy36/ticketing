@@ -33,16 +33,33 @@ export default function TicketList({
   const renderTicketRequest = (pending: any) => {
     if (pending.status === 'accepted') {
       return (
-        <View className="flex flex-col gap-1">
-          <Link
-            href={`/${pending.to_profile.username}`}
-            className="flex flex-col gap-2"
-          >
-            <ProfileCard userProfile={pending.to_profile} />
-          </Link>
-          <View className="flex flex-row items-center gap-2">
-            <View className="h-2 w-2 rounded-full bg-green-500"></View>
-            <Text className="text-muted-foreground">Accepted</Text>
+        <View className="flex flex-row items-center gap-5">
+          <View>
+            {pending.to_profile.profile_image ? (
+              <Image
+                className={`h-12 w-12 rounded-full flex justify-center items-center`}
+                source={{
+                  uri: replaceLocalhostWithIP(pending.to_profile).profile_image,
+                }}
+                placeholder={blurhash}
+                contentFit="cover"
+                transition={1000}
+              />
+            ) : (
+              <View></View>
+            )}
+          </View>
+
+          <View className="flex max-w-[225px] flex-col justify-between">
+            <View className="flex">
+              <Text className="font-medium text-base text-white">
+                {pending.to_profile.first_name} {pending.to_profile.last_name}
+              </Text>
+            </View>
+            <View className="flex flex-row items-center">
+              <View className="h-2 w-2 rounded-full bg-green-500"></View>
+              <Text className="text-muted-foreground pl-2">Accepted</Text>
+            </View>
           </View>
         </View>
       );
@@ -55,31 +72,48 @@ export default function TicketList({
       );
     } else if (pending.status === 'pending') {
       return (
-        <View className="flex flex-col gap-2">
-          <Link
-            href={`/${pending.to_profile.username}`}
-            className="flex flex-row items-center"
-          >
-            <ProfileCard userProfile={pending.to_profile} />
-          </Link>
-
-          <View className="flex flex-row items-center justify-between gap-4">
-            <View className="flex flex-row items-center gap-2 ">
-              <View className="h-2 w-2 rounded-full bg-yellow-500"></View>
-              <Text className="text-muted-foreground">Pending</Text>
+        <View className="flex flex-col">
+          <View className="flex flex-row items-center gap-5 pb-2">
+            <View>
+              {pending.to_profile.profile_image ? (
+                <Image
+                  className={`h-12 w-12 rounded-full flex justify-center items-center`}
+                  source={{
+                    uri: replaceLocalhostWithIP(pending.to_profile)
+                      .profile_image,
+                  }}
+                  placeholder={blurhash}
+                  contentFit="cover"
+                  transition={1000}
+                />
+              ) : (
+                <View></View>
+              )}
             </View>
 
-            <TouchableOpacity
-              onPress={() => {
-                router.push(`/tickets/cancel/${pending.ticket_id}`);
-              }}
-            >
-              <View className="flex flex-row items-center p-2 text-yellow-500 border border-yellow-500 rounded-full">
-                {/* <Feather name="x" size={16} /> */}
-                <Text className="text-yellow-500">Cancel</Text>
+            <View className="flex max-w-[225px] flex-col justify-between">
+              <View className="flex">
+                <Text className="font-medium text-base text-white">
+                  {pending.to_profile.first_name} {pending.to_profile.last_name}
+                </Text>
               </View>
-            </TouchableOpacity>
+              <View className="flex flex-row items-center">
+                <View className="h-2 w-2 rounded-full bg-yellow-500"></View>
+                <Text className="text-muted-foreground pl-2">Pending</Text>
+              </View>
+            </View>
           </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              router.push(`/tickets/cancel/${pending.ticket_id}`);
+            }}
+          >
+            <View className="flex flex-row items-center justify-center p-2 text-yellow-500 border border-zinc-800 rounded-full">
+              <Feather name="x" size={16} color="#eab308" />
+              <Text className="text-yellow-500 pl-2">Cancel</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       );
     }
