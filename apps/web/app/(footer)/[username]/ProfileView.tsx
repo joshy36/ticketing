@@ -20,6 +20,7 @@ import FriendRequest from './FriendRequest';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { notFound } from 'next/navigation';
 import { Wallet } from 'lucide-react';
+import FriendsView from './FriendsView';
 
 export default async function ProfileView({
   params,
@@ -85,14 +86,7 @@ export default async function ProfileView({
               <CopyWallet userProfile={userProfile} />
             )}
           </div>
-          <div className='flex flex-row'>
-            <p className='md:text-md pb-4 text-sm font-light text-muted-foreground'>{`@${userProfile?.username} ·`}</p>
-            {friendCount === 1 ? (
-              <p className='md:text-md ml-1 pb-4 text-sm font-semibold text-muted-foreground hover:underline'>{`${friendCount} friend`}</p>
-            ) : (
-              <p className='md:text-md ml-1 pb-4 text-sm font-semibold text-muted-foreground hover:underline'>{`${friendCount} friends`}</p>
-            )}
-          </div>
+          <FriendsView userProfile={userProfile} friendCount={friendCount} />
           {userProfile?.bio && (
             <p className='font-light'>{`${userProfile?.bio}`}</p>
           )}
