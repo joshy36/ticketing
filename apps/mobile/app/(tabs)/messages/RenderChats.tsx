@@ -90,80 +90,83 @@ export default function RenderChats({
       {chats?.chats?.length === 0 && (
         <p className="pt-8 text-center">No messages yet.</p>
       )}
-      {chatsWithTimestamps?.map((chat, index) => {
-        return (
-          <Link href={`/messages/${chat.id}`} key={chat.id} asChild>
-            <TouchableOpacity
-              className={`flex flex-row items-center justify-between w-full gap-2 border-b border-zinc-800 px-4 py-4`}
-              onPress={() => {
-                console.log(
-                  'unred2: ',
-                  numberOfUnreadMessagesPerChat![chat.id]?.unread
-                );
-                console.log('unred: ', unreadMessages);
-                setUnreadMessages(0);
-                setNumberOfUnreadMessagesPerChat((prevState) => ({
-                  ...prevState,
-                  [chat.id]: { unread: 0 },
-                }));
+      <View className="pb-24">
+        {chatsWithTimestamps?.map((chat, index) => {
+          return (
+            <Link href={`/messages/${chat.id}`} key={chat.id} asChild>
+              <TouchableOpacity
+                className={`flex flex-row items-center justify-between w-full gap-2 border-b border-zinc-800 px-4 py-4`}
+                onPress={() => {
+                  console.log(
+                    'unred2: ',
+                    numberOfUnreadMessagesPerChat![chat.id]?.unread
+                  );
+                  console.log('unred: ', unreadMessages);
+                  setUnreadMessages(0);
+                  setNumberOfUnreadMessagesPerChat((prevState) => ({
+                    ...prevState,
+                    [chat.id]: { unread: 0 },
+                  }));
 
-                console.log('unred3: ', unreadMessages);
+                  console.log('unred3: ', unreadMessages);
 
-                //   router.push(`/messages/${chat.id}`);
-              }}
-            >
-              <View>
-                {chat?.chat_type === 'dm' && (
-                  <ChatProfileCard
-                    userProfile={getRandomUserFromChat(index)!}
-                    mostRecentMessage={
-                      mostRecentMessageByChat
-                        ? mostRecentMessageByChat[chat.id]?.message
-                        : null
-                    }
-                  />
-                )}
-                {chat?.chat_type === 'group' && (
-                  <GroupCard
-                    userProfile={userProfile}
-                    chatMembers={chat?.chat_members.map(
-                      (member) => member.user_profiles!
-                    )}
-                    mostRecentMessage={
-                      mostRecentMessageByChat
-                        ? mostRecentMessageByChat[chat.id]?.message
-                        : null
-                    }
-                  />
-                )}
-                {chat.chat_type === 'organization' && (
-                  <OrgCard
-                    artist={
-                      chat?.chat_members.find((member) => member.artists)
-                        ?.artists
-                    }
-                    venue={
-                      chat?.chat_members.find((member) => member.venues)?.venues
-                    }
-                    mostRecentMessage={
-                      mostRecentMessageByChat
-                        ? mostRecentMessageByChat[chat.id]?.message
-                        : null
-                    }
-                  />
-                )}
-              </View>
-              {numberOfUnreadMessagesPerChat &&
-                numberOfUnreadMessagesPerChat[chat.id] &&
-                numberOfUnreadMessagesPerChat[chat.id]?.unread! > 0 && (
-                  <View className="flex pr-2">
-                    <View className="h-3 w-3 rounded-full bg-blue-700"></View>
-                  </View>
-                )}
-            </TouchableOpacity>
-          </Link>
-        );
-      })}
+                  //   router.push(`/messages/${chat.id}`);
+                }}
+              >
+                <View>
+                  {chat?.chat_type === 'dm' && (
+                    <ChatProfileCard
+                      userProfile={getRandomUserFromChat(index)!}
+                      mostRecentMessage={
+                        mostRecentMessageByChat
+                          ? mostRecentMessageByChat[chat.id]?.message
+                          : null
+                      }
+                    />
+                  )}
+                  {chat?.chat_type === 'group' && (
+                    <GroupCard
+                      userProfile={userProfile}
+                      chatMembers={chat?.chat_members.map(
+                        (member) => member.user_profiles!
+                      )}
+                      mostRecentMessage={
+                        mostRecentMessageByChat
+                          ? mostRecentMessageByChat[chat.id]?.message
+                          : null
+                      }
+                    />
+                  )}
+                  {chat.chat_type === 'organization' && (
+                    <OrgCard
+                      artist={
+                        chat?.chat_members.find((member) => member.artists)
+                          ?.artists
+                      }
+                      venue={
+                        chat?.chat_members.find((member) => member.venues)
+                          ?.venues
+                      }
+                      mostRecentMessage={
+                        mostRecentMessageByChat
+                          ? mostRecentMessageByChat[chat.id]?.message
+                          : null
+                      }
+                    />
+                  )}
+                </View>
+                {numberOfUnreadMessagesPerChat &&
+                  numberOfUnreadMessagesPerChat[chat.id] &&
+                  numberOfUnreadMessagesPerChat[chat.id]?.unread! > 0 && (
+                    <View className="flex pr-2">
+                      <View className="h-3 w-3 rounded-full bg-blue-700"></View>
+                    </View>
+                  )}
+              </TouchableOpacity>
+            </Link>
+          );
+        })}
+      </View>
     </ScrollView>
   );
 }

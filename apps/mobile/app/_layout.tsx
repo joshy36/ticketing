@@ -14,6 +14,13 @@ export default function RootLayout() {
             <FriendRequestProvider>
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="confirmation"
+                  options={{
+                    headerShown: false,
+                    presentation: 'modal',
+                  }}
+                />
               </Stack>
             </FriendRequestProvider>
           </MessagesProvider>

@@ -104,7 +104,7 @@ export const MessagesProvider = ({
     //   setCurrentChat(null);
     // }
     setCurrentChat(url);
-    console.log('current: ', currentChat);
+    // console.log('current: ', currentChat);
   }, [url]);
 
   useEffect(() => {

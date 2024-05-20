@@ -3,7 +3,6 @@ import { Alert, TouchableOpacity, View, Text } from 'react-native';
 import { router, useNavigation } from 'expo-router';
 import { StackActions } from '@react-navigation/native';
 import ConfettiCannon from 'react-native-confetti-cannon';
-import { useState } from 'react';
 
 export default function CheckoutScreen({
   cartInfo,
@@ -47,12 +46,17 @@ export default function CheckoutScreen({
       }
     } else {
       // confetti();
+
       // wait 1 sec before redirecting
       await new Promise((resolve) => setTimeout(resolve, 1000));
       // router.replace(`/`);
       navigation.dispatch(StackActions.popToTop());
       // router.replace(`/tickets/${eventId}`);
-      router.replace(`/tickets`);
+      // router.replace(`/tickets`);
+      router.push({
+        pathname: '/confirmation',
+        params: { paymentIntent: paymentIntent },
+      });
     }
   };
 

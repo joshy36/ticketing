@@ -9,10 +9,10 @@ const Home = () => {
   const { data: events, isLoading: eventsLoading } = trpc.getEvents.useQuery();
 
   return (
-    <View className="flex-1 justify-center bg-black pb-24">
+    <View className="flex-1 justify-center bg-black">
       {/* <Text className="text-white text-3xl font-bold">Upcoming Events</Text> */}
       <ScrollView>
-        <View>
+        <View className="pb-24">
           {eventsLoading ? (
             <Text className="text-white">Loading...</Text>
           ) : (

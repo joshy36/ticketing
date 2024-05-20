@@ -69,169 +69,171 @@ const Search = () => {
         value={searchQuery}
       />
       <ScrollView>
-        {filteredEvents?.length === 0 &&
-        filteredArtists?.length === 0 &&
-        filteredVenues?.length === 0 &&
-        filteredUsers?.length === 0 &&
-        searchQuery.length !== 0 ? (
-          <Text className="text-white text-2xl text-center pt-24 ">
-            No results found.
-          </Text>
-        ) : null}
-
-        {filteredEvents?.length !== 0 && (
-          <View>
-            <Text className="text-white text-xl font-bold">Events</Text>
-            {filteredEvents?.map((event) => (
-              <View className="" key={event.id}>
-                <Link href={`/home/${event.id}`}>
-                  <View className="flex flex-row items-center py-3 ">
-                    <View>
-                      <Image
-                        style={{ borderRadius: 16 }}
-                        className="h-20 w-20"
-                        source={{ uri: replaceLocalhostWithIP(event).image }}
-                        placeholder={blurhash}
-                        contentFit="cover"
-                        transition={1000}
-                      />
-                    </View>
-                    <View className="flex flex-col">
-                      <View>
-                        <Text className="text-white pl-2 text-2xl text-bold">
-                          {event.name}
-                        </Text>
-                      </View>
-                      <View>
-                        <Text className="text-muted-foreground pl-2">
-                          {dateToString(event.date)}
-                        </Text>
-                      </View>
-                      <View>
-                        <Text className="text-muted-foreground pl-2">
-                          {event.venues?.name}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </Link>
-              </View>
-            ))}
-          </View>
-        )}
-        {searchQuery.length === 0 && (
-          <View>
-            <Text className="text-white text-xl font-bold">
-              Recommended Events
+        <View className="pb-24">
+          {filteredEvents?.length === 0 &&
+          filteredArtists?.length === 0 &&
+          filteredVenues?.length === 0 &&
+          filteredUsers?.length === 0 &&
+          searchQuery.length !== 0 ? (
+            <Text className="text-white text-2xl text-center pt-24 ">
+              No results found.
             </Text>
-            {events?.map((event) => (
-              <View className="" key={event.id}>
-                <Link href={`/home/${event.id}`}>
-                  <View className="flex flex-row items-center py-3 ">
+          ) : null}
+
+          {filteredEvents?.length !== 0 && (
+            <View>
+              <Text className="text-white text-xl font-bold">Events</Text>
+              {filteredEvents?.map((event) => (
+                <View className="" key={event.id}>
+                  <Link href={`/home/${event.id}`}>
+                    <View className="flex flex-row items-center py-3 ">
+                      <View>
+                        <Image
+                          style={{ borderRadius: 16 }}
+                          className="h-20 w-20"
+                          source={{ uri: replaceLocalhostWithIP(event).image }}
+                          placeholder={blurhash}
+                          contentFit="cover"
+                          transition={1000}
+                        />
+                      </View>
+                      <View className="flex flex-col">
+                        <View>
+                          <Text className="text-white pl-2 text-2xl text-bold">
+                            {event.name}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text className="text-muted-foreground pl-2">
+                            {dateToString(event.date)}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text className="text-muted-foreground pl-2">
+                            {event.venues?.name}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </Link>
+                </View>
+              ))}
+            </View>
+          )}
+          {searchQuery.length === 0 && (
+            <View>
+              <Text className="text-white text-xl font-bold">
+                Recommended Events
+              </Text>
+              {events?.map((event) => (
+                <View className="" key={event.id}>
+                  <Link href={`/home/${event.id}`}>
+                    <View className="flex flex-row items-center py-3 ">
+                      <View>
+                        <Image
+                          style={{ borderRadius: 16 }}
+                          className="h-20 w-20"
+                          source={{ uri: replaceLocalhostWithIP(event).image }}
+                          placeholder={blurhash}
+                          contentFit="cover"
+                          transition={1000}
+                        />
+                      </View>
+                      <View className="flex flex-col">
+                        <View>
+                          <Text className="text-white pl-2 text-2xl text-bold">
+                            {event.name}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text className="text-muted-foreground pl-2">
+                            {dateToString(event.date)}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text className="text-muted-foreground pl-2">
+                            {event.venues?.name}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </Link>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {filteredArtists?.length !== 0 && (
+            <Text className="text-white text-xl font-bold">Artists</Text>
+          )}
+          {filteredArtists?.map((artist) => (
+            <Text key={artist.id} className="text-white text-xl">
+              <Link href={`/home/artist/${artist.id}`}>
+                <View className="flex flex-row items-center py-3 ">
+                  <View>
+                    <Image
+                      style={{ borderRadius: 16 }}
+                      className="h-20 w-20"
+                      source={{ uri: artist.image! }}
+                      placeholder={blurhash}
+                      contentFit="cover"
+                      transition={1000}
+                    />
+                  </View>
+                  <View className="flex flex-col">
                     <View>
-                      <Image
-                        style={{ borderRadius: 16 }}
-                        className="h-20 w-20"
-                        source={{ uri: replaceLocalhostWithIP(event).image }}
-                        placeholder={blurhash}
-                        contentFit="cover"
-                        transition={1000}
-                      />
-                    </View>
-                    <View className="flex flex-col">
-                      <View>
-                        <Text className="text-white pl-2 text-2xl text-bold">
-                          {event.name}
-                        </Text>
-                      </View>
-                      <View>
-                        <Text className="text-muted-foreground pl-2">
-                          {dateToString(event.date)}
-                        </Text>
-                      </View>
-                      <View>
-                        <Text className="text-muted-foreground pl-2">
-                          {event.venues?.name}
-                        </Text>
-                      </View>
+                      <Text className="text-white text-xl pl-2">
+                        {artist.name}
+                      </Text>
                     </View>
                   </View>
-                </Link>
-              </View>
-            ))}
-          </View>
-        )}
-
-        {filteredArtists?.length !== 0 && (
-          <Text className="text-white text-xl font-bold">Artists</Text>
-        )}
-        {filteredArtists?.map((artist) => (
-          <Text key={artist.id} className="text-white text-xl">
-            <Link href={`/home/artist/${artist.id}`}>
-              <View className="flex flex-row items-center py-3 ">
-                <View>
-                  <Image
-                    style={{ borderRadius: 16 }}
-                    className="h-20 w-20"
-                    source={{ uri: artist.image! }}
-                    placeholder={blurhash}
-                    contentFit="cover"
-                    transition={1000}
-                  />
                 </View>
-                <View className="flex flex-col">
+              </Link>
+            </Text>
+          ))}
+
+          {filteredVenues?.length !== 0 && (
+            <Text className="text-white text-xl font-bold">Venues</Text>
+          )}
+          {filteredVenues?.map((venue) => (
+            <Text key={venue.id} className="text-white text-xl">
+              <Link href={`/home/venue/${venue.id}`}>
+                <View className="flex flex-row items-center py-3 ">
                   <View>
-                    <Text className="text-white text-xl pl-2">
-                      {artist.name}
-                    </Text>
+                    <Image
+                      style={{ borderRadius: 16 }}
+                      className="h-20 w-20"
+                      source={{ uri: venue.image! }}
+                      placeholder={blurhash}
+                      contentFit="cover"
+                      transition={1000}
+                    />
+                  </View>
+                  <View className="flex flex-col">
+                    <View>
+                      <Text className="text-white text-xl pl-2">
+                        {venue.name}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Link>
-          </Text>
-        ))}
+              </Link>
+            </Text>
+          ))}
 
-        {filteredVenues?.length !== 0 && (
-          <Text className="text-white text-xl font-bold">Venues</Text>
-        )}
-        {filteredVenues?.map((venue) => (
-          <Text key={venue.id} className="text-white text-xl">
-            <Link href={`/home/venue/${venue.id}`}>
-              <View className="flex flex-row items-center py-3 ">
-                <View>
-                  <Image
-                    style={{ borderRadius: 16 }}
-                    className="h-20 w-20"
-                    source={{ uri: venue.image! }}
-                    placeholder={blurhash}
-                    contentFit="cover"
-                    transition={1000}
-                  />
+          {filteredUsers?.length !== 0 && (
+            <Text className="text-white text-xl font-bold">Users</Text>
+          )}
+          {filteredUsers?.map((user) => (
+            <Text key={user.id} className="text-white text-xl">
+              <Link href={`/home/user/${user.id}`}>
+                <View className="flex flex-row items-center py-3">
+                  <ProfileCard userProfile={user} />
                 </View>
-                <View className="flex flex-col">
-                  <View>
-                    <Text className="text-white text-xl pl-2">
-                      {venue.name}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </Link>
-          </Text>
-        ))}
-
-        {filteredUsers?.length !== 0 && (
-          <Text className="text-white text-xl font-bold">Users</Text>
-        )}
-        {filteredUsers?.map((user) => (
-          <Text key={user.id} className="text-white text-xl">
-            <Link href={`/home/user/${user.id}`}>
-              <View className="flex flex-row items-center py-3">
-                <ProfileCard userProfile={user} />
-              </View>
-            </Link>
-          </Text>
-        ))}
+              </Link>
+            </Text>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
