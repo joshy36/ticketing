@@ -26,9 +26,9 @@ type TicketsContextProps = {
 };
 
 export const TicketsContext = createContext<TicketsContextProps>({
-  pendingPushRequsts: [],
+  pendingPushRequsts: undefined,
   refetchPush: () => {},
-  tickets: [],
+  tickets: undefined,
   refetchTickets: () => {},
   numberOfTicketsNeedToTransfer: 0,
 });
