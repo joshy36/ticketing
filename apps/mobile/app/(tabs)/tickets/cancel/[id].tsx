@@ -15,7 +15,7 @@ import ProfileCard from '../../../components/ProfileCard';
 import { SupabaseContext } from '../../../../utils/supabaseProvider';
 import { useLocalSearchParams } from 'expo-router';
 import UsersListSingle from '@/app/components/UsersListSingle';
-import { TicketsContext } from '../ticketsProvider';
+import { TicketsContext } from '../../../../providers/ticketsProvider';
 
 export default function Modal() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,19 +40,21 @@ export default function Modal() {
   });
 
   return (
-    <View className="flex-1 bg-black pt-4">
-      <Text className="text-white text-xl">
+    <View className="flex-1 bg-black pt-4 px-2">
+      <Text className="text-white text-lg pt-4">
         Are you sure you want to cancel this transfer request?
       </Text>
-      <View className="flex flex-row justify-center pt-4 gap-4">
+      <View className="flex flex-row justify-end pt-8 gap-4">
         <TouchableOpacity
-          className="bg-zinc-800 rounded-full p-4"
+          className="bg-zinc-800 rounded-full p-4 w-1/3"
           onPress={() => router.back()}
         >
-          <Text className="text-white font-semibold">No</Text>
+          <View className="flex flex-row justify-center">
+            <Text className="text-white font-semibold">No</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-white rounded-full p-4"
+          className="bg-white rounded-full p-4 w-1/3"
           onPress={() => {
             setIsLoading(true);
             cancelRequestTransfer.mutate({
@@ -60,7 +62,7 @@ export default function Modal() {
             });
           }}
         >
-          <View className="flex flex-row">
+          <View className="flex flex-row justify-center">
             {isLoading && <ActivityIndicator className="pr-2" />}
             <Text className="font-semibold">Yes</Text>
           </View>

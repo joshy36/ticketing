@@ -3,18 +3,19 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
 import { useContext } from 'react';
-import { MessagesContext } from './messages/messagesProvider';
-import { FriendRequestContext } from './messages/friendRequestsProvider';
+import { MessagesContext } from '../../providers/messagesProvider';
+import { FriendRequestContext } from '../../providers/friendRequestsProvider';
 import { SupabaseContext } from '../../utils/supabaseProvider';
 import { Image } from 'expo-image';
 import { blurhash, replaceLocalhostWithIP } from '../../utils/helpers';
+import { TicketsContext } from '../../providers/ticketsProvider';
 
 export default function TabsLayout() {
   const { userProfile } = useContext(SupabaseContext);
   const { unreadMessages } = useContext(MessagesContext);
   const { friendRequests } = useContext(FriendRequestContext);
-
-  console.log('unreadMessages', unreadMessages);
+  const { pendingPushRequsts, numberOfTicketsNeedToTransfer } =
+    useContext(TicketsContext);
 
   return (
     <Tabs
@@ -77,11 +78,37 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarActiveTintColor: 'white',
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialCommunityIcons
-              name={focused ? 'ticket-confirmation' : 'ticket-outline'}
-              size={30}
-              color={color}
-            />
+            <View style={{ position: 'relative' }}>
+              <MaterialCommunityIcons
+                name={focused ? 'ticket-confirmation' : 'ticket-outline'}
+                size={30}
+                color={color}
+              />
+              {pendingPushRequsts &&
+                pendingPushRequsts?.length + numberOfTicketsNeedToTransfer >
+                  0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: -5,
+                      right: -5,
+                      backgroundColor: '#b91c1c',
+                      borderWidth: 1,
+                      borderColor: 'black',
+                      borderRadius: 10,
+                      width: 18,
+                      height: 18,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text className="text-white text-xs items-center">
+                      {pendingPushRequsts?.length +
+                        numberOfTicketsNeedToTransfer}
+                    </Text>
+                  </View>
+                )}
+            </View>
           ),
         }}
       />

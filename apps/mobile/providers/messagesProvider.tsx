@@ -1,5 +1,5 @@
-import { RouterOutputs, trpc } from '../../../utils/trpc';
-import React from 'react';
+import { RouterOutputs, trpc } from '../utils/trpc';
+import React, { useContext } from 'react';
 import {
   Dispatch,
   SetStateAction,
@@ -8,16 +8,15 @@ import {
   useState,
 } from 'react';
 import { Message, UserProfile } from 'supabase';
-import { supabase } from '../../../utils/supabaseExpo';
+import { supabase } from '../utils/supabaseExpo';
+import { SupabaseContext } from '@/utils/supabaseProvider';
 
 type MessagesProviderProps = {
   children: React.ReactNode;
-  userProfile: UserProfile | null | undefined;
   url: string | null;
 };
 
 type MessagesContextProps = {
-  userProfile: UserProfile | null | undefined;
   url: string | null;
   unreadMessages: number;
   mostRecentMessageByChat?: {
@@ -47,7 +46,6 @@ type MessagesContextProps = {
 };
 
 export const MessagesContext = createContext<MessagesContextProps>({
-  userProfile: null,
   url: null,
   unreadMessages: 0,
   mostRecentMessageByChat: {},
@@ -58,11 +56,7 @@ export const MessagesContext = createContext<MessagesContextProps>({
   setUnreadMessages: () => {},
 });
 
-export const MessagesProvider = ({
-  children,
-  userProfile,
-  url,
-}: MessagesProviderProps) => {
+export const MessagesProvider = ({ children, url }: MessagesProviderProps) => {
   const [didFetch, setDidFetch] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const [currentChat, setCurrentChat] = useState<string | null>(null);
@@ -82,6 +76,8 @@ export const MessagesProvider = ({
   }>();
 
   // const url = usePathname().split('/');
+
+  const { userProfile } = useContext(SupabaseContext);
 
   const { data: unread } = trpc.getTotalUnreadMessages.useQuery();
   const { data: messagesInCurrentChat } = trpc.getMessagesByChat.useQuery({
@@ -267,7 +263,6 @@ export const MessagesProvider = ({
   return (
     <MessagesContext.Provider
       value={{
-        userProfile,
         url,
         unreadMessages,
         mostRecentMessageByChat,

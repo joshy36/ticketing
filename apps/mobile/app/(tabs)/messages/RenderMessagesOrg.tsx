@@ -6,7 +6,7 @@ import {
 } from '../../../utils/helpers';
 import { useContext } from 'react';
 // import { MessagesContext } from 'providers';
-import { MessagesContext } from './messagesProvider';
+import { MessagesContext } from '../../../providers/messagesProvider';
 import { Link } from 'expo-router';
 import { trpc } from '../../../utils/trpc';
 // import { ChevronRight } from 'lucide-react';
@@ -24,8 +24,8 @@ export default function RenderMessagesOrg({
 
   const mess = messages?.map((m) => m.chat_messages?.event_id)!;
 
-  const events = trpc.useQueries(
-    (t) => mess?.map((message) => t.getEventById({ id: message! }))
+  const events = trpc.useQueries((t) =>
+    mess?.map((message) => t.getEventById({ id: message! }))
   );
 
   const artistOrVenue = artist || venue;
@@ -46,8 +46,8 @@ export default function RenderMessagesOrg({
                         artist
                           ? `/artist/${artistOrVenue?.id}`
                           : venue
-                          ? `/venue/${artistOrVenue?.id}`
-                          : '/'
+                            ? `/venue/${artistOrVenue?.id}`
+                            : '/'
                       }
                       className="flex items-end"
                     >

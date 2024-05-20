@@ -12,7 +12,7 @@ import ProfileCard from '../../components/ProfileCard';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import { useContext, useEffect, useState } from 'react';
-import { TicketsContext } from './ticketsProvider';
+import { TicketsContext } from '../../../providers/ticketsProvider';
 
 export default function TicketList({
   userProfile,

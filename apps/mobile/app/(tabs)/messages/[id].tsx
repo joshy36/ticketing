@@ -1,4 +1,4 @@
-import { MessagesContext } from './messagesProvider';
+import { MessagesContext } from '../../../providers/messagesProvider';
 import { useContext, useState } from 'react';
 import GroupCard from './GroupCard';
 import { ChevronLeft, Info } from 'lucide-react';

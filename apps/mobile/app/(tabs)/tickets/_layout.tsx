@@ -1,7 +1,7 @@
 import { Stack, router } from 'expo-router';
 import Feather from '@expo/vector-icons/Feather';
 import { TouchableOpacity } from 'react-native';
-import { TicketsProvider } from './ticketsProvider';
+import { TicketsProvider } from '../../../providers/ticketsProvider';
 import { useContext } from 'react';
 import { SupabaseContext } from '@/utils/supabaseProvider';
 

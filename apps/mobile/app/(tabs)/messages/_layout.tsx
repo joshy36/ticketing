@@ -1,5 +1,5 @@
 import { Link, Stack, useGlobalSearchParams } from 'expo-router';
-import { MessagesProvider } from './messagesProvider';
+import { MessagesProvider } from '../../../providers/messagesProvider';
 import { useContext } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import { trpc } from '../../../utils/trpc';

@@ -10,7 +10,7 @@ import { useCallback, useContext, useState } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import TicketsPage from './TicketsPage';
 import { Link } from 'expo-router';
-import { TicketsContext } from './ticketsProvider';
+import { TicketsContext } from '../../../providers/ticketsProvider';
 
 const Tickets = () => {
   const [refreshing, setRefreshing] = useState(false);

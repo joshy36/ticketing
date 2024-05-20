@@ -15,7 +15,7 @@ import ProfileCard from '../../../components/ProfileCard';
 import { SupabaseContext } from '../../../../utils/supabaseProvider';
 import { useLocalSearchParams } from 'expo-router';
 import UsersListSingle from '@/app/components/UsersListSingle';
-import { TicketsContext } from '../ticketsProvider';
+import { TicketsContext } from '../../../../providers/ticketsProvider';
 
 export default function Modal() {
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(

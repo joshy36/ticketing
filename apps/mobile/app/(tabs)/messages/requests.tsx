@@ -1,7 +1,7 @@
 import { trpc } from '../../../utils/trpc';
 import ProfileCard from '../../components/ProfileCard';
 import { useContext } from 'react';
-import { FriendRequestContext } from './friendRequestsProvider';
+import { FriendRequestContext } from '../../../providers/friendRequestsProvider';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import ToastManager, { Toast } from 'toastify-react-native';
@@ -44,7 +44,7 @@ export default function Requests() {
           </View>
         ) : (
           <View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 Toast.success('Promised is resolved');
               }}
@@ -54,7 +54,7 @@ export default function Requests() {
                 borderWidth: 1,
                 padding: 10,
               }}
-            ></TouchableOpacity>
+            ></TouchableOpacity> */}
             {friendRequests?.map((request) => {
               return (
                 <View
@@ -64,7 +64,7 @@ export default function Requests() {
                   <ProfileCard userProfile={request.from!} />
                   <View className="flex flex-row gap-3">
                     <TouchableOpacity
-                      className="p-3 rounded-full border border-zinc-800 bg-red-800 flex items-center"
+                      className="p-3 rounded-full border border-zinc-800 flex items-center"
                       onPress={() => {
                         rejectRequest.mutate({ from: request.from.id });
                       }}
@@ -72,12 +72,12 @@ export default function Requests() {
                       <Feather name="x" size={24} color="white" />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      className="p-3 rounded-full border border-zinc-800 flex items-center"
+                      className="p-3 rounded-full border border-zinc-800 bg-white flex items-center"
                       onPress={() => {
                         acceptRequest.mutate({ from: request.from.id });
                       }}
                     >
-                      <Feather name="check" size={24} color="white" />
+                      <Feather name="check" size={24} color="black" />
                     </TouchableOpacity>
                   </View>
                 </View>

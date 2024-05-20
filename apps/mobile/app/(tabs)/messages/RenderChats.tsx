@@ -1,5 +1,5 @@
 import { UserProfile } from 'supabase';
-import { MessagesContext } from './messagesProvider';
+import { MessagesContext } from '../../../providers/messagesProvider';
 import ChatProfileCard from './ChatProfileCard';
 import OrgCard from './OrgCard';
 import GroupCard from './GroupCard';
@@ -10,7 +10,7 @@ import {
   RefreshControl,
   Text,
 } from 'react-native';
-import { FriendRequestContext } from './friendRequestsProvider';
+import { FriendRequestContext } from '../../../providers/friendRequestsProvider';
 import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { useCallback, useContext, useState } from 'react';

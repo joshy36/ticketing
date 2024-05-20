@@ -7,7 +7,7 @@ import {
 } from '../../../utils/helpers';
 import { useContext, useEffect, useRef } from 'react';
 // import { MessagesContext } from 'providers';
-import { MessagesContext } from './messagesProvider';
+import { MessagesContext } from '../../../providers/messagesProvider';
 import { Image } from 'expo-image';
 import { View, Text, ScrollView } from 'react-native';
 

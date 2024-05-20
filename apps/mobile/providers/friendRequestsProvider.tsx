@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { RouterOutputs, trpc } from '../../../utils/trpc';
+import { RouterOutputs, trpc } from '../utils/trpc';
 
 type FriendRequestProviderProps = {
   children: React.ReactNode;
