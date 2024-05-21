@@ -32,6 +32,7 @@ import { toast } from 'sonner';
 import RenderTicketRequest from './RenderTicketRequest';
 import AcceptTickets from './AcceptTickets';
 import { TicketsContext } from '~/providers/ticketsProvider';
+import { RouterOutputs } from 'api';
 
 export default function TicketList({
   userProfile,
@@ -51,6 +52,22 @@ export default function TicketList({
 
   const { pendingPushRequsts, refetchPush, tickets, refetchTickets } =
     useContext(TicketsContext);
+
+  function extractUniqueEvents(
+    tickets: RouterOutputs['getTicketsForUser'] | null | undefined,
+  ) {
+    const uniqueEventsMap = new Map();
+
+    tickets?.tickets?.forEach((ticket) => {
+      uniqueEventsMap.set(ticket?.events?.id, ticket.events);
+    });
+
+    return Array.from(uniqueEventsMap.values());
+  }
+
+  const uniqueEvents = extractUniqueEvents(tickets);
+  console.log('unique: ', uniqueEvents);
+  console.log('tickets: ', tickets?.tickets);
 
   const {
     data: users,
@@ -97,7 +114,7 @@ export default function TicketList({
             refetchPush={refetchPush}
           />
           <div>
-            {upcomingEvents?.length != 0 ? (
+            {uniqueEvents?.length != 0 ? (
               <div>
                 <Link href={`/${userProfile.username}/id`}>
                   <Button className='mb-4 w-full'>
@@ -108,7 +125,7 @@ export default function TicketList({
                   </Button>
                 </Link>
                 <div className='grid grid-cols-1 gap-y-2'>
-                  {upcomingEvents?.map((event) => (
+                  {uniqueEvents?.map((event) => (
                     <div key={event?.id}>
                       <Accordion type='single' collapsible>
                         <AccordionItem value='item-1'>
@@ -178,7 +195,9 @@ export default function TicketList({
                                 )[0]?.seat
                               }
 
-                              <p>Your Ticket</p>
+                              {tickets?.tickets?.filter(
+                                (ticket) => ticket.owner_id === userProfile.id,
+                              ).length != 0 && <p>Your Ticket</p>}
                             </div>
                             {tickets?.tickets
                               ?.filter((ticket) => ticket.event_id === event.id)
@@ -193,6 +212,7 @@ export default function TicketList({
                                   <div className='flex items-center gap-8 font-medium'>
                                     <div className='flex flex-col'>
                                       <p className=' '>{ticket.seat}</p>
+                                      <p>{ticket.id}</p>
                                     </div>
                                   </div>
 

@@ -53,15 +53,17 @@ export const ticketsRouter = router({
       const supabase = ctx.supabase;
       const { data } = await supabase
         .from('tickets')
-        .select(`*, events (id, image, name, etherscan_link, date)`)
-        .eq('purchaser_id', input.user_id)
+        .select(
+          `*, events (id, image, name, etherscan_link, date, venues (name))`
+        )
+        .or(`purchaser_id.eq.${input.user_id},owner_id.eq.${input.user_id}`)
         .order('id', { ascending: true });
 
-      const { data: ownedTicket } = await supabase
-        .from('tickets')
-        .select(`*, events (id, image, name, etherscan_link, date)`)
-        .eq('owner_id', input.user_id)
-        .single();
+      // const { data: ownedTicket } = await supabase
+      //   .from('tickets')
+      //   .select(`*, events (id, image, name, etherscan_link, date)`)
+      //   .eq('owner_id', input.user_id)
+      //   .single();
 
       const { data: pushRequestTickets } = await supabase
         .from('ticket_transfer_push_requests')
@@ -354,6 +356,9 @@ export const ticketsRouter = router({
           message: 'Not the owner of the ticket!',
         });
       }
+
+      // if there is no owner and the current user did not purchase
+      // if there is an owner and the current user is not the owner
 
       await supabase
         .from('ticket_transfer_push_requests')
