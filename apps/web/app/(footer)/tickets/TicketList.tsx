@@ -46,10 +46,6 @@ export default function TicketList({
   const [userSearch, setUserSearch] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { data: upcomingEvents } = trpc.getUpcomingEventsForUser.useQuery({
-    user_id: userProfile.id,
-  });
-
   const { pendingPushRequsts, refetchPush, tickets, refetchTickets } =
     useContext(TicketsContext);
 
@@ -66,8 +62,6 @@ export default function TicketList({
   }
 
   const uniqueEvents = extractUniqueEvents(tickets);
-  console.log('unique: ', uniqueEvents);
-  console.log('tickets: ', tickets?.tickets);
 
   const {
     data: users,
@@ -212,7 +206,6 @@ export default function TicketList({
                                   <div className='flex items-center gap-8 font-medium'>
                                     <div className='flex flex-col'>
                                       <p className=' '>{ticket.seat}</p>
-                                      <p>{ticket.id}</p>
                                     </div>
                                   </div>
 
@@ -345,10 +338,14 @@ export default function TicketList({
               </div>
             ) : (
               <div>
-                <p className='pt-12 text-3xl'>No upcoming events</p>
-                <p className='pt-2 font-light text-muted-foreground'>
-                  Check out the events page to explore upcoming events
-                </p>
+                {!uniqueEvents && (
+                  <div>
+                    <p className='pt-12 text-3xl'>No upcoming events</p>
+                    <p className='pt-2 font-light text-muted-foreground'>
+                      Check out the events page to explore upcoming events
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
