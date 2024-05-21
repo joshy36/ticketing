@@ -33,6 +33,7 @@ import RenderTicketRequest from './RenderTicketRequest';
 import AcceptTickets from './AcceptTickets';
 import { TicketsContext } from '~/providers/ticketsProvider';
 import { RouterOutputs } from 'api';
+import TicketListSkeleton from './TicketListSkeleton';
 
 export default function TicketList({
   userProfile,
@@ -108,17 +109,17 @@ export default function TicketList({
             refetchPush={refetchPush}
           />
           <div>
+            <Link href={`/${userProfile.username}/id`}>
+              <Button className='mb-4 w-full'>
+                <div className='flex flex-row items-center gap-2'>
+                  <ScanFace />
+                  <p>Scan In</p>
+                </div>
+              </Button>
+            </Link>
             {uniqueEvents?.length != 0 ? (
               <div>
-                <Link href={`/${userProfile.username}/id`}>
-                  <Button className='mb-4 w-full'>
-                    <div className='flex flex-row items-center gap-2'>
-                      <ScanFace />
-                      <p>Scan In</p>
-                    </div>
-                  </Button>
-                </Link>
-                <div className='grid grid-cols-1 gap-y-2'>
+                <div className='grid grid-cols-1'>
                   {uniqueEvents?.map((event) => (
                     <div key={event?.id}>
                       <Accordion type='single' collapsible>
@@ -338,12 +339,18 @@ export default function TicketList({
               </div>
             ) : (
               <div>
-                {!uniqueEvents && (
+                {!uniqueEvents ? (
                   <div>
                     <p className='pt-12 text-3xl'>No upcoming events</p>
                     <p className='pt-2 font-light text-muted-foreground'>
                       Check out the events page to explore upcoming events
                     </p>
+                  </div>
+                ) : (
+                  <div>
+                    <TicketListSkeleton />
+                    <TicketListSkeleton />
+                    <TicketListSkeleton />
                   </div>
                 )}
               </div>
