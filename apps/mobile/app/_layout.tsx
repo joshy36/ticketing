@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack, useGlobalSearchParams } from 'expo-router';
 import { TRPCProvider } from '../utils/trpc';
 import { SupabaseProvider } from '../providers/supabaseProvider';
 import { StripeProvider } from '@stripe/stripe-react-native';
@@ -7,11 +7,13 @@ import { FriendRequestProvider } from '../providers/friendRequestsProvider';
 import { TicketsProvider } from '../providers/ticketsProvider';
 
 export default function RootLayout() {
+  const glob = useGlobalSearchParams();
+
   return (
     <StripeProvider publishableKey={process.env.EXPO_PUBLIC_STRIPE_KEY!}>
       <TRPCProvider>
         <SupabaseProvider>
-          <MessagesProvider url={null}>
+          <MessagesProvider url={glob.id! as string}>
             <FriendRequestProvider>
               <TicketsProvider>
                 <Stack>

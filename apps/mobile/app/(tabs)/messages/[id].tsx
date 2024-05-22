@@ -63,48 +63,45 @@ export default function Home() {
     <KeyboardAvoidingView
       keyboardVerticalOffset={10}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1"
+      className="flex-1 bg-black"
     >
-      <View className="flex-1 bg-black flex-col">
-        <View className="flex-1 flex-col overflow-hidden pb-2">
-          {currentChatDetails?.chat_type !== 'organization' && (
-            <RenderMessages userProfile={userProfile!} />
-          )}
-          {currentChatDetails?.chat_type === 'organization' && (
-            <RenderMessagesOrg
-              artist={
-                currentChatDetails?.chat_members.find(
-                  (member) => member.artists
-                )?.artists
-              }
-              venue={
-                currentChatDetails?.chat_members.find((member) => member.venues)
-                  ?.venues
-              }
-            />
-          )}
-        </View>
+      <View className="flex-1 flex-col overflow-hidden pb-2">
         {currentChatDetails?.chat_type !== 'organization' && (
-          <View className="flex flex-row pb-24 gap-2 px-2">
-            <TextInput
-              className="mb-3 rounded-full flex-1 py-3 px-6 border border-zinc-800 text-muted-foreground items-center"
-              placeholder="Message..."
-              placeholderTextColor="#6B7280"
-              onChangeText={handleInputChange}
-              value={message}
-            />
-            <TouchableOpacity
-              onPress={handleSubmit}
-              disabled={message.length === 0}
-              className={`bg-white rounded-full px-4 py-3 mb-3 ${
-                message.length === 0 ? 'opacity-50' : ''
-              }`}
-            >
-              <Text className="font-semibold">Send</Text>
-            </TouchableOpacity>
-          </View>
+          <RenderMessages userProfile={userProfile!} />
+        )}
+        {currentChatDetails?.chat_type === 'organization' && (
+          <RenderMessagesOrg
+            artist={
+              currentChatDetails?.chat_members.find((member) => member.artists)
+                ?.artists
+            }
+            venue={
+              currentChatDetails?.chat_members.find((member) => member.venues)
+                ?.venues
+            }
+          />
         )}
       </View>
+      {currentChatDetails?.chat_type !== 'organization' && (
+        <View className="flex flex-row pb-24 gap-2 px-2">
+          <TextInput
+            className="mb-3 rounded-full flex-1 py-3 px-6 border border-zinc-800 text-muted-foreground items-center"
+            placeholder="Message..."
+            placeholderTextColor="#6B7280"
+            onChangeText={handleInputChange}
+            value={message}
+          />
+          <TouchableOpacity
+            onPress={handleSubmit}
+            disabled={message.length === 0}
+            className={`bg-white rounded-full px-4 py-3 mb-3 ${
+              message.length === 0 ? 'opacity-50' : ''
+            }`}
+          >
+            <Text className="font-semibold">Send</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
