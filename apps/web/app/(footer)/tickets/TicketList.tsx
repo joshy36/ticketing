@@ -107,6 +107,7 @@ export default function TicketList({
           <AcceptTickets
             pendingPushRequsts={pendingPushRequsts}
             refetchPush={refetchPush}
+            refetchTickets={refetchTickets}
           />
           <div>
             <Link href={`/${userProfile.username}/id`}>

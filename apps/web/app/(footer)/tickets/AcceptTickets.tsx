@@ -20,11 +20,13 @@ import { RouterOutputs } from 'api';
 export default function AcceptTickets({
   pendingPushRequsts,
   refetchPush,
+  refetchTickets,
 }: {
   pendingPushRequsts:
     | RouterOutputs['getPendingTicketTransferPushRequests']
     | undefined;
   refetchPush: () => void;
+  refetchTickets: () => void;
 }) {
   const [dialogOpen, setDialogOpen] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,10 +35,12 @@ export default function AcceptTickets({
     onSettled: async (data, error) => {
       if (error) {
         await refetchPush();
+        await refetchTickets();
         toast.error(`Error rejecting transfer: ${error.message}`);
         console.error('Error rejecting transfer: ', error);
       } else {
         await refetchPush();
+        await refetchTickets();
         toast.success('Ticket transfer request rejected!');
       }
       setIsLoading(false);
@@ -48,10 +52,12 @@ export default function AcceptTickets({
     onSettled: async (data, error) => {
       if (error) {
         await refetchPush();
+        await refetchTickets();
         toast.error(`Error accepting transfer: ${error.message}`);
         console.error('Error accepting transfer: ', error);
       } else {
         await refetchPush();
+        await refetchTickets();
         toast.success('Ticket transfer request accepted!');
       }
       setIsLoading(false);
