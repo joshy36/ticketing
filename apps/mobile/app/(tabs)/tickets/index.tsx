@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import { trpc } from '../../../utils/trpc';
+import { RouterOutputs } from '../../../utils/trpc';
 import { useCallback, useContext, useState } from 'react';
 import { SupabaseContext } from '../../../utils/supabaseProvider';
 import TicketsPage from './TicketsPage';
@@ -16,13 +16,26 @@ const Tickets = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const { session, user, userProfile } = useContext(SupabaseContext);
-  const { upcomingEvents, refetchTickets, refetchUpcomingEvents, refetchPush } =
-    useContext(TicketsContext);
+  const { tickets, refetchTickets, refetchPush } = useContext(TicketsContext);
+
+  function extractUniqueEvents(
+    tickets: RouterOutputs['getTicketsForUser'] | null | undefined
+  ) {
+    const uniqueEventsMap = new Map();
+
+    tickets?.tickets?.forEach((ticket) => {
+      uniqueEventsMap.set(ticket?.events?.id, ticket.events);
+    });
+
+    return Array.from(uniqueEventsMap.values());
+  }
+
+  let uniqueEvents = extractUniqueEvents(tickets);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await refetchUpcomingEvents();
     await refetchPush();
+    uniqueEvents = extractUniqueEvents(tickets);
     refetchTickets().then(() => {
       setRefreshing(false);
     });
@@ -42,7 +55,7 @@ const Tickets = () => {
             }
           >
             <View>
-              {upcomingEvents?.length == 0 && (
+              {uniqueEvents?.length == 0 && (
                 <View>
                   <Text className="text-white font-semibold text-lg text-center pt-20">
                     No upcoming events
@@ -53,7 +66,10 @@ const Tickets = () => {
                 </View>
               )}
             </View>
-            <TicketsPage userProfile={userProfile} />
+            <TicketsPage
+              userProfile={userProfile}
+              uniqueEvents={uniqueEvents}
+            />
           </ScrollView>
           <View className="-bottom-10 absolute w-full border-t border-zinc-800">
             <Link href="/tickets/scanIn" className="flex w-full pt-4">

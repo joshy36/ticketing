@@ -5,10 +5,8 @@ import {
   dateToString,
   replaceLocalhostWithIP,
 } from '../../../utils/helpers';
-import { RouterOutputs, trpc } from '../../../utils/trpc';
 import { ListItem } from '@rneui/themed';
-import { Link, router } from 'expo-router';
-import ProfileCard from '../../components/ProfileCard';
+import { router } from 'expo-router';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import { useContext, useEffect, useState } from 'react';
@@ -17,24 +15,21 @@ import AcceptTickets from './AcceptTickets';
 
 export default function TicketList({
   userProfile,
+  uniqueEvents,
 }: {
   userProfile: UserProfile | undefined | null;
+  uniqueEvents: any[];
 }) {
-  const {
-    upcomingEvents,
-    upcomingEventsLoading,
-    tickets,
-    pendingPushRequsts,
-    refetchPush,
-  } = useContext(TicketsContext);
+  const { tickets, pendingPushRequsts, refetchPush } =
+    useContext(TicketsContext);
 
   const [expanded, setExpanded] = useState<boolean[]>([]);
 
   useEffect(() => {
-    if (!upcomingEventsLoading && upcomingEvents?.length) {
-      setExpanded(new Array(upcomingEvents.length).fill(false));
+    if (uniqueEvents && uniqueEvents?.length) {
+      setExpanded(new Array(uniqueEvents.length).fill(false));
     }
-  }, [upcomingEventsLoading, upcomingEvents]);
+  }, [uniqueEvents]);
 
   const renderTicketRequest = (pending: any) => {
     if (pending.status === 'accepted') {
@@ -127,13 +122,13 @@ export default function TicketList({
 
   return (
     <View>
-      {upcomingEvents?.length != 0 ? (
+      {uniqueEvents?.length != 0 ? (
         <View>
           <AcceptTickets
             pendingPushRequsts={pendingPushRequsts}
             refetchPush={refetchPush}
           />
-          {upcomingEvents?.map((event, index) => (
+          {uniqueEvents?.map((event, index) => (
             <View key={event?.id} className="border-b border-zinc-800">
               <ListItem.Accordion
                 containerStyle={{ backgroundColor: 'black' }}

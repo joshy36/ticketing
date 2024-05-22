@@ -7,25 +7,19 @@ type TicketsProviderProps = {
 };
 
 type TicketsContextProps = {
-  upcomingEvents: RouterOutputs['getUpcomingEventsForUser'] | undefined;
-  upcomingEventsLoading: boolean;
   tickets: RouterOutputs['getTicketsForUser'] | undefined;
   pendingPushRequsts:
     | RouterOutputs['getPendingTicketTransferPushRequests']
     | undefined;
   numberOfTicketsNeedToTransfer: number;
-  refetchUpcomingEvents: () => Promise<any>;
   refetchTickets: () => Promise<any>;
   refetchPush: () => Promise<any>;
 };
 
 export const TicketsContext = createContext<TicketsContextProps>({
-  upcomingEvents: [],
-  upcomingEventsLoading: false,
   tickets: undefined,
   pendingPushRequsts: undefined,
   numberOfTicketsNeedToTransfer: 0,
-  refetchUpcomingEvents: async () => {},
   refetchTickets: async () => {},
   refetchPush: async () => {},
 });
@@ -37,14 +31,6 @@ export const TicketsProvider = ({ children }: TicketsProviderProps) => {
     trpc.getPendingTicketTransferPushRequests.useQuery();
 
   const { userProfile } = useContext(SupabaseContext);
-
-  const {
-    data: upcomingEvents,
-    isLoading: upcomingEventsLoading,
-    refetch: refetchUpcomingEvents,
-  } = trpc.getUpcomingEventsForUser.useQuery({
-    user_id: userProfile?.id!,
-  });
 
   const { data: tickets, refetch: refetchTickets } =
     trpc.getTicketsForUser.useQuery(
@@ -72,12 +58,9 @@ export const TicketsProvider = ({ children }: TicketsProviderProps) => {
   return (
     <TicketsContext.Provider
       value={{
-        upcomingEvents,
-        upcomingEventsLoading,
         tickets,
         pendingPushRequsts,
         numberOfTicketsNeedToTransfer,
-        refetchUpcomingEvents,
         refetchTickets,
         refetchPush,
       }}
