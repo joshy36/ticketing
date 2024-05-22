@@ -12,7 +12,7 @@ import { useContext, useState } from 'react';
 import { UserProfile } from 'supabase';
 import { trpc } from '../../../../utils/trpc';
 import ProfileCard from '../../../components/ProfileCard';
-import { SupabaseContext } from '../../../../utils/supabaseProvider';
+import { SupabaseContext } from '../../../../providers/supabaseProvider';
 import { useLocalSearchParams } from 'expo-router';
 import UsersListSingle from '@/app/components/UsersListSingle';
 import { TicketsContext } from '../../../../providers/ticketsProvider';

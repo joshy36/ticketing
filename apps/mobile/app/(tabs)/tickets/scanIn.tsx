@@ -1,4 +1,4 @@
-import { SupabaseContext } from '@/utils/supabaseProvider';
+import { SupabaseContext } from '@/providers/supabaseProvider';
 import { useContext } from 'react';
 import { View, Text } from 'react-native';
 import { Image } from 'expo-image';

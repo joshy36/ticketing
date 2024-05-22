@@ -12,7 +12,7 @@ import Separator from '../../../components/Separator';
 import { useLocalSearchParams } from 'expo-router';
 import FriendRequest from './FriendRequest';
 import { useCallback, useContext, useState } from 'react';
-import { SupabaseContext } from '../../../../utils/supabaseProvider';
+import { SupabaseContext } from '../../../../providers/supabaseProvider';
 
 const ProfilePage = () => {
   const { id } = useLocalSearchParams();

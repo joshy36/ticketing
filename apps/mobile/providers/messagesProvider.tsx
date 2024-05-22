@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { Message, UserProfile } from 'supabase';
 import { supabase } from '../utils/supabaseExpo';
-import { SupabaseContext } from '@/utils/supabaseProvider';
+import { SupabaseContext } from '@/providers/supabaseProvider';
 
 type MessagesProviderProps = {
   children: React.ReactNode;

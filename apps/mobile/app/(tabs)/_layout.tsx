@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import { useContext } from 'react';
 import { MessagesContext } from '../../providers/messagesProvider';
 import { FriendRequestContext } from '../../providers/friendRequestsProvider';
-import { SupabaseContext } from '../../utils/supabaseProvider';
+import { SupabaseContext } from '../../providers/supabaseProvider';
 import { Image } from 'expo-image';
 import { blurhash, replaceLocalhostWithIP } from '../../utils/helpers';
 import { TicketsContext } from '../../providers/ticketsProvider';

@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import { TRPCProvider } from '../utils/trpc';
-import { SupabaseProvider } from '../utils/supabaseProvider';
+import { SupabaseProvider } from '../providers/supabaseProvider';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { MessagesProvider } from '../providers/messagesProvider';
 import { FriendRequestProvider } from '../providers/friendRequestsProvider';

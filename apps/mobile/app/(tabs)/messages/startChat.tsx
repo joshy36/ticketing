@@ -12,7 +12,7 @@ import { useContext, useState } from 'react';
 import { UserProfile } from 'supabase';
 import { trpc } from '../../../utils/trpc';
 import ProfileCard from '../../components/ProfileCard';
-import { SupabaseContext } from '../../../utils/supabaseProvider';
+import { SupabaseContext } from '../../../providers/supabaseProvider';
 import UsersList from '../../components/UsersList';
 
 export default function Modal() {

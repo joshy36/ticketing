@@ -25,6 +25,7 @@ export default function RenderMessages({
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
   }, [messages]);
+
   return (
     <ScrollView
       ref={scrollViewRef}

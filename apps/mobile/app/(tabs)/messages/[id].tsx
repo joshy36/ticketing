@@ -1,4 +1,5 @@
-import { MessagesContext } from '../../../providers/messagesProvider';
+import { MessagesContext } from '@/providers/messagesProvider';
+import { SupabaseContext } from '@/providers/supabaseProvider';
 import { useContext, useState } from 'react';
 import GroupCard from './GroupCard';
 import { ChevronLeft, Info } from 'lucide-react';
@@ -6,7 +7,7 @@ import RenderMessages from './RenderMessages';
 // import { Input } from '@/components/ui/input';
 // import { Button } from '@/components/ui/button';
 import ChatProfileCard from './ChatProfileCard';
-import { trpc } from '../../../utils/trpc';
+import { trpc } from '@/utils/trpc';
 import Link from 'next/link';
 import OrgCard from './OrgCard';
 import RenderMessagesOrg from './RenderMessagesOrg';
@@ -22,7 +23,8 @@ import { useLocalSearchParams } from 'expo-router';
 
 export default function Home() {
   const { id } = useLocalSearchParams();
-  const { userProfile, chats } = useContext(MessagesContext);
+  const { chats } = useContext(MessagesContext);
+  const { userProfile } = useContext(SupabaseContext);
   const [message, setMessage] = useState('');
 
   const handleInputChange = (input: string) => {
@@ -58,31 +60,32 @@ export default function Home() {
   };
 
   return (
-    <View className="flex-1 bg-black flex-col">
-      <View className="flex-1 flex-col overflow-hidden pb-2">
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={10}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      className="flex-1"
+    >
+      <View className="flex-1 bg-black flex-col">
+        <View className="flex-1 flex-col overflow-hidden pb-2">
+          {currentChatDetails?.chat_type !== 'organization' && (
+            <RenderMessages userProfile={userProfile!} />
+          )}
+          {currentChatDetails?.chat_type === 'organization' && (
+            <RenderMessagesOrg
+              artist={
+                currentChatDetails?.chat_members.find(
+                  (member) => member.artists
+                )?.artists
+              }
+              venue={
+                currentChatDetails?.chat_members.find((member) => member.venues)
+                  ?.venues
+              }
+            />
+          )}
+        </View>
         {currentChatDetails?.chat_type !== 'organization' && (
-          <RenderMessages userProfile={userProfile!} />
-        )}
-        {currentChatDetails?.chat_type === 'organization' && (
-          <RenderMessagesOrg
-            artist={
-              currentChatDetails?.chat_members.find((member) => member.artists)
-                ?.artists
-            }
-            venue={
-              currentChatDetails?.chat_members.find((member) => member.venues)
-                ?.venues
-            }
-          />
-        )}
-      </View>
-      {currentChatDetails?.chat_type !== 'organization' && (
-        <View className="flex-1">
-          <KeyboardAvoidingView
-            keyboardVerticalOffset={100}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            className="px-2 flex w-full items-center flex-row gap-2 bg-black backdrop-blur-md"
-          >
+          <View className="flex flex-row pb-24 gap-2 px-2">
             <TextInput
               className="mb-3 rounded-full flex-1 py-3 px-6 border border-zinc-800 text-muted-foreground items-center"
               placeholder="Message..."
@@ -99,9 +102,9 @@ export default function Home() {
             >
               <Text className="font-semibold">Send</Text>
             </TouchableOpacity>
-          </KeyboardAvoidingView>
-        </View>
-      )}
-    </View>
+          </View>
+        )}
+      </View>
+    </KeyboardAvoidingView>
   );
 }

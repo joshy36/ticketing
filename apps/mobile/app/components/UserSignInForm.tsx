@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { SupabaseContext } from '../../utils/supabaseProvider';
+import { SupabaseContext } from '../../providers/supabaseProvider';
 import { Link } from 'expo-router';
 import { useContext, useState } from 'react';
 

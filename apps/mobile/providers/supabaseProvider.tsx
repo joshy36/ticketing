@@ -1,8 +1,8 @@
 import { Session, User } from '@supabase/supabase-js';
 import { createContext, useEffect, useState } from 'react';
-import { ExpoSecureStoreAdapter, supabase } from './supabaseExpo';
+import { ExpoSecureStoreAdapter, supabase } from '../utils/supabaseExpo';
 import { Alert } from 'react-native';
-import { trpc } from './trpc';
+import { trpc } from '../utils/trpc';
 import { UserProfile } from 'supabase';
 
 type SupabaseContextProps = {

@@ -1,7 +1,7 @@
 import { Link, Stack, useGlobalSearchParams } from 'expo-router';
 import { MessagesProvider } from '../../../providers/messagesProvider';
 import { useContext } from 'react';
-import { SupabaseContext } from '../../../utils/supabaseProvider';
+import { SupabaseContext } from '../../../providers/supabaseProvider';
 import { trpc } from '../../../utils/trpc';
 import { Feather } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';

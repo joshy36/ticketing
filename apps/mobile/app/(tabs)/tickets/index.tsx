@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { RouterOutputs } from '../../../utils/trpc';
 import { useCallback, useContext, useState } from 'react';
-import { SupabaseContext } from '../../../utils/supabaseProvider';
+import { SupabaseContext } from '../../../providers/supabaseProvider';
 import TicketsPage from './TicketsPage';
 import { Link } from 'expo-router';
 import { TicketsContext } from '../../../providers/ticketsProvider';

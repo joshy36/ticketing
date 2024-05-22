@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import { trpc } from '../../../utils/trpc';
-import { SupabaseContext } from '../../../utils/supabaseProvider';
+import { SupabaseContext } from '../../../providers/supabaseProvider';
 import RenderChats from './RenderChats';
 import { useContext } from 'react';
 

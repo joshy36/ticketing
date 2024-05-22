@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
-import { SupabaseContext } from '../../utils/supabaseProvider';
+import { SupabaseContext } from '../../providers/supabaseProvider';
 import { trpc } from '../../utils/trpc';
 import { blurhash, replaceLocalhostWithIP } from '../../utils/helpers';
 import Separator from './Separator';
@@ -70,7 +70,9 @@ const ProfilePage = () => {
                 )}
               </View>
               <Text className="flex flex-row py-2">
-                <Text className="pb-4 text-sm font-light text-muted-foreground">{`@${userProfile?.username} ·`}</Text>
+                <Text className="pb-4 text-sm font-light text-muted-foreground">
+                  {`@${userProfile?.username}`} {' · '}
+                </Text>
                 {friendCount === 1 ? (
                   <Text className="ml-2 pb-4 text-sm font-semibold text-muted-foreground hover:underline">{`${friendCount} friend`}</Text>
                 ) : (

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { RouterOutputs, trpc } from '../utils/trpc';
-import { SupabaseContext } from '@/utils/supabaseProvider';
+import { SupabaseContext } from '@/providers/supabaseProvider';
 
 type TicketsProviderProps = {
   children: React.ReactNode;

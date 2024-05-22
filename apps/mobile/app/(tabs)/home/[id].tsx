@@ -11,7 +11,7 @@ import { trpc } from '../../../utils/trpc';
 import { dateToString, replaceLocalhostWithIP } from '../../../utils/helpers';
 import Separator from '../../components/Separator';
 import { blurhash } from '../../../utils/helpers';
-import { SupabaseContext } from '../../../utils/supabaseProvider';
+import { SupabaseContext } from '../../../providers/supabaseProvider';
 import { useContext } from 'react';
 import TicketSection from '../../components/TicketSection';
 import { A } from '@expo/html-elements';
