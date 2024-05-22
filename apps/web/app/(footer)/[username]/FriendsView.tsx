@@ -44,13 +44,13 @@ export default function FriendsView({
                 <p>No friends yet!</p>
               </div>
             )}
-            <ScrollArea className='h-[200px] w-full'>
+            <ScrollArea className='mt-2 h-[200px] w-full'>
               {friends?.map((friend) => {
                 return (
                   <Link
                     href={`/${friend.profile.username}`}
                     key={friend.profile.id}
-                    className='flex flex-row items-center justify-between border-b border-zinc-800 p-2'
+                    className='flex flex-row items-center justify-between border-b border-zinc-800 p-2 hover:bg-zinc-800/50'
                   >
                     <ProfileCard userProfile={friend.profile} />
                   </Link>

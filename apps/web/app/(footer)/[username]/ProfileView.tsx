@@ -17,10 +17,10 @@ import { Separator } from '~/components/ui/separator';
 import UserSignOut from './UserSignOut';
 import CopyWallet from './CopyWallet';
 import FriendRequest from './FriendRequest';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { notFound } from 'next/navigation';
 import { Wallet } from 'lucide-react';
 import FriendsView from './FriendsView';
+import AvatarView from './AvatarView';
 
 export default async function ProfileView({
   params,
@@ -58,13 +58,7 @@ export default async function ProfileView({
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-24'>
       <div className='flex flex-col gap-4'>
         <div className='flex flex-row justify-between'>
-          <Avatar className='h-32 w-32'>
-            {userProfile?.profile_image ? (
-              <AvatarImage src={userProfile?.profile_image} alt='pfp' />
-            ) : (
-              <AvatarFallback></AvatarFallback>
-            )}
-          </Avatar>
+          <AvatarView userProfile={userProfile} />
           {user && user.user?.id === userProfile?.id && (
             <UserSignOut userProfile={userProfile} />
           )}
