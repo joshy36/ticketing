@@ -27,7 +27,7 @@ export const sbtsRouter = router({
         .limit(1)
         .single();
 
-      return data?.sbts_released;
+      return data;
     }),
 
   releaseSbtsForEvent: authedProcedure
@@ -48,7 +48,7 @@ export const sbtsRouter = router({
       const { data: eventMetadata } = await supabase
         .from('events_metadata')
         .select()
-        .eq('id', input.event_id)
+        .eq('event_id', input.event_id)
         .limit(1)
         .single();
 
@@ -120,6 +120,6 @@ export const sbtsRouter = router({
       await supabase
         .from('events_metadata')
         .update({ sbts_released: true })
-        .eq('id', input.event_id);
+        .eq('event_id', input.event_id);
     }),
 });

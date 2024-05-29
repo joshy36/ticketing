@@ -27,7 +27,7 @@ export const collectiblesRouter = router({
         .limit(1)
         .single();
 
-      return data?.collectibles_released;
+      return data;
     }),
 
   releaseCollectiblesForEvent: authedProcedure
@@ -48,9 +48,11 @@ export const collectiblesRouter = router({
       const { data: eventMetadata } = await supabase
         .from('events_metadata')
         .select()
-        .eq('id', input.event_id)
+        .eq('event_id', input.event_id)
         .limit(1)
         .single();
+
+      console.log('EVENT: ', eventMetadata);
 
       if (!eventMetadata?.collectible_etherscan_link) {
         throw new TRPCError({
@@ -120,6 +122,6 @@ export const collectiblesRouter = router({
       await supabase
         .from('events_metadata')
         .update({ collectibles_released: true })
-        .eq('id', input.event_id);
+        .eq('event_id', input.event_id);
     }),
 });
