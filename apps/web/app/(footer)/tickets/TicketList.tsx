@@ -183,7 +183,7 @@ export default function TicketList({
                             )}
                           </AccordionTrigger>
                           <AccordionContent>
-                            <div className='flex flex-row items-center justify-between border-b px-2 py-2'>
+                            <div className='flex flex-row items-center justify-between border-b px-4 py-2'>
                               {
                                 tickets?.tickets?.filter(
                                   (ticket) =>
@@ -203,7 +203,7 @@ export default function TicketList({
                               ?.map((ticket: any, index: number) => (
                                 <div
                                   key={ticket.id}
-                                  className='flex flex-row items-center justify-between border-b px-2 py-2'
+                                  className='flex flex-row items-center justify-between border-b px-4 py-2'
                                 >
                                   <div className='flex items-center gap-8 font-medium'>
                                     <div className='flex flex-col'>
