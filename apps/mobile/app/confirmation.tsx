@@ -3,8 +3,11 @@ import { Link, router, useLocalSearchParams } from 'expo-router';
 import { trpc } from '@/utils/trpc';
 import { Entypo } from '@expo/vector-icons';
 import Separator from './components/Separator';
+import LottieView from 'lottie-react-native';
+import React, { useRef } from 'react';
 
 export default function Modal() {
+  const animation = useRef(null);
   const { paymentIntent } = useLocalSearchParams<{
     paymentIntent: string;
   }>();
@@ -24,6 +27,17 @@ export default function Modal() {
   const isPresented = router.canGoBack();
   return (
     <View className="flex-1 justify-center bg-black pt-4">
+      <LottieView
+        autoPlay
+        loop={false}
+        ref={animation}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+        }}
+        source={require('../assets/confetti.json')}
+      />
       {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
       {!isPresented && <Link href="../">Dismiss</Link>}
       {paymentIntentFull.isLoading ||
@@ -76,8 +90,8 @@ export default function Modal() {
                   </View>
                 )
               )}
-              <Separator />
-              <View className="flex flex-row justify-between w-full">
+
+              <View className="flex flex-row justify-between w-full border-t border-zinc-800 mt-4">
                 <View className="pt-2 text-lg font-semibold text-white">
                   <Text className="text-white font-bold text-xl">Total:</Text>
                 </View>
@@ -90,11 +104,11 @@ export default function Modal() {
 
               <View className="flex justify-center">
                 <TouchableOpacity
-                  className="mt-8 px-4 py-2 rounded-full border border-white flex flex-row items-center justify-center"
+                  className="mt-8 px-4 py-2 rounded-full border bg-white flex flex-row items-center justify-center"
                   onPress={() => router.replace('/tickets')}
                 >
-                  <Text className="text-white">View Tickets</Text>
-                  <Entypo name="chevron-right" size={24} color="white" />
+                  <Text className="font-bold">View Tickets</Text>
+                  <Entypo name="chevron-right" size={24} color="black" />
                 </TouchableOpacity>
               </View>
             </View>
