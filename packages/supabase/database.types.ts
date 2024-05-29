@@ -259,34 +259,25 @@ export interface Database {
       }
       collectibles: {
         Row: {
-          base_url: string | null
           created_at: string
-          etherscan_link: string | null
           event_id: string | null
           id: string
-          ipfs_image: string | null
           ticket_id: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          base_url?: string | null
           created_at?: string
-          etherscan_link?: string | null
           event_id?: string | null
           id?: string
-          ipfs_image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          base_url?: string | null
           created_at?: string
-          etherscan_link?: string | null
           event_id?: string | null
           id?: string
-          ipfs_image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -390,6 +381,52 @@ export interface Database {
             foreignKeyName: "events_venue_fkey"
             columns: ["venue"]
             referencedRelation: "venues"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      events_metadata: {
+        Row: {
+          collectible_base_url: string | null
+          collectible_etherscan_link: string | null
+          collectible_ipfs_image: string | null
+          created_at: string
+          event_id: string
+          id: number
+          sbt_base_url: string | null
+          sbt_etherscan_link: string | null
+          sbt_ipfs_image: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          collectible_base_url?: string | null
+          collectible_etherscan_link?: string | null
+          collectible_ipfs_image?: string | null
+          created_at?: string
+          event_id: string
+          id?: number
+          sbt_base_url?: string | null
+          sbt_etherscan_link?: string | null
+          sbt_ipfs_image?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          collectible_base_url?: string | null
+          collectible_etherscan_link?: string | null
+          collectible_ipfs_image?: string | null
+          created_at?: string
+          event_id?: string
+          id?: number
+          sbt_base_url?: string | null
+          sbt_etherscan_link?: string | null
+          sbt_ipfs_image?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_metadata_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
             referencedColumns: ["id"]
           }
         ]
@@ -669,34 +706,25 @@ export interface Database {
       }
       sbts: {
         Row: {
-          base_url: string | null
           created_at: string
-          etherscan_link: string | null
           event_id: string | null
           id: string
-          ipfs_image: string | null
           ticket_id: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          base_url?: string | null
           created_at?: string
-          etherscan_link?: string | null
           event_id?: string | null
           id?: string
-          ipfs_image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          base_url?: string | null
           created_at?: string
-          etherscan_link?: string | null
           event_id?: string | null
           id?: string
-          ipfs_image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null

@@ -1,13 +1,35 @@
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, useGlobalSearchParams } from 'expo-router';
 import { useContext } from 'react';
-import { SupabaseContext } from '../../../providers/supabaseProvider';
+import { SupabaseContext } from '@/providers/supabaseProvider';
 import { Feather } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
+import { MessagesContext } from '@/providers/messagesProvider';
+import { Image } from 'expo-image';
+import { blurhash, replaceLocalhostWithIP } from '@/utils/helpers';
 
 const Layout = () => {
-  const supabaseContext = useContext(SupabaseContext);
-  const { session, user } = supabaseContext;
+  const { id } = useGlobalSearchParams();
+  const { chats } = useContext(MessagesContext);
+  const { session, user, userProfile } = useContext(SupabaseContext);
+
+  const currentChatDetails = chats?.chats?.find(
+    (chat) => chat.id === (id! as string)
+  );
+
+  const otherUser = currentChatDetails?.chat_members.find(
+    (user) => user.user_id != userProfile?.id
+  )?.user_profiles;
+
+  const artist = currentChatDetails?.chat_members.find(
+    (member) => member.artists
+  )?.artists;
+
+  const venue = currentChatDetails?.chat_members.find(
+    (member) => member.venues
+  )?.venues;
+
+  const artistOrVenue = artist || venue;
 
   return (
     <Stack
@@ -35,8 +57,44 @@ const Layout = () => {
       <Stack.Screen
         name="[id]"
         options={{
-          headerTitle: 'Message',
-          headerBackTitle: 'Back',
+          headerTitle: () => (
+            <View>
+              {currentChatDetails?.chat_type === 'dm' && (
+                <View className="flex flex-row justify-center items-center gap-2">
+                  <Image
+                    className="h-8 w-8 rounded-full flex justify-center items-center"
+                    source={{
+                      uri: replaceLocalhostWithIP(otherUser?.profile_image),
+                    }}
+                    placeholder={blurhash}
+                    contentFit="cover"
+                    transition={1000}
+                  />
+                  <Text className="text-white">
+                    {otherUser?.first_name + ' ' + otherUser?.last_name}
+                  </Text>
+                </View>
+              )}
+              {currentChatDetails?.chat_type === 'group' && (
+                <View className="flex flex-row justify-center items-center gap-2"></View>
+              )}
+              {currentChatDetails?.chat_type === 'organization' && (
+                <View className="flex flex-row justify-center items-center gap-2">
+                  <Image
+                    className="h-8 w-8 rounded-xl flex justify-center items-center"
+                    source={{
+                      uri: replaceLocalhostWithIP(artistOrVenue?.image),
+                    }}
+                    placeholder={blurhash}
+                    contentFit="cover"
+                    transition={1000}
+                  />
+                  <Text className="text-white">{artistOrVenue?.name}</Text>
+                </View>
+              )}
+            </View>
+          ),
+          headerBackTitleVisible: false,
           headerRight: () => (
             <Ionicons
               name={'information-circle-outline'}

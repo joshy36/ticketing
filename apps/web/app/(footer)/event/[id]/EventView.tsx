@@ -115,32 +115,6 @@ export default async function EventView({
                 className='rounded-lg'
               />
             )}
-            {event.etherscan_link ? (
-              <a href={`${event.etherscan_link}`} target='_blank'>
-                <Button variant='link'>
-                  <div className='flex items-center space-x-1.5'>
-                    <span className='relative flex h-3 w-3'>
-                      {/* Uncomment to animate */}
-                      {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
-                      <div className='relative inline-flex h-3 w-3 rounded-full bg-green-600 '></div>
-                    </span>
-                    <div className='text-muted-foreground'>Contract live</div>
-                    <ExternalLinkIcon className='text-muted-foreground' />
-                  </div>
-                </Button>
-              </a>
-            ) : (
-              <div className='flex items-center space-x-1.5'>
-                <span className='relative flex h-3 w-3'>
-                  {/* Uncomment to animate */}
-                  {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span> */}
-                  <div className='relative inline-flex h-3 w-3 rounded-full bg-yellow-500 '></div>
-                </span>
-                <div className='text-muted-foreground'>
-                  Contract pending deployment
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

@@ -13,9 +13,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deploy } = deployments;
 
   // CHANGE
-  const id = 'faec1b46-fe85-4697-925a-29ca4792084e';
+  const id = '61654172-be49-4240-a0d7-c79701736e83';
   // CHANGE
-  const env: string = 'prod';
+  const env: string = 'local';
 
   let SUPABASE_URL: string;
   let SUPABASE_ANON_KEY: string;

@@ -11,7 +11,7 @@ export const sbtsRouter = router({
       const supabase = ctx.supabase;
       const { data } = await supabase
         .from('sbts')
-        .select(`*, events (id, image, name, etherscan_link)`)
+        .select(`*, events (id, image, name)`)
         .eq('user_id', input.user_id);
       return data;
     }),
@@ -33,17 +33,24 @@ export const sbtsRouter = router({
         .select()
         .eq('event_id', input.event_id);
 
-      const link = sbts?.at(0)?.etherscan_link?.split('/');
+      const { data: eventMetadata } = await supabase
+        .from('events_metadata')
+        .select()
+        .eq('id', input.event_id)
+        .limit(1)
+        .single();
 
-      if (!link) {
+      if (!eventMetadata?.sbt_etherscan_link) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'No contract deployed for sbts',
         });
       }
 
-      const sbtsToSend = sbts?.filter(
-        (sbt) => scannedTickets?.some((ticket) => ticket.id === sbt.ticket_id)
+      const link = eventMetadata.sbt_etherscan_link.split('/');
+
+      const sbtsToSend = sbts?.filter((sbt) =>
+        scannedTickets?.some((ticket) => ticket.id === sbt.ticket_id)
       );
 
       // transfer the nft and update the db

@@ -13,9 +13,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deploy } = deployments;
 
   // CHANGE
-  const id = 'd34f35ce-405e-4e84-a3fc-ea88a5e35065';
+  const id = '61654172-be49-4240-a0d7-c79701736e83';
   // CHANGE
-  const env: string = 'prod';
+  const env: string = 'local';
 
   let SUPABASE_URL: string;
   let SUPABASE_ANON_KEY: string;
@@ -36,13 +36,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     .single();
 
   const { data: sbt } = await supabase
-    .from('sbts')
+    .from('events_metadata')
     .select()
     .eq('event_id', id)
     .limit(1)
     .single();
 
-  if (!sbt?.base_url) {
+  if (!sbt?.sbt_base_url) {
     console.log('No baseUrl yet!');
     return;
   }
@@ -54,7 +54,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const name = event?.name;
   const symbol = event?.name.substring(0, 2);
-  const baseUri = event?.base_url;
+  const baseUri = sbt?.sbt_base_url;
 
   const deployment = await deploy('SBT', {
     from: deployer!,
@@ -67,8 +67,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     'https://base-sepolia.blockscout.com/address/' + deployment.address;
 
   await supabase
-    .from('sbts')
-    .update({ etherscan_link: etherscanLink })
+    .from('events_metadata')
+    .update({ sbt_etherscan_link: etherscanLink })
     .eq('event_id', id);
 
   console.log(`SBT with name ${name} deployed to ${etherscanLink}`);

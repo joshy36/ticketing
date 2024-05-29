@@ -1,10 +1,17 @@
 const { createClient } = require('@supabase/supabase-js');
-const { NFTStorage } = require('nft.storage');
 const uploadMetadataImage = require('./uploadMetadataImage');
 const uploadFullMetadata = require('./uploadFullMetadata');
+const {
+  BucketManager,
+  ObjectManager,
+  NameManager,
+  GatewayManager,
+  PinManager,
+} = require('@filebase/sdk');
+// https://filebase.github.io/filebase-sdk/
+
 require('dotenv').config();
 
-const API_KEY = process.env.NFT_STORAGE_API_KEY;
 let SUPABASE_URL;
 let SUPABASE_ANON_KEY;
 
@@ -39,9 +46,15 @@ const main = async () => {
       return;
     }
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const nftClient = new NFTStorage({ token: API_KEY });
-    await uploadMetadataImage(args[0], args[2], supabase, nftClient);
-    await uploadFullMetadata(args[0], args[2], supabase, nftClient);
+    const objectManager = new ObjectManager(
+      process.env.S3_KEY,
+      process.env.S3_SECRET,
+      {
+        bucket: 'ticketing-event-metadata',
+      }
+    );
+    await uploadMetadataImage(args[0], args[2], supabase, objectManager);
+    await uploadFullMetadata(args[0], args[2], supabase, objectManager);
   }
 };
 

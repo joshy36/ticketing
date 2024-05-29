@@ -11,7 +11,7 @@ export const collectiblesRouter = router({
       const supabase = ctx.supabase;
       const { data } = await supabase
         .from('collectibles')
-        .select(`*, events (id, image, name, etherscan_link)`)
+        .select(`*, events (id, image, name)`)
         .eq('user_id', input.user_id);
       return data;
     }),
@@ -33,18 +33,24 @@ export const collectiblesRouter = router({
         .select()
         .eq('event_id', input.event_id);
 
-      const link = collectibles?.at(0)?.etherscan_link?.split('/');
+      const { data: eventMetadata } = await supabase
+        .from('events_metadata')
+        .select()
+        .eq('id', input.event_id)
+        .limit(1)
+        .single();
 
-      if (!link) {
+      if (!eventMetadata?.collectible_etherscan_link) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'No contract deployed for collectibles',
         });
       }
 
-      const collectiblesToSend = collectibles?.filter(
-        (collectible) =>
-          scannedTickets?.some((ticket) => ticket.id === collectible.ticket_id)
+      const link = eventMetadata.collectible_etherscan_link.split('/');
+
+      const collectiblesToSend = collectibles?.filter((collectible) =>
+        scannedTickets?.some((ticket) => ticket.id === collectible.ticket_id)
       );
 
       // transfer the nft and update the db

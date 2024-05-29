@@ -165,29 +165,6 @@ const Home = () => {
                 <Text className="text-muted-foreground text-xl font-light py-4">
                   {event?.description}
                 </Text>
-                {event?.etherscan_link ? (
-                  <View>
-                    <A href={`${event.etherscan_link}`}>
-                      <View className="flex flex-row items-center space-x-1.5">
-                        <View className="relative flex h-3 w-3">
-                          <View className="relative inline-flex h-3 w-3 rounded-full bg-green-600 "></View>
-                        </View>
-                        <Text className="text-muted-foreground">
-                          Contract live
-                        </Text>
-                      </View>
-                    </A>
-                  </View>
-                ) : (
-                  <View className="flex flex-row items-center space-x-1.5">
-                    <View className="relative flex h-3 w-3">
-                      <View className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500 "></View>
-                    </View>
-                    <Text className="text-muted-foreground">
-                      Contract pending deployment
-                    </Text>
-                  </View>
-                )}
                 {isScanner ? (
                   <Link href={`/home/scan/${event?.id}`} asChild>
                     <TouchableOpacity className="bg-white py-3 rounded-full flex mb-20">
