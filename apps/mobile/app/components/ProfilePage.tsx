@@ -36,59 +36,61 @@ const ProfilePage = () => {
       {userProfileLoading ? (
         <Text className="text-white">Loading...</Text>
       ) : (
-        <View>
-          <View className="flex flex-row justify-end pr-2">
-            <TouchableOpacity
-              className="bg-black border border-gray-800 py-3 rounded-full w-24 "
-              onPress={() => signOut()}
-            >
-              <Text className="text-white text-center font-bold">Sign Out</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View className="flex flex-col gap-2">
-            <View>
-              {userProfile && (
-                <Image
-                  className="h-20 w-20 rounded-full flex justify-center items-center"
-                  source={{
-                    uri: replaceLocalhostWithIP(userProfile).profile_image,
-                  }}
-                  placeholder={blurhash}
-                  contentFit="cover"
-                  transition={1000}
-                />
-              )}
+        <ScrollView>
+          <View className="pb-24">
+            <View className="flex flex-row justify-end pr-2">
+              <TouchableOpacity
+                className="bg-black border border-gray-800 py-3 rounded-full w-24 "
+                onPress={() => signOut()}
+              >
+                <Text className="text-white text-center font-bold">
+                  Sign Out
+                </Text>
+              </TouchableOpacity>
             </View>
-            <View className="pb-6">
-              <View className="flex flex-row">
-                {userProfile?.first_name && (
-                  <Text className="text-white text-2xl font-bold">{`${userProfile.first_name} `}</Text>
-                )}
-                {userProfile?.last_name && (
-                  <Text className="text-white text-2xl font-bold">{`${userProfile.last_name}`}</Text>
+
+            <View className="flex flex-col gap-2">
+              <View>
+                {userProfile && (
+                  <Image
+                    className="h-20 w-20 rounded-full flex justify-center items-center"
+                    source={{
+                      uri: replaceLocalhostWithIP(userProfile).profile_image,
+                    }}
+                    placeholder={blurhash}
+                    contentFit="cover"
+                    transition={1000}
+                  />
                 )}
               </View>
-              <Text className="flex flex-row py-2">
-                <Text className="pb-4 text-sm font-light text-muted-foreground">
-                  {`@${userProfile?.username}`} {' · '}
+              <View className="pb-6">
+                <View className="flex flex-row">
+                  {userProfile?.first_name && (
+                    <Text className="text-white text-2xl font-bold">{`${userProfile.first_name} `}</Text>
+                  )}
+                  {userProfile?.last_name && (
+                    <Text className="text-white text-2xl font-bold">{`${userProfile.last_name}`}</Text>
+                  )}
+                </View>
+                <Text className="flex flex-row py-2">
+                  <Text className="pb-4 text-sm font-light text-muted-foreground">
+                    {`@${userProfile?.username}`} {' · '}
+                  </Text>
+                  {friendCount === 1 ? (
+                    <Text className="ml-2 pb-4 text-sm font-semibold text-muted-foreground hover:underline">{`${friendCount} friend`}</Text>
+                  ) : (
+                    <Text className="ml-2 pb-4 text-sm font-semibold text-muted-foreground hover:underline">{`${friendCount} friends`}</Text>
+                  )}
                 </Text>
-                {friendCount === 1 ? (
-                  <Text className="ml-2 pb-4 text-sm font-semibold text-muted-foreground hover:underline">{`${friendCount} friend`}</Text>
-                ) : (
-                  <Text className="ml-2 pb-4 text-sm font-semibold text-muted-foreground hover:underline">{`${friendCount} friends`}</Text>
-                )}
-              </Text>
-              <View className="space-y-6">
-                <Text className="text-white font-light text-base">
-                  {userProfile?.bio}
-                </Text>
+                <View className="space-y-6">
+                  <Text className="text-white font-light text-base">
+                    {userProfile?.bio}
+                  </Text>
+                </View>
               </View>
+              <Separator />
             </View>
-            <Separator />
-          </View>
 
-          <ScrollView>
             <View className="flex flex-row items-center justify-center gap-2 pt-4">
               <Text className="text-center text-white text-2xl font-bold">
                 Social Wallet
@@ -107,23 +109,24 @@ const ProfilePage = () => {
                       Attend events to build a collection!
                     </Text>
                   ) : (
-                    <View className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <View className="grid grid-cols-1 gap-4">
                       {collectibles?.map((sbt) => (
-                        <View key={sbt.id}>
-                          <View className="xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background">
-                            {sbt.events?.image && (
-                              <Image
-                                source={{
-                                  uri: replaceLocalhostWithIP(sbt.events).image,
-                                }}
-                                alt="sbt Image"
-                                className="h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
-                              />
-                            )}
-                          </View>
-                          <h1 className="mt-4 text-lg text-accent-foreground">
+                        <View
+                          key={sbt.id}
+                          className="flex flex-row gap-2 items-center"
+                        >
+                          {sbt.events?.image && (
+                            <Image
+                              source={{
+                                uri: replaceLocalhostWithIP(sbt.events).image,
+                              }}
+                              alt="sbt Image"
+                              className="h-12 w-12 object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
+                            />
+                          )}
+                          <Text className="mt-4 text-lg font-light text-white">
                             {sbt.events?.name}
-                          </h1>
+                          </Text>
                         </View>
                       ))}
                     </View>
@@ -142,21 +145,22 @@ const ProfilePage = () => {
                       Attend events to build a collection!
                     </Text>
                   ) : (
-                    <View className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <View className="grid grid-cols-1 gap-4">
                       {sbts?.map((sbt) => (
-                        <View key={sbt.id}>
-                          <View className="xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background">
-                            {sbt.events?.image && (
-                              <Image
-                                source={{
-                                  uri: replaceLocalhostWithIP(sbt.events).image,
-                                }}
-                                alt="sbt Image"
-                                className="h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
-                              />
-                            )}
-                          </View>
-                          <Text className="mt-4 text-lg text-accent-foreground">
+                        <View
+                          key={sbt.id}
+                          className="flex flex-row gap-2 items-center"
+                        >
+                          {sbt.events?.image && (
+                            <Image
+                              source={{
+                                uri: replaceLocalhostWithIP(sbt.events).image,
+                              }}
+                              alt="sbt Image"
+                              className="h-12 w-12 object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
+                            />
+                          )}
+                          <Text className="mt-4 text-lg font-light text-white">
                             {sbt.events?.name}
                           </Text>
                         </View>
@@ -166,8 +170,8 @@ const ProfilePage = () => {
                 </View>
               </View>
             </View>
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
       )}
     </View>
   );

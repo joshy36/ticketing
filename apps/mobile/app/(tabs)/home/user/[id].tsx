@@ -80,7 +80,7 @@ const ProfilePage = () => {
         {otherUserProfileLoading ? (
           <Text className="text-white">Loading...</Text>
         ) : (
-          <View>
+          <View className="pb-24">
             <View className="flex flex-col gap-2">
               <View>
                 {otherUserProfile && (
@@ -129,87 +129,85 @@ const ProfilePage = () => {
               <Separator />
             </View>
 
-            <ScrollView>
-              <View className="flex flex-row items-center justify-center gap-2 pt-4">
-                <Text className="text-center text-white text-2xl font-bold">
-                  Social Wallet
-                </Text>
-              </View>
-              <View className="grid grid-cols-1 gap-8 px-4 pt-8">
-                <View>
-                  <View className="flex flex-row items-center justify-center gap-2">
-                    <Text className="text-center text-white text-2xl underline underline-offset-8">
-                      Collectibles
-                    </Text>
-                  </View>
-                  <View className="grid grid-cols-1 gap-8 px-4 pt-8">
-                    {collectibles?.length === 0 ? (
-                      <Text className="text-center text-white text-xl font-extralight">
-                        Attend events to build a collection!
-                      </Text>
-                    ) : (
-                      <View className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                        {collectibles?.map((sbt) => (
-                          <View key={sbt.id}>
-                            <View className="xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background">
-                              {sbt.events?.image && (
-                                <Image
-                                  source={{
-                                    uri: replaceLocalhostWithIP(sbt.events)
-                                      .image,
-                                  }}
-                                  alt="sbt Image"
-                                  className="h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
-                                />
-                              )}
-                            </View>
-                            <h1 className="mt-4 text-lg text-accent-foreground">
-                              {sbt.events?.name}
-                            </h1>
-                          </View>
-                        ))}
-                      </View>
-                    )}
-                  </View>
+            <View className="flex flex-row items-center justify-center gap-2 pt-4">
+              <Text className="text-center text-white text-2xl font-bold">
+                Social Wallet
+              </Text>
+            </View>
+            <View className="grid grid-cols-1 gap-8 px-4 pt-8">
+              <View>
+                <View className="flex flex-row items-center justify-center gap-2">
+                  <Text className="text-center text-white text-2xl underline underline-offset-8">
+                    Collectibles
+                  </Text>
                 </View>
-                <View>
-                  <View className="flex flex-row items-center justify-center gap-2">
-                    <Text className="text-center text-white text-2xl underline underline-offset-8">
-                      Community
+                <View className="grid grid-cols-1 gap-8 px-4 pt-8">
+                  {collectibles?.length === 0 ? (
+                    <Text className="text-center text-white text-xl font-extralight">
+                      Attend events to build a collection!
                     </Text>
-                  </View>
-                  <View className="grid grid-cols-1 gap-8 px-4 pt-8">
-                    {sbts?.length === 0 ? (
-                      <Text className="text-center text-white text-xl font-extralight">
-                        Attend events to build a collection!
-                      </Text>
-                    ) : (
-                      <View className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                        {sbts?.map((sbt) => (
-                          <View key={sbt.id}>
-                            <View className="xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background">
-                              {sbt.events?.image && (
-                                <Image
-                                  source={{
-                                    uri: replaceLocalhostWithIP(sbt.events)
-                                      .image,
-                                  }}
-                                  alt="sbt Image"
-                                  className="h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
-                                />
-                              )}
-                            </View>
-                            <Text className="mt-4 text-lg text-accent-foreground">
-                              {sbt.events?.name}
-                            </Text>
-                          </View>
-                        ))}
-                      </View>
-                    )}
-                  </View>
+                  ) : (
+                    <View className="grid grid-cols-1 gap-4">
+                      {collectibles?.map((sbt) => (
+                        <View
+                          key={sbt.id}
+                          className="flex flex-row gap-2 items-center"
+                        >
+                          {sbt.events?.image && (
+                            <Image
+                              source={{
+                                uri: replaceLocalhostWithIP(sbt.events).image,
+                              }}
+                              alt="sbt Image"
+                              className="h-12 w-12 object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
+                            />
+                          )}
+                          <Text className="mt-4 text-lg font-light text-white">
+                            {sbt.events?.name}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
                 </View>
               </View>
-            </ScrollView>
+              <View>
+                <View className="flex flex-row items-center justify-center gap-2">
+                  <Text className="text-center text-white text-2xl underline underline-offset-8">
+                    Community
+                  </Text>
+                </View>
+                <View className="grid grid-cols-1 gap-8 px-4 pt-8">
+                  {sbts?.length === 0 ? (
+                    <Text className="text-center text-white text-xl font-extralight">
+                      Attend events to build a collection!
+                    </Text>
+                  ) : (
+                    <View className="grid grid-cols-1 gap-4">
+                      {sbts?.map((sbt) => (
+                        <View
+                          key={sbt.id}
+                          className="flex flex-row gap-2 items-center"
+                        >
+                          {sbt.events?.image && (
+                            <Image
+                              source={{
+                                uri: replaceLocalhostWithIP(sbt.events).image,
+                              }}
+                              alt="sbt Image"
+                              className="h-12 w-12 object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
+                            />
+                          )}
+                          <Text className="mt-4 text-lg font-light text-white">
+                            {sbt.events?.name}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              </View>
+            </View>
           </View>
         )}
       </ScrollView>
