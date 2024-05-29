@@ -73,39 +73,13 @@ export const generatePfpForUser = inngest.createFunction(
   },
 );
 
-export const transferTicketDatabase = inngest.createFunction(
-  { id: 'transfer-ticket-database', concurrency: 1 },
-  { event: 'ticket/transfer.database' },
-  async ({ event }) => {
-    const supabase = createSupabaseServer();
-    console.log(
-      `INNGEST::recieved: ${event.data.transaction_id} ${event.data.purchaser_id} ${event.data.section_id} ${event.data.event_id}`,
-    );
-    const { data: ticket, error } = await supabase
-      .from('tickets')
-      .update({
-        owner_id: event.data.owner_id,
-        purchaser_id: event.data.purchaser_id,
-        transaction_id: event.data.transaction_id,
-      })
-      .is('purchaser_id', null)
-      .is('owner_id', null)
-      .eq('section_id', event.data.section_id)
-      .eq('event_id', event.data.event_id)
-      .order('id', { ascending: true })
-      .select()
-      .limit(1)
-      .single();
-    console.log(`INNGEST::done: ${ticket}`);
-    return ticket;
-  },
-);
-
 export const transferTicket = inngest.createFunction(
   { id: 'transfer-ticket', concurrency: 1 },
   { event: 'ticket/transfer' },
   async ({ event }) => {
-    console.log(`INNGEST::recieved: ${event.data.ticket_id}`);
+    console.log(
+      `INNGEST::transferTicket: ${event.data.ticket_id} ${event.data.event_id} ${event.data.owner_id}`,
+    );
     const supabase = createSupabaseServer();
     const { data: eventSupabase } = await supabase
       .from('events')
@@ -124,7 +98,7 @@ export const transferTicket = inngest.createFunction(
     const { data: userProfile } = await supabase
       .from('user_profiles')
       .select()
-      .eq('id', event.data.user_id)
+      .eq('id', event.data.owner_id)
       .limit(1)
       .single();
 
@@ -162,5 +136,47 @@ export const transferTicket = inngest.createFunction(
         current_wallet_address: userProfile?.wallet_address,
       })
       .eq('id', event.data.ticket_id);
+  },
+);
+
+export const transferTicketDatabase = inngest.createFunction(
+  { id: 'transfer-ticket-database', concurrency: 1 },
+  { event: 'ticket/transfer.database' },
+  async ({ event, step }) => {
+    const supabase = createSupabaseServer();
+    console.log(
+      `INNGEST::recieved: ${event.data.transaction_id} ${event.data.purchaser_id} ${event.data.owner_id} ${event.data.section_id} ${event.data.event_id}`,
+    );
+    const { data: ticket, error } = await supabase
+      .from('tickets')
+      .update({
+        owner_id: event.data.owner_id,
+        purchaser_id: event.data.purchaser_id,
+        transaction_id: event.data.transaction_id,
+      })
+      .is('purchaser_id', null)
+      .is('owner_id', null)
+      .eq('section_id', event.data.section_id)
+      .eq('event_id', event.data.event_id)
+      .order('token_id', { ascending: true })
+      .select()
+      .limit(1)
+      .single();
+    console.log(`INNGEST::error: ${error}`);
+    console.log(`INNGEST::done: ${JSON.stringify(ticket)}`);
+
+    if (event.data.owner_id) {
+      console.log('Sending transfer ticket event');
+      await step.invoke('ticket-transfer', {
+        function: transferTicket,
+        data: {
+          ticket_id: ticket?.id,
+          event_id: event.data.event_id,
+          owner_id: event.data.owner_id,
+        },
+      });
+    }
+
+    return ticket;
   },
 );

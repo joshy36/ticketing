@@ -25,18 +25,6 @@ export const paymentsRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const supabase = ctx.supabase;
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: Number((input.price * 100).toFixed(2)),
-        currency: 'usd',
-        automatic_payment_methods: {
-          enabled: true,
-        },
-        metadata: {
-          event_id: input.event_id,
-          cart_info: JSON.stringify(input.cart_info),
-          user_id: ctx.user.id,
-        },
-      });
 
       const ticketReservations: Reservation[] = [];
 
@@ -48,7 +36,7 @@ export const paymentsRouter = router({
           .eq('section_id', input.cart_info[i]?.section.id!)
           .is('purchaser_id', null)
           .is('owner_id', null)
-          .order('price', { ascending: true });
+          .order('token_id', { ascending: true });
 
         const noReservationTickets = tickets?.filter(
           (ticket) => ticket.reservations === null
@@ -71,7 +59,7 @@ export const paymentsRouter = router({
             j
           );
 
-          const { data: reservation } = await supabase
+          const { data: reservation, error } = await supabase
             .from('reservations')
             .insert({
               user_id: input.user_id,
@@ -84,9 +72,29 @@ export const paymentsRouter = router({
             .limit(1)
             .single();
 
+          console.log('reservationError: ', error);
+
           ticketReservations.push(reservation!);
         }
       }
+
+      const ticketReservationIds = ticketReservations.map(
+        (reservation) => reservation.ticket_id
+      );
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Number((input.price * 100).toFixed(2)),
+        currency: 'usd',
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        metadata: {
+          event_id: input.event_id,
+          cart_info: JSON.stringify(input.cart_info),
+          ticket_reservations: JSON.stringify(ticketReservationIds),
+          user_id: ctx.user.id,
+        },
+      });
 
       return {
         paymentIntent: paymentIntent.client_secret,

@@ -16,6 +16,20 @@ export const sbtsRouter = router({
       return data;
     }),
 
+  sbtsReleased: authedProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('events_metadata')
+        .select()
+        .eq('event_id', input.event_id)
+        .limit(1)
+        .single();
+
+      return data?.sbts_released;
+    }),
+
   releaseSbtsForEvent: authedProcedure
     .input(z.object({ event_id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -23,10 +37,8 @@ export const sbtsRouter = router({
       const { data: tickets } = await supabase
         .from('tickets')
         .select()
-        .eq('event_id', input.event_id);
-      const scannedTickets = tickets?.filter(
-        (ticket) => ticket.scanned === true
-      );
+        .eq('event_id', input.event_id)
+        .eq('scanned', true);
 
       const { data: sbts } = await supabase
         .from('sbts')
@@ -47,10 +59,17 @@ export const sbtsRouter = router({
         });
       }
 
+      if (eventMetadata?.sbts_released) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Sbts already released',
+        });
+      }
+
       const link = eventMetadata.sbt_etherscan_link.split('/');
 
       const sbtsToSend = sbts?.filter((sbt) =>
-        scannedTickets?.some((ticket) => ticket.id === sbt.ticket_id)
+        tickets?.some((ticket) => ticket.id === sbt.ticket_id)
       );
 
       // transfer the nft and update the db
@@ -97,5 +116,10 @@ export const sbtsRouter = router({
           .eq('id', sbtsToSend![i]?.id!)
           .select();
       }
+
+      await supabase
+        .from('events_metadata')
+        .update({ sbts_released: true })
+        .eq('id', input.event_id);
     }),
 });

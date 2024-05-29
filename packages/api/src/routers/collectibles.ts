@@ -16,6 +16,20 @@ export const collectiblesRouter = router({
       return data;
     }),
 
+  collectiblesReleased: authedProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('events_metadata')
+        .select()
+        .eq('event_id', input.event_id)
+        .limit(1)
+        .single();
+
+      return data?.collectibles_released;
+    }),
+
   releaseCollectiblesForEvent: authedProcedure
     .input(z.object({ event_id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -23,10 +37,8 @@ export const collectiblesRouter = router({
       const { data: tickets } = await supabase
         .from('tickets')
         .select()
-        .eq('event_id', input.event_id);
-      const scannedTickets = tickets?.filter(
-        (ticket) => ticket.scanned === true
-      );
+        .eq('event_id', input.event_id)
+        .eq('scanned', true);
 
       const { data: collectibles } = await supabase
         .from('collectibles')
@@ -47,10 +59,17 @@ export const collectiblesRouter = router({
         });
       }
 
+      if (eventMetadata?.collectibles_released) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Collectibles already released',
+        });
+      }
+
       const link = eventMetadata.collectible_etherscan_link.split('/');
 
       const collectiblesToSend = collectibles?.filter((collectible) =>
-        scannedTickets?.some((ticket) => ticket.id === collectible.ticket_id)
+        tickets?.some((ticket) => ticket.id === collectible.ticket_id)
       );
 
       // transfer the nft and update the db
@@ -97,5 +116,10 @@ export const collectiblesRouter = router({
           .eq('id', collectiblesToSend![i]?.id!)
           .select();
       }
+
+      await supabase
+        .from('events_metadata')
+        .update({ collectibles_released: true })
+        .eq('id', input.event_id);
     }),
 });

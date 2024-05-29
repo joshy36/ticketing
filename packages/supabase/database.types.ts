@@ -390,36 +390,42 @@ export interface Database {
           collectible_base_url: string | null
           collectible_etherscan_link: string | null
           collectible_ipfs_image: string | null
+          collectibles_released: boolean
           created_at: string
           event_id: string
           id: number
           sbt_base_url: string | null
           sbt_etherscan_link: string | null
           sbt_ipfs_image: string | null
+          sbts_released: boolean
           updated_at: string | null
         }
         Insert: {
           collectible_base_url?: string | null
           collectible_etherscan_link?: string | null
           collectible_ipfs_image?: string | null
+          collectibles_released?: boolean
           created_at?: string
           event_id: string
           id?: number
           sbt_base_url?: string | null
           sbt_etherscan_link?: string | null
           sbt_ipfs_image?: string | null
+          sbts_released?: boolean
           updated_at?: string | null
         }
         Update: {
           collectible_base_url?: string | null
           collectible_etherscan_link?: string | null
           collectible_ipfs_image?: string | null
+          collectibles_released?: boolean
           created_at?: string
           event_id?: string
           id?: number
           sbt_base_url?: string | null
           sbt_etherscan_link?: string | null
           sbt_ipfs_image?: string | null
+          sbts_released?: boolean
           updated_at?: string | null
         }
         Relationships: [

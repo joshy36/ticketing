@@ -23,7 +23,7 @@ import { Skeleton } from '~/components/ui/skeleton';
 export default function Revenue({ event }: { event: Events }) {
   const revenue = trpc.getRevenueForEvent.useQuery({ event_id: event.id });
   return (
-    <Card className='mt-4 rounded-md border bg-zinc-950'>
+    <Card className='mt-4 w-full rounded-md border bg-zinc-950'>
       <CardHeader>
         <CardTitle>Revenue</CardTitle>
         <CardDescription>Earnings for this event.</CardDescription>

@@ -131,23 +131,6 @@ export const ticketsRouter = router({
       return filteredUserProfiles;
     }),
 
-  createReservationForTicket: authedProcedure
-    .input(z.object({ ticket_id: z.string(), user_id: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const supabase = ctx.supabase;
-      const { data: reservation } = await supabase
-        .from('reservations')
-        .insert({
-          user_id: input.user_id,
-          ticket_id: input.ticket_id,
-          expiration: new Date(Date.now() + 10 * 60000).toISOString(),
-        })
-        .limit(1)
-        .single();
-
-      return reservation;
-    }),
-
   deleteReservationForTickets: authedProcedure
     .input(z.object({ ticket_ids: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {

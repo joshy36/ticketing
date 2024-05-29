@@ -1,18 +1,16 @@
 'use client';
 
-import { trpc } from '~/app/_trpc/client';
 import { Button } from '~/components/ui/button';
 import { dateToString } from '~/utils/helpers';
-import { router } from 'api/src/trpc';
 import { ArrowLeft, ExternalLink, Ticket } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
 import { Events, Organization } from 'supabase';
 import { useRouter } from 'next/navigation';
 import { Separator } from '~/components/ui/separator';
 import Scanners from './Scanners';
 import Revenue from './Revenue';
 import TicketSales from './TicketSales';
+import Release from './Release';
 
 export default function ManageEvent({
   event,
@@ -22,31 +20,6 @@ export default function ManageEvent({
   organization: Organization | null;
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const releaseCollectibles = trpc.releaseCollectiblesForEvent.useMutation({
-    onSettled(data, error) {
-      if (error) {
-        console.error('Release collectibles error:', error);
-        setIsLoading(false);
-      } else {
-        console.log('collectibles released!');
-        setIsLoading(false);
-      }
-    },
-  });
-
-  const releaseSbts = trpc.releaseSbtsForEvent.useMutation({
-    onSettled(data, error) {
-      if (error) {
-        console.error('Release sbts error:', error);
-        setIsLoading(false);
-      } else {
-        console.log('sbts released!');
-        setIsLoading(false);
-      }
-    },
-  });
 
   return (
     <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
@@ -80,31 +53,13 @@ export default function ManageEvent({
       <h4 className='font-light text-muted-foreground'>
         {dateToString(event.date)}
       </h4>
-      <TicketSales event={event} />
-      <Revenue event={event} />
-      <Scanners event={event} />
-      <div className='flex flex-row items-center gap-2 pt-8'>
-        <Button
-          onClick={() => {
-            setIsLoading(true);
-            releaseCollectibles.mutate({ event_id: event.id });
-          }}
-          disabled={true}
-          className='rounded-md'
-        >
-          Release Collectibles
-        </Button>
-        <Button
-          onClick={() => {
-            setIsLoading(true);
-            releaseSbts.mutate({ event_id: event.id });
-          }}
-          disabled={true}
-          className='rounded-md'
-        >
-          Release SBTs
-        </Button>
+      <div className='flex flex-col gap-0 md:flex-row md:gap-4'>
+        <TicketSales event={event} />
+        <Revenue event={event} />
       </div>
+
+      <Scanners event={event} />
+      <Release event={event} />
     </div>
   );
 }

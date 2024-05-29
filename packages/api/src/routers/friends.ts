@@ -97,8 +97,6 @@ export const friendsRouter = router({
         .select()
         .eq('user1_id', userProfile?.id!);
 
-      console.log('friends: ', friends);
-
       if (friends) {
         friendsCount += friends.length;
       }
@@ -155,13 +153,6 @@ export const friendsRouter = router({
           )`
         )
         .eq('user1_id', userProfile?.id!);
-
-      console.log('friends:', friends);
-      console.log('friendsError:', friendsError);
-      console.log(
-        'friends:',
-        friends![0]?.friend_profile?.ticket_transfer_push_requests
-      );
 
       if (friends) {
         friends
