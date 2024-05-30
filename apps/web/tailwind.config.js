@@ -99,6 +99,11 @@ module.exports = {
           from: { transform: 'translateY(0)' },
           to: { transform: 'translateY(calc(-100% - var(--gap)))' },
         },
+        gradient: {
+          to: {
+            backgroundPosition: 'var(--bg-size) 0',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -106,6 +111,7 @@ module.exports = {
         'text-gradient': 'text 3.0s linear infinite',
         'marquee-left': 'marquee-left var(--duration, 40s) linear infinite',
         'marquee-up': 'marquee-up var(--duration, 40s) linear infinite',
+        gradient: 'gradient 8s linear infinite',
       },
     },
   },

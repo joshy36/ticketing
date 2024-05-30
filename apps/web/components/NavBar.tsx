@@ -38,6 +38,7 @@ import { ChevronRight } from 'lucide-react';
 import { trpc } from '../app/_trpc/client';
 import { FriendRequestContext } from '../providers/friendRequestsProvider';
 import { TicketsContext } from '../providers/ticketsProvider';
+import AnimatedGradientText from './AnimatedGradientText';
 
 export const createComponents: {
   title: string;
@@ -268,23 +269,19 @@ export default function NavBar({
                     chat_id: chatsWithUnreadMessages[0]?.id!,
                   });
                 }}
-                className='fixed z-40 mt-24 flex max-w-[350px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'
+                className='fixed z-40 mt-24 flex  items-center justify-center p-2'
               >
-                {/* <div className='fixed z-40 mt-24 flex max-w-[350px] items-center justify-center rounded-full bg-black/50 p-2 backdrop-blur-sm'> */}
-                <span className='mr-3 flex rounded-full bg-gradient-to-r from-red-700 via-orange-600 to-yellow-500 px-2 py-1 text-sm font-semibold uppercase'>
-                  New
-                </span>
-                <span className='mr-2 flex-auto truncate text-ellipsis text-left '>
-                  {chatsWithUnreadMessages[0]?.mostRecentMessageContent}
-                </span>
-                <svg
-                  className='h-4 w-4 fill-current'
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox='0 0 20 20'
-                >
-                  <path d='M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z' />
-                </svg>
-                {/* </div> */}
+                <AnimatedGradientText>
+                  <div className='mr-2 h-2 w-2 rounded-full bg-[#9c40ff]'></div>
+                  <span
+                    className={cn(
+                      `animate-gradient mr-2 max-w-[200px] overflow-hidden truncate text-ellipsis whitespace-nowrap bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent lg:max-w-[400px]`,
+                    )}
+                  >
+                    {chatsWithUnreadMessages[0]?.mostRecentMessageContent}
+                  </span>
+                  <ChevronRight className='size-3 ml-1 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+                </AnimatedGradientText>
               </AlertDialogTrigger>
               <AlertDialogContent className='bg-black/40'>
                 <AlertDialogHeader>

@@ -392,7 +392,7 @@ export default function EventCreate({
                           If you can&apos;t find the artist in this list, create
                           a profile{' '}
                           <Link
-                            href='/artist/create'
+                            href='/dashboard/artist/create'
                             className='underline underline-offset-4 hover:text-primary'
                           >
                             here.
@@ -478,7 +478,7 @@ export default function EventCreate({
                           If you can&apos;t find the venue in this list, create
                           a profile{' '}
                           <Link
-                            href='/venue/create'
+                            href='/dashboard/venue/create'
                             className='underline underline-offset-4 hover:text-primary'
                           >
                             here.
