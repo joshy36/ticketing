@@ -11,6 +11,7 @@ import Scanners from './Scanners';
 import Revenue from './Revenue';
 import TicketSales from './TicketSales';
 import Release from './Release';
+import ScannedIn from './ScannedIn';
 
 export default function ManageEvent({
   event,
@@ -59,7 +60,11 @@ export default function ManageEvent({
       </div>
 
       <Scanners event={event} />
-      <Release event={event} />
+
+      <div className='flex flex-col gap-0 md:flex-row md:gap-4'>
+        <ScannedIn event={event} />
+        <Release event={event} />
+      </div>
     </div>
   );
 }

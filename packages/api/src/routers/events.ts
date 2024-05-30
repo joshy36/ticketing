@@ -338,4 +338,16 @@ export const eventsRouter = router({
         profit: profit,
       };
     }),
+
+  getScannedInUsersForEvent: authedProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data: tickets } = await supabase
+        .from('tickets')
+        .select(`*, ticket_profile:user_profiles!tickets_owner_id_fkey(*)`)
+        .eq('event_id', input.event_id)
+        .eq('scanned', true);
+      return tickets;
+    }),
 });
