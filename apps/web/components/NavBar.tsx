@@ -276,6 +276,7 @@ export default function NavBar({
                   <span
                     className={cn(
                       `animate-gradient mr-2 max-w-[200px] overflow-hidden truncate text-ellipsis whitespace-nowrap bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent lg:max-w-[400px]`,
+                      // prettier-ignore
                     )}
                   >
                     {chatsWithUnreadMessages[0]?.mostRecentMessageContent}
