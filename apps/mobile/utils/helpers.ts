@@ -38,8 +38,10 @@ export const dateToString = (date: string): string => {
 export const blurhash = 'L04U]7j[fQj[offQfQfQfQfQfQfQ';
 
 // export const ipAddress = '67.85.181.216';
-// export const ipAddress = '192.168.1.213'; // 222
-export const ipAddress = '192.168.1.165'; // jackson
+export const ipAddress = '192.168.1.213'; // 222
+// export const ipAddress = '192.168.1.49'; // 222
+
+// export const ipAddress = '192.168.1.165'; // jackson
 
 export const replaceLocalhostWithIP = (event: any) => {
   if (!event) {

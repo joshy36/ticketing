@@ -93,17 +93,17 @@ export default async function ProfileView({
         </div>
       </div>
       <Separator className='my-8' />
-      <div className='flex flex-row items-center justify-center gap-2'>
+      {/* <div className='flex flex-row items-center justify-center gap-2'>
         <h2 className='text-center text-2xl font-bold lg:text-3xl'>
           Social Wallet
         </h2>
         <Wallet />
-      </div>
+      </div> */}
 
-      <div className='grid grid-cols-1 gap-8 px-4 pt-8 md:grid-cols-2 md:px-16'>
+      <div className='flex flex-col'>
         <div>
-          <div className='flex flex-row items-center justify-center gap-2'>
-            <div className='text-center text-2xl underline underline-offset-8'>
+          <div className='flex flex-row items-center gap-2'>
+            <div className='text-center text-2xl font-semibold'>
               Collectibles
             </div>
             <AlertDialog>
@@ -123,16 +123,16 @@ export default async function ProfileView({
               </AlertDialogContent>
             </AlertDialog>
           </div>
-          <div className='grid grid-cols-1 gap-8 px-4 pt-8'>
+          <div className='gap-8 pt-8'>
             {collectibles?.length === 0 ? (
-              <div className='text-center text-xl font-extralight md:pt-32'>
-                Attend events to build a collection!
+              <div className='pb-4 font-extralight text-muted-foreground'>
+                Attend events to build a collection.
               </div>
             ) : (
-              <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+              <div className='grid grid-cols-1 gap-8 md:grid-cols-4'>
                 {collectibles?.map((sbt) => (
                   <div key={sbt.id}>
-                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
+                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-tl-lg rounded-tr-lg'>
                       {sbt.events?.image ? (
                         <Image
                           src={sbt.events?.image}
@@ -151,9 +151,11 @@ export default async function ProfileView({
                         />
                       )}
                     </div>
-                    <h1 className='mt-4 text-lg text-accent-foreground'>
-                      {sbt.events?.name}
-                    </h1>
+                    <div className='rounded-bl-lg rounded-br-lg bg-zinc-900'>
+                      <h1 className='py-4 pl-4 text-accent-foreground'>
+                        {sbt.events?.name}
+                      </h1>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -161,10 +163,8 @@ export default async function ProfileView({
           </div>
         </div>
         <div>
-          <div className='flex flex-row items-center justify-center gap-2'>
-            <div className='text-center text-2xl underline underline-offset-8'>
-              Community
-            </div>
+          <div className='flex flex-row items-center gap-2 pt-8'>
+            <div className='text-center text-2xl font-semibold'>Community</div>
             <AlertDialog>
               <AlertDialogTrigger>
                 <InfoCircledIcon />
@@ -182,16 +182,16 @@ export default async function ProfileView({
               </AlertDialogContent>
             </AlertDialog>
           </div>
-          <div className='grid grid-cols-1 gap-8 px-4 pt-8'>
+          <div className='gap-8 pt-8'>
             {sbts?.length === 0 ? (
-              <div className='text-center text-xl font-extralight md:pt-32'>
-                Attend events to build a collection!
+              <div className='pb-4 font-extralight text-muted-foreground'>
+                Attend events to build a collection.
               </div>
             ) : (
-              <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+              <div className='grid grid-cols-1 gap-8 md:grid-cols-4'>
                 {sbts?.map((sbt) => (
                   <div key={sbt.id}>
-                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-lg bg-background'>
+                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-tl-lg rounded-tr-lg'>
                       {sbt.events?.image ? (
                         <Image
                           src={sbt.events?.image}
@@ -210,9 +210,11 @@ export default async function ProfileView({
                         />
                       )}
                     </div>
-                    <h1 className='mt-4 text-lg text-accent-foreground'>
-                      {sbt.events?.name}
-                    </h1>
+                    <div className='rounded-bl-lg rounded-br-lg bg-zinc-900'>
+                      <h1 className='py-4 pl-4 text-accent-foreground'>
+                        {sbt.events?.name}
+                      </h1>
+                    </div>
                   </div>
                 ))}
               </div>
