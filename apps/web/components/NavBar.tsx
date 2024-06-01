@@ -133,13 +133,15 @@ export default function NavBar({
                     <Link href={component.href} legacyBehavior passHref>
                       {component.image ? (
                         <NavigationMenuLink>
-                          <Image
-                            className='pr-4 pt-2'
-                            src={component.image}
-                            alt='image'
-                            width={75}
-                            height={75}
-                          />
+                          <div className='h-[75px] w-[75px]'>
+                            <Image
+                              className='pr-4 pt-3'
+                              src={component.image}
+                              alt='image'
+                              width={75}
+                              height={75}
+                            />
+                          </div>
                         </NavigationMenuLink>
                       ) : (
                         <NavigationMenuLink

@@ -348,6 +348,10 @@ export const eventsRouter = router({
         .select(`*, ticket_profile:user_profiles!tickets_owner_id_fkey(*)`)
         .eq('event_id', input.event_id)
         .eq('scanned', true);
+
+      if (!tickets) {
+        return [];
+      }
       return tickets;
     }),
 });

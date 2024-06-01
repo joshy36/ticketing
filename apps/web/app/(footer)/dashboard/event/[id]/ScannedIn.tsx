@@ -35,7 +35,7 @@ export default function ScannedIn({ event }: { event: Events }) {
               <Skeleton className='mt-3 h-4 w-20' />
             </div>
           )}
-          {scannedIn?.length && totalTickets?.length && (
+          {scannedIn && totalTickets && (
             <div>
               <Progress
                 value={(scannedIn?.length / totalTickets?.length) * 100}
