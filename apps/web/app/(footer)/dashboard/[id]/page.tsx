@@ -1,4 +1,4 @@
-import DashBoard from './Dashboard';
+import Dashboard from './Dashboard';
 import { serverClient } from '../../../_trpc/serverClient';
 import { notFound } from 'next/navigation';
 import createSupabaseServer from '~/utils/supabaseServer';
@@ -33,7 +33,7 @@ export default async function Home({ params }: { params: { id: string } }) {
 
   return (
     <main>
-      <DashBoard id={params.id} />
+      <Dashboard id={params.id} />
     </main>
   );
 }

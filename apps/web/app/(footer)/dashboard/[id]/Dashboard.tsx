@@ -9,14 +9,23 @@ import ManageOrg from './ManageOrg';
 import { trpc } from '../../../_trpc/client';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { ComboboxDemo } from './Combo';
+import Artists from './Artists';
+import Venues from './Venues';
 
-export default function DashBoard({ id }: { id: string }) {
+export default function Dashboard({ id }: { id: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentTab = searchParams.get('tab');
 
   const { data: events } = trpc.getEventsByOrganization.useQuery({
+    organization_id: id,
+  });
+
+  const { data: artists } = trpc.getArtistsByOrganization.useQuery({
+    organization_id: id,
+  });
+
+  const { data: venues } = trpc.getVenuesByOrganization.useQuery({
     organization_id: id,
   });
 
@@ -51,14 +60,21 @@ export default function DashBoard({ id }: { id: string }) {
             className='text-sm font-semibold md:text-sm'
             onClick={() => router.push(`?tab=events`)}
           >
-            Manage Events
+            Overview
           </TabsTrigger>
           <TabsTrigger
-            value='org'
+            value='artists'
             className='text-sm font-semibold md:text-sm'
-            onClick={() => router.push(`?tab=org`)}
+            onClick={() => router.push(`?tab=artists`)}
           >
-            Manage Organization
+            Artists
+          </TabsTrigger>
+          <TabsTrigger
+            value='venues'
+            className='text-sm font-semibold md:text-sm'
+            onClick={() => router.push(`?tab=venues`)}
+          >
+            Venues
           </TabsTrigger>
           <TabsTrigger
             value='message'
@@ -67,15 +83,28 @@ export default function DashBoard({ id }: { id: string }) {
           >
             Send Message
           </TabsTrigger>
+          <TabsTrigger
+            value='org'
+            className='text-sm font-semibold md:text-sm'
+            onClick={() => router.push(`?tab=org`)}
+          >
+            Manage Organization
+          </TabsTrigger>
         </TabsList>
         <TabsContent value='events'>
           <EventTable events={events} />
         </TabsContent>
-        <TabsContent value='org'>
-          <ManageOrg organization={organization} />
+        <TabsContent value='artists'>
+          <Artists artists={artists} />
+        </TabsContent>
+        <TabsContent value='venues'>
+          <Venues venues={venues} />
         </TabsContent>
         <TabsContent value='message'>
           <SendMessage />
+        </TabsContent>
+        <TabsContent value='org'>
+          <ManageOrg organization={organization} />
         </TabsContent>
       </Tabs>
     </div>

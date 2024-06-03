@@ -22,6 +22,19 @@ export const venuesRouter = router({
       return data;
     }),
 
+  getVenuesByOrganization: authedProcedure
+    .input(z.object({ organization_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+
+      const { data: venues } = await supabase
+        .from('venues')
+        .select('*')
+        .eq('organization_id', input.organization_id);
+
+      return venues;
+    }),
+
   getSectionsForVenue: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {

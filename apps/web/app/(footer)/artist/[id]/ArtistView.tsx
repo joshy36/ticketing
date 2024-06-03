@@ -21,21 +21,20 @@ export default async function ArtistView({
           <Image
             src={artist.image!}
             alt={artist.description}
-            width={250}
-            height={250}
-            className='rounded-lg'
+            width={150}
+            height={150}
+            className='aspect-square rounded-lg'
           />
         </div>
         <div className='flex-1'>
-          <p className='py-4 text-6xl font-light'>{artist.name}</p>
-          <p className='py-4 text-2xl'>About</p>
-          <p className='text-xl font-light text-muted-foreground'>
+          <p className='py-4 text-4xl'>{artist.name}</p>
+          <p className='font-light text-muted-foreground'>
             {artist.description}
           </p>
         </div>
       </div>
       <Separator className='my-8' />
-      <h1 className='pb-8 text-4xl font-light'>Upcoming Events</h1>
+      <h1 className='pb-8 text-2xl font-light'>Upcoming Events</h1>
     </div>
   );
 }

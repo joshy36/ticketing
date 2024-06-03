@@ -22,6 +22,19 @@ export const artistsRouter = router({
       return data;
     }),
 
+  getArtistsByOrganization: authedProcedure
+    .input(z.object({ organization_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+
+      const { data: artists } = await supabase
+        .from('artists')
+        .select('*')
+        .eq('organization_id', input.organization_id);
+
+      return artists;
+    }),
+
   createArtist: authedProcedure
     .input(
       z.object({

@@ -12,6 +12,7 @@ import { dateToString } from '~/utils/helpers';
 import { ChevronRight } from 'lucide-react';
 import { Button } from '~/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function EventTable({ events }: { events: any }) {
   return (
@@ -119,9 +120,7 @@ export default function EventTable({ events }: { events: any }) {
         {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
           <TableRow>
-            <TableHead className='w-[100px] text-muted-foreground'>
-              Name
-            </TableHead>
+            <TableHead className='text-muted-foreground'>Name</TableHead>
             <TableHead className='text-muted-foreground'>Venue</TableHead>
             <TableHead className='text-muted-foreground'>Artist</TableHead>
             <TableHead className='text-muted-foreground'>Date</TableHead>
@@ -134,7 +133,20 @@ export default function EventTable({ events }: { events: any }) {
               key={event.id}
               className={index % 2 === 0 ? 'gap-4 bg-black' : 'bg-zinc-950'}
             >
-              <TableCell className='font-medium'>{event.name}</TableCell>
+              <TableCell className='font-medium'>
+                {
+                  <div className='flex flex-row items-center gap-2'>
+                    <Image
+                      src={event.image}
+                      alt='event image'
+                      width={48}
+                      height={48}
+                      className='aspect-square rounded-md'
+                    />
+                    <p>{event.name}</p>
+                  </div>
+                }
+              </TableCell>
               <TableCell>{event.venues.name}</TableCell>
               <TableCell>{event.artists.name}</TableCell>
               <TableCell>{dateToString(event.date)}</TableCell>
