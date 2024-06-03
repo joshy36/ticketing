@@ -129,42 +129,40 @@ const ProfilePage = () => {
               <Separator />
             </View>
 
-            <View className="flex flex-row items-center justify-center gap-2 pt-4">
-              <Text className="text-center text-white text-2xl font-bold">
-                Social Wallet
-              </Text>
-            </View>
-            <View className="grid grid-cols-1 gap-8 px-4 pt-8">
+            <View className="gap-8 pt-8">
               <View>
-                <View className="flex flex-row items-center justify-center gap-2">
-                  <Text className="text-center text-white text-2xl underline underline-offset-8">
+                <View className="flex flex-row items-center gap-2">
+                  <Text className="text-white text-2xl font-bold">
                     Collectibles
                   </Text>
                 </View>
-                <View className="grid grid-cols-1 gap-8 px-4 pt-8">
+                <View className="grid grid-cols-1 gap-8 pt-8">
                   {collectibles?.length === 0 ? (
-                    <Text className="text-center text-white text-xl font-extralight">
-                      Attend events to build a collection!
+                    <Text className="text-muted-foreground text-lg font-light">
+                      Attend events to build a collection.
                     </Text>
                   ) : (
-                    <View className="grid grid-cols-1 gap-4">
-                      {collectibles?.map((sbt) => (
-                        <View
-                          key={sbt.id}
-                          className="flex flex-row gap-2 items-center"
-                        >
-                          {sbt.events?.image && (
-                            <Image
-                              source={{
-                                uri: replaceLocalhostWithIP(sbt.events).image,
-                              }}
-                              alt="sbt Image"
-                              className="h-12 w-12 object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
-                            />
-                          )}
-                          <Text className="mt-4 text-lg font-light text-white">
-                            {sbt.events?.name}
-                          </Text>
+                    <View>
+                      {collectibles?.map((collectible) => (
+                        <View key={collectible.id}>
+                          <View className="aspect-square w-full overflow-hidden rounded-tl-2xl rounded-tr-2xl">
+                            {collectible.events?.image && (
+                              <Image
+                                source={{
+                                  uri: replaceLocalhostWithIP(
+                                    collectible.events
+                                  ).image,
+                                }}
+                                alt="collectible Image"
+                                className="h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
+                              />
+                            )}
+                          </View>
+                          <View className="rounded-bl-2xl rounded-br-2xl bg-zinc-900">
+                            <Text className="py-4 pl-4 text-white">
+                              {collectible.events?.name}
+                            </Text>
+                          </View>
                         </View>
                       ))}
                     </View>
@@ -172,35 +170,36 @@ const ProfilePage = () => {
                 </View>
               </View>
               <View>
-                <View className="flex flex-row items-center justify-center gap-2">
-                  <Text className="text-center text-white text-2xl underline underline-offset-8">
+                <View className="flex flex-row items-center gap-2">
+                  <Text className="text-white text-2xl font-bold">
                     Community
                   </Text>
                 </View>
-                <View className="grid grid-cols-1 gap-8 px-4 pt-8">
+                <View className="grid grid-cols-1 gap-8 pt-8">
                   {sbts?.length === 0 ? (
-                    <Text className="text-center text-white text-xl font-extralight">
-                      Attend events to build a collection!
+                    <Text className="text-muted-foreground text-lg font-light">
+                      Attend events to build a collection.
                     </Text>
                   ) : (
-                    <View className="grid grid-cols-1 gap-4">
+                    <View>
                       {sbts?.map((sbt) => (
-                        <View
-                          key={sbt.id}
-                          className="flex flex-row gap-2 items-center"
-                        >
-                          {sbt.events?.image && (
-                            <Image
-                              source={{
-                                uri: replaceLocalhostWithIP(sbt.events).image,
-                              }}
-                              alt="sbt Image"
-                              className="h-12 w-12 object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
-                            />
-                          )}
-                          <Text className="mt-4 text-lg font-light text-white">
-                            {sbt.events?.name}
-                          </Text>
+                        <View key={sbt.id}>
+                          <View className="aspect-square w-full overflow-hidden rounded-tl-2xl rounded-tr-2xl">
+                            {sbt.events?.image && (
+                              <Image
+                                source={{
+                                  uri: replaceLocalhostWithIP(sbt.events).image,
+                                }}
+                                alt="sbt Image"
+                                className="h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75"
+                              />
+                            )}
+                          </View>
+                          <View className="rounded-bl-2xl rounded-br-2xl bg-zinc-900">
+                            <Text className="py-4 pl-4 text-white">
+                              {sbt.events?.name}
+                            </Text>
+                          </View>
                         </View>
                       ))}
                     </View>
