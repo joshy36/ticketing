@@ -1,10 +1,4 @@
-import {
-  ScrollView,
-  TextInput,
-  Touchable,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Text } from 'react-native';
@@ -14,6 +8,7 @@ import { trpc } from '../../../utils/trpc';
 import ProfileCard from '../../components/ProfileCard';
 import { SupabaseContext } from '../../../providers/supabaseProvider';
 import UsersList from '../../components/UsersList';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Modal() {
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
@@ -66,7 +61,7 @@ export default function Modal() {
   // a full screen page. You may need to change the UI to account for this.
   const isPresented = router.canGoBack();
   return (
-    <View className="flex-1 justify-center bg-black pt-4">
+    <View className="flex-1 justify-center bg-black pt-2">
       {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
       {!isPresented && (
         <Link href="../" className="text-white">
@@ -78,18 +73,24 @@ export default function Modal() {
 
       <View className="flex-1">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <Text className="text-center text-muted-foreground">
+          <Text className="text-center text-muted-foreground pb-2">
             Select users to start a chat with.
           </Text>
           <View className="flex flex-col">
             {selectedUsers?.map((user) => {
               return (
-                <View
+                <TouchableOpacity
                   key={user.id}
-                  className="mx-4 my-2 rounded-full border border-zinc-800 p-2"
+                  className="mx-4 my-1 rounded-full border border-zinc-800 p-2 flex flex-row justify-between items-center"
+                  onPress={() => {
+                    setSelectedUsers(
+                      selectedUsers?.filter((u) => u.id !== user.id)
+                    );
+                  }}
                 >
                   <ProfileCard userProfile={user} />
-                </View>
+                  <Ionicons name={'close-outline'} size={25} color={'white'} />
+                </TouchableOpacity>
               );
             })}
           </View>

@@ -87,7 +87,7 @@ const Home = () => {
                 <ImageBackground
                   style={{ width: '100%', height: 200 }}
                   source={{
-                    uri: replaceLocalhostWithIP(event).image,
+                    uri: replaceLocalhostWithIP(event)?.image,
                   }}
                   // blurRadius={20}
                 >
@@ -129,40 +129,50 @@ const Home = () => {
                   )}
                 </View>
 
-                <Text className="text-white text-2xl font-semibold py-6">
+                <Text className="text-white text-2xl font-semibold py-4">
                   Artist
                 </Text>
                 <Link className="py-2" href={`/home/artist/${artist?.id}`}>
-                  <View className="flex flex-row items-center">
-                    {/* <Image
-                      style={{ borderRadius: 24 }}
-                      className="h-12 w-12"
+                  <View className="flex flex-row items-center gap-2">
+                    <Image
+                      className="h-12 w-12 rounded-xl"
                       source={{
-                        uri: replaceLocalhostWithIP(artist).image,
+                        uri: replaceLocalhostWithIP(artist)?.image,
                       }}
                       placeholder={blurhash}
                       contentFit="cover"
                       transition={1000}
-                    /> */}
-                    <Text className="text-muted-foreground pl-2 text-xl font-light">
+                    />
+                    <Text className="text-muted-foreground pl-2 text-base">
                       {artist?.name}
                     </Text>
                   </View>
                 </Link>
                 <Separator />
-                <Text className="text-white text-2xl font-semibold pt-4">
+                <Text className="text-white text-2xl font-semibold py-4">
                   Venue
                 </Text>
-                <Link className="py-4" href={`/home/venue/${venue?.id}`}>
-                  <Text className="text-muted-foreground font-light text-xl">
-                    {venue?.name}
-                  </Text>
+                <Link className="py-2" href={`/home/venue/${venue?.id}`}>
+                  <View className="flex flex-row items-center gap-2">
+                    <Image
+                      className="h-12 w-12 rounded-xl"
+                      source={{
+                        uri: replaceLocalhostWithIP(venue)?.image,
+                      }}
+                      placeholder={blurhash}
+                      contentFit="cover"
+                      transition={1000}
+                    />
+                    <Text className="text-muted-foreground pl-2 text-base">
+                      {venue?.name}
+                    </Text>
+                  </View>
                 </Link>
                 <Separator />
                 <Text className="text-white text-2xl font-semibold pt-4">
                   Description
                 </Text>
-                <Text className="text-muted-foreground text-xl font-light py-4">
+                <Text className="text-muted-foreground text-base py-4">
                   {event?.description}
                 </Text>
                 {isScanner ? (

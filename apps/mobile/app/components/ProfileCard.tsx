@@ -15,7 +15,7 @@ export default function ProfileCard({
   imageSize?: number;
 }) {
   return (
-    <View className="flex flex-row items-center gap-5">
+    <View className="flex flex-row items-center gap-2">
       <View>
         {userProfile?.profile_image ? (
           // <AvatarImage src={userProfile?.profile_image!} alt='pfp' />
