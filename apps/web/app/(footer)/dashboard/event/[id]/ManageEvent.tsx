@@ -7,11 +7,13 @@ import Link from 'next/link';
 import { Events, Organization } from 'supabase';
 import { useRouter } from 'next/navigation';
 import { Separator } from '~/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import Scanners from './Scanners';
 import Revenue from './Revenue';
 import TicketSales from './TicketSales';
 import Release from './Release';
 import ScannedIn from './ScannedIn';
+import CreateCollectibles from './CreateCollectibles';
 
 export default function ManageEvent({
   event,
@@ -54,17 +56,44 @@ export default function ManageEvent({
       <h4 className='font-light text-muted-foreground'>
         {dateToString(event.date)}
       </h4>
-      <div className='flex flex-col gap-0 md:flex-row md:gap-4'>
-        <TicketSales event={event} />
-        <Revenue event={event} />
-      </div>
-
-      <Scanners event={event} />
-
-      <div className='flex flex-col gap-0 md:flex-row md:gap-4'>
-        <ScannedIn event={event} />
-        <Release event={event} />
-      </div>
+      <Tabs defaultValue='account' className=''>
+        <TabsList className='-ml-4'>
+          <TabsTrigger
+            value='account'
+            className='text-sm font-semibold md:text-sm'
+          >
+            Revenue
+          </TabsTrigger>
+          <TabsTrigger
+            value='password'
+            className='text-sm font-semibold md:text-sm'
+          >
+            Scanners
+          </TabsTrigger>
+          <TabsTrigger
+            value='post'
+            className='text-sm font-semibold md:text-sm'
+          >
+            Post Event Management
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value='account'>
+          <div className='flex flex-col gap-0 md:flex-row md:gap-4'>
+            <Revenue event={event} />
+            <TicketSales event={event} />
+          </div>
+        </TabsContent>
+        <TabsContent value='password'>
+          <Scanners event={event} />
+        </TabsContent>
+        <TabsContent value='post'>
+          <CreateCollectibles event={event} />
+          <div className='flex flex-col gap-0 md:flex-row md:gap-4'>
+            <ScannedIn event={event} />
+            <Release event={event} />
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

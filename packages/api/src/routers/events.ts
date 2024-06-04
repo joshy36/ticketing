@@ -3,6 +3,10 @@ import { z } from 'zod';
 import { createStripeProduct, stripe } from '../services/stripe';
 import { getOrganizationMembers } from '../shared/organizations';
 import { TRPCError } from '@trpc/server';
+import { Inngest } from 'inngest';
+
+// Create a client to send and receive events
+export const inngest = new Inngest({ id: 'my-app' });
 
 export const eventsRouter = router({
   getEvents: publicProcedure.query(async ({ ctx }) => {
@@ -353,5 +357,45 @@ export const eventsRouter = router({
         return [];
       }
       return tickets;
+    }),
+
+  generateEventImages: authedProcedure
+    .input(z.object({ event_id: z.string(), prompt: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { count: numTickets } = await supabase
+        .from('tickets')
+        .select('*', { count: 'exact', head: true })
+        .eq('event_id', input.event_id);
+
+      if (!numTickets) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'No tickets found',
+        });
+      }
+
+      for (let i = 0; i < numTickets; i++) {
+        await inngest.send({
+          name: 'image/generate',
+          data: {
+            event_id: input.event_id,
+            token_id: i,
+            collectiblesOrSbts: 'sbts',
+            prompt: input.prompt,
+          },
+        });
+        await inngest.send({
+          name: 'image/generate',
+          data: {
+            event_id: input.event_id,
+            token_id: i,
+            collectiblesOrSbts: 'collectibles',
+            prompt: input.prompt,
+          },
+        });
+      }
+
+      console.log('num: ', numTickets);
     }),
 });

@@ -16,6 +16,17 @@ export const sbtsRouter = router({
       return data;
     }),
 
+  getSbtsForEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('sbts')
+        .select(`*, tickets(token_id)`)
+        .eq('event_id', input.event_id);
+      return data;
+    }),
+
   sbtsReleased: authedProcedure
     .input(z.object({ event_id: z.string() }))
     .query(async ({ ctx, input }) => {

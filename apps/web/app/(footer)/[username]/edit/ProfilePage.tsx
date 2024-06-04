@@ -17,10 +17,10 @@ const sidebarNavItems = [
     title: 'Profile',
     href: '',
   },
-  {
-    title: 'Account',
-    href: '',
-  },
+  // {
+  //   title: 'Account',
+  //   href: '',
+  // },
 ];
 
 export default function ProfilePage({

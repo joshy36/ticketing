@@ -262,6 +262,7 @@ export interface Database {
           created_at: string
           event_id: string | null
           id: string
+          image: string | null
           ticket_id: string | null
           updated_at: string | null
           user_id: string | null
@@ -270,6 +271,7 @@ export interface Database {
           created_at?: string
           event_id?: string | null
           id?: string
+          image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -278,6 +280,7 @@ export interface Database {
           created_at?: string
           event_id?: string | null
           id?: string
+          image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -390,42 +393,42 @@ export interface Database {
           collectible_base_url: string | null
           collectible_etherscan_link: string | null
           collectible_ipfs_image: string | null
-          collectibles_released: boolean
+          collectibles_released: boolean | null
           created_at: string
-          event_id: string
-          id: number
+          event_id: string | null
+          id: string
           sbt_base_url: string | null
           sbt_etherscan_link: string | null
           sbt_ipfs_image: string | null
-          sbts_released: boolean
+          sbts_released: boolean | null
           updated_at: string | null
         }
         Insert: {
           collectible_base_url?: string | null
           collectible_etherscan_link?: string | null
           collectible_ipfs_image?: string | null
-          collectibles_released?: boolean
+          collectibles_released?: boolean | null
           created_at?: string
-          event_id: string
-          id?: number
+          event_id?: string | null
+          id?: string
           sbt_base_url?: string | null
           sbt_etherscan_link?: string | null
           sbt_ipfs_image?: string | null
-          sbts_released?: boolean
+          sbts_released?: boolean | null
           updated_at?: string | null
         }
         Update: {
           collectible_base_url?: string | null
           collectible_etherscan_link?: string | null
           collectible_ipfs_image?: string | null
-          collectibles_released?: boolean
+          collectibles_released?: boolean | null
           created_at?: string
-          event_id?: string
-          id?: number
+          event_id?: string | null
+          id?: string
           sbt_base_url?: string | null
           sbt_etherscan_link?: string | null
           sbt_ipfs_image?: string | null
-          sbts_released?: boolean
+          sbts_released?: boolean | null
           updated_at?: string | null
         }
         Relationships: [
@@ -715,6 +718,7 @@ export interface Database {
           created_at: string
           event_id: string | null
           id: string
+          image: string | null
           ticket_id: string | null
           updated_at: string | null
           user_id: string | null
@@ -723,6 +727,7 @@ export interface Database {
           created_at?: string
           event_id?: string | null
           id?: string
+          image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -731,6 +736,7 @@ export interface Database {
           created_at?: string
           event_id?: string | null
           id?: string
+          image?: string | null
           ticket_id?: string | null
           updated_at?: string | null
           user_id?: string | null

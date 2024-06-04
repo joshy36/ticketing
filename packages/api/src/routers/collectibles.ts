@@ -16,6 +16,17 @@ export const collectiblesRouter = router({
       return data;
     }),
 
+  getCollectiblesForEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+      const { data } = await supabase
+        .from('collectibles')
+        .select(`*, tickets(token_id)`)
+        .eq('event_id', input.event_id);
+      return data;
+    }),
+
   collectiblesReleased: authedProcedure
     .input(z.object({ event_id: z.string() }))
     .query(async ({ ctx, input }) => {

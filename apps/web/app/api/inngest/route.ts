@@ -5,15 +5,10 @@ import {
   generatePfpForUser,
   helloWorld,
   transferTicket,
-  transferTicketDatabase,
+  generateImages,
 } from '../../../inngest/functions';
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [
-    helloWorld,
-    transferTicket,
-    transferTicketDatabase,
-    generatePfpForUser,
-  ],
+  functions: [helloWorld, transferTicket, generatePfpForUser, generateImages],
 });

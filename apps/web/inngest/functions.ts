@@ -4,6 +4,8 @@ import contractAbi from '../../../packages/chain/deployments/base-goerli/Event.j
 import createSupabaseServer from '~/utils/supabaseServer';
 import OpenAI from 'openai';
 import { serverClient } from '~/app/_trpc/serverClient';
+import Replicate from 'replicate';
+import { createRouteClient } from 'supabase';
 
 export const helloWorld = inngest.createFunction(
   { id: 'hello-world', concurrency: 1 },
@@ -139,44 +141,89 @@ export const transferTicket = inngest.createFunction(
   },
 );
 
-export const transferTicketDatabase = inngest.createFunction(
-  { id: 'transfer-ticket-database', concurrency: 1 },
-  { event: 'ticket/transfer.database' },
-  async ({ event, step }) => {
-    const supabase = createSupabaseServer();
-    console.log(
-      `INNGEST::recieved: ${event.data.transaction_id} ${event.data.purchaser_id} ${event.data.owner_id} ${event.data.section_id} ${event.data.event_id}`,
+export const generateImages = inngest.createFunction(
+  { id: 'generate-images', concurrency: 500 },
+  { event: 'image/generate' },
+  async ({ event }) => {
+    const supabase = createRouteClient();
+
+    const replicate = new Replicate({
+      auth: process.env.REPLICATE_API_TOKEN,
+    });
+
+    const input = {
+      prompt: event.data.prompt,
+      scheduler: 'K_EULER',
+      num_outputs: 1,
+    };
+
+    const output = await replicate.run(
+      'stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4',
+      { input },
     );
-    const { data: ticket, error } = await supabase
-      .from('tickets')
-      .update({
-        owner_id: event.data.owner_id,
-        purchaser_id: event.data.purchaser_id,
-        transaction_id: event.data.transaction_id,
-      })
-      .is('purchaser_id', null)
-      .is('owner_id', null)
-      .eq('section_id', event.data.section_id)
-      .eq('event_id', event.data.event_id)
-      .order('token_id', { ascending: true })
-      .select()
-      .limit(1)
-      .single();
-    console.log(`INNGEST::error: ${error}`);
-    console.log(`INNGEST::done: ${JSON.stringify(ticket)}`);
 
-    if (event.data.owner_id) {
-      console.log('Sending transfer ticket event');
-      await step.invoke('ticket-transfer', {
-        function: transferTicket,
-        data: {
-          ticket_id: ticket?.id,
-          event_id: event.data.event_id,
-          owner_id: event.data.owner_id,
-        },
+    console.log(output);
+
+    // @ts-ignore
+    await fetch(output[0])
+      .then((response) => response.blob())
+      .then(async (blob) => {
+        const { data, error } = await supabase.storage
+          .from('events')
+          .upload(
+            `${event.data.event_id}/${event.data.collectiblesOrSbts}/${event.data.token_id}.png`,
+            blob,
+            {
+              contentType: 'image/png',
+              upsert: true,
+            },
+          );
+
+        const url =
+          process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
+          `/events/${event.data.event_id}/${event.data.collectiblesOrSbts}/${event.data.token_id}.png`;
+
+        if (event.data.collectiblesOrSbts === 'collectibles') {
+          const { data: tokens, error: tokenError } = await supabase
+            .from('collectibles')
+            .select(`*, tickets(*)`)
+            .eq('event_id', event.data.event_id)
+            .eq('tickets.token_id', event.data.token_id);
+
+          // get token where tickets field is not null
+          const token = tokens?.find((token) => token.tickets);
+
+          if (!token) {
+            console.error('Token not found');
+            return;
+          }
+
+          const { data: updatedToken, error: updateError } = await supabase
+            .from('collectibles')
+            .update({ image: url })
+            .eq('id', token.id);
+        } else if (event.data.collectiblesOrSbts === 'sbts') {
+          const { data: tokens, error: tokenError } = await supabase
+            .from('sbts')
+            .select(`*, tickets(*)`)
+            .eq('event_id', event.data.event_id)
+            .eq('tickets.token_id', event.data.token_id);
+
+          // get token where tickets field is not null
+          const token = tokens?.find((token) => token.tickets);
+
+          if (!token) {
+            console.error('Token not found');
+            return;
+          }
+
+          const { data: updatedToken, error: updateError } = await supabase
+            .from('sbts')
+            .update({ image: url })
+            .eq('id', token.id);
+        }
       });
-    }
 
-    return ticket;
+    return output;
   },
 );
