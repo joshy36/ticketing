@@ -56,25 +56,25 @@ export default function App() {
   }
 
   return (
-    <View className="flex-1 items-center bg-black">
+    <View className='flex-1 items-center bg-black'>
       <View style={styles.cameraContainer}>
         <BarCodeScanner
           barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          className="flex-1"
+          className='flex-1'
         />
       </View>
       {scanned ? (
         <TouchableOpacity
-          className="bg-white py-3 rounded-full flex w-80"
+          className='flex w-80 rounded-full bg-white py-3'
           onPress={() => setScanned(false)}
         >
-          <Text className="text-black text-center font-bold">
+          <Text className='text-center font-bold text-black'>
             Tap to scan another ticket
           </Text>
         </TouchableOpacity>
       ) : (
-        <Text className="text-white py-2 font-bold">Ready</Text>
+        <Text className='py-2 font-bold text-white'>Ready</Text>
       )}
     </View>
   );

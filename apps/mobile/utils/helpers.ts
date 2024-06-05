@@ -61,7 +61,7 @@ export const replaceLocalhostWithIP = (event: any) => {
 
 export const truncate = (
   str: string | null | undefined,
-  maxLength: number
+  maxLength: number,
 ): string => {
   if (!str) {
     return ''; // Return an empty string if the input is null or undefined

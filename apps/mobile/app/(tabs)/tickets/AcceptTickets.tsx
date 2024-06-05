@@ -61,31 +61,31 @@ export default function AcceptTickets({
   return (
     <View>
       {pendingPushRequsts && pendingPushRequsts.length != 0 && (
-        <View className="flex flex-col justify-center px-2 py-6 border-b border-zinc-800">
-          <View className="pt-4">
-            <Text className="text-xl font-bold text-white">Accept Tickets</Text>
-            <Text className="pb-4 text-sm font-light text-muted-foreground">
+        <View className='flex flex-col justify-center border-b border-zinc-800 px-2 py-6'>
+          <View className='pt-4'>
+            <Text className='text-xl font-bold text-white'>Accept Tickets</Text>
+            <Text className='pb-4 text-sm font-light text-muted-foreground'>
               Here you can see pending ticket transfers from friends. You must
               accept or reject these tickets before the event begins.
             </Text>
           </View>
           {pendingPushRequsts?.map((request, index) => (
-            <View key={request.id} className="border-b px-2 py-2">
-              <Text className="font-bold text-white">From:</Text>
-              <View className="flex flex-row items-center justify-between py-2">
+            <View key={request.id} className='border-b px-2 py-2'>
+              <Text className='font-bold text-white'>From:</Text>
+              <View className='flex flex-row items-center justify-between py-2'>
                 <ProfileCard userProfile={request.from_profile!} />
-                <View className="flex items-center gap-8 font-medium">
-                  <View className="flex flex-col">
-                    <Text className="text-white">
+                <View className='flex items-center gap-8 font-medium'>
+                  <View className='flex flex-col'>
+                    <Text className='text-white'>
                       {pendingPushRequsts![index]?.tickets?.events?.name}
                     </Text>
-                    <Text className="text-sm font-extralight text-muted-foreground">
+                    <Text className='text-sm font-extralight text-muted-foreground'>
                       {pendingPushRequsts![index]?.tickets?.seat}
                     </Text>
                   </View>
                 </View>
               </View>
-              <View className="flex flex-row justify-end gap-2">
+              <View className='flex flex-row justify-end gap-2'>
                 {/* <Dialog
                   open={dialogOpen === request.id} // Only open the dialog if its id matches with dialogOpen state
                   onOpenChange={(isOpen) => {
@@ -137,11 +137,11 @@ export default function AcceptTickets({
                     </View>
                   </DialogContent>
                 </Dialog> */}
-                <TouchableOpacity className="rounded-full border border-zinc-800 px-4 py-2">
-                  <Text className="text-white ">Reject</Text>
+                <TouchableOpacity className='rounded-full border border-zinc-800 px-4 py-2'>
+                  <Text className='text-white'>Reject</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  className="bg-white rounded-full px-4 py-2"
+                  className='rounded-full bg-white px-4 py-2'
                   onPress={() => {
                     setIsLoading(true);
                     acceptTransfer.mutate({

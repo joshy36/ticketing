@@ -54,7 +54,7 @@ const TicketSection = ({
         },
         (payload) => {
           refetch();
-        }
+        },
       )
       .on(
         'postgres_changes',
@@ -66,7 +66,7 @@ const TicketSection = ({
         },
         (payload) => {
           refetch();
-        }
+        },
       )
       .subscribe();
 
@@ -78,7 +78,7 @@ const TicketSection = ({
   const getTotalTicketCount = () => {
     return Object.values(ticketQuantities).reduce(
       (total, count) => total + count.quantity,
-      0
+      0,
     );
   };
 
@@ -123,20 +123,20 @@ const TicketSection = ({
   return (
     <View>
       {sections?.map((section) => (
-        <View key={section.id} className="flex flex-row justify-between py-2">
-          <View className="flex flex-col">
-            <Text className="text-white text-xl">{section.name}</Text>
+        <View key={section.id} className='flex flex-row justify-between py-2'>
+          <View className='flex flex-col'>
+            <Text className='text-xl text-white'>{section.name}</Text>
             <View>
               {!tickets ||
               tickets?.filter((ticket) => ticket.section_id === section.id)
                 .length <= 0 ? (
-                <Text className="text-red-700">Sold out</Text>
+                <Text className='text-red-700'>Sold out</Text>
               ) : (
                 <View>
-                  <Text className="text font-light text-gray-400">
+                  <Text className='text font-light text-gray-400'>
                     {`$` +
                       tickets?.find(
-                        (ticket) => ticket.section_id === section.id
+                        (ticket) => ticket.section_id === section.id,
                       )?.price}
                   </Text>
                   {/* <Text className="text-white">
@@ -149,7 +149,7 @@ const TicketSection = ({
               )}
             </View>
           </View>
-          <View className="flex flex-row items-center justify-center">
+          <View className='flex flex-row items-center justify-center'>
             <TouchableOpacity
               onPress={() => {
                 handleRemoveTicket(section);
@@ -165,9 +165,9 @@ const TicketSection = ({
                   : {} // Default styles when not disabled
               }
             >
-              <Ionicons name="remove-circle" size={50} color="white" />
+              <Ionicons name='remove-circle' size={50} color='white' />
             </TouchableOpacity>
-            <Text className="text-white px-2">
+            <Text className='px-2 text-white'>
               {ticketQuantities[section.id!]?.quantity || 0}
             </Text>
             <TouchableOpacity
@@ -191,14 +191,14 @@ const TicketSection = ({
                   : {} // Default styles when not disabled
               }
             >
-              <Ionicons name="add-circle" size={50} color="white" />
+              <Ionicons name='add-circle' size={50} color='white' />
             </TouchableOpacity>
           </View>
         </View>
       ))}
       {getTotalTicketCount() >= event?.max_tickets_per_user! ? (
         <View>
-          <Text className="text-white text-center">
+          <Text className='text-center text-white'>
             Max {event?.max_tickets_per_user} tickets per user
           </Text>
         </View>
@@ -206,8 +206,8 @@ const TicketSection = ({
         <View></View>
       )}
       <Separator />
-      <View className="py-4">
-        <Text className="text-white text-xl font-bold">
+      <View className='py-4'>
+        <Text className='text-xl font-bold text-white'>
           Total: ${getTotalPrice().toFixed(2)}
         </Text>
       </View>
@@ -215,16 +215,16 @@ const TicketSection = ({
         <View>
           {getTotalTicketCount() === 0 ? (
             <TouchableOpacity
-              className="bg-white opacity-50 py-3 rounded-full flex"
+              className='flex rounded-full bg-white py-3 opacity-50'
               disabled={getTotalTicketCount() == 0}
             >
-              <Text className="text-black text-center font-bold">
+              <Text className='text-center font-bold text-black'>
                 Add tickets above
               </Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              className="bg-white py-3 rounded-full flex"
+              className='flex rounded-full bg-white py-3'
               disabled={getTotalTicketCount() == 0}
               onPress={async () => {
                 setIsLoading(true);
@@ -250,7 +250,7 @@ const TicketSection = ({
                         section: {
                           ...item.section,
                         },
-                      }))
+                      })),
                     ),
                     totalPrice: getTotalPrice(),
                     userId: user?.id,
@@ -259,9 +259,9 @@ const TicketSection = ({
                 });
               }}
             >
-              <View className="flex flex-row items-center justify-center">
-                {isLoading && <ActivityIndicator className="pr-2" />}
-                <Text className="text-black text-center font-bold">
+              <View className='flex flex-row items-center justify-center'>
+                {isLoading && <ActivityIndicator className='pr-2' />}
+                <Text className='text-center font-bold text-black'>
                   Proceed to Checkout
                 </Text>
               </View>
@@ -270,8 +270,8 @@ const TicketSection = ({
         </View>
       ) : (
         <Link href={`/profile`} asChild>
-          <TouchableOpacity className="bg-white py-3 rounded-full flex">
-            <Text className="text-black text-center font-bold">
+          <TouchableOpacity className='flex rounded-full bg-white py-3'>
+            <Text className='text-center font-bold text-black'>
               Sign in to Purchase
             </Text>
           </TouchableOpacity>

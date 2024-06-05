@@ -18,25 +18,25 @@ export default function OrgCard({
 }) {
   const artistOrVenue = artist || venue;
   return (
-    <View className="flex flex-row items-center gap-5">
+    <View className='flex flex-row items-center gap-5'>
       {artistOrVenue?.image && (
         <Image
           style={{ borderRadius: 16 }}
-          className="h-12 w-12 flex justify-center items-center"
+          className='flex h-12 w-12 items-center justify-center'
           source={{ uri: replaceLocalhostWithIP(artistOrVenue).image }}
           placeholder={blurhash}
-          contentFit="cover"
+          contentFit='cover'
           transition={1000}
         />
       )}
-      <View className="flex max-w-[225px] flex-col justify-between">
-        <View className="flex">
-          <Text className="font-medium text-base text-white">
+      <View className='flex max-w-[225px] flex-col justify-between'>
+        <View className='flex'>
+          <Text className='text-base font-medium text-white'>
             {artistOrVenue?.name}
           </Text>
         </View>
         <View>
-          <Text className="text-sm font-light text-muted-foreground">
+          <Text className='text-sm font-light text-muted-foreground'>
             {truncate(mostRecentMessage, 60)}
           </Text>
         </View>

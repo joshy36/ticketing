@@ -18,10 +18,10 @@ const MessagePage = ({
   });
 
   return (
-    <View className="px-4 pt-4">
+    <View className='px-4 pt-4'>
       {messages?.filter((message: any) => message.status !== 'deleted')
         .length == 0 ? (
-        <Text className="pt-16 text-white text-center font-bold text-xl">
+        <Text className='pt-16 text-center text-xl font-bold text-white'>
           No messages, check back later.
         </Text>
       ) : (
@@ -31,28 +31,28 @@ const MessagePage = ({
             ?.sort(
               (a, b) =>
                 new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
+                new Date(a.created_at).getTime(),
             )
             .map((message: any) => (
-              <View key={message.id} className="py-2 border-b border-zinc-700">
+              <View key={message.id} className='border-b border-zinc-700 py-2'>
                 <Link
                   href={`/messages/${message.id}`}
                   onPress={() => readMessage.mutate({ message_id: message.id })}
                 >
-                  <View className="flex flex-row items-center justify-between gap-2 w-full pb-2">
-                    <View className="flex flex-col">
-                      <Text className="text-white text-xl">
+                  <View className='flex w-full flex-row items-center justify-between gap-2 pb-2'>
+                    <View className='flex flex-col'>
+                      <Text className='text-xl text-white'>
                         {message.message.length < 32
                           ? message.message
                           : `${message.message.slice(0, 32)}...`}
                       </Text>
-                      <Text className="text-left text-xs font-light text-muted-foreground pt-1">
+                      <Text className='pt-1 text-left text-xs font-light text-muted-foreground'>
                         {dateToString(message.created_at)}
                       </Text>
                     </View>
-                    <View className="flex pr-2">
+                    <View className='flex pr-2'>
                       {message.status === 'unread' && (
-                        <View className="h-3 w-3 rounded-full bg-blue-700"></View>
+                        <View className='h-3 w-3 rounded-full bg-blue-700'></View>
                       )}
                     </View>
                   </View>

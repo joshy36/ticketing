@@ -61,7 +61,7 @@ export const MessagesProvider = ({ children, url }: MessagesProviderProps) => {
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const [currentChat, setCurrentChat] = useState<string | null>(null);
   const [messages, setMessages] = useState<RouterOutputs['getMessagesByChat']>(
-    []
+    [],
   );
   const [numberOfUnreadMessagesPerChat, setNumberOfUnreadMessagesPerChat] =
     useState<{
@@ -106,7 +106,7 @@ export const MessagesProvider = ({ children, url }: MessagesProviderProps) => {
   useEffect(() => {
     if (numberOfUnreadMessagesPerChat) {
       const totalUnreadMessages = Object.values(
-        numberOfUnreadMessagesPerChat!
+        numberOfUnreadMessagesPerChat!,
       ).reduce((accumulator, chat) => accumulator + chat.unread, 0);
       setUnreadMessages(totalUnreadMessages);
     }
@@ -181,7 +181,7 @@ export const MessagesProvider = ({ children, url }: MessagesProviderProps) => {
             const { data: messages } = await supabase
               .from('chat_member_messages')
               .select(
-                `*, chat_members(*, user_profiles(*), artists(*), venues(*)), chat_messages(*)`
+                `*, chat_members(*, user_profiles(*), artists(*), venues(*)), chat_messages(*)`,
               )
               .eq('chat_id', currentChat)
               .order('created_at', {
@@ -199,7 +199,7 @@ export const MessagesProvider = ({ children, url }: MessagesProviderProps) => {
           console.log('message from: ', message.from);
           console.log(
             'test: ',
-            chats?.chats?.map((chat) => chat.id).includes(message.chat_id!)
+            chats?.chats?.map((chat) => chat.id).includes(message.chat_id!),
           );
 
           if (
@@ -231,7 +231,7 @@ export const MessagesProvider = ({ children, url }: MessagesProviderProps) => {
               event_id: message.event_id!,
             },
           }));
-        }
+        },
       )
       .on(
         'postgres_changes',
@@ -242,7 +242,7 @@ export const MessagesProvider = ({ children, url }: MessagesProviderProps) => {
         },
         (payload) => {
           refetch();
-        }
+        },
       )
       .subscribe();
 

@@ -28,7 +28,7 @@ export default function UsersList({
     <View>
       {usersLoading ? (
         <View>
-          <Text className="text-white">Loading...</Text>
+          <Text className='text-white'>Loading...</Text>
         </View>
       ) : (
         <ScrollView>
@@ -47,14 +47,14 @@ export default function UsersList({
                     .includes(userSearch.toLowerCase()) ||
                   `${user.first_name} ${user.last_name}`
                     .toLowerCase()
-                    .includes(userSearch.toLowerCase()))
+                    .includes(userSearch.toLowerCase())),
             )
             .slice(0, 10)
             .map((user) => {
               return (
                 <TouchableOpacity
                   key={user.id}
-                  className=" flex w-full justify-between border-b border-zinc-800 px-2 py-2"
+                  className='flex w-full justify-between border-b border-zinc-800 px-2 py-2'
                   onPress={() => {
                     // if user is not selected add them
                     if (!selectedUsers?.find((u) => u.id === user.id)) {
@@ -68,12 +68,12 @@ export default function UsersList({
                     } else {
                       // if user is selected remove them
                       setSelectedUsers(
-                        selectedUsers?.filter((u) => u.id !== user.id)
+                        selectedUsers?.filter((u) => u.id !== user.id),
                       );
                     }
                   }}
                 >
-                  <View className="flex flex-row justify-between items-center">
+                  <View className='flex flex-row items-center justify-between'>
                     <ProfileCard userProfile={user} />
                     {selectedUsers?.find((u) => u.id === user.id) && (
                       <Ionicons

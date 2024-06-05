@@ -36,11 +36,11 @@ const Checkout = () => {
         // Do something when the screen is unfocused
         deleteReservations.mutate({
           ticket_ids: paymentInfo?.ticketReservations.map(
-            (ticket) => ticket.ticket_id!
+            (ticket) => ticket.ticket_id!,
           )!,
         });
       };
-    }, [])
+    }, []),
   );
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const Checkout = () => {
         } else {
           deleteReservations.mutate({
             ticket_ids: paymentInfo?.ticketReservations.map(
-              (ticket) => ticket.ticket_id!
+              (ticket) => ticket.ticket_id!,
             )!,
           });
           router.back();
@@ -70,14 +70,14 @@ const Checkout = () => {
   }, []);
 
   return (
-    <View className="flex-1 bg-black p-4">
-      <View className="flex flex-row justify-between pb-4">
-        <Text className="text-white font-bold text-3xl pb-4">Cart</Text>
-        <View className="flex flex-col">
-          <Text className="font-light text-muted-foreground">
+    <View className='flex-1 bg-black p-4'>
+      <View className='flex flex-row justify-between pb-4'>
+        <Text className='pb-4 text-3xl font-bold text-white'>Cart</Text>
+        <View className='flex flex-col'>
+          <Text className='font-light text-muted-foreground'>
             Time Remaining
           </Text>
-          <Text className="flex justify-end text-lg font-semibold text-white">
+          <Text className='flex justify-end text-lg font-semibold text-white'>
             {String(Math.floor(seconds / 60)).padStart(2, '0')}:
             {String(seconds % 60).padStart(2, '0')}
           </Text>
@@ -88,19 +88,19 @@ const Checkout = () => {
           {section.quantity == 0 ? (
             <View></View>
           ) : (
-            <View className="flex flex-row justify-between pb-4">
-              <View className="flex flex-row gap-2 items-center">
-                <View className="bg-zinc-800 py-1 px-4 rounded-full">
-                  <Text className="text-white font-bold">
+            <View className='flex flex-row justify-between pb-4'>
+              <View className='flex flex-row items-center gap-2'>
+                <View className='rounded-full bg-zinc-800 px-4 py-1'>
+                  <Text className='font-bold text-white'>
                     {section.quantity}
                   </Text>
                 </View>
-                <Text className="text-white text-xl">
+                <Text className='text-xl text-white'>
                   {section.section.name}
                 </Text>
               </View>
               <View>
-                <Text className="text-white text-xl">
+                <Text className='text-xl text-white'>
                   {`$` + section.section.price}
                 </Text>
               </View>
@@ -109,9 +109,9 @@ const Checkout = () => {
         </View>
       ))}
       <Separator />
-      <View className="flex flex-row justify-between">
-        <Text className="py-4 font-bold text-xl text-white">Total:</Text>
-        <Text className="py-4 font-bold text-xl text-white">${totalPrice}</Text>
+      <View className='flex flex-row justify-between'>
+        <Text className='py-4 text-xl font-bold text-white'>Total:</Text>
+        <Text className='py-4 text-xl font-bold text-white'>${totalPrice}</Text>
       </View>
       <Separator />
 

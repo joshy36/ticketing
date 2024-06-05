@@ -18,11 +18,11 @@ export default function RootLayout() {
               <TicketsProvider>
                 <Stack>
                   <Stack.Screen
-                    name="(tabs)"
+                    name='(tabs)'
                     options={{ headerShown: false }}
                   />
                   <Stack.Screen
-                    name="confirmation"
+                    name='confirmation'
                     options={{
                       headerShown: false,
                       presentation: 'modal',

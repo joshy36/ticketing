@@ -12,7 +12,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Modal() {
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[] | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userSearch, setUserSearch] = useState<string>('');
@@ -30,7 +30,7 @@ export default function Modal() {
       {
         id: user?.id!,
       },
-      { enabled: !!user }
+      { enabled: !!user },
     );
 
   const createChat = trpc.createChat.useMutation({
@@ -61,30 +61,30 @@ export default function Modal() {
   // a full screen page. You may need to change the UI to account for this.
   const isPresented = router.canGoBack();
   return (
-    <View className="flex-1 justify-center bg-black pt-2">
+    <View className='flex-1 justify-center bg-black pt-2'>
       {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
       {!isPresented && (
-        <Link href="../" className="text-white">
+        <Link href='../' className='text-white'>
           Dismiss
         </Link>
       )}
       {/* Native modals have dark backgrounds on iOS, set the status bar to light content. */}
-      <StatusBar style="light" />
+      <StatusBar style='light' />
 
-      <View className="flex-1">
+      <View className='flex-1'>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <Text className="text-center text-muted-foreground pb-2">
+          <Text className='pb-2 text-center text-muted-foreground'>
             Select users to start a chat with.
           </Text>
-          <View className="flex flex-col">
+          <View className='flex flex-col'>
             {selectedUsers?.map((user) => {
               return (
                 <TouchableOpacity
                   key={user.id}
-                  className="mx-4 my-1 rounded-full border border-zinc-800 p-2 flex flex-row justify-between items-center"
+                  className='mx-4 my-1 flex flex-row items-center justify-between rounded-full border border-zinc-800 p-2'
                   onPress={() => {
                     setSelectedUsers(
-                      selectedUsers?.filter((u) => u.id !== user.id)
+                      selectedUsers?.filter((u) => u.id !== user.id),
                     );
                   }}
                 >
@@ -94,15 +94,15 @@ export default function Modal() {
               );
             })}
           </View>
-          <View className="flex w-full flex-row space-x-2 pt-8 pb-8 justify-center">
+          <View className='flex w-full flex-row justify-center space-x-2 pb-8 pt-8'>
             <TextInput
-              placeholder="username"
-              className="rounded-full flex-1 py-3 px-6 items-center text-muted-foreground border border-zinc-800"
+              placeholder='username'
+              className='flex-1 items-center rounded-full border border-zinc-800 px-6 py-3 text-muted-foreground'
               onChangeText={handleInputChange}
             />
             <TouchableOpacity
               disabled={isLoading || !selectedUsers?.length}
-              className="w-28 rounded-full bg-white p-3 items-center justify-center"
+              className='w-28 items-center justify-center rounded-full bg-white p-3'
               onPress={() => {
                 setIsLoading(true);
                 createChat.mutate({
@@ -110,7 +110,7 @@ export default function Modal() {
                 });
               }}
             >
-              <Text className="font-semibold"> Start Chat</Text>
+              <Text className='font-semibold'> Start Chat</Text>
             </TouchableOpacity>
           </View>
 

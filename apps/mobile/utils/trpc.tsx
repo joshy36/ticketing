@@ -35,7 +35,7 @@ export const getBaseUrl = () => {
     // return 'https://www.jupiter-tickets.com';
     // return "https://turbo.t3.gg";
     throw new Error(
-      'Failed to get localhost. Please point to your production server.'
+      'Failed to get localhost. Please point to your production server.',
     );
   }
   if (process.env.EXPO_PUBLIC_ENV === 'prod') {
@@ -70,7 +70,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
           },
         }),
       ],
-    })
+    }),
   );
 
   return (

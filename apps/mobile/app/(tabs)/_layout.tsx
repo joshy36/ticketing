@@ -19,7 +19,7 @@ export default function TabsLayout() {
 
   return (
     <Tabs
-      initialRouteName="home"
+      initialRouteName='home'
       screenOptions={{
         tabBarStyle: {
           backgroundColor: 'transparent',
@@ -39,7 +39,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name='home'
         options={{
           title: 'Home',
           tabBarShowLabel: false,
@@ -55,7 +55,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
+        name='search'
         options={{
           title: 'Search',
           tabBarShowLabel: false,
@@ -71,7 +71,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="tickets"
+        name='tickets'
         options={{
           title: 'Tickets',
           tabBarShowLabel: false,
@@ -102,7 +102,7 @@ export default function TabsLayout() {
                       alignItems: 'center',
                     }}
                   >
-                    <Text className="text-white text-xs items-center">
+                    <Text className='items-center text-xs text-white'>
                       {pendingPushRequsts?.length +
                         numberOfTicketsNeedToTransfer}
                     </Text>
@@ -113,7 +113,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="messages"
+        name='messages'
         options={{
           title: 'Messages',
           tabBarShowLabel: false,
@@ -143,7 +143,7 @@ export default function TabsLayout() {
                       alignItems: 'center',
                     }}
                   >
-                    <Text className="text-white text-xs items-center">
+                    <Text className='items-center text-xs text-white'>
                       {unreadMessages + friendRequests?.length}
                     </Text>
                   </View>
@@ -153,7 +153,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name='profile'
         options={{
           title: 'Profile',
           tabBarShowLabel: false,
@@ -165,22 +165,22 @@ export default function TabsLayout() {
                 <View>
                   {focused ? (
                     <Image
-                      className="h-8 w-8 rounded-full flex justify-center items-center border-2 border-white"
+                      className='flex h-8 w-8 items-center justify-center rounded-full border-2 border-white'
                       source={{
                         uri: replaceLocalhostWithIP(userProfile).profile_image,
                       }}
                       placeholder={blurhash}
-                      contentFit="cover"
+                      contentFit='cover'
                       transition={1000}
                     />
                   ) : (
                     <Image
-                      className="h-8 w-8 rounded-full flex justify-center items-center"
+                      className='flex h-8 w-8 items-center justify-center rounded-full'
                       source={{
                         uri: replaceLocalhostWithIP(userProfile).profile_image,
                       }}
                       placeholder={blurhash}
-                      contentFit="cover"
+                      contentFit='cover'
                       transition={1000}
                     />
                   )}

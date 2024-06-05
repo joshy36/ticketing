@@ -9,7 +9,7 @@ const Profile = () => {
   const { session, user } = supabaseContext;
 
   return (
-    <View className="flex-1 bg-black">
+    <View className='flex-1 bg-black'>
       {session && user ? <ProfilePage /> : <UserSignInForm />}
     </View>
   );

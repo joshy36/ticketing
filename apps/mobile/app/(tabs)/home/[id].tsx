@@ -46,7 +46,7 @@ const Home = () => {
     {
       id: event?.venue!,
     },
-    { enabled: !!event }
+    { enabled: !!event },
   );
 
   const { data: isScanner, isLoading: isScannerLoading } =
@@ -55,13 +55,13 @@ const Home = () => {
         user_id: user?.id!,
         event_id: event?.id!,
       },
-      { enabled: !!event && !!user }
+      { enabled: !!event && !!user },
     );
 
   const { data: sections, isLoading: sectionsLoading } =
     trpc.getSectionsForVenueWithPrices.useQuery(
       { id: event?.venue!, event_id: event?.id! },
-      { enabled: !!event }
+      { enabled: !!event },
     );
 
   const {
@@ -72,15 +72,15 @@ const Home = () => {
     {
       event_id: event?.id!,
     },
-    { enabled: !!event }
+    { enabled: !!event },
   );
 
   return (
-    <View className="flex-1 justify-center bg-black">
+    <View className='flex-1 justify-center bg-black'>
       <ScrollView>
         <View>
           {eventLoading ? (
-            <Text className="text-white text-2xl">Loading...</Text>
+            <Text className='text-2xl text-white'>Loading...</Text>
           ) : (
             <View>
               {event?.image && (
@@ -97,16 +97,16 @@ const Home = () => {
                   ></LinearGradient>
                 </ImageBackground>
               )}
-              <View className="p-4">
-                <Text className="text-5xl text-white text-center font-bold">
+              <View className='p-4'>
+                <Text className='text-center text-5xl font-bold text-white'>
                   {event?.name}
                 </Text>
-                <Text className="text-muted-foreground text-xl font-light text-center pb-4">
+                <Text className='pb-4 text-center text-xl font-light text-muted-foreground'>
                   {dateToString(event?.date!)}
                 </Text>
 
-                <View className="border p-6 rounded-xl bg-black border-zinc-800 shadow-2xl shadow-zinc-900">
-                  <Text className="text-white text-3xl font-bold pb-2">
+                <View className='rounded-xl border border-zinc-800 bg-black p-6 shadow-2xl shadow-zinc-900'>
+                  <Text className='pb-2 text-3xl font-bold text-white'>
                     Buy Tickets
                   </Text>
                   {event?.etherscan_link ? (
@@ -118,67 +118,67 @@ const Home = () => {
                       refetch={refetch}
                     />
                   ) : (
-                    <View className="flex flex-row items-center space-x-1.5">
-                      <View className="relative flex h-3 w-3">
-                        <View className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500 "></View>
+                    <View className='flex flex-row items-center space-x-1.5'>
+                      <View className='relative flex h-3 w-3'>
+                        <View className='relative inline-flex h-3 w-3 rounded-full bg-yellow-500'></View>
                       </View>
-                      <Text className="text-muted-foreground">
+                      <Text className='text-muted-foreground'>
                         Contract pending deployment
                       </Text>
                     </View>
                   )}
                 </View>
 
-                <Text className="text-white text-2xl font-semibold py-4">
+                <Text className='py-4 text-2xl font-semibold text-white'>
                   Artist
                 </Text>
-                <Link className="py-2" href={`/home/artist/${artist?.id}`}>
-                  <View className="flex flex-row items-center gap-2">
+                <Link className='py-2' href={`/home/artist/${artist?.id}`}>
+                  <View className='flex flex-row items-center gap-2'>
                     <Image
-                      className="h-12 w-12 rounded-xl"
+                      className='h-12 w-12 rounded-xl'
                       source={{
                         uri: replaceLocalhostWithIP(artist)?.image,
                       }}
                       placeholder={blurhash}
-                      contentFit="cover"
+                      contentFit='cover'
                       transition={1000}
                     />
-                    <Text className="text-muted-foreground pl-2 text-base">
+                    <Text className='pl-2 text-base text-muted-foreground'>
                       {artist?.name}
                     </Text>
                   </View>
                 </Link>
                 <Separator />
-                <Text className="text-white text-2xl font-semibold py-4">
+                <Text className='py-4 text-2xl font-semibold text-white'>
                   Venue
                 </Text>
-                <Link className="py-2" href={`/home/venue/${venue?.id}`}>
-                  <View className="flex flex-row items-center gap-2">
+                <Link className='py-2' href={`/home/venue/${venue?.id}`}>
+                  <View className='flex flex-row items-center gap-2'>
                     <Image
-                      className="h-12 w-12 rounded-xl"
+                      className='h-12 w-12 rounded-xl'
                       source={{
                         uri: replaceLocalhostWithIP(venue)?.image,
                       }}
                       placeholder={blurhash}
-                      contentFit="cover"
+                      contentFit='cover'
                       transition={1000}
                     />
-                    <Text className="text-muted-foreground pl-2 text-base">
+                    <Text className='pl-2 text-base text-muted-foreground'>
                       {venue?.name}
                     </Text>
                   </View>
                 </Link>
                 <Separator />
-                <Text className="text-white text-2xl font-semibold pt-4">
+                <Text className='pt-4 text-2xl font-semibold text-white'>
                   Description
                 </Text>
-                <Text className="text-muted-foreground text-base py-4">
+                <Text className='py-4 text-base text-muted-foreground'>
                   {event?.description}
                 </Text>
                 {isScanner ? (
                   <Link href={`/home/scan/${event?.id}`} asChild>
-                    <TouchableOpacity className="bg-white py-3 rounded-full flex mb-20">
-                      <Text className="text-black text-center font-bold">
+                    <TouchableOpacity className='mb-20 flex rounded-full bg-white py-3'>
+                      <Text className='text-center font-bold text-black'>
                         Scan Tickets
                       </Text>
                     </TouchableOpacity>

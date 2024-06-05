@@ -11,9 +11,9 @@ const Venue = () => {
   });
 
   return (
-    <View className="flex-1 justify-center bg-black">
+    <View className='flex-1 justify-center bg-black'>
       <ScrollView>
-        <View className="pb-24">
+        <View className='pb-24'>
           <ImageBackground
             style={{ width: '100%', height: 200 }}
             source={{
@@ -26,14 +26,14 @@ const Venue = () => {
               style={{ height: '100%', width: '100%' }}
             ></LinearGradient>
           </ImageBackground>
-          <View className="p-4">
-            <Text className="text-5xl text-white text-center font-bold pb-8">
+          <View className='p-4'>
+            <Text className='pb-8 text-center text-5xl font-bold text-white'>
               {venue?.name}
             </Text>
-            <Text className="text-base text-muted-foreground">
+            <Text className='text-base text-muted-foreground'>
               {venue?.description}
             </Text>
-            <Text className="text-white py-4 text-2xl font-bold">
+            <Text className='py-4 text-2xl font-bold text-white'>
               Upcoming Events
             </Text>
           </View>

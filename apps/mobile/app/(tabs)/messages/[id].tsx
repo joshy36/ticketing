@@ -50,12 +50,12 @@ export default function Home() {
   });
 
   const currentChatDetails = chats?.chats?.find(
-    (chat) => chat.id === (id! as string)
+    (chat) => chat.id === (id! as string),
   );
 
   const getRandomUserFromChat = () => {
     return currentChatDetails?.chat_members.find(
-      (user) => user.user_id != userProfile?.id
+      (user) => user.user_id != userProfile?.id,
     )?.user_profiles!;
   };
 
@@ -63,9 +63,9 @@ export default function Home() {
     <KeyboardAvoidingView
       keyboardVerticalOffset={10}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-black"
+      className='flex-1 bg-black'
     >
-      <View className="flex-1 flex-col overflow-hidden pb-2">
+      <View className='flex-1 flex-col overflow-hidden pb-2'>
         {currentChatDetails?.chat_type !== 'organization' && (
           <RenderMessages userProfile={userProfile!} />
         )}
@@ -83,22 +83,22 @@ export default function Home() {
         )}
       </View>
       {currentChatDetails?.chat_type !== 'organization' && (
-        <View className="flex flex-row pb-24 gap-2 px-2">
+        <View className='flex flex-row gap-2 px-2 pb-24'>
           <TextInput
-            className="mb-3 rounded-full flex-1 py-3 px-6 border border-zinc-800 text-muted-foreground items-center"
-            placeholder="Message..."
-            placeholderTextColor="#6B7280"
+            className='mb-3 flex-1 items-center rounded-full border border-zinc-800 px-6 py-3 text-muted-foreground'
+            placeholder='Message...'
+            placeholderTextColor='#6B7280'
             onChangeText={handleInputChange}
             value={message}
           />
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={message.length === 0}
-            className={`bg-white rounded-full px-4 py-3 mb-3 ${
+            className={`mb-3 rounded-full bg-white px-4 py-3 ${
               message.length === 0 ? 'opacity-50' : ''
             }`}
           >
-            <Text className="font-semibold">Send</Text>
+            <Text className='font-semibold'>Send</Text>
           </TouchableOpacity>
         </View>
       )}

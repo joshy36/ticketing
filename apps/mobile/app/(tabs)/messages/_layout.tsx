@@ -14,26 +14,26 @@ const Layout = () => {
   const { session, user, userProfile } = useContext(SupabaseContext);
 
   const currentChatDetails = chats?.chats?.find(
-    (chat) => chat.id === (id! as string)
+    (chat) => chat.id === (id! as string),
   );
 
   const otherUser = currentChatDetails?.chat_members.find(
-    (user) => user.user_id != userProfile?.id
+    (user) => user.user_id != userProfile?.id,
   )?.user_profiles;
 
   const artist = currentChatDetails?.chat_members.find(
-    (member) => member.artists
+    (member) => member.artists,
   )?.artists;
 
   const venue = currentChatDetails?.chat_members.find(
-    (member) => member.venues
+    (member) => member.venues,
   )?.venues;
 
   const artistOrVenue = artist || venue;
 
   return (
     <Stack
-      initialRouteName="index"
+      initialRouteName='index'
       screenOptions={{
         headerStyle: { backgroundColor: '#000000' },
         headerTintColor: '#FFFFFF',
@@ -44,9 +44,9 @@ const Layout = () => {
         headerRight: () => (
           <View>
             {session && user && (
-              <Link href="messages/startChat">
-                <View className="bg-white p-2 rounded-full flex items-center ">
-                  <Feather name="send" size={24} color="black" />
+              <Link href='messages/startChat'>
+                <View className='flex items-center rounded-full bg-white p-2'>
+                  <Feather name='send' size={24} color='black' />
                 </View>
               </Link>
             )}
@@ -55,41 +55,41 @@ const Layout = () => {
       }}
     >
       <Stack.Screen
-        name="[id]"
+        name='[id]'
         options={{
           headerTitle: () => (
             <View>
               {currentChatDetails?.chat_type === 'dm' && (
-                <View className="flex flex-row justify-center items-center gap-2">
+                <View className='flex flex-row items-center justify-center gap-2'>
                   <Image
-                    className="h-8 w-8 rounded-full flex justify-center items-center"
+                    className='flex h-8 w-8 items-center justify-center rounded-full'
                     source={{
                       uri: replaceLocalhostWithIP(otherUser?.profile_image),
                     }}
                     placeholder={blurhash}
-                    contentFit="cover"
+                    contentFit='cover'
                     transition={1000}
                   />
-                  <Text className="text-white">
+                  <Text className='text-white'>
                     {otherUser?.first_name + ' ' + otherUser?.last_name}
                   </Text>
                 </View>
               )}
               {currentChatDetails?.chat_type === 'group' && (
-                <View className="flex flex-row justify-center items-center gap-2"></View>
+                <View className='flex flex-row items-center justify-center gap-2'></View>
               )}
               {currentChatDetails?.chat_type === 'organization' && (
-                <View className="flex flex-row justify-center items-center gap-2">
+                <View className='flex flex-row items-center justify-center gap-2'>
                   <Image
-                    className="h-8 w-8 rounded-xl flex justify-center items-center"
+                    className='flex h-8 w-8 items-center justify-center rounded-xl'
                     source={{
                       uri: replaceLocalhostWithIP(artistOrVenue?.image),
                     }}
                     placeholder={blurhash}
-                    contentFit="cover"
+                    contentFit='cover'
                     transition={1000}
                   />
-                  <Text className="text-white">{artistOrVenue?.name}</Text>
+                  <Text className='text-white'>{artistOrVenue?.name}</Text>
                 </View>
               )}
             </View>
@@ -105,7 +105,7 @@ const Layout = () => {
         }}
       />
       <Stack.Screen
-        name="requests"
+        name='requests'
         options={{
           headerTitle: 'Friend Requests',
           headerBackTitle: 'Back',
@@ -113,7 +113,7 @@ const Layout = () => {
         }}
       />
       <Stack.Screen
-        name="startChat"
+        name='startChat'
         options={{
           // Set the presentation mode to modal for our modal route.
           presentation: 'modal',

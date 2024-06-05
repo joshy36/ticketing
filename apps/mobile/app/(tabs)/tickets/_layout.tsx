@@ -10,7 +10,7 @@ const Layout = () => {
   return (
     <TicketsProvider userProfile={userProfile}>
       <Stack
-        initialRouteName="index"
+        initialRouteName='index'
         screenOptions={{
           headerStyle: { backgroundColor: 'black' },
           headerTintColor: '#FFFFFF',
@@ -28,19 +28,19 @@ const Layout = () => {
         }}
       /> */}
         <Stack.Screen
-          name="scanIn"
+          name='scanIn'
           options={{
             presentation: 'modal',
             headerTitle: 'Scan In',
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>
-                <Feather name="x" size={24} color="white" />
+                <Feather name='x' size={24} color='white' />
               </TouchableOpacity>
             ),
           }}
         />
         <Stack.Screen
-          name="transfer/[id]"
+          name='transfer/[id]'
           options={{
             // Set the presentation mode to modal for our modal route.
             presentation: 'modal',
@@ -48,7 +48,7 @@ const Layout = () => {
           }}
         />
         <Stack.Screen
-          name="cancel/[id]"
+          name='cancel/[id]'
           options={{
             // Set the presentation mode to modal for our modal route.
             presentation: 'modal',

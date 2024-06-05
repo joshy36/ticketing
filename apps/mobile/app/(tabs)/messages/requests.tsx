@@ -13,7 +13,7 @@ export default function Requests() {
   const rejectRequest = trpc.rejectFriendRequest.useMutation({
     onMutate(data) {
       const newRequests = friendRequests?.filter(
-        (request) => request.from.id !== data.from
+        (request) => request.from.id !== data.from,
       );
       setFriendRequests(newRequests!);
       Toast.success('Request rejected!');
@@ -24,7 +24,7 @@ export default function Requests() {
   const acceptRequest = trpc.acceptFriendRequest.useMutation({
     onMutate(data) {
       const newRequests = friendRequests?.filter(
-        (request) => request.from.id !== data.from
+        (request) => request.from.id !== data.from,
       );
       setFriendRequests(newRequests!);
       //   toast.success('Request accepted!');
@@ -33,12 +33,12 @@ export default function Requests() {
   });
 
   return (
-    <View className="flex-1 bg-black">
-      <ToastManager backdropColor="black" />
-      <View className="flex w-full flex-col">
+    <View className='flex-1 bg-black'>
+      <ToastManager backdropColor='black' />
+      <View className='flex w-full flex-col'>
         {friendRequests?.length === 0 && !friendRequestsLoading ? (
-          <View className="flex h-64 flex-col items-center justify-center">
-            <Text className="text-muted-foreground">
+          <View className='flex h-64 flex-col items-center justify-center'>
+            <Text className='text-muted-foreground'>
               No new friend requests.
             </Text>
           </View>
@@ -59,25 +59,25 @@ export default function Requests() {
               return (
                 <View
                   key={request.id}
-                  className="flex flex-row justify-between border-b border-zinc-800 p-4"
+                  className='flex flex-row justify-between border-b border-zinc-800 p-4'
                 >
                   <ProfileCard userProfile={request.from!} />
-                  <View className="flex flex-row gap-3">
+                  <View className='flex flex-row gap-3'>
                     <TouchableOpacity
-                      className="p-3 rounded-full border border-zinc-800 flex items-center"
+                      className='flex items-center rounded-full border border-zinc-800 p-3'
                       onPress={() => {
                         rejectRequest.mutate({ from: request.from.id });
                       }}
                     >
-                      <Feather name="x" size={24} color="white" />
+                      <Feather name='x' size={24} color='white' />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      className="p-3 rounded-full border border-zinc-800 bg-white flex items-center"
+                      className='flex items-center rounded-full border border-zinc-800 bg-white p-3'
                       onPress={() => {
                         acceptRequest.mutate({ from: request.from.id });
                       }}
                     >
-                      <Feather name="check" size={24} color="black" />
+                      <Feather name='check' size={24} color='black' />
                     </TouchableOpacity>
                   </View>
                 </View>

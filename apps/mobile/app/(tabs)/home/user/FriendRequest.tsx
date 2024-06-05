@@ -35,27 +35,27 @@ export default function FriendRequest({
         requestFriend.mutate({ to: userProfile.id });
       }}
       disabled={isLoading || relationship !== 'none'}
-      className="mt-4 border border-zinc-800 rounded-full py-2 px-4 flex flex-row items-center justify-center w-1/2"
+      className='mt-4 flex w-1/2 flex-row items-center justify-center rounded-full border border-zinc-800 px-4 py-2'
     >
       {/* {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />} */}
       {relationship === 'none' && (
-        <View className="flex flex-row items-center gap-2">
-          <Text className="text-white">Add friend</Text>
-          <Feather name="user-plus" size={16} color="white" />
+        <View className='flex flex-row items-center gap-2'>
+          <Text className='text-white'>Add friend</Text>
+          <Feather name='user-plus' size={16} color='white' />
         </View>
       )}
       {relationship === 'requested' && (
-        <Text className="flex flex-row items-center gap-2 text-muted-foreground">
+        <Text className='flex flex-row items-center gap-2 text-muted-foreground'>
           Request Pending
         </Text>
       )}
       {relationship === 'rejected' && (
-        <Text className="flex flex-row items-center gap-2 text-muted-foreground">
+        <Text className='flex flex-row items-center gap-2 text-muted-foreground'>
           Request Rejected
         </Text>
       )}
       {relationship === 'accepted' && (
-        <Text className="flex flex-row items-center gap-2 text-muted-foreground">
+        <Text className='flex flex-row items-center gap-2 text-muted-foreground'>
           Friends
         </Text>
       )}

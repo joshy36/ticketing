@@ -49,7 +49,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
     {
       id: user?.id,
     },
-    { enabled: !!user }
+    { enabled: !!user },
   );
 
   useEffect(() => {

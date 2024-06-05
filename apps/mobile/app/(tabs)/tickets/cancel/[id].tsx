@@ -40,21 +40,21 @@ export default function Modal() {
   });
 
   return (
-    <View className="flex-1 bg-black pt-4 px-2">
-      <Text className="text-white text-lg pt-4">
+    <View className='flex-1 bg-black px-2 pt-4'>
+      <Text className='pt-4 text-lg text-white'>
         Are you sure you want to cancel this transfer request?
       </Text>
-      <View className="flex flex-row justify-end pt-8 gap-4">
+      <View className='flex flex-row justify-end gap-4 pt-8'>
         <TouchableOpacity
-          className="bg-zinc-800 rounded-full p-4 w-1/3"
+          className='w-1/3 rounded-full bg-zinc-800 p-4'
           onPress={() => router.back()}
         >
-          <View className="flex flex-row justify-center">
-            <Text className="text-white font-semibold">No</Text>
+          <View className='flex flex-row justify-center'>
+            <Text className='font-semibold text-white'>No</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-white rounded-full p-4 w-1/3"
+          className='w-1/3 rounded-full bg-white p-4'
           onPress={() => {
             setIsLoading(true);
             cancelRequestTransfer.mutate({
@@ -62,9 +62,9 @@ export default function Modal() {
             });
           }}
         >
-          <View className="flex flex-row justify-center">
-            {isLoading && <ActivityIndicator className="pr-2" />}
-            <Text className="font-semibold">Yes</Text>
+          <View className='flex flex-row justify-center'>
+            {isLoading && <ActivityIndicator className='pr-2' />}
+            <Text className='font-semibold'>Yes</Text>
           </View>
         </TouchableOpacity>
       </View>

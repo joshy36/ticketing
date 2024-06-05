@@ -82,10 +82,10 @@ export default function CheckoutScreen({
         />
       ) : null} */}
       <TouchableOpacity
-        className="bg-white py-3 rounded-full flex "
+        className='flex rounded-full bg-white py-3'
         onPress={openPaymentSheet}
       >
-        <Text className="text-black text-center font-bold">Checkout</Text>
+        <Text className='text-center font-bold text-black'>Checkout</Text>
       </TouchableOpacity>
     </View>
   );

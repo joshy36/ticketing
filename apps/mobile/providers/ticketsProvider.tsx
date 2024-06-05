@@ -37,7 +37,7 @@ export const TicketsProvider = ({ children }: TicketsProviderProps) => {
       {
         user_id: userProfile?.id!,
       },
-      { enabled: !!userProfile }
+      { enabled: !!userProfile },
     );
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const TicketsProvider = ({ children }: TicketsProviderProps) => {
       let total = 0;
       for (const ticket of tickets.tickets!) {
         const req = tickets.pushRequestTickets?.find(
-          (ticketFind) => ticketFind.ticket_id === ticket.id
+          (ticketFind) => ticketFind.ticket_id === ticket.id,
         );
         if (!req && ticket.owner_id !== userProfile?.id!) {
           total++;

@@ -14,25 +14,25 @@ const ScanIn = () => {
   });
 
   return (
-    <View className="bg-black flex-1 px-8">
-      <View className="flex items-center justify-center border rounded-2xl border-zinc-800 mt-10 p-4">
+    <View className='flex-1 bg-black px-8'>
+      <View className='mt-10 flex items-center justify-center rounded-2xl border border-zinc-800 p-4'>
         {userProfile && (
           <Image
-            className="h-64 w-64 rounded-full flex justify-center items-center"
+            className='flex h-64 w-64 items-center justify-center rounded-full'
             source={{
               uri: replaceLocalhostWithIP(userProfile).profile_image,
             }}
             placeholder={blurhash}
-            contentFit="cover"
+            contentFit='cover'
             transition={1000}
           />
         )}
 
         {userSalt && (
-          <View className="flex items-center justify-center p-4">
+          <View className='flex items-center justify-center p-4'>
             <QRCode
-              bgColor="#000000"
-              fgColor="#FFFFFF"
+              bgColor='#000000'
+              fgColor='#FFFFFF'
               value={userSalt.salt!}
             />
           </View>

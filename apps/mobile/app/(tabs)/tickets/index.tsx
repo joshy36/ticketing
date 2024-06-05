@@ -19,7 +19,7 @@ const Tickets = () => {
   const { tickets, refetchTickets, refetchPush } = useContext(TicketsContext);
 
   function extractUniqueEvents(
-    tickets: RouterOutputs['getTicketsForUser'] | null | undefined
+    tickets: RouterOutputs['getTicketsForUser'] | null | undefined,
   ) {
     const uniqueEventsMap = new Map();
 
@@ -42,25 +42,25 @@ const Tickets = () => {
   }, []);
 
   return (
-    <View className="flex-1 bg-black pb-36">
+    <View className='flex-1 bg-black pb-36'>
       {session && user ? (
-        <View className="flex-1">
+        <View className='flex-1'>
           <ScrollView
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                tintColor="white"
+                tintColor='white'
               />
             }
           >
             <View>
               {uniqueEvents?.length == 0 && (
                 <View>
-                  <Text className="text-white font-semibold text-lg text-center pt-20">
+                  <Text className='pt-20 text-center text-lg font-semibold text-white'>
                     No upcoming events
                   </Text>
-                  <Text className="text-muted-foreground font-light text-center">
+                  <Text className='text-center font-light text-muted-foreground'>
                     Check out the events page to explore upcoming events
                   </Text>
                 </View>
@@ -71,10 +71,10 @@ const Tickets = () => {
               uniqueEvents={uniqueEvents}
             />
           </ScrollView>
-          <View className="-bottom-10 absolute w-full border-t border-zinc-800">
-            <Link href="/tickets/scanIn" className="flex w-full pt-4">
+          <View className='absolute -bottom-10 w-full border-t border-zinc-800'>
+            <Link href='/tickets/scanIn' className='flex w-full pt-4'>
               {/* <View className="bg-white rounded-full p-3"> */}
-              <Text className="text-center text-white font-semibold">
+              <Text className='text-center font-semibold text-white'>
                 Scan In
               </Text>
               {/* </View> */}
@@ -82,8 +82,8 @@ const Tickets = () => {
           </View>
         </View>
       ) : (
-        <View className="flex-1 items-center justify-center bg-black px-4">
-          <Text className="text-white font-bold text-3xl pb-6">
+        <View className='flex-1 items-center justify-center bg-black px-4'>
+          <Text className='pb-6 text-3xl font-bold text-white'>
             Sign In to View Tickets
           </Text>
         </View>

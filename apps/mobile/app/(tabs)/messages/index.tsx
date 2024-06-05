@@ -14,14 +14,14 @@ const Tickets = () => {
     });
 
   return (
-    <View className="flex-1 bg-black">
+    <View className='flex-1 bg-black'>
       {session && user ? (
-        <View className="flex-1">
+        <View className='flex-1'>
           <RenderChats userProfile={userProfile!} />
         </View>
       ) : (
-        <View className="flex-1 items-center justify-center bg-black px-4">
-          <Text className="text-white font-bold text-3xl pb-6">
+        <View className='flex-1 items-center justify-center bg-black px-4'>
+          <Text className='pb-6 text-3xl font-bold text-white'>
             Sign In to View Messages
           </Text>
         </View>

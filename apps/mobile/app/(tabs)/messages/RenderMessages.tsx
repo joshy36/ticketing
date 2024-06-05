@@ -34,34 +34,34 @@ export default function RenderMessages({
         scrollViewRef.current?.scrollToEnd({ animated: true })
       }
     >
-      <View className="px-4">
+      <View className='px-4'>
         {messages?.map((message, index) => {
           return (
-            <View key={message.id} className="py-0.5">
+            <View key={message.id} className='py-0.5'>
               {message.chat_members?.user_id === userProfile?.id ? (
-                <View className="flex justify-end">
+                <View className='flex justify-end'>
                   {!(
                     messages[index + 1]?.chat_members?.user_id ===
                     messages[index]?.chat_members?.user_id
                   ) ? (
-                    <View className="flex flex-col">
-                      <View className="flex flex-row justify-end">
-                        <View className="flex rounded-bl-xl rounded-tl-xl rounded-tr-xl border bg-white">
-                          <Text className="flex items-center px-3 py-2 text-black">
+                    <View className='flex flex-col'>
+                      <View className='flex flex-row justify-end'>
+                        <View className='flex rounded-bl-xl rounded-tl-xl rounded-tr-xl border bg-white'>
+                          <Text className='flex items-center px-3 py-2 text-black'>
                             {message.chat_messages?.content}
                           </Text>
                         </View>
                       </View>
-                      <View className="flex flex-row justify-end">
-                        <Text className="pt-1 text-xs font-light text-muted-foreground">
+                      <View className='flex flex-row justify-end'>
+                        <Text className='pt-1 text-xs font-light text-muted-foreground'>
                           {dateToString(message.created_at)}
                         </Text>
                       </View>
                     </View>
                   ) : (
-                    <View className="flex flex-row justify-end">
-                      <View className="flex rounded-xl bg-white">
-                        <Text className="rounded-lg px-3 py-2 text-black">
+                    <View className='flex flex-row justify-end'>
+                      <View className='flex rounded-xl bg-white'>
+                        <Text className='rounded-lg px-3 py-2 text-black'>
                           {message.chat_messages?.content}
                         </Text>
                       </View>
@@ -69,12 +69,12 @@ export default function RenderMessages({
                   )}
                 </View>
               ) : (
-                <View className="flex flex-col justify-start">
+                <View className='flex flex-col justify-start'>
                   {!(
                     messages[index - 1]?.chat_members?.user_id ===
                     messages[index]?.chat_members?.user_id
                   ) && (
-                    <Text className="ml-14 text-xs font-light text-muted-foreground">
+                    <Text className='ml-14 text-xs font-light text-muted-foreground'>
                       {messages[index]?.chat_members?.user_profiles
                         ?.first_name +
                         ' ' +
@@ -85,25 +85,25 @@ export default function RenderMessages({
                     messages[index + 1]?.chat_members?.user_id ===
                     messages[index]?.chat_members?.user_id
                   ) ? (
-                    <View className="flex flex-col">
-                      <View className="flex flex-row">
+                    <View className='flex flex-col'>
+                      <View className='flex flex-row'>
                         {/* <Link */}
                         <View
                           // href={`/${messages[index]?.chat_members?.user_profiles?.username}`}
-                          className="flex items-end"
+                          className='flex items-end'
                         >
                           {messages[index]?.chat_members?.user_profiles
                             ?.profile_image ? (
                             // <AvatarImage src={userProfile?.profile_image!} alt='pfp' />
                             <Image
-                              className="h-10 w-10 rounded-full flex justify-center items-center"
+                              className='flex h-10 w-10 items-center justify-center rounded-full'
                               source={{
                                 uri: replaceLocalhostWithIP(
-                                  messages[index]?.chat_members?.user_profiles
+                                  messages[index]?.chat_members?.user_profiles,
                                 ).profile_image,
                               }}
                               placeholder={blurhash}
-                              contentFit="cover"
+                              contentFit='cover'
                               transition={1000}
                             />
                           ) : (
@@ -112,13 +112,13 @@ export default function RenderMessages({
                           )}
                         </View>
                         {/* </Link> */}
-                        <View className="ml-2 flex rounded-br-xl rounded-tl-xl rounded-tr-xl bg-zinc-800/80 max-w-xs">
-                          <Text className="items-center px-3 py-2 text-white">
+                        <View className='ml-2 flex max-w-xs rounded-br-xl rounded-tl-xl rounded-tr-xl bg-zinc-800/80'>
+                          <Text className='items-center px-3 py-2 text-white'>
                             {message.chat_messages?.content}
                           </Text>
                         </View>
                       </View>
-                      <Text className="flex justify-start pl-12 pt-1 text-xs font-light text-muted-foreground">
+                      <Text className='flex justify-start pl-12 pt-1 text-xs font-light text-muted-foreground'>
                         {dateToString(message.created_at)}
                       </Text>
                     </View>
@@ -126,17 +126,17 @@ export default function RenderMessages({
                       messages[index - 1]?.chat_members?.user_id ===
                       messages[index]?.chat_members?.user_id
                     ) ? (
-                    <View className="flex flex-row">
-                      <View className="bg-zinc-800/80 rounded-xl w-fit flex ml-12 ">
-                        <Text className="flex items-center  px-3 py-2 text-white">
+                    <View className='flex flex-row'>
+                      <View className='ml-12 flex w-fit rounded-xl bg-zinc-800/80'>
+                        <Text className='flex items-center px-3 py-2 text-white'>
                           {message.chat_messages?.content}
                         </Text>
                       </View>
                     </View>
                   ) : (
-                    <View className="flex flex-row">
-                      <View className="bg-zinc-800/80 rounded-xl ml-12 flex w-fit">
-                        <Text className="items-center rounded-lg border px-3 py-2 text-white">
+                    <View className='flex flex-row'>
+                      <View className='ml-12 flex w-fit rounded-xl bg-zinc-800/80'>
+                        <Text className='items-center rounded-lg border px-3 py-2 text-white'>
                           {message.chat_messages?.content}
                         </Text>
                       </View>

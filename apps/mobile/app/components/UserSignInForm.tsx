@@ -18,23 +18,23 @@ const UserSignInForm = () => {
   const { signInWithPassword } = supabaseContext;
 
   return (
-    <View className="flex-1 items-center justify-center bg-black px-4">
-      <Text className="text-white font-bold text-3xl">Sign In</Text>
-      <Text className="text-muted-foreground pt-2">
+    <View className='flex-1 items-center justify-center bg-black px-4'>
+      <Text className='text-3xl font-bold text-white'>Sign In</Text>
+      <Text className='pt-2 text-muted-foreground'>
         Enter your email below to sign in.
       </Text>
-      <View className="py-2 w-full">
-        <Text className="text-white">Email</Text>
+      <View className='w-full py-2'>
+        <Text className='text-white'>Email</Text>
         <TextInput
           style={styles.input}
           onChangeText={(text) => setEmail(text)}
           value={email}
-          placeholder="name@example.com"
+          placeholder='name@example.com'
           autoCapitalize={'none'}
         />
       </View>
-      <View className="py-2 w-full">
-        <Text className="text-white">Password</Text>
+      <View className='w-full py-2'>
+        <Text className='text-white'>Password</Text>
         <TextInput
           style={styles.input}
           onChangeText={(text) => setPassword(text)}
@@ -43,21 +43,21 @@ const UserSignInForm = () => {
           autoCapitalize={'none'}
         />
       </View>
-      <View className="py-2 w-full">
+      <View className='w-full py-2'>
         <TouchableOpacity
-          className="bg-white py-3 rounded-xl"
+          className='rounded-xl bg-white py-3'
           disabled={loading}
           onPress={() => signInWithPassword(email, password)}
         >
-          <Text className="text-black text-center font-bold">
+          <Text className='text-center font-bold text-black'>
             Sign In with Email
           </Text>
         </TouchableOpacity>
       </View>
-      <Text className="text-muted-foreground pt-4">Don't have an account?</Text>
+      <Text className='pt-4 text-muted-foreground'>Don't have an account?</Text>
       <Link
-        href="https://www.jupiter-tickets.com/sign-up"
-        className=" text-muted-foreground underline underline-offset-4 hover:text-primary"
+        href='https://www.jupiter-tickets.com/sign-up'
+        className='text-muted-foreground underline underline-offset-4 hover:text-primary'
       >
         Sign up.
       </Link>

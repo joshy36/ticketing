@@ -49,12 +49,12 @@ export default function RenderChats({
     .sort(
       (a, b) =>
         new Date(b.mostRecentMessageTimestamp).getTime() -
-        new Date(a.mostRecentMessageTimestamp).getTime()
+        new Date(a.mostRecentMessageTimestamp).getTime(),
     );
 
   const getRandomUserFromChat = (index: number) => {
     return chatsWithTimestamps![index]!.chat_members.find(
-      (user) => user.user_id != userProfile.id
+      (user) => user.user_id != userProfile.id,
     )?.user_profiles;
   };
 
@@ -64,22 +64,22 @@ export default function RenderChats({
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          tintColor="white"
+          tintColor='white'
         />
       }
     >
-      <Link href="/messages/requests" asChild>
-        <TouchableOpacity className="flex flex-row w-full items-center justify-between border-b border-zinc-800 px-4 py-6 font-medium hover:bg-zinc-800/50 focus:bg-secondary">
-          <View className="flex flex-row gap-4 items-center">
-            <Feather name="users" color="white" size={20} />
-            <Text className="text-white font-bold text-lg">
+      <Link href='/messages/requests' asChild>
+        <TouchableOpacity className='flex w-full flex-row items-center justify-between border-b border-zinc-800 px-4 py-6 font-medium hover:bg-zinc-800/50 focus:bg-secondary'>
+          <View className='flex flex-row items-center gap-4'>
+            <Feather name='users' color='white' size={20} />
+            <Text className='text-lg font-bold text-white'>
               Friend Requests
             </Text>
           </View>
           {friendRequests && friendRequests?.length > 0 && (
-            <View className="flex pr-2">
-              <View className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light">
-                <Text className="text-white text-xs">
+            <View className='flex pr-2'>
+              <View className='flex h-4 w-4 items-center justify-center rounded-full bg-blue-700 text-xs font-light'>
+                <Text className='text-xs text-white'>
                   {friendRequests?.length}
                 </Text>
               </View>
@@ -88,18 +88,18 @@ export default function RenderChats({
         </TouchableOpacity>
       </Link>
       {chats?.chats?.length === 0 && (
-        <p className="pt-8 text-center">No messages yet.</p>
+        <p className='pt-8 text-center'>No messages yet.</p>
       )}
-      <View className="pb-24">
+      <View className='pb-24'>
         {chatsWithTimestamps?.map((chat, index) => {
           return (
             <Link href={`/messages/${chat.id}`} key={chat.id} asChild>
               <TouchableOpacity
-                className={`flex flex-row items-center justify-between w-full gap-2 border-b border-zinc-800 px-4 py-4`}
+                className={`flex w-full flex-row items-center justify-between gap-2 border-b border-zinc-800 px-4 py-4`}
                 onPress={() => {
                   console.log(
                     'unred2: ',
-                    numberOfUnreadMessagesPerChat![chat.id]?.unread
+                    numberOfUnreadMessagesPerChat![chat.id]?.unread,
                   );
                   console.log('unred: ', unreadMessages);
                   setUnreadMessages(0);
@@ -128,7 +128,7 @@ export default function RenderChats({
                     <GroupCard
                       userProfile={userProfile}
                       chatMembers={chat?.chat_members.map(
-                        (member) => member.user_profiles!
+                        (member) => member.user_profiles!,
                       )}
                       mostRecentMessage={
                         mostRecentMessageByChat
@@ -158,8 +158,8 @@ export default function RenderChats({
                 {numberOfUnreadMessagesPerChat &&
                   numberOfUnreadMessagesPerChat[chat.id] &&
                   numberOfUnreadMessagesPerChat[chat.id]?.unread! > 0 && (
-                    <View className="flex pr-2">
-                      <View className="h-3 w-3 rounded-full bg-blue-700"></View>
+                    <View className='flex pr-2'>
+                      <View className='h-3 w-3 rounded-full bg-blue-700'></View>
                     </View>
                   )}
               </TouchableOpacity>

@@ -14,7 +14,7 @@ const Layout = () => {
       }}
     >
       <Stack.Screen
-        name="[id]"
+        name='[id]'
         options={{
           headerTitle: '',
           headerBackTitleVisible: false,
@@ -23,21 +23,21 @@ const Layout = () => {
         }}
       />
       <Stack.Screen
-        name="scan/[id]"
+        name='scan/[id]'
         options={{
           headerTitle: 'Scan Tickets',
           headerBackTitleVisible: false,
         }}
       />
       <Stack.Screen
-        name="checkout/[id]"
+        name='checkout/[id]'
         options={{
           headerTitle: 'Checkout',
           headerBackTitleVisible: false,
         }}
       />
       <Stack.Screen
-        name="artist/[id]"
+        name='artist/[id]'
         options={{
           headerTitle: '',
           headerBackTitleVisible: false,
@@ -46,7 +46,7 @@ const Layout = () => {
         }}
       />
       <Stack.Screen
-        name="venue/[id]"
+        name='venue/[id]'
         options={{
           headerTitle: '',
           headerBackTitleVisible: false,
@@ -55,7 +55,7 @@ const Layout = () => {
         }}
       />
       <Stack.Screen
-        name="user/[id]"
+        name='user/[id]'
         options={{
           headerTitle: '',
           headerBackTitleVisible: false,
