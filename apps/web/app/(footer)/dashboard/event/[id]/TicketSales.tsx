@@ -65,7 +65,8 @@ export default function TicketSales({ event }: { event: Events }) {
               <Separator className='my-2' />
               <p>New Users Aquired: {data}</p>
               <p className='text-sm font-light text-muted-foreground'>
-                Users that have not been to an event that you've hosted before
+                Users that have not been to an event that you&apos;ve hosted
+                before
               </p>
               {/* <Progress className='[&>*]:bg-red-600' value={50} max={100} /> */}
             </div>

@@ -112,8 +112,8 @@ export default function CreateCollectibles({ event }: { event: Events }) {
 
         <div className='grid grid-cols-2 gap-y-8 pt-4 lg:grid-cols-4'>
           {sortedCollectibles?.map((collectible) => (
-            <AlertDialog>
-              <div key={collectible.id} className='flex justify-center'>
+            <AlertDialog key={collectible.id}>
+              <div className='flex justify-center'>
                 <div className='relative'>
                   <Image
                     src={collectible.image!}
