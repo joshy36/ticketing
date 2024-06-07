@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "stripe": "stripe listen --forward-to localhost:3000/api/stripe-webhook",
+    "inngest": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest",
     "update-types": "npx supabase gen types typescript --local > database.types.ts",
     "prettier:check": "prettier . --check"
   },

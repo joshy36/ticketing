@@ -381,21 +381,60 @@ export const eventsRouter = router({
           data: {
             event_id: input.event_id,
             token_id: i,
-            collectiblesOrSbts: 'sbts',
-            prompt: input.prompt,
-          },
-        });
-        await inngest.send({
-          name: 'image/generate',
-          data: {
-            event_id: input.event_id,
-            token_id: i,
-            collectiblesOrSbts: 'collectibles',
             prompt: input.prompt,
           },
         });
       }
 
       console.log('num: ', numTickets);
+    }),
+
+  getNewUsersForEvent: authedProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const supabase = ctx.supabase;
+
+      const { data: event } = await supabase
+        .from('events')
+        .select()
+        .eq('id', input.event_id)
+        .limit(1)
+        .single();
+
+      const currentEventDate = new Date(event?.date!);
+
+      const { data: tickets } = await supabase
+        .from('tickets')
+        .select(`*`)
+        .eq('event_id', input.event_id);
+
+      const ownedTickets = tickets?.filter(
+        (ticket) => ticket.owner_id !== null
+      );
+
+      console.log(ownedTickets);
+
+      let newUsers = 0;
+
+      for (let i = 0; i < ownedTickets!.length; i++) {
+        const { data: userTickets } = await supabase
+          .from('tickets')
+          .select(`*, events(*)`)
+          .eq('owner_id', ownedTickets![i]?.owner_id!);
+
+        const pastEventsWithOrg = userTickets?.filter((ticket) => {
+          const ticketEventDate = new Date(ticket.events?.date!); // Convert ticket event date to Date object
+          return (
+            ticket.events?.organization_id === event?.organization_id &&
+            ticketEventDate < currentEventDate
+          );
+        });
+        console.log(pastEventsWithOrg?.length);
+        if (pastEventsWithOrg?.length === 0) {
+          newUsers++;
+        }
+      }
+
+      return newUsers;
     }),
 });

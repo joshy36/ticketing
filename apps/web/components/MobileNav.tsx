@@ -12,7 +12,7 @@ import { UserNav } from './UserNav';
 import { User } from '@supabase/supabase-js';
 import { UserProfile } from 'supabase';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { MessageCircle } from 'lucide-react';
+import { ChevronRight, MessageCircle } from 'lucide-react';
 import { useContext } from 'react';
 import { MessagesContext } from '../providers/messagesProvider';
 import { trpc } from '../app/_trpc/client';
@@ -138,7 +138,10 @@ export function MobileNav({
             <div className=''></div>
             {userOrg && (
               <MobileLink href={`/dashboard/${userOrg}`} onOpenChange={setOpen}>
-                Admin Dashboard
+                <div className='flex w-36 flex-row items-center gap-2 rounded-full bg-white px-4 py-2 text-black hover:bg-white/80'>
+                  Dashboard
+                  <ChevronRight className='h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+                </div>
               </MobileLink>
             )}
             {/* {user ? (

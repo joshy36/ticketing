@@ -7,6 +7,18 @@ import { useState } from 'react';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import { trpc } from '~/app/_trpc/client';
+import Menu from './Menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '~/components/ui/alert-dialog';
 
 export function Id({ userProfile }: { userProfile: UserProfile }) {
   const [qrCode, showQRCode] = useState(false);
@@ -47,6 +59,25 @@ export function Id({ userProfile }: { userProfile: UserProfile }) {
             Show QR
           </Button>
         )}
+        <AlertDialog>
+          <AlertDialogTrigger className='w-full pt-4'>
+            <Button variant='outline' className='w-full'>
+              Order Food
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              {/* <AlertDialogTitle>Menu</AlertDialogTitle> */}
+              <AlertDialogDescription>
+                <Menu />
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Place Order</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

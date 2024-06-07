@@ -171,7 +171,7 @@ export const generateImages = inngest.createFunction(
         const { data, error } = await supabase.storage
           .from('events')
           .upload(
-            `${event.data.event_id}/${event.data.collectiblesOrSbts}/${event.data.token_id}.png`,
+            `${event.data.event_id}/collectibles/${event.data.token_id}.png`,
             blob,
             {
               contentType: 'image/png',
@@ -181,47 +181,26 @@ export const generateImages = inngest.createFunction(
 
         const url =
           process.env.NEXT_PUBLIC_BUCKET_BASE_URL +
-          `/events/${event.data.event_id}/${event.data.collectiblesOrSbts}/${event.data.token_id}.png`;
+          `/events/${event.data.event_id}/collectibles/${event.data.token_id}.png`;
 
-        if (event.data.collectiblesOrSbts === 'collectibles') {
-          const { data: tokens, error: tokenError } = await supabase
-            .from('collectibles')
-            .select(`*, tickets(*)`)
-            .eq('event_id', event.data.event_id)
-            .eq('tickets.token_id', event.data.token_id);
+        const { data: tokens, error: tokenError } = await supabase
+          .from('collectibles')
+          .select(`*, tickets(*)`)
+          .eq('event_id', event.data.event_id)
+          .eq('tickets.token_id', event.data.token_id);
 
-          // get token where tickets field is not null
-          const token = tokens?.find((token) => token.tickets);
+        // get token where tickets field is not null
+        const token = tokens?.find((token) => token.tickets);
 
-          if (!token) {
-            console.error('Token not found');
-            return;
-          }
-
-          const { data: updatedToken, error: updateError } = await supabase
-            .from('collectibles')
-            .update({ image: url })
-            .eq('id', token.id);
-        } else if (event.data.collectiblesOrSbts === 'sbts') {
-          const { data: tokens, error: tokenError } = await supabase
-            .from('sbts')
-            .select(`*, tickets(*)`)
-            .eq('event_id', event.data.event_id)
-            .eq('tickets.token_id', event.data.token_id);
-
-          // get token where tickets field is not null
-          const token = tokens?.find((token) => token.tickets);
-
-          if (!token) {
-            console.error('Token not found');
-            return;
-          }
-
-          const { data: updatedToken, error: updateError } = await supabase
-            .from('sbts')
-            .update({ image: url })
-            .eq('id', token.id);
+        if (!token) {
+          console.error('Token not found');
+          return;
         }
+
+        const { data: updatedToken, error: updateError } = await supabase
+          .from('collectibles')
+          .update({ image: url })
+          .eq('id', token.id);
       });
 
     return output;
