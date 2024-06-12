@@ -45,7 +45,7 @@ export default function ManageEvent({
       <Button
         variant='link'
         className='my-1 -ml-4 rounded-md'
-        onClick={() => router.push(`/dashboard/${organization?.id}`)}
+        onClick={() => router.push(`/${organization?.id}`)}
       >
         <ArrowLeft className='mr-2 h-4 w-4' />
         Main Dashboard

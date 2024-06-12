@@ -116,6 +116,30 @@ export default function EventTable({ events }: { events: any }) {
           </CardContent>
         </Card>
       </div>
+      <div className='grid grid-cols-4 gap-4'>
+        {events?.map((event: any, index: number) => (
+          <div
+            key={event.id}
+            className='rounded-md border bg-zinc-950 p-4 hover:bg-zinc-900'
+          >
+            <div className='flex flex-row items-center gap-2'>
+              <Image
+                src={event.image}
+                alt='event image'
+                width={48}
+                height={48}
+                className='aspect-square rounded-md'
+              />
+              <div className='flex flex-col'>
+                <p className='text-lg font-semibold'>{event.name}</p>
+                <p className='text-sm font-light text-muted-foreground'>
+                  {dateToString(event.date)}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
       <Table>
         {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
@@ -156,7 +180,7 @@ export default function EventTable({ events }: { events: any }) {
                   className='rounded-md text-white'
                   asChild
                 >
-                  <Link href={`/dashboard/event/${event.id}`}>
+                  <Link href={`/event/${event.id}`}>
                     Manage
                     <ChevronRight />
                   </Link>

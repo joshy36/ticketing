@@ -6,7 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 import createSupabaseServer from '~/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
-import { GeistSans } from 'geist/font';
+import { GeistSans } from 'geist/font/sans';
 import { MobileNav } from '~/components/MobileNav';
 import { Metadata } from 'next';
 import { MessagesProvider } from '~/providers/messagesProvider';
@@ -14,6 +14,7 @@ import { FriendRequestProvider } from '~/providers/friendRequestsProvider';
 import { TicketsProvider } from '~/providers/ticketsProvider';
 
 import './globals.css';
+import { redirect } from 'next/navigation';
 
 export const revalidate = 0; //disable cache
 
@@ -32,39 +33,24 @@ export default async function RootLayout({
   const supabase = createSupabaseServer();
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  let userProfile = null;
-  let userOrg = null;
-
-  if (session?.user) {
-    userProfile = await serverClient.getUserProfile.query({
-      id: session.user?.id,
-    });
-
-    if (userProfile) {
-      userOrg = await serverClient.getUserOrganization.query({
-        user_id: userProfile?.id,
-      });
-    }
-  }
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <html lang='en' className={GeistSans.className}>
       <body>
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            <MessagesProvider userProfile={userProfile}>
+            {/* <MessagesProvider userProfile={userProfile}>
               <TicketsProvider userProfile={userProfile}>
-                <FriendRequestProvider>
-                  <div>{children}</div>
-                  <Toaster richColors />
-                  <SpeedInsights />
-                  <Analytics />
-                </FriendRequestProvider>
+                <FriendRequestProvider> */}
+            <div>{children}</div>
+            <Toaster richColors />
+            <SpeedInsights />
+            <Analytics />
+            {/* </FriendRequestProvider>
               </TicketsProvider>
-            </MessagesProvider>
+            </MessagesProvider> */}
           </ThemeProvider>
         </Provider>
       </body>

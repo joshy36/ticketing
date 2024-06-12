@@ -22,7 +22,7 @@ import { toast } from 'sonner';
 import { Icons } from '~/components/ui/icons';
 import { Separator } from '~/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../../_trpc/client';
+import { trpc } from '../../_trpc/client';
 
 const formSchema = z.object({
   name: z.string().min(2, {

@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import EventTable from './EventTable';
 import SendMessage from './SendMessage';
 import ManageOrg from './ManageOrg';
-import { trpc } from '../../../_trpc/client';
+import { trpc } from '../_trpc/client';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Artists from './Artists';
