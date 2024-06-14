@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 import { Icons } from '~/components/ui/icons';
 import { Separator } from '~/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../../../../_trpc/client';
+import { trpc } from '~/app/_trpc/client';
 
 import { useState } from 'react';
 import { cn } from '~/components/ui/utils';
