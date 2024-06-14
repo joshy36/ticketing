@@ -9,9 +9,6 @@ import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font/sans';
 import { MobileNav } from '~/components/MobileNav';
 import { Metadata } from 'next';
-import { MessagesProvider } from '~/providers/messagesProvider';
-import { FriendRequestProvider } from '~/providers/friendRequestsProvider';
-import { TicketsProvider } from '~/providers/ticketsProvider';
 
 import './globals.css';
 import { redirect } from 'next/navigation';
