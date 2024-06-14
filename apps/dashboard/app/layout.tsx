@@ -1,4 +1,3 @@
-import NavBar from '~/components/NavBar';
 import { ThemeProvider } from '~/components/ThemeProvider';
 import { Toaster } from '~/components/ui/sonner';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -7,7 +6,6 @@ import createSupabaseServer from '~/utils/supabaseServer';
 import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font/sans';
-import { MobileNav } from '~/components/MobileNav';
 import { Metadata } from 'next';
 
 import './globals.css';
