@@ -33,11 +33,15 @@ export default function ManageEvent({
         </div>
         <div className='flex flex-row gap-2'>
           <Button className='rounded-md' variant='link' asChild>
-            <Link href={`/event/${event.id}`}>
+            <a
+              href={`${process.env.NEXT_PUBLIC_TICKETS_BASE_URL}/event/${event.id}`}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               <div className='flex flex-row items-center gap-2 text-xl font-light text-muted-foreground hover:text-white'>
                 View Event Page <ExternalLink className='h-4 w-4' />
               </div>
-            </Link>
+            </a>
           </Button>
         </div>
       </div>

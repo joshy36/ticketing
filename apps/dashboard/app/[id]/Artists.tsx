@@ -1,7 +1,6 @@
 import { RouterOutputs } from 'api';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 export default function Artists({
   artists,
@@ -16,10 +15,12 @@ export default function Artists({
         </p>
       )}
       {artists?.map((artist) => (
-        <Link
+        <a
           key={artist.id}
           className='flex flex-row items-center justify-between border-b px-4 py-2 hover:bg-zinc-800/40'
-          href={`/artist/${artist.id}`}
+          href={`${process.env.NEXT_PUBLIC_TICKETS_BASE_URL}/artist/${artist.id}`}
+          target='_blank'
+          rel='noopener noreferrer'
         >
           <div className='flex flex-row items-center gap-2'>
             <Image
@@ -32,7 +33,7 @@ export default function Artists({
             <p>{artist.name}</p>
           </div>
           <ChevronRight />
-        </Link>
+        </a>
       ))}
     </div>
   );
