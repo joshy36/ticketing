@@ -4,7 +4,11 @@ import { Separator } from '~/components/ui/separator';
 import createSupabaseServer from '~/utils/supabaseServer';
 import { redirect } from 'next/navigation';
 
-export default async function Home({ params }: { params: { id: string } }) {
+export default async function Home({
+  params,
+}: {
+  params: { artist_id: string };
+}) {
   const supabase = createSupabaseServer();
 
   const {
@@ -42,7 +46,7 @@ export default async function Home({ params }: { params: { id: string } }) {
                 </h1>
                 <UploadImage
                   params={{
-                    id: params.id,
+                    id: params.artist_id,
                     bucket: 'artists',
                   }}
                 />

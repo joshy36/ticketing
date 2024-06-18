@@ -1,5 +1,5 @@
 import Dashboard from './Dashboard';
-import { serverClient } from '../_trpc/serverClient';
+import { serverClient } from '../../_trpc/serverClient';
 import { notFound } from 'next/navigation';
 import createSupabaseServer from '~/utils/supabaseServer';
 import { redirect } from 'next/navigation';

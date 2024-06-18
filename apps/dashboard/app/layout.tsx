@@ -7,9 +7,17 @@ import { serverClient } from './_trpc/serverClient';
 import Provider from './_trpc/Provider';
 import { GeistSans } from 'geist/font/sans';
 import { Metadata } from 'next';
+import NavBar from '../components/NavBar';
+import { SidebarNav } from '../components/SidebarNav';
+import {
+  Home,
+  User,
+  Warehouse,
+  SendHorizonal,
+  SlidersHorizontal,
+} from 'lucide-react';
 
 import './globals.css';
-import { redirect } from 'next/navigation';
 
 export const revalidate = 0; //disable cache
 
@@ -31,21 +39,30 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  let userProfile = null;
+  let userOrg = null;
+
+  if (user) {
+    userProfile = await serverClient.getUserProfile.query({
+      id: user?.id,
+    });
+
+    if (userProfile) {
+      userOrg = await serverClient.getUserOrganization.query({
+        user_id: userProfile?.id,
+      });
+    }
+  }
+
   return (
     <html lang='en' className={GeistSans.className}>
       <body>
         <Provider>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            {/* <MessagesProvider userProfile={userProfile}>
-              <TicketsProvider userProfile={userProfile}>
-                <FriendRequestProvider> */}
             <div>{children}</div>
             <Toaster richColors />
             <SpeedInsights />
             <Analytics />
-            {/* </FriendRequestProvider>
-              </TicketsProvider>
-            </MessagesProvider> */}
           </ThemeProvider>
         </Provider>
       </body>

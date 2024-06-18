@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Unauthenticated() {
   return (
     <div className='mt-24 space-y-0.5 text-center'>
@@ -5,6 +7,12 @@ export default function Unauthenticated() {
       <p className='text-muted-foreground'>
         Sorry, you must be signed in to view this page!
       </p>
+      <Link
+        href='/sign-in'
+        className='underline underline-offset-4 hover:text-primary'
+      >
+        Sign in.
+      </Link>
     </div>
   );
 }

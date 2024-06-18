@@ -4,13 +4,9 @@ import Link from 'next/link';
 import { Button } from '~/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import EventTable from './EventTable';
-import SendMessage from './SendMessage';
-import ManageOrg from './ManageOrg';
-import { trpc } from '../_trpc/client';
+import { trpc } from '../../_trpc/client';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import Artists from './Artists';
-import Venues from './Venues';
 
 export default function Dashboard({ id }: { id: string }) {
   const router = useRouter();
@@ -18,14 +14,6 @@ export default function Dashboard({ id }: { id: string }) {
   const currentTab = searchParams.get('tab');
 
   const { data: events } = trpc.getEventsByOrganization.useQuery({
-    organization_id: id,
-  });
-
-  const { data: artists } = trpc.getArtistsByOrganization.useQuery({
-    organization_id: id,
-  });
-
-  const { data: venues } = trpc.getVenuesByOrganization.useQuery({
     organization_id: id,
   });
 
@@ -43,7 +31,7 @@ export default function Dashboard({ id }: { id: string }) {
         </div>
         <div className='flex flex-row gap-2'>
           <Button className='rounded-md' variant='outline' asChild>
-            <Link href='artist/create'>Create Artist</Link>
+            <Link href={`${id}/artist/create`}>Create Artist</Link>
           </Button>
           <Button className='rounded-md' variant='outline' asChild>
             <Link href='venue/create'>Create Venue</Link>
@@ -63,27 +51,6 @@ export default function Dashboard({ id }: { id: string }) {
             Overview
           </TabsTrigger>
           <TabsTrigger
-            value='artists'
-            className='text-sm font-semibold md:text-sm'
-            onClick={() => router.push(`?tab=artists`)}
-          >
-            Artists
-          </TabsTrigger>
-          <TabsTrigger
-            value='venues'
-            className='text-sm font-semibold md:text-sm'
-            onClick={() => router.push(`?tab=venues`)}
-          >
-            Venues
-          </TabsTrigger>
-          <TabsTrigger
-            value='message'
-            className='text-sm font-semibold md:text-sm'
-            onClick={() => router.push(`?tab=message`)}
-          >
-            Send Message
-          </TabsTrigger>
-          <TabsTrigger
             value='org'
             className='text-sm font-semibold md:text-sm'
             onClick={() => router.push(`?tab=org`)}
@@ -93,18 +60,6 @@ export default function Dashboard({ id }: { id: string }) {
         </TabsList>
         <TabsContent value='events'>
           <EventTable events={events} />
-        </TabsContent>
-        <TabsContent value='artists'>
-          <Artists artists={artists} />
-        </TabsContent>
-        <TabsContent value='venues'>
-          <Venues venues={venues} />
-        </TabsContent>
-        <TabsContent value='message'>
-          <SendMessage />
-        </TabsContent>
-        <TabsContent value='org'>
-          <ManageOrg organization={organization} />
         </TabsContent>
       </Tabs>
     </div>

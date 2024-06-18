@@ -2,35 +2,36 @@ import { RouterOutputs } from 'api';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
-export default function Artists({
-  artists,
+export default function Venues({
+  venues,
 }: {
-  artists: RouterOutputs['getArtistsByOrganization'] | undefined;
+  venues: RouterOutputs['getVenuesByOrganization'] | undefined;
 }) {
   return (
     <div className='pt-4'>
-      {artists?.length === 0 && (
+      <h1 className='pb-4 text-2xl font-semibold'>Venues</h1>
+      {venues?.length === 0 && (
         <p className='pt-4 text-center font-light text-muted-foreground'>
-          No artists found.
+          No venues found.
         </p>
       )}
-      {artists?.map((artist) => (
+      {venues?.map((venue) => (
         <a
-          key={artist.id}
+          key={venue.id}
           className='flex flex-row items-center justify-between border-b px-4 py-2 hover:bg-zinc-800/40'
-          href={`${process.env.NEXT_PUBLIC_TICKETS_BASE_URL}/artist/${artist.id}`}
+          href={`${process.env.NEXT_PUBLIC_TICKETS_BASE_URL}/venue/${venue.id}`}
           target='_blank'
           rel='noopener noreferrer'
         >
           <div className='flex flex-row items-center gap-2'>
             <Image
-              src={artist.image || '/apps/web/public/fallback.jpeg'}
-              alt='artist image'
+              src={venue.image || '/apps/web/public/fallback.jpeg'}
+              alt='venue image'
               width={48}
               height={48}
               className='aspect-square rounded-md'
             />
-            <p>{artist.name}</p>
+            <p>{venue.name}</p>
           </div>
           <ChevronRight />
         </a>

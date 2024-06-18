@@ -37,6 +37,8 @@ export default function OrganizationName({
     },
   });
 
+  console.log('name: ', organization);
+
   return (
     <Card className='mt-4 rounded-md border bg-zinc-950'>
       <CardHeader>
