@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: 'This is a ticketing app',
 };
 
-export default async function RootLayout({
+export default async function SidebarLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
   children,
