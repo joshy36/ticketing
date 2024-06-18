@@ -2,7 +2,7 @@ import { serverClient } from '../app/_trpc/serverClient';
 import createSupabaseServer from './supabaseServer';
 import { redirect } from 'next/navigation';
 
-export const isAuthed = async (organizationId) => {
+export const isAuthed = async (organizationId: string) => {
   const supabase = createSupabaseServer();
 
   const {
