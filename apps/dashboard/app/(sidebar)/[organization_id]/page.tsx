@@ -1,8 +1,7 @@
 import Dashboard from './Dashboard';
 import { serverClient } from '../../_trpc/serverClient';
 import { notFound } from 'next/navigation';
-import createSupabaseServer from '~/utils/supabaseServer';
-import { redirect } from 'next/navigation';
+import { isAuthed } from '~/utils/isAuthed';
 
 const sidebarNavItems = [
   {
@@ -24,23 +23,7 @@ export default async function Home({
     notFound();
   }
 
-  const supabase = createSupabaseServer();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    redirect('/unauthorized');
-  }
-
-  const isInOrganization = await serverClient.getUserOrganization.query({
-    user_id: session?.user.id,
-  });
-
-  if (!isInOrganization) {
-    redirect('/unauthorized');
-  }
+  await isAuthed(params.organization_id);
 
   return (
     <main>
