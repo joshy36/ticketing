@@ -3,12 +3,17 @@
 import { Organization } from 'supabase';
 import OrganizationName from './OrganizationName';
 import OrganizationMembers from './OrganizationMembers';
+import { trpc } from '~/app/_trpc/client';
 
 export default function ManageOrg({
-  organization,
+  organization_id,
 }: {
-  organization: Organization | null | undefined;
+  organization_id: string;
 }) {
+  const { data: organization } = trpc.getOrganizationById.useQuery({
+    organization_id: organization_id,
+  });
+
   return (
     <div>
       <OrganizationName organization={organization} />

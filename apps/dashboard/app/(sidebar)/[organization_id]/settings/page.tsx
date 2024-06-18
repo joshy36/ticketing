@@ -1,5 +1,4 @@
 import { isAuthed } from '../../../../utils/isAuthed';
-import { serverClient } from '../../../_trpc/serverClient';
 import ManageOrg from './ManageOrg';
 
 export default async function Home({
@@ -9,13 +8,9 @@ export default async function Home({
 }) {
   await isAuthed(params.organization_id);
 
-  const organization = await serverClient.getOrganizationById.query({
-    organization_id: params.organization_id,
-  });
-
   return (
     <div>
-      <ManageOrg organization={organization} />
+      <ManageOrg organization_id={params.organization_id} />
     </div>
   );
 }

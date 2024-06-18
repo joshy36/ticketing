@@ -1,12 +1,18 @@
-import { RouterOutputs } from 'api';
+'use client';
+
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import { trpc } from '~/app/_trpc/client';
 
 export default function Venues({
-  venues,
+  organization_id,
 }: {
-  venues: RouterOutputs['getVenuesByOrganization'] | undefined;
+  organization_id: string;
 }) {
+  const { data: venues } = trpc.getVenuesByOrganization.useQuery({
+    organization_id: organization_id,
+  });
+
   return (
     <div className='pt-4'>
       <h1 className='pb-4 text-2xl font-semibold'>Venues</h1>
