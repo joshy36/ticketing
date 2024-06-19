@@ -25,11 +25,15 @@ export default function ManageEvent({
   const router = useRouter();
 
   return (
-    <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+    <div className=''>
       <div className='flex flex-row justify-between'>
         <div>
-          <h1 className=' text-4xl font-light'>Dashboard</h1>
-          <h3 className='pb-8 text-muted-foreground'>{organization?.name}</h3>
+          <h3 className='pt-4 text-2xl font-light'>
+            Manage Event - {event.name}
+          </h3>
+          <h4 className='font-light text-muted-foreground'>
+            {dateToString(event.date)}
+          </h4>
         </div>
         <div className='flex flex-row gap-2'>
           <Button className='rounded-md' variant='link' asChild>
@@ -45,6 +49,8 @@ export default function ManageEvent({
           </Button>
         </div>
       </div>
+      {/* 
+      <Separator />
 
       <Button
         variant='link'
@@ -53,13 +59,7 @@ export default function ManageEvent({
       >
         <ArrowLeft className='mr-2 h-4 w-4' />
         Main Dashboard
-      </Button>
-      <Separator />
-
-      <h3 className='pt-4 text-2xl font-light'>Manage Event - {event.name}</h3>
-      <h4 className='font-light text-muted-foreground'>
-        {dateToString(event.date)}
-      </h4>
+      </Button> */}
       <Tabs defaultValue='account' className=''>
         <TabsList className='-ml-4'>
           <TabsTrigger

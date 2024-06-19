@@ -1,26 +1,21 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '~/components/ui/table';
+'use client';
+
 import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
 import { dateToString } from '~/utils/helpers';
 import { ChevronRight } from 'lucide-react';
 import { Button } from '~/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { trpc } from '../../_trpc/client';
+import { useRouter } from 'next/navigation';
 
-export default function EventTable({
-  orgId,
-  events,
-}: {
-  orgId: string;
-  events: any;
-}) {
+export default function EventTable({ orgId }: { orgId: string }) {
+  const router = useRouter();
+
+  const { data: events } = trpc.getEventsByOrganization.useQuery({
+    organization_id: orgId,
+  });
+
   return (
     <div>
       <div className='grid gap-4 py-4 md:grid-cols-2 lg:grid-cols-4'>
@@ -29,7 +24,7 @@ export default function EventTable({
             <CardTitle className='text-sm font-medium'>Total Revenue</CardTitle>
             <svg
               xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
+              viewBox='0 0 36 24'
               fill='none'
               stroke='currentColor'
               strokeLinecap='round'
@@ -122,80 +117,50 @@ export default function EventTable({
           </CardContent>
         </Card>
       </div>
-      <div className='grid grid-cols-4 gap-4'>
+      <div className='grid grid-cols-3 gap-4'>
         {events?.map((event: any, index: number) => (
-          <div
+          <button
             key={event.id}
-            className='rounded-md border bg-zinc-950 p-4 hover:bg-zinc-900'
+            className='flex flex-col gap-2 rounded-md border p-4 hover:border-zinc-700 hover:bg-zinc-950'
+            onClick={() => router.push(`/${orgId}/event/${event.id}`)}
           >
             <div className='flex flex-row items-center gap-2'>
               <Image
                 src={event.image}
                 alt='event image'
-                width={48}
-                height={48}
+                width={64}
+                height={64}
                 className='aspect-square rounded-md'
               />
               <div className='flex flex-col'>
-                <p className='text-lg font-semibold'>{event.name}</p>
+                <p className='text-left text-lg font-semibold'>{event.name}</p>
                 <p className='text-sm font-light text-muted-foreground'>
                   {dateToString(event.date)}
                 </p>
               </div>
             </div>
-          </div>
+
+            <div className='flex flex-row items-center gap-2'>
+              <Image
+                src={event.artists.image}
+                alt='event image'
+                width={36}
+                height={36}
+                className='aspect-square rounded-full'
+              />
+              <p className='text-sm font-light text-muted-foreground'>
+                {event.artists.name}
+              </p>
+            </div>
+            <div className='flex flex-row items-center gap-2'>
+              <p className='text-sm '>Venue: </p>
+              <p className='text-sm font-light text-muted-foreground'>
+                {event.venues.name}
+              </p>
+            </div>
+          </button>
         ))}
       </div>
-      <Table>
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-        <TableHeader>
-          <TableRow>
-            <TableHead className='text-muted-foreground'>Name</TableHead>
-            <TableHead className='text-muted-foreground'>Venue</TableHead>
-            <TableHead className='text-muted-foreground'>Artist</TableHead>
-            <TableHead className='text-muted-foreground'>Date</TableHead>
-            <TableHead className='text-right'></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {events?.map((event: any, index: number) => (
-            <TableRow
-              key={event.id}
-              className={index % 2 === 0 ? 'gap-4 bg-black' : 'bg-zinc-950'}
-            >
-              <TableCell className='font-medium'>
-                {
-                  <div className='flex flex-row items-center gap-2'>
-                    <Image
-                      src={event.image}
-                      alt='event image'
-                      width={48}
-                      height={48}
-                      className='aspect-square rounded-md'
-                    />
-                    <p>{event.name}</p>
-                  </div>
-                }
-              </TableCell>
-              <TableCell>{event.venues.name}</TableCell>
-              <TableCell>{event.artists.name}</TableCell>
-              <TableCell>{dateToString(event.date)}</TableCell>
-              <TableCell className='text-right'>
-                <Button
-                  variant='secondary'
-                  className='rounded-md text-white'
-                  asChild
-                >
-                  <Link href={`${orgId}/event/${event.id}`}>
-                    Manage
-                    <ChevronRight />
-                  </Link>
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
     </div>
   );
 }

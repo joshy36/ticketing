@@ -11,6 +11,7 @@ import {
 import { Progress } from '~/components/ui/progress';
 import { Events } from 'supabase';
 import { Skeleton } from '~/components/ui/skeleton';
+import { Separator } from '~/components/ui/separator';
 
 export default function TicketSales({ event }: { event: Events }) {
   const { data: totalTickets, isLoading: totalTicketsLoading } =
@@ -21,6 +22,9 @@ export default function TicketSales({ event }: { event: Events }) {
     trpc.getAvailableTicketsForEvent.useQuery({
       event_id: event.id,
     });
+  const { data } = trpc.getNewUsersForEvent.useQuery({
+    event_id: event.id,
+  });
 
   return (
     <Card className='mt-4 w-full rounded-md border bg-zinc-950'>
@@ -58,6 +62,13 @@ export default function TicketSales({ event }: { event: Events }) {
                 ).toFixed(1)}
                 % Tickets Sold
               </p>
+              <Separator className='my-2' />
+              <p>New Users Aquired: {data}</p>
+              <p className='text-sm font-light text-muted-foreground'>
+                Users that have not been to an event that you&apos;ve hosted
+                before
+              </p>
+              {/* <Progress className='[&>*]:bg-red-600' value={50} max={100} /> */}
             </div>
           )}
         </div>

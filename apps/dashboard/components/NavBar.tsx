@@ -31,13 +31,23 @@ import { UserNav } from './UserNav';
 import { CommandMenu } from './ui/command-menu';
 import { UserProfile } from 'supabase';
 import Image from 'next/image';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from './ui/breadcrumb';
+import { SlashIcon } from '@radix-ui/react-icons';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { ChevronRight } from 'lucide-react';
+import { ChevronDownIcon, ChevronRight } from 'lucide-react';
 import { trpc } from '../app/_trpc/client';
 
 import AnimatedGradientText from './AnimatedGradientText';
 import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 
 export const createComponents: {
   title: string;
@@ -68,9 +78,23 @@ export default function NavBar({
 }: {
   user: User | null;
   userProfile: UserProfile | null;
-  userOrg: string | null | undefined;
+  userOrg: any;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const [breadcrumbs, setBreadcrumbs] = useState<string | null>(null);
+
+  const { data: events } = trpc.getEventsByOrganization.useQuery({
+    organization_id: userOrg?.id!,
+  });
+
+  useEffect(() => {
+    if (pathname.includes('event')) {
+      const eventId = pathname.split('/').pop();
+      const event = events?.find((event) => event.id === eventId);
+      setBreadcrumbs(event?.name || null);
+    }
+  }, [events, pathname]);
 
   const signOut = trpc.signOut.useMutation({
     onSettled(error) {
@@ -89,10 +113,58 @@ export default function NavBar({
     signOut.mutate();
   };
 
+  console.log(pathname);
   return (
     <div className='flex flex-col'>
-      <div className='fixed top-0 z-40 hidden h-16 w-full items-center border-b bg-black/50 px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
-        <div className='flex flex-1 items-center justify-between space-x-6 md:justify-end'></div>
+      <div className='fixed top-0 z-40 hidden h-16 w-full items-center border-b bg-black/50 px-8 backdrop-blur-md transition-colors duration-500 md:flex md:justify-between'>
+        {userOrg && (
+          <Breadcrumb>
+            <BreadcrumbList>
+              <DropdownMenu>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href='/'> {userOrg.name}</BreadcrumbLink>
+                </BreadcrumbItem>
+                <DropdownMenuTrigger className='flex items-center gap-1'>
+                  <ChevronDownIcon className='h-4 w-4' />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align='start'>
+                  <DropdownMenuItem>{userOrg.name}</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {pathname.includes('event') && (
+                <>
+                  <BreadcrumbSeparator>
+                    <SlashIcon />
+                  </BreadcrumbSeparator>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink>
+                      <div className='flex flex-row items-center gap-2'>
+                        {events?.find(
+                          (event) => event.id === pathname.split('/').pop(),
+                        )?.image && (
+                          <Image
+                            src={
+                              events?.find(
+                                (event) =>
+                                  event.id === pathname.split('/').pop(),
+                              )?.image!
+                            }
+                            alt='event image'
+                            width={28}
+                            height={28}
+                            className='aspect-square rounded-sm'
+                          />
+                        )}
+                        <p>{breadcrumbs}</p>
+                      </div>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </>
+              )}
+            </BreadcrumbList>
+          </Breadcrumb>
+        )}
+
         {userProfile && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

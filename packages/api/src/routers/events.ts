@@ -37,7 +37,7 @@ export const eventsRouter = router({
 
       const { data: events } = await supabase
         .from('events')
-        .select(`*, venues (name), artists (name)`)
+        .select(`*, venues (name, image), artists (name, image)`)
         .eq('organization_id', input.organization_id);
 
       return events;
@@ -412,8 +412,6 @@ export const eventsRouter = router({
         (ticket) => ticket.owner_id !== null
       );
 
-      console.log(ownedTickets);
-
       let newUsers = 0;
 
       for (let i = 0; i < ownedTickets!.length; i++) {
@@ -429,7 +427,7 @@ export const eventsRouter = router({
             ticketEventDate < currentEventDate
           );
         });
-        console.log(pastEventsWithOrg?.length);
+
         if (pastEventsWithOrg?.length === 0) {
           newUsers++;
         }

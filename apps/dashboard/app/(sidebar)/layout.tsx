@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 import './../globals.css';
+import { UserProfile } from 'supabase';
 
 export const metadata: Metadata = {
   title: 'Ticketing',
@@ -32,7 +33,7 @@ export default async function SidebarLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  let userProfile = null;
+  let userProfile: UserProfile | null = null;
   let userOrg = null;
 
   if (user) {
@@ -41,8 +42,12 @@ export default async function SidebarLayout({
     });
 
     if (userProfile) {
-      userOrg = await serverClient.getUserOrganization.query({
-        user_id: userProfile?.id,
+      const userOrgId = await serverClient.getUserOrganization.query({
+        user_id: userProfile?.id!,
+      });
+
+      userOrg = await serverClient.getOrganizationById.query({
+        organization_id: userOrgId!,
       });
     }
   }
@@ -50,27 +55,27 @@ export default async function SidebarLayout({
   const sidebarNavItems = [
     {
       title: 'Home',
-      href: `/${userOrg}`,
+      href: `/${userOrg.id}`,
       icon: <Home strokeWidth={1.5} width={18} height={18} />,
     },
     {
       title: 'Artists',
-      href: `/${userOrg}/artists`,
+      href: `/${userOrg.id}/artists`,
       icon: <User strokeWidth={1.5} width={18} height={18} />,
     },
     {
       title: 'Venues',
-      href: `/${userOrg}/venues`,
+      href: `/${userOrg.id}/venues`,
       icon: <Warehouse strokeWidth={1.5} width={18} height={18} />,
     },
     {
       title: 'Send Message',
-      href: `/${userOrg}/message`,
+      href: `/${userOrg.id}/message`,
       icon: <SendHorizonal strokeWidth={1.5} width={18} height={18} />,
     },
     {
       title: 'Settings',
-      href: `/${userOrg}/settings`,
+      href: `/${userOrg.id}/settings`,
       icon: <SlidersHorizontal strokeWidth={1.5} width={18} height={18} />,
     },
   ];

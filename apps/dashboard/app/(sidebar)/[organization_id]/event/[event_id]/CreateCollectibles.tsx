@@ -79,16 +79,16 @@ export default function CreateCollectibles({ event }: { event: Events }) {
         <div className='grid grid-cols-4 gap-4'>
           {sbts?.map((sbt) => (
             <div key={sbt.id} className='flex justify-center'>
-              <div>
+              <div className='relative'>
                 <Image
                   src={sbt.image || event.image!}
                   alt='image'
                   width={200}
                   height={200}
-                  className='aspect-square rounded-tl-lg rounded-tr-lg'
+                  className='aspect-square rounded-lg border'
                 />
-                <div className='rounded-bl-lg rounded-br-lg bg-zinc-900'>
-                  <h1 className='py-2 pl-4 text-accent-foreground'>
+                <div className='absolute bottom-0 left-0 right-0 rounded-bl-lg rounded-br-lg bg-zinc-900 bg-opacity-50 backdrop-blur-md'>
+                  <h1 className='py-4 pl-4 text-sm font-light text-accent-foreground'>
                     {sbt?.tickets?.token_id}
                   </h1>
                 </div>

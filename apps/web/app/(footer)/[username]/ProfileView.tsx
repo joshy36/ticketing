@@ -134,14 +134,14 @@ export default async function ProfileView({
               <div className='grid grid-cols-1 gap-8 md:grid-cols-4'>
                 {collectibles?.map((collectible) => (
                   <div key={collectible.id}>
-                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-tl-lg rounded-tr-lg'>
+                    <div className='relative'>
                       {collectible.events?.image ? (
                         <Image
                           src={collectible.image || collectible.events?.image}
                           alt='collectible Image'
                           width={500}
                           height={500}
-                          className='h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75'
+                          className='aspect-square h-full w-full rounded-lg border object-cover object-center'
                         />
                       ) : (
                         <Image
@@ -149,14 +149,15 @@ export default async function ProfileView({
                           alt='image'
                           width={500}
                           height={500}
-                          className='h-full w-full object-cover object-center group-hover:opacity-75'
+                          className='aspect-square h-full w-full rounded-lg border object-cover object-center'
                         />
                       )}
-                    </div>
-                    <div className='rounded-bl-lg rounded-br-lg bg-zinc-900'>
-                      <h1 className='py-4 pl-4 text-accent-foreground'>
-                        {collectible.events?.name}
-                      </h1>
+
+                      <div className='absolute bottom-0 left-0 right-0 rounded-bl-lg rounded-br-lg bg-zinc-900 bg-opacity-50 backdrop-blur-md'>
+                        <h1 className='py-4 pl-4 text-sm text-accent-foreground'>
+                          {collectible.events?.name}
+                        </h1>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -194,14 +195,14 @@ export default async function ProfileView({
               <div className='grid grid-cols-1 gap-8 md:grid-cols-4'>
                 {sbts?.map((sbt) => (
                   <div key={sbt.id}>
-                    <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-full overflow-hidden rounded-tl-lg rounded-tr-lg'>
+                    <div className='relative'>
                       {sbt.events?.image ? (
                         <Image
                           src={sbt.events?.image}
                           alt='sbt Image'
                           width={500}
                           height={500}
-                          className='h-full w-full object-cover object-center duration-300 ease-in-out hover:scale-105 group-hover:opacity-75'
+                          className='aspect-square h-full w-full rounded-lg border object-cover object-center'
                         />
                       ) : (
                         <Image
@@ -209,14 +210,15 @@ export default async function ProfileView({
                           alt='image'
                           width={500}
                           height={500}
-                          className='h-full w-full object-cover object-center group-hover:opacity-75'
+                          className='aspect-square h-full w-full  rounded-lg border object-cover object-center'
                         />
                       )}
-                    </div>
-                    <div className='rounded-bl-lg rounded-br-lg bg-zinc-900'>
-                      <h1 className='py-4 pl-4 text-accent-foreground'>
-                        {sbt.events?.name}
-                      </h1>
+
+                      <div className='absolute bottom-0 left-0 right-0 rounded-bl-lg rounded-br-lg bg-zinc-900 bg-opacity-50 backdrop-blur-md'>
+                        <h1 className='py-4 pl-4 text-sm text-accent-foreground'>
+                          {sbt.events?.name}
+                        </h1>
+                      </div>
                     </div>
                   </div>
                 ))}
