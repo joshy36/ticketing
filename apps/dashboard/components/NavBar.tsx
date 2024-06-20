@@ -116,7 +116,7 @@ export default function NavBar({
   console.log(pathname);
   return (
     <div className='flex flex-col'>
-      <div className='fixed top-0 z-40 hidden h-16 w-full items-center border-b bg-black/50 px-8 backdrop-blur-md transition-colors duration-500 md:flex md:justify-between'>
+      <div className='fixed top-0 z-40 flex h-16 w-full items-center justify-between border-b bg-black/50 px-8 backdrop-blur-md transition-colors duration-500'>
         {userOrg && (
           <Breadcrumb>
             <BreadcrumbList>

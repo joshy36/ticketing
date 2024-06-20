@@ -34,7 +34,7 @@ import { toast } from 'sonner';
 import { Icons } from '~/components/ui/icons';
 import { Separator } from '~/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { trpc } from '../../../../../_trpc/client';
+import { trpc } from '../../../../_trpc/client';
 
 import {
   Command,
@@ -42,7 +42,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '../../../../../../components/ui/command';
+} from '../../../../../components/ui/command';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';

@@ -24,7 +24,7 @@ export default function Dashboard({ id }: { id: string }) {
             <Link href={`${id}/venue/create`}>Create Venue</Link>
           </Button>
           <Button className='rounded-md' asChild>
-            <Link href={`event/create/${id}`}>Create Event</Link>
+            <Link href={`${id}/event/create`}>Create Event</Link>
           </Button>
         </div>
       </div>

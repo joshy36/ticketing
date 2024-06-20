@@ -124,7 +124,7 @@ export default function EventTable({ orgId }: { orgId: string }) {
             className='flex flex-col gap-2 rounded-md border p-4 hover:border-zinc-700 hover:bg-zinc-950'
             onClick={() => router.push(`/${orgId}/event/${event.id}`)}
           >
-            <div className='flex flex-row items-center gap-2'>
+            <div className='flex flex-row items-center gap-4'>
               <Image
                 src={event.image}
                 alt='event image'
@@ -134,29 +134,34 @@ export default function EventTable({ orgId }: { orgId: string }) {
               />
               <div className='flex flex-col'>
                 <p className='text-left text-lg font-semibold'>{event.name}</p>
-                <p className='text-sm font-light text-muted-foreground'>
+                <p className='text-left text-sm font-light text-muted-foreground'>
                   {dateToString(event.date)}
                 </p>
               </div>
             </div>
 
-            <div className='flex flex-row items-center gap-2'>
-              <Image
-                src={event.artists.image}
-                alt='event image'
-                width={36}
-                height={36}
-                className='aspect-square rounded-full'
-              />
-              <p className='text-sm font-light text-muted-foreground'>
-                {event.artists.name}
-              </p>
-            </div>
-            <div className='flex flex-row items-center gap-2'>
-              <p className='text-sm '>Venue: </p>
-              <p className='text-sm font-light text-muted-foreground'>
-                {event.venues.name}
-              </p>
+            <div className='flex w-full flex-row justify-between'>
+              <div className='flex flex-col items-start justify-start'>
+                <p className='text-sm font-light text-muted-foreground'>
+                  Artist
+                </p>
+                <div className='flex flex-row items-center gap-2'>
+                  {/* <Image
+                    src={event.artists.image}
+                    alt='event image'
+                    width={36}
+                    height={36}
+                    className='aspect-square rounded-full'
+                  /> */}
+                  <p className=''>{event.artists.name}</p>
+                </div>
+              </div>
+              <div className='flex flex-col items-start justify-start'>
+                <p className='text-sm font-light text-muted-foreground'>
+                  Venue
+                </p>
+                <p className=''>{event.venues.name}</p>
+              </div>
             </div>
           </button>
         ))}

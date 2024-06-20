@@ -14,6 +14,7 @@ import TicketSales from './TicketSales';
 import Release from './Release';
 import ScannedIn from './ScannedIn';
 import CreateCollectibles from './CreateCollectibles';
+import Image from 'next/image';
 
 export default function ManageEvent({
   event,
@@ -27,13 +28,20 @@ export default function ManageEvent({
   return (
     <div className=''>
       <div className='flex flex-row justify-between'>
-        <div>
-          <h3 className='pt-4 text-2xl font-light'>
-            Manage Event - {event.name}
-          </h3>
-          <h4 className='font-light text-muted-foreground'>
-            {dateToString(event.date)}
-          </h4>
+        <div className='flex flex-row items-center gap-4 pb-4'>
+          <Image
+            src={event.image!}
+            alt='event image'
+            width={80}
+            height={80}
+            className='aspect-square rounded-md'
+          />
+          <div>
+            <h3 className='text-2xl font-light'>Manage Event - {event.name}</h3>
+            <h4 className='font-light text-muted-foreground'>
+              {dateToString(event.date)}
+            </h4>
+          </div>
         </div>
         <div className='flex flex-row gap-2'>
           <Button className='rounded-md' variant='link' asChild>

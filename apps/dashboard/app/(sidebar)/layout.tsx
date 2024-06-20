@@ -84,10 +84,10 @@ export default async function SidebarLayout({
     <div>
       <NavBar user={user} userProfile={userProfile!} userOrg={userOrg} />
       <div className='flex flex-col space-y-4 lg:flex-row'>
-        <aside className='h-screen border-r px-2 lg:w-1/6'>
+        <aside className='border-r px-2 pb-4 lg:h-screen lg:w-1/6'>
           <SidebarNav items={sidebarNavItems} />
         </aside>
-        <div className='w-full px-8 pt-20'>{children}</div>
+        <div className='w-full px-8 lg:pt-20'>{children}</div>
       </div>
     </div>
   );

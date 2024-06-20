@@ -1,5 +1,5 @@
-import ArtistCreate from './ArtistCreate';
-import { isAuthed } from '../../../../../utils/isAuthed';
+import EventCreate from './EventCreate';
+import { isAuthed } from '~/utils/isAuthed';
 
 export default async function Home({
   params,
@@ -10,7 +10,7 @@ export default async function Home({
 
   return (
     <main>
-      <ArtistCreate organization={params.organization_id} />
+      <EventCreate organizationId={params.organization_id} />
     </main>
   );
 }

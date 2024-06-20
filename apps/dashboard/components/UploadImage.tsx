@@ -87,7 +87,8 @@ export default function UploadImage({ params }: { params: Props }) {
       return;
     }
 
-    const fileType = data.file[0].name.split('.')[1];
+    const fileType =
+      data.file[0].name.split('.')[data.file[0].name.split('.').length - 1];
     if (!ACCEPTED_IMAGE_TYPES.includes(fileType)) {
       toast.error('Image must be a jpeg, jpg, png, webp, or heic');
       setIsLoading(false);

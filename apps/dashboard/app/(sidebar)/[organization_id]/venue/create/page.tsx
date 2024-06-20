@@ -1,30 +1,16 @@
-import { serverClient } from '~/app/_trpc/serverClient';
 import VenueCreate from './VenueCreate';
-import createSupabaseServer from '~/utils/supabaseServer';
-import { redirect } from 'next/navigation';
+import { isAuthed } from '~/utils/isAuthed';
 
-export default async function Home() {
-  const supabase = createSupabaseServer();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session?.user) {
-    redirect('/unauthorized');
-  }
-
-  const isInOrganization = await serverClient.getUserOrganization.query({
-    user_id: session?.user.id,
-  });
-
-  if (!isInOrganization) {
-    redirect('/unauthorized');
-  }
+export default async function Home({
+  params,
+}: {
+  params: { organization_id: string };
+}) {
+  await isAuthed(params.organization_id);
 
   return (
     <main>
-      <VenueCreate organization={isInOrganization!} />
+      <VenueCreate organization={params.organization_id} />
     </main>
   );
 }
