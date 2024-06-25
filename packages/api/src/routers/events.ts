@@ -369,6 +369,7 @@ export const eventsRouter = router({
         .eq('event_id', input.event_id);
 
       if (!numTickets) {
+        console.log('No tickets found');
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'No tickets found',
