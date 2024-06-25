@@ -287,7 +287,7 @@ export default function TicketList({
                                               isLoading ||
                                               !selectedUsers?.length
                                             }
-                                            className='w-full'
+                                            className='w-56'
                                             onClick={() => {
                                               setIsLoading(true);
                                               requestTransfer.mutate({

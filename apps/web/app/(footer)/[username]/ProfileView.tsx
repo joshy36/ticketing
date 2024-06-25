@@ -91,18 +91,11 @@ export default async function ProfileView({
               otherUserProfile={userProfile}
             />
           )}
-          <Points userProfile={userProfile} />
         </div>
       </div>
       <Separator className='my-8' />
-      {/* <div className='flex flex-row items-center justify-center gap-2'>
-        <h2 className='text-center text-2xl font-bold lg:text-3xl'>
-          Social Wallet
-        </h2>
-        <Wallet />
-      </div> */}
-
-      <div className='flex flex-col'>
+      <Points userProfile={userProfile} />
+      <div className='flex flex-col pt-8'>
         <div>
           <div className='flex flex-row items-center gap-2'>
             <div className='text-center text-2xl font-semibold'>

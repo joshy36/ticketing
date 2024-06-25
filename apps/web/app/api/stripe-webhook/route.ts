@@ -1,10 +1,13 @@
+import {
+  incrementArtistPointsForUser,
+  incrementVenuePointsForUser,
+} from 'api/src/services/points';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createRouteClient } from 'supabase';
 import { inngest } from '~/inngest/client';
 
 export async function POST(req: NextRequest) {
-  const supabase = createRouteClient();
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const payload = await req.text();
   const sig = req.headers.get('stripe-signature') as string;
@@ -32,6 +35,12 @@ export async function POST(req: NextRequest) {
     console.log('🔔 ticketReservations: ', ticketReservations);
     const supabase = createRouteClient();
 
+    const { data: eventData } = await supabase
+      .from('events')
+      .select()
+      .eq('id', metadata.event_id!)
+      .single();
+
     const { data: transaction } = await supabase
       .from('transactions')
       .insert({
@@ -43,6 +52,20 @@ export async function POST(req: NextRequest) {
       .select()
       .limit(1)
       .single();
+
+    await incrementArtistPointsForUser(
+      supabase,
+      metadata.user_id!,
+      eventData?.artist!,
+      ticketReservations.length,
+    );
+
+    await incrementVenuePointsForUser(
+      supabase,
+      metadata.user_id!,
+      eventData?.venue!,
+      ticketReservations.length,
+    );
 
     const { data: userHasTicketToEvent } = await supabase
       .from('tickets')
