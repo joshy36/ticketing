@@ -37,6 +37,10 @@ export default async function ProfileView({
     username: params.username,
   });
 
+  const platformPoints = await serverClient.getPlatformPointsForUser.query({
+    user_id: userProfile?.id!,
+  });
+
   if (!userProfile) {
     notFound();
   }
@@ -90,6 +94,7 @@ export default async function ProfileView({
               otherUserProfile={userProfile}
             />
           )}
+          <p>Platform points: {platformPoints}</p>
         </div>
       </div>
       <Separator className='my-8' />

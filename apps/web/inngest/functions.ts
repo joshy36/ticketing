@@ -31,9 +31,13 @@ export const generatePfpForUser = inngest.createFunction(
       apiKey: process.env.OPEN_AI_API_KEY,
     });
 
+    const prompt =
+      event.data.prompt.replace(/_/g, ' ') +
+      ' in space retro theme profile picture';
+
     const response = await openai.images.generate({
       model: 'dall-e-3',
-      prompt: event.data.prompt,
+      prompt: prompt,
       n: 1,
       size: '1024x1024',
     });

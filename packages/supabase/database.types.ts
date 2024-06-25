@@ -34,6 +34,46 @@ export interface Database {
   }
   public: {
     Tables: {
+      artist_points: {
+        Row: {
+          artist_id: string | null
+          created_at: string
+          id: string
+          points: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          artist_id?: string | null
+          created_at?: string
+          id?: string
+          points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          artist_id?: string | null
+          created_at?: string
+          id?: string
+          points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_points_artist_id_fkey"
+            columns: ["artist_id"]
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "artist_points_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       artists: {
         Row: {
           created_at: string
@@ -621,6 +661,37 @@ export interface Database {
         }
         Relationships: []
       }
+      platform_points: {
+        Row: {
+          created_at: string
+          id: string
+          points: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_points_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       reservations: {
         Row: {
           created_at: string
@@ -1086,6 +1157,46 @@ export interface Database {
             foreignKeyName: "user_salts_user_id_fkey"
             columns: ["user_id"]
             referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      venue_points: {
+        Row: {
+          created_at: string
+          id: string
+          points: number | null
+          updated_at: string | null
+          user_id: string | null
+          venue_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          venue_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_points_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venue_points_venue_id_fkey"
+            columns: ["venue_id"]
+            referencedRelation: "venues"
             referencedColumns: ["id"]
           }
         ]

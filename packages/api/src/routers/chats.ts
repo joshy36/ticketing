@@ -3,6 +3,7 @@ import { router, publicProcedure, authedProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import { Chat } from 'supabase';
 import { areArraysEqual } from '../shared/messages';
+import { incrementPlatformPointsForUser } from '../services/points';
 
 export const chatsRouter = router({
   getUserChats: authedProcedure
@@ -153,6 +154,8 @@ export const chatsRouter = router({
         chat_message_id: newMessage?.id,
         chat_id: input.chat_id,
       });
+
+      await incrementPlatformPointsForUser(supabase, user.id, 1);
 
       return newMessage;
     }),

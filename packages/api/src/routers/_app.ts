@@ -18,6 +18,7 @@ import { transactionsRouter } from './transactions';
 import { chatsRouter } from './chats';
 import { friendsRouter } from './friends';
 import { authRouter } from './auth';
+import { pointsRouter } from './points';
 
 export const appRouter = mergeRouters(
   eventsRouter,
@@ -35,7 +36,8 @@ export const appRouter = mergeRouters(
   transactionsRouter,
   chatsRouter,
   friendsRouter,
-  authRouter
+  authRouter,
+  pointsRouter
 );
 
 export type AppRouter = typeof appRouter;
