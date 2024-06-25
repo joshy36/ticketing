@@ -368,6 +368,8 @@ export const eventsRouter = router({
         .select('*', { count: 'exact', head: true })
         .eq('event_id', input.event_id);
 
+      console.log('numTickets: ', numTickets);
+
       if (!numTickets) {
         console.log('No tickets found');
         throw new TRPCError({
