@@ -21,6 +21,7 @@ import { notFound } from 'next/navigation';
 import { Wallet } from 'lucide-react';
 import FriendsView from './FriendsView';
 import AvatarView from './AvatarView';
+import Points from './Points';
 
 export default async function ProfileView({
   params,
@@ -35,10 +36,6 @@ export default async function ProfileView({
 
   const friendCount = await serverClient.getTotalFriendsCountForUser.query({
     username: params.username,
-  });
-
-  const platformPoints = await serverClient.getPlatformPointsForUser.query({
-    user_id: userProfile?.id!,
   });
 
   if (!userProfile) {
@@ -94,7 +91,7 @@ export default async function ProfileView({
               otherUserProfile={userProfile}
             />
           )}
-          <p>Platform points: {platformPoints}</p>
+          <Points userProfile={userProfile} />
         </div>
       </div>
       <Separator className='my-8' />
