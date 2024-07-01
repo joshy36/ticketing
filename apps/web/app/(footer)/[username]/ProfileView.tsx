@@ -94,7 +94,7 @@ export default async function ProfileView({
         </div>
       </div>
       <Separator className='my-8' />
-      <Points userProfile={userProfile} />
+      {/* <Points userProfile={userProfile} /> */}
       <div className='flex flex-col pt-8'>
         <div>
           <div className='flex flex-row items-center gap-2'>
