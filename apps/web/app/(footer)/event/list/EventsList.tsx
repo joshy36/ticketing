@@ -29,10 +29,12 @@ export default function EventsList({
                 />
                 <CardContent className='bg-zinc-950 p-4'>
                   <h3 className='text-lg font-semibold'>{event.name}</h3>
-                  <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                    <span>{`${dateToString(event.date)}`}</span>
-                    <span>·</span>
-                    <span> {`${event.artists?.name}`}</span>
+                  <div className='flex items-center text-sm text-muted-foreground'>
+                    <span className='flex-shrink-0'>{`${dateToString(event.date)}`}</span>
+                    <span className='mx-2 flex-shrink-0'>·</span>
+                    <span className='overflow-hidden text-ellipsis whitespace-nowrap'>
+                      {`${event.artists?.name}`}
+                    </span>
                   </div>
                   <p className='text-sm text-muted-foreground'>
                     {`${event.venues?.name}`}
