@@ -121,7 +121,7 @@ export default function NavBar({
 
   return (
     <div className='flex flex-col'>
-      <div className='fixed top-0 z-40 hidden h-16 w-full items-center bg-black/50 px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
+      <div className='fixed top-0 z-40 hidden h-16 w-full items-center px-8 backdrop-blur-md transition-colors duration-500 md:flex'>
         <NavigationMenu>
           <NavigationMenuList>
             {mainComponents.map((component) => (

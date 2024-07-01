@@ -19,7 +19,7 @@ export default function EventsList({
         {events?.map((event) => (
           <Link href={`/event/${event.id}`} key={event.id}>
             <div>
-              <Card className='group overflow-hidden border'>
+              <Card className='group overflow-hidden border shadow-2xl shadow-black hover:shadow-none'>
                 <Image
                   src={event.image!}
                   alt='Event Image'

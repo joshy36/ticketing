@@ -120,12 +120,12 @@ export default function TicketList({
             </Link>
             {uniqueEvents?.length != 0 ? (
               <div>
-                <div className='grid grid-cols-1'>
+                <div className='grid grid-cols-1 gap-2'>
                   {uniqueEvents?.map((event) => (
                     <div key={event?.id}>
                       <Accordion type='single' collapsible>
                         <AccordionItem value='item-1'>
-                          <AccordionTrigger className='hover:bg-zinc-800/50 hover:no-underline'>
+                          <AccordionTrigger className='border bg-zinc-950 shadow-lg shadow-black hover:bg-black hover:no-underline'>
                             <div className='flex w-full flex-row items-center justify-between'>
                               <div className='flex flex-row gap-4'>
                                 <div className='xl:aspect-h-8 xl:aspect-w-7 aspect-square w-24 overflow-hidden rounded-lg bg-background'>
@@ -182,8 +182,8 @@ export default function TicketList({
                               </div>
                             )}
                           </AccordionTrigger>
-                          <AccordionContent>
-                            <div className='flex flex-row items-center justify-between border-b px-4 py-2'>
+                          <AccordionContent className='mt-2 rounded-md border bg-zinc-950 shadow-lg shadow-black'>
+                            <div className='flex flex-row items-center justify-between px-4 py-2 hover:bg-black'>
                               {
                                 tickets?.tickets?.filter(
                                   (ticket) =>
@@ -193,7 +193,9 @@ export default function TicketList({
 
                               {tickets?.tickets?.filter(
                                 (ticket) => ticket.owner_id === userProfile.id,
-                              ).length != 0 && <p>Your Ticket</p>}
+                              ).length != 0 && (
+                                <p className='py-1'>Your Ticket</p>
+                              )}
                             </div>
                             {tickets?.tickets
                               ?.filter((ticket) => ticket.event_id === event.id)
@@ -203,7 +205,7 @@ export default function TicketList({
                               ?.map((ticket: any, index: number) => (
                                 <div
                                   key={ticket.id}
-                                  className='flex flex-row items-center justify-between border-b px-4 py-2'
+                                  className='flex flex-row items-center justify-between px-4 py-2 hover:bg-black'
                                 >
                                   <div className='flex items-center gap-8 font-medium'>
                                     <div className='flex flex-col'>
