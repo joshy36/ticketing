@@ -182,8 +182,8 @@ export default function TicketList({
                               </div>
                             )}
                           </AccordionTrigger>
-                          <AccordionContent className='mt-2 rounded-md border bg-zinc-950 shadow-lg shadow-black'>
-                            <div className='flex flex-row items-center justify-between px-4 py-2 hover:bg-black'>
+                          <AccordionContent className='-mt-6 rounded-md border bg-zinc-950 shadow-lg shadow-black'>
+                            <div className='flex flex-row items-center justify-between px-4 pb-3 pt-10 hover:bg-black'>
                               {
                                 tickets?.tickets?.filter(
                                   (ticket) =>
@@ -193,9 +193,7 @@ export default function TicketList({
 
                               {tickets?.tickets?.filter(
                                 (ticket) => ticket.owner_id === userProfile.id,
-                              ).length != 0 && (
-                                <p className='py-1'>Your Ticket</p>
-                              )}
+                              ).length != 0 && <p>Your Ticket</p>}
                             </div>
                             {tickets?.tickets
                               ?.filter((ticket) => ticket.event_id === event.id)
