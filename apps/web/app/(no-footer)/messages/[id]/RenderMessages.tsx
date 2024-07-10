@@ -26,7 +26,7 @@ export default function RenderMessages({
                   ) ? (
                     <div className='flex flex-col'>
                       <div className='flex flex-row justify-end'>
-                        <div className='flex items-center rounded-bl-lg rounded-tl-lg rounded-tr-lg border bg-white px-3 py-1 text-black'>
+                        <div className='flex items-center rounded-bl-lg rounded-tl-lg rounded-tr-lg border bg-foreground px-3 py-1 text-black'>
                           {message.chat_messages?.content}
                         </div>
                       </div>
@@ -35,7 +35,7 @@ export default function RenderMessages({
                       </div>
                     </div>
                   ) : (
-                    <div className='flex items-center rounded-lg border bg-white px-3 py-1 text-black'>
+                    <div className='flex items-center rounded-lg border bg-foreground px-3 py-1 text-black'>
                       {message.chat_messages?.content}
                     </div>
                   )}

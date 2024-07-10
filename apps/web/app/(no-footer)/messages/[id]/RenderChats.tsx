@@ -167,7 +167,7 @@ export default function RenderChats({
         </div>
       </div>
       <button
-        className='flex w-full items-center justify-between border-b px-4 py-6 font-medium hover:bg-zinc-800/50 focus:bg-secondary'
+        className='flex w-full items-center justify-between border-b px-4 py-6 font-medium hover:bg-black/30 focus:bg-secondary'
         onClick={() => {
           router.push(`/messages/requests`);
         }}
@@ -206,7 +206,7 @@ export default function RenderChats({
         return (
           <button
             key={chat.id}
-            className={`flex w-full items-center justify-between gap-2 truncate text-ellipsis border-b px-4 py-4 hover:bg-zinc-800/50 focus:bg-secondary`}
+            className={`flex w-full items-center justify-between gap-2 truncate text-ellipsis border-b px-4 py-4 hover:bg-black/30 focus:bg-secondary`}
             onClick={() => {
               setNumberOfUnreadMessagesPerChat((prevState) => ({
                 ...prevState,

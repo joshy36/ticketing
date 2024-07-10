@@ -27,8 +27,10 @@ export default function EventsList({
                   height={300}
                   className='aspect-[4/3] w-full object-cover transition-transform group-hover:scale-105'
                 />
-                <CardContent className='bg-zinc-950 p-4'>
-                  <h3 className='text-lg font-semibold'>{event.name}</h3>
+                <CardContent className='bg-black p-4'>
+                  <h3 className='text-lg font-semibold text-foreground'>
+                    {event.name}
+                  </h3>
                   <div className='flex items-center text-sm text-muted-foreground'>
                     <span className='flex-shrink-0'>{`${dateToString(event.date)}`}</span>
                     <span className='mx-2 flex-shrink-0'>·</span>

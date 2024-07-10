@@ -18,8 +18,10 @@ export default function ProfileCard({
 
       <div className='flex max-w-[200px] flex-col justify-between'>
         <div className='flex'>
-          <p className='font-medium text-white'>{userProfile?.first_name}</p>
-          <p className='ml-1 truncate text-ellipsis font-medium text-white'>
+          <p className='font-medium text-foreground'>
+            {userProfile?.first_name}
+          </p>
+          <p className='ml-1 truncate text-ellipsis font-medium text-foreground'>
             {userProfile?.last_name}
           </p>
         </div>

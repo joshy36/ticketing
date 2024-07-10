@@ -201,7 +201,7 @@ export default function TicketSection({
           <div className='flex flex-row items-center justify-between'>
             <AlertDialog>
               <AlertDialogTrigger>
-                <Button variant='outline' className='pl-1'>
+                <Button variant='outline' className='pl-1 text-foreground'>
                   <ChevronLeft />
                   Back
                 </Button>
@@ -234,7 +234,7 @@ export default function TicketSection({
               <h1 className='font-light text-muted-foreground'>
                 Time Remaining
               </h1>
-              <h1 className='flex justify-end text-lg font-semibold'>
+              <h1 className='flex justify-end text-lg font-semibold text-foreground'>
                 {String(Math.floor(seconds / 60)).padStart(2, '0')}:
                 {String(seconds % 60).padStart(2, '0')}
               </h1>
@@ -256,7 +256,7 @@ export default function TicketSection({
               className='flex flex-row justify-between py-2'
             >
               <div className='flex flex-col'>
-                <div className='text-xl text-white'>{section.name}</div>
+                <div className='text-xl text-foreground'>{section.name}</div>
                 <div>
                   {!tickets ||
                   tickets?.filter((ticket) => ticket.section_id === section.id)
@@ -264,13 +264,13 @@ export default function TicketSection({
                     <div className='text-red-700'>Sold out</div>
                   ) : (
                     <div>
-                      <div className='text font-extralight text-gray-400'>
+                      <div className='text font-extralight text-muted-foreground'>
                         {`$` +
                           tickets?.find(
                             (ticket) => ticket.section_id === section.id,
                           )?.price}
                       </div>
-                      <div>
+                      <div className='text-muted-foreground'>
                         {`Amount left: ${
                           (tickets?.filter(
                             (ticket) => ticket.section_id === section.id,
@@ -324,7 +324,7 @@ export default function TicketSection({
           ))}
           {getTotalTicketCount() >= event?.max_tickets_per_user! ? (
             <div>
-              <div className='text-center text-white'>
+              <div className='text-center text-foreground'>
                 Max {event?.max_tickets_per_user} tickets per user
               </div>
             </div>
@@ -333,7 +333,7 @@ export default function TicketSection({
           )}
           <Separator />
           <div className='py-4'>
-            <div className='text-xl text-white'>
+            <div className='text-xl text-foreground'>
               Total: ${getTotalPrice().toFixed(2)}
             </div>
           </div>

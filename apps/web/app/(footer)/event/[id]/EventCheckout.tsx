@@ -51,7 +51,7 @@ export default function EventCheckout({
     variables: {
       colorPrimary: '#000000',
       colorBackground: '#000000',
-      colorText: '#ffffff',
+      colorText: '#ffecd6',
     },
   };
 
@@ -65,14 +65,14 @@ export default function EventCheckout({
       <div>
         {userProfile.wallet_address ? (
           <div>
-            <div className='py-4 text-2xl font-bold text-white'>Cart</div>
+            <div className='py-4 text-2xl font-bold text-foreground'>Cart</div>
             {/* <Separator className='my-4' /> */}
             {cart!.map((section: any) => (
               <div key={section.section.id}>
                 {section.quantity == 0 ? (
                   <div></div>
                 ) : (
-                  <div className='flex flex-row justify-between'>
+                  <div className='flex flex-row justify-between text-foreground'>
                     <div className='flex items-start'>
                       <span className='flex h-6 items-center sm:h-7'>
                         <Badge variant='secondary'>{section.quantity}</Badge>
@@ -89,8 +89,8 @@ export default function EventCheckout({
               </div>
             ))}
             <Separator className='my-4' />
-            <div className='flex flex-row justify-between'>
-              <div className='pt-2 text-lg font-semibold'>
+            <div className='flex flex-row justify-between text-foreground'>
+              <div className='pt-2 text-lg font-semibold '>
                 <p>Total:</p>
               </div>
               <div className='pt-2 text-lg font-semibold'>
@@ -106,14 +106,14 @@ export default function EventCheckout({
                 <RadioGroupItem
                   value='card'
                   id='card'
-                  className='peer sr-only'
+                  className='peer sr-only text-foreground'
                   onClick={() => {
                     setPaymentMethod('card');
                   }}
                 />
                 <Label
                   htmlFor='card'
-                  className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-accent [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-accent'
+                  className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 text-foreground hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-accent [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-accent'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'

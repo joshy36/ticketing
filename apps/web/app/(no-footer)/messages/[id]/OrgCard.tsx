@@ -24,7 +24,7 @@ export default function OrgCard({
       )}
       <div className='flex max-w-[225px] flex-col justify-between'>
         <div className='flex items-center'>
-          <p className='truncate text-ellipsis font-medium text-white'>
+          <p className='truncate text-ellipsis font-medium text-foreground'>
             {artistOrVenue?.name}
           </p>
         </div>

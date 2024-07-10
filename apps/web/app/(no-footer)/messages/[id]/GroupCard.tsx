@@ -33,7 +33,7 @@ export default function GroupCard({
         ))}
       </div>
       <div className='ml-1 flex max-w-[180px] flex-col'>
-        <p className='truncate text-ellipsis font-medium text-white'>
+        <p className='truncate text-ellipsis font-medium text-foreground'>
           {allMembersNames}
         </p>
         <p className='truncate text-ellipsis text-left text-sm font-light text-muted-foreground'>

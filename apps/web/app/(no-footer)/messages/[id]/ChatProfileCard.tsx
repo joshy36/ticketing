@@ -20,7 +20,7 @@ export default function ChatProfileCard({
 
       <div className='flex max-w-[225px] flex-col justify-between'>
         <div className='flex items-center'>
-          <p className='truncate text-ellipsis font-medium text-white'>
+          <p className='truncate text-ellipsis font-medium text-foreground'>
             {userProfile?.first_name} {userProfile?.last_name}
           </p>
         </div>
