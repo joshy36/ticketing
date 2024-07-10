@@ -99,11 +99,11 @@ export default function Home() {
             </div>
 
             <LandingPageInput
-              className='z-30 h-12 w-80 rounded-full border-none bg-black/50 backdrop-blur-3xl hover:bg-black/90 md:w-96 lg:h-14'
+              className='z-30 h-12 w-80 rounded-full border-none bg-black/50 shadow-lg shadow-black backdrop-blur-3xl hover:bg-black/90 hover:shadow-none md:w-96 lg:h-14'
               placeholder='Search events, artists, venues'
             />
 
-            <Button className='z-30 h-12 w-full rounded-full bg-white/70 font-semibold lg:flex lg:h-14 lg:w-36'>
+            <Button className='z-30 h-12 w-full rounded-full bg-foreground/90 font-semibold lg:flex lg:h-14 lg:w-36'>
               Search
             </Button>
           </div>

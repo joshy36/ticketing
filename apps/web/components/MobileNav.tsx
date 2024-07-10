@@ -138,7 +138,7 @@ export function MobileNav({
             <div className=''></div>
             {userOrg && (
               <MobileLink href={`/dashboard/${userOrg}`} onOpenChange={setOpen}>
-                <div className='flex w-36 flex-row items-center gap-2 rounded-full bg-white px-4 py-2 text-black hover:bg-white/80'>
+                <div className='flex w-36 flex-row items-center gap-2 rounded-full bg-foreground px-4 py-2 text-black hover:bg-white/80'>
                   Dashboard
                   <ChevronRight className='h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
                 </div>
@@ -202,7 +202,7 @@ export function MobileNav({
                 <Button
                   variant='outline'
                   size='icon'
-                  className='border-none bg-zinc-700/50'
+                  className=' bg-zinc-950/50 shadow-none hover:bg-zinc-950'
                 >
                   <MessageCircle className='h-4 w-4' />
                 </Button>
